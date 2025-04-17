@@ -1,0 +1,173 @@
+﻿.run-container {
+    display: grid;
+    width: 100%;
+    grid-gap: 0.5rem;
+}
+
+    .run-container .fighter-container {
+        display: grid;
+        grid-template-columns: auto 20% auto;
+        border-bottom: 1px solid var(--chd-font-color);
+        grid-gap: 0.5rem;
+        padding: 0.5rem;
+    }
+
+        .run-container .fighter-container .fighter {
+            display: grid;
+        }
+
+            .run-container .fighter-container .fighter.fighter-chong {
+                text-align: right;
+            }
+
+            .run-container .fighter-container .fighter.fighter-hong {
+            }
+
+            .run-container .fighter-container .fighter .fighter-scores {
+                display: grid;
+            }
+
+            .run-container .fighter-container .fighter.fighter-chong .fighter-scores {
+                grid-template-columns: 50% repeat(2,auto);
+            }
+
+            .run-container .fighter-container .fighter.fighter-hong .fighter-scores {
+                grid-template-columns: repeat(2,auto) 50%;
+            }
+
+
+
+            .run-container .fighter-container .fighter .fighter-scores .fighter-score {
+                align-content: end;
+            }
+
+                .run-container .fighter-container .fighter .fighter-scores .fighter-score.presentation {
+                    color: darkorange;
+                }
+
+                .run-container .fighter-container .fighter .fighter-scores .fighter-score.accuracy {
+                    color: orangered;
+                }
+
+                .run-container .fighter-container .fighter .fighter-scores .fighter-score.total {
+                    color: yellow;
+                    font-size: 1.5rem;
+                }
+
+            .run-container .fighter-container .fighter .fighter-name {
+            }
+
+        .run-container .fighter-container .run-middle {
+            border: 1px solid var(--chd-font-color);
+            border-radius: 0.5rem;
+        }
+
+    .run-container .scoring-container {
+        display: grid;
+        grid-template-columns: auto 35% auto;
+    }
+
+        .run-container .scoring-container .scoring {
+            display: grid;
+            gap: 15%;
+        }
+
+            .run-container .scoring-container .scoring.scoring-hong {
+                justify-items: end;
+            }
+            
+            .run-container .scoring-container .scoring.scoring-hong .scoring-button {
+                justify-items: end;
+            }
+
+            .run-container .scoring-container .scoring .scoring-button {
+                width: 90%;
+                border-radius: 0 3rem 3rem 0;
+                padding: 0.1rem 0;
+            }
+
+            .run-container .scoring-container .scoring.scoring-chong .scoring-button {
+                background-color: royalblue;
+            }
+
+            .run-container .scoring-container .scoring.scoring-hong .scoring-button {
+                background-color: red;
+                border-radius: 3rem 0 0 3rem;
+            }
+
+            .run-container .scoring-container .scoring .scoring-button .scoring-button-inner {
+                height: 100%;
+                width: 80%;
+                border-radius: 0 3rem 3rem 0;
+                border-top: 1px solid black;
+                border-bottom: 1px solid black;
+                border-right: 1px solid black;
+                background-color: deepskyblue;
+            }
+
+            .run-container .scoring-container .scoring.scoring-hong .scoring-button .scoring-button-inner {
+                background-color: indianred;
+                border-radius: 3rem 0 0 3rem;
+                border-left: 1px solid black;
+                border-right: 0px;
+            }
+
+            .run-container .scoring-container .scoring .scoring-button.scoring-button-big {
+                height: 110%;
+            }
+
+            .run-container .scoring-container .scoring .scoring-button.scoring-button-small {
+                height: 80%;
+            }
+
+        .run-container .scoring-container .scoring-middle {
+            display: grid;
+            grid-gap: 0.5rem;
+        }
+
+            .run-container .scoring-container .scoring-middle .scores {
+                border: 1px solid var(--chd-font-color);
+                border-radius: 0.5rem;
+                display: grid;
+                grid-template-columns: max-content auto max-content;
+                text-align: center;
+                font-size: 0.9rem;
+                align-items: center;
+            }
+
+                .run-container .scoring-container .scoring-middle .scores .score {
+                    padding: 0 0.3rem 0 0.3rem;
+                    font-size: 1.1rem;
+                    color: white;
+                }
+
+                    .run-container .scoring-container .scoring-middle .scores .score.score-chong {
+                        background-color: royalblue;
+                        border-radius: 0.5rem;
+                    }
+
+                .run-container .scoring-container .scoring-middle .scores.accuracy .score.score-chong {
+                    background-color: deepskyblue;
+                }
+
+                .run-container .scoring-container .scoring-middle .scores.accuracy .score.score-hong {
+                    background-color: indianred;
+                }
+
+                .run-container .scoring-container .scoring-middle .scores .score.score-hong {
+                    background-color: red;
+                    border-radius: 0.5rem;
+                }
+
+                .run-container .scoring-container .scoring-middle .scores.finish {
+                    grid-template-columns: auto;
+                    border: none;
+                    justify-content: center;
+                }
+
+                    .run-container .scoring-container .scoring-middle .scores.finish > div {
+                        border: 1px solid var(--chd-font-color);
+                        border-radius: 0.5rem;
+                        padding: 0.2rem;
+                        width: max-content;
+                    }

@@ -1,0 +1,27 @@
+@using System.Globalization
+@inherits LayoutComponentBase
+
+<div class="header-panel">
+    <HeaderBase TUserId="int" TRightId="int" PageTitle="@this.PageTitle" ShowVersion="true" ShowDateInfo="false">
+        <RightChildContent>
+            <ThemeModeButton />
+        </RightChildContent>
+    </HeaderBase>
+</div>
+
+@code {
+    [Parameter] public string PageTitle { get; set; }
+
+    private string _themeModeIcon;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async void InfoChanged(object sender, EventArgs e)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+}

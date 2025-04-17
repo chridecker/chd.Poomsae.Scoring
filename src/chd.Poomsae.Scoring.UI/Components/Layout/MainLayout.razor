@@ -1,3 +1,57 @@
-﻿@inherits LayoutComponentBase
+﻿@inherits PageComponentBase<int,int>
+@using Blazored.Toast.Configuration
+@using chd.UI.Base.Client.Implementations.Services
+@using chd.UI.Base.Contracts.Enum
+@inject IScrollInfoService scrollInfoService
+@inject IHandleUserIdLogin<int> handleUserIdLogin
 
-@Body
+
+<div class="page">
+    @if (this._autocollapseNav)
+    {
+        <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
+            <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse": "")" @onmouseover="() => this._navCollapsed = false">
+            </div>
+        </SwipeArea>
+    }
+
+    <NavMenu Visible="!(this._autocollapseNav && this._navCollapsed)" />
+
+    <main class="@(this._autocollapseNav && this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
+        <article id="main-article" class="content px-4" @onscroll="scrollInfoService.Scrolled">
+            @Body
+        </article>
+    </main>
+</div>
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                MaxToastCount="3"
+                RemoveToastsOnNavigation="true"
+                ShowProgressBar="true">
+    <CloseButtonContent>
+        <div>
+            <span>&times;</span>
+        </div>
+    </CloseButtonContent>
+</BlazoredToasts>
+
+@code {
+    private bool _autocollapseNav = false;
+    private bool _navCollapsed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._navCollapsed = true;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task OnLabelSwiped(ESwipeDirection e)
+    {
+        if (e == ESwipeDirection.LeftToRight)
+        {
+            this._navCollapsed = false;
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+}

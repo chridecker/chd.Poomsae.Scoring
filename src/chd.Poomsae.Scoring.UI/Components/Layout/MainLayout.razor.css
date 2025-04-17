@@ -1,0 +1,44 @@
+main {
+    position: absolute;
+    left: var(--sidebar-width-small);
+    height: var(--main-article-available-height);
+    width: calc(100% - var(--sidebar-width-small));
+}
+
+    main.collapsed-nav {
+        left: 0;
+        width: 100%;
+    }
+
+        main.collapsed-nav ::deep * {
+            --main-article-width: 100vw;
+        }
+
+
+article {
+    position: relative;
+    padding: 0 !important;
+}
+
+    article ::deep * {
+        max-width: var(--main-article-available-width);
+    }
+
+.page ::deep .swipe-area {
+    padding: 0;
+    position: fixed;
+    height: 100%;
+    width: 2rem;
+    z-index: 900;
+}
+
+.sidebar-hover-toggle {
+    position: fixed;
+    height: 100%;
+    width: 6rem;
+    z-index: 900;
+}
+
+    .sidebar-hover-toggle.auto-collapse {
+        width: 2rem;
+    }

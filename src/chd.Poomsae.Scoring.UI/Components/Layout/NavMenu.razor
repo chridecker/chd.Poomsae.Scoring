@@ -1,0 +1,21 @@
+@using chd.UI.Base.Contracts.Enum
+
+<div class="nav-menu">
+    <NavMenuBase Visible="this.Visible">
+        <MenuContent>
+            <NavItem href="" Match="NavLinkMatch.All" IconFAClass="house" Title="Home" />
+            <NavItem href="settings" Match="NavLinkMatch.All" IconFAClass="gears" Title="Config" />
+        </MenuContent>
+    </NavMenuBase>
+</div>
+
+@code{
+    [Inject] private INavigationHandler _navigationHandler { get; set; }
+
+    [Parameter] public bool Visible { get; set; } = true;
+
+    private void GoHome()
+    {
+        this._navigationHandler.NavigateToRoot();
+    }
+}
