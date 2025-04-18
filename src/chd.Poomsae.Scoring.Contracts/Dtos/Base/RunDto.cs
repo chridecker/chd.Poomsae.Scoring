@@ -1,4 +1,5 @@
-﻿using System;
+﻿using chd.Poomsae.Scoring.Contracts.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +9,6 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos.Base
     {
         public JudgeDto Judge { get; set; } = new();
         public TimeSpan Time { get; set; } = TimeSpan.Zero;
-        public bool Running { get; set; }
+        public ERunState State { get; set; }
     }
 }

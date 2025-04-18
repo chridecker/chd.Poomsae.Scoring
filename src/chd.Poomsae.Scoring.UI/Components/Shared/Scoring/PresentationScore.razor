@@ -1,0 +1,35 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="presentation-score">
+    <div class="presentation-score-label">@this.Text</div>
+    <div class="presentation-score-slider">
+        <input type="range" min="0" max="100" step="1" value="@this._value" @oninput="this.OnInput" />
+    </div>
+    <div class="presentation-score-value"><div class="score-value">@this.Value.ToDisplayString()</div></div>
+</div>
+
+@code {
+    private decimal _value;
+    [Parameter]
+    public decimal Value
+    {
+        get => this._value;
+        set
+        {
+            this._value = value;
+            this.ValueChanged.InvokeAsync(value);
+        }
+    }
+    [Parameter]
+    public EventCallback<decimal> ValueChanged { get; set; }
+
+    [Parameter] public string Text { get; set; }
+    [Parameter] public decimal Max { get; set; }
+
+    private async Task OnInput(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value.ToString(), out int val))
+        {
+            this.Value = Math.Round((this.Max * val / 100), 1);
+        }
+    }
+}

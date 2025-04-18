@@ -1,4 +1,5 @@
 @using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.Contracts.Enums
 @using chd.Poomsae.Scoring.UI.Extensions
 
 
@@ -29,7 +30,7 @@
     </div>
     <div class="scores-group finish">
         <div class="scores ">
-            <div class="" @onclick="async ()=> await this.StartStopRun()">@(this.Running ? "Finish" : "Start")</div>
+            <div class="" @onclick="this.HandleState">@_middleButtonText</div>
         </div>
     </div>
 
@@ -37,6 +38,15 @@
 @code {
     [Parameter] public ScoreDto ChongScore { get; set; }
     [Parameter] public ScoreDto HongScore { get; set; }
-    [Parameter] public Func<Task> StartStopRun { get; set; }
-    [Parameter] public bool Running { get; set; }
+    [Parameter] public Func<Task> HandleState { get; set; }
+    [Parameter] public ERunState State { get; set; }
+
+    private string _middleButtonText => this.State switch
+    {
+        ERunState.Initial => "Start",
+        ERunState.Started => "Stop",
+        ERunState.Stopped => "Finish",
+        ERunState.Finished => "Reset",
+        _ => string.Empty
+    };
 }

@@ -1,0 +1,23 @@
+﻿.scoring-presentation {
+    display: grid;
+    gap: 0.5rem;
+    --score-color: royalblue;
+}
+
+    .scoring-presentation.score-hong {
+        --score-color: red;
+    }
+
+    .scoring-presentation .scoring {
+        display: grid;
+        gap: 0.2rem;
+    }
+
+    .scoring-presentation .buttons {
+        display: grid;
+        grid-template-columns: repeat(2,auto);
+    }
+
+    .scoring-presentation .buttons .btn.btn-primary {
+        background-color: var(--score-color);
+    }

@@ -1,0 +1,32 @@
+﻿.settings {
+    margin-top: 1.5rem;
+    padding-left: 0.3rem;
+}
+
+    .settings .init-settings {
+        display:flex;
+        flex-direction:column;
+        gap: 0.2rem;
+        width:max-content;
+    }
+
+        .settings .init-settings .init-setting {
+            padding: 0.2rem;
+            border: 1px solid var(--chd-font-color);
+            border-radius: 0.5rem;
+            display:flex;
+            gap:0.2rem;
+        }
+
+            .settings .init-settings .init-setting .setting-label {
+                width: 6rem;
+                text-align:right;
+            }
+
+            .settings .init-settings .init-setting input[type=number] {
+                width: 3rem;
+            }
+            .settings .init-settings .init-setting input {
+                width: 8rem;
+                text-align:center;
+            }

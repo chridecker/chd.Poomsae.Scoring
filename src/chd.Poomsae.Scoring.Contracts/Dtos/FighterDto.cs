@@ -10,5 +10,15 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Fullname => $"{this.Firstname} {this.Lastname.ToUpper()}";
+
+        public FighterDto()
+        {
+
+        }
+        public FighterDto(string firstName, string lastName)
+        {
+            this.Firstname = firstName;
+            this.Lastname = lastName;
+        }
     }
 }

@@ -1,0 +1,32 @@
+﻿.presentation-score {
+    display: grid;
+    grid-template-columns: 40% 40% auto;
+    color: white;
+    border: 1px solid var(--chd-font-color);
+    border-radius: 0.5rem;
+    padding: 0.2rem;
+    align-items:center;
+}
+
+    .presentation-score .presentation-score-label {
+    }
+
+    .presentation-score .presentation-score-slider {
+    }
+
+        .presentation-score .presentation-score-slider input[type=range] {
+            width: 100%;
+            accent-color: var(--score-color);
+        }
+
+    .presentation-score .presentation-score-value {
+        justify-items: center;
+    }
+
+        .presentation-score .presentation-score-value .score-value {
+            padding: 0 0.4rem 0 0.4rem;
+            border: 1px solid white;
+            border-radius: 0.5rem;
+            background-color: var(--score-color);
+            font-weight: bold;
+        }

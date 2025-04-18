@@ -1,0 +1,26 @@
+@using Blazored.Modal.Services
+@using chd.Poomsae.Scoring.Contracts.Dtos
+
+<div class="scoring-presentation @_css">
+    <div class="scoring">
+        <PresentationScore Text="Speed & Power" Max="2" ValueChanged="(d) => this._dto.SpeedAndPower = d" />
+        <PresentationScore Text="Rhythm/Temp/Softness" Max="2" ValueChanged="(d) => this._dto.RhythmAndTempo = d" />
+        <PresentationScore Text="Expression of Energy" Max="2" ValueChanged="(d) => this._dto.ExpressionAndEnergy = d" />
+    </div>
+    <div class="buttons">
+        <button class="btn btn-primary" @onclick="async ()=> await this.ModalInstance.CloseAsync(ModalResult.Ok(this._dto))">Submit</button>
+        <button class="btn btn-cancel" @onclick="async ()=>await this.ModalInstance.CancelAsync()">Abbrechen</button>
+    </div>
+</div>
+
+
+
+@code {
+    private PresentatioScoreDto _dto = new();
+
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter] public bool IsRed { get; set; }
+
+    private string _css => this.IsRed ? "score-hong" : "score-chong";
+}

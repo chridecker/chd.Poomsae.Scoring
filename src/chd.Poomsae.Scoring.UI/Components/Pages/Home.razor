@@ -2,9 +2,14 @@
 @implements IDisposable
 @using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.Contracts.Enums
+@using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
+
+@if (runDto is null) { return; }
+
 <div class="run-container">
     <div class="fighter-container">
         <FighterScore Fighter="@runDto.ChongFighter" Score="@runDto.ChongScore" />
@@ -16,7 +21,7 @@
     <div class="scoring-container">
         <ScoringButtonComponent ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
-            <ScoringSummaryComponent ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" Running="@runDto.Running" StartStopRun="this.StartStopRun" />
+            <ScoringSummaryComponent ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
         <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
     </div>
@@ -25,21 +30,10 @@
 
 @code {
     [Inject] IModalService _modal { get; set; }
+    [Inject] IStartRunService _runService { get; set; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    private EliminationRunDto runDto = new()
-        {
-            ChongFighter = new()
-            {
-                Firstname = "Player",
-                Lastname = "1"
-            },
-            HongFighter = new()
-            {
-                Firstname = "Player",
-                Lastname = "2"
-            }
-        };
+    private EliminationRunDto runDto;
 
     private RunTimer _runTimer;
     private IDisposable _registerLocationChangeHandler;
@@ -47,11 +41,14 @@
     {
         this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
 
+        this.runDto = this._runService.StartEliminiationRun();
+
         await base.OnInitializedAsync();
     }
 
     private async Task CalcScore(bool isRed, decimal value)
     {
+        if (this.runDto.State is not ERunState.Started) { return; }
         this.CalculateAccuracyScore(isRed ? this.runDto.HongScore : this.runDto.ChongScore, value);
         await this.InvokeAsync(this.StateHasChanged);
     }
@@ -68,22 +65,69 @@
         }
     }
 
-    private async Task StartStopRun()
+    private async Task HandleClick()
     {
-        if (!this.runDto.Running)
+        if (this.runDto.State is ERunState.Initial)
         {
-            this.runDto.Running = true;
             this._runTimer.Start();
+            this.runDto.State = ERunState.Started;
         }
-        else
+        else if (this.runDto.State is ERunState.Started)
         {
-            this.runDto.Running = false;
+            this.runDto.Time = this._runTimer.Time;
             this._runTimer.Stop();
+            var modalResultBlue = await this._modal.Show<ScorePresentationModal>(runDto.ChongFighter.Fullname, new ModalParameters()
+            {
+            }, new ModalOptions()
+                {
+                    Size = ModalSize.ExtraLarge,
+                }).Result;
+            if (modalResultBlue.Cancelled)
+            {
+                this._runTimer.Start();
+                return;
+            }
+            else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
+            {
+                this.runDto.ChongScore.SpeedAndPower = scoreDto.SpeedAndPower;
+                this.runDto.ChongScore.RhythmAndTempo = scoreDto.RhythmAndTempo;
+                this.runDto.ChongScore.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
+            }
+            var modalResultRed = await this._modal.Show<ScorePresentationModal>(runDto.HongFighter.Fullname, new ModalParameters(){
+                {nameof(ScorePresentationModal.IsRed),true}
+            }, new ModalOptions()
+            {
+                Size = ModalSize.ExtraLarge,
+            }).Result;
+            if (modalResultBlue.Data is PresentatioScoreDto scoreDto2)
+            {
+                this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
+                this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
+                this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
+            }
+
+            this.runDto.State = ERunState.Stopped;
         }
+        else if (this.runDto.State is ERunState.Stopped)
+        {
+            this.runDto.State = ERunState.Finished;
+            await this.SendResult();
+        }
+        else if (this.runDto.State is ERunState.Finished)
+        {
+            this.runDto = this._runService.StartEliminiationRun();
+        }
+        await this.InvokeAsync(this.StateHasChanged);
     }
+
+    private async Task SendResult()
+    {
+
+    }
+
     private async ValueTask OnLocationChanging(LocationChangingContext context)
     {
-        if (this.runDto.Running)
+        if (this.runDto.State is ERunState.Started or ERunState.Stopped)
         {
             var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
             if (res == EDialogResult.No)
