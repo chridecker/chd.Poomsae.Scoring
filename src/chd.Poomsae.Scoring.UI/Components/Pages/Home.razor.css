@@ -10,7 +10,7 @@
         border-bottom: 1px solid var(--chd-font-color);
         grid-gap: 0.5rem;
         padding: 0.5rem;
-        height: 30vh;
+        height: 25vh;
     }
 
         .run-container .fighter-container .run-middle {
@@ -19,7 +19,7 @@
         }
 
     .run-container .scoring-container {
-        height: 70vh;
+        height: 75vh;
         display: grid;
         grid-template-columns: auto 35% auto;
     }

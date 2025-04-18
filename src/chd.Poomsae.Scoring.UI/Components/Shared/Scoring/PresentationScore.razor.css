@@ -1,6 +1,6 @@
 ﻿.presentation-score {
     display: grid;
-    grid-template-columns: 40% 50% auto;
+    grid-template-columns: 45% 45% auto;
     color: white;
     border: 1px solid var(--chd-font-color);
     border-radius: 0.5rem;
