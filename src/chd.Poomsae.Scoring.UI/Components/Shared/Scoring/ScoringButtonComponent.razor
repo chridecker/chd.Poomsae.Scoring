@@ -1,0 +1,14 @@
+<div class="scoring @_css">
+    <div class="scoring-button scoring-button-big">
+        <div class="scoring-button-inner"></div>
+    </div>
+    <div class="scoring-button scoring-button-small">
+        <div class="scoring-button-inner"></div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsRed { get; set; }
+
+    private string _css => this.IsRed ? "scoring-hong" : "scoring-chong";
+}

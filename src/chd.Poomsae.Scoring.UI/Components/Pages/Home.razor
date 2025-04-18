@@ -11,25 +11,11 @@
         <FighterScore Fighter="@runDto.HongFighter" Score="@runDto.HongScore" IsRed="true" />
     </div>
     <div class="scoring-container">
-        <div class="scoring scoring-chong">
-            <div class="scoring-button scoring-button-big">
-                <div class="scoring-button-inner"></div>
-            </div>
-            <div class="scoring-button scoring-button-small">
-                <div class="scoring-button-inner"></div>
-            </div>
-        </div>
+        <ScoringButtonComponent />
         <div class="scoring-middle">
             <ScoringSummaryComponent ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" Running="@runDto.Running" StartStopRun="this.StartStopRun" />
         </div>
-        <div class="scoring scoring-hong">
-            <div class="scoring-button scoring-button-big">
-                <div class="scoring-button-inner"></div>
-            </div>
-            <div class="scoring-button scoring-button-small">
-                <div class="scoring-button-inner"></div>
-            </div>
-        </div>
+        <ScoringButtonComponent IsRed="true" />
     </div>
 </div>
 
