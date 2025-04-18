@@ -1,14 +1,21 @@
 <div class="scoring @_css">
-    <div class="scoring-button scoring-button-big">
-        <div class="scoring-button-inner"></div>
-    </div>
-    <div class="scoring-button scoring-button-small">
-        <div class="scoring-button-inner"></div>
-    </div>
+    <ScoringButton IsBig="true" Value="@ValueBig" OnClick="async (d)=> await OnClickButton(d)" />
+    <ScoringButton IsBig="false" Value="@ValueSmall" OnClick="async (d)=> await OnClickButton(d)" />
 </div>
 
 @code {
     [Parameter] public bool IsRed { get; set; }
+    [Parameter] public decimal ValueBig { get; set; }
+    [Parameter] public decimal ValueSmall { get; set; }
+
+
+    [Parameter] public Func<bool, decimal, Task> OnCalcClick { get; set; }
+
 
     private string _css => this.IsRed ? "scoring-hong" : "scoring-chong";
+
+    private async Task OnClickButton(decimal value)
+    {
+        await this.OnCalcClick(this.IsRed, value);
+    }
 }

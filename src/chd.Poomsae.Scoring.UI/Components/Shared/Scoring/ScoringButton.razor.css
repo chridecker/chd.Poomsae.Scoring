@@ -1,0 +1,64 @@
+﻿.scoring-button {
+    width: 90%;
+    border-radius: 0 var(--button-radius) var(--button-radius) 0;
+    padding: 0.1rem 0;
+}
+
+.scoring.scoring-chong .scoring-button {
+    background-color: royalblue;
+}
+
+.scoring.scoring-hong .scoring-button {
+    background-color: red;
+    border-radius: var(--button-radius) 0 0 var(--button-radius);
+}
+
+.scoring-button .scoring-button-inner {
+    height: 100%;
+    width: 80%;
+    border-radius: 0 var(--button-radius) var(--button-radius) 0;
+    background-color: deepskyblue;
+    padding: 0.2rem;
+    display: flex;
+    justify-content: end;
+}
+
+    .scoring-button .scoring-button-inner .scoring-button-inner-button {
+        aspect-ratio: 1/1;
+        height: 100%;
+        border: 1px solid white;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: inherit;
+    }
+
+        .scoring-button .scoring-button-inner .scoring-button-inner-button:active {
+            border-width:2px;
+        }
+
+        .scoring-button .scoring-button-inner .scoring-button-inner-button .scoring-button-inner-button-value {
+            color: white;
+            font-weight: bold;
+            font-size: 2.8rem;
+        }
+
+.scoring-button.scoring-button-small .scoring-button-inner .scoring-button-inner-button .scoring-button-inner-button-value {
+    font-size: 1.5rem;
+}
+
+.scoring.scoring-hong .scoring-button .scoring-button-inner {
+    background-color: indianred;
+    border-radius: var(--button-radius) 0 0 var(--button-radius);
+    border-right: 0px;
+    justify-content: start;
+}
+
+.scoring-button.scoring-button-big {
+    height: 35vh;
+}
+
+.scoring-button.scoring-button-small {
+    height: 20vh;
+}

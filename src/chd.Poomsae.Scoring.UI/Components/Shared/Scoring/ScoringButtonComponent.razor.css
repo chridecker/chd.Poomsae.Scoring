@@ -11,47 +11,9 @@
         align-items: end;
     }
 
-        .scoring.scoring-hong .scoring-button {
+        .scoring.scoring-hong ::deep .scoring-button {
             justify-items: end;
             align-items: end;
         }
 
-    .scoring .scoring-button {
-        width: 90%;
-        border-radius: 0 var(--button-radius) var(--button-radius) 0;
-        padding: 0.1rem 0;
-    }
-
-    .scoring.scoring-chong .scoring-button {
-        background-color: royalblue;
-    }
-
-    .scoring.scoring-hong .scoring-button {
-        background-color: red;
-        border-radius: var(--button-radius) 0 0 var(--button-radius);
-    }
-
-    .scoring .scoring-button .scoring-button-inner {
-        height: 100%;
-        width: 80%;
-        border-radius: 0 var(--button-radius) var(--button-radius) 0;
-        border-top: 1px solid black;
-        border-bottom: 1px solid black;
-        border-right: 1px solid black;
-        background-color: deepskyblue;
-    }
-
-    .scoring.scoring-hong .scoring-button .scoring-button-inner {
-        background-color: indianred;
-        border-radius: var(--button-radius) 0 0 var(--button-radius);
-        border-left: 1px solid black;
-        border-right: 0px;
-    }
-
-    .scoring .scoring-button.scoring-button-big {
-        height: 35vh;
-    }
-
-    .scoring .scoring-button.scoring-button-small {
-        height: 20vh;
-    }
+   

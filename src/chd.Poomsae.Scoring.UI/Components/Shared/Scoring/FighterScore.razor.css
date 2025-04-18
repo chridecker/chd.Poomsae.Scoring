@@ -14,17 +14,18 @@
     }
 
     .fighter.fighter-chong .fighter-scores {
-        grid-template-columns: 50% repeat(2,auto);
+        grid-template-columns: 50% repeat(2,25%);
     }
 
     .fighter.fighter-hong .fighter-scores {
-        grid-template-columns: repeat(2,auto) 50%;
+        grid-template-columns: repeat(2,25%) 50%;
     }
 
 
 
     .fighter .fighter-scores .fighter-score {
         align-content: end;
+
     }
 
         .fighter .fighter-scores .fighter-score.presentation {

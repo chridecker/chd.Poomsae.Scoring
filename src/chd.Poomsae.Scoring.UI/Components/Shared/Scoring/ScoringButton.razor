@@ -1,0 +1,16 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="scoring-button @_css">
+    <div class="scoring-button-inner">
+        <button class="scoring-button-inner-button" @onclick="async ()=> await this.OnClick(this.Value)">
+            <div class="scoring-button-inner-button-value" >@Value.ToDisplayString()</div>
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsBig { get; set; }
+    [Parameter] public decimal Value { get; set; }
+    [Parameter] public Func<decimal, Task> OnClick { get; set; }
+
+    private string _css => this.IsBig ? " scoring-button-big" : " scoring-button-small";
+}

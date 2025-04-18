@@ -6,7 +6,7 @@
 
     .run-container .fighter-container {
         display: grid;
-        grid-template-columns: auto 20% auto;
+        grid-template-columns: 40% 20% 40%;
         border-bottom: 1px solid var(--chd-font-color);
         grid-gap: 0.5rem;
         padding: 0.5rem;

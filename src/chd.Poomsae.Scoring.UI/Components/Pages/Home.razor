@@ -1,7 +1,10 @@
 ﻿@page "/"
+@implements IDisposable
+@using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
 @using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
 <div class="run-container">
     <div class="fighter-container">
         <FighterScore Fighter="@runDto.ChongFighter" Score="@runDto.ChongScore" />
@@ -11,16 +14,19 @@
         <FighterScore Fighter="@runDto.HongFighter" Score="@runDto.HongScore" IsRed="true" />
     </div>
     <div class="scoring-container">
-        <ScoringButtonComponent />
+        <ScoringButtonComponent ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
             <ScoringSummaryComponent ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" Running="@runDto.Running" StartStopRun="this.StartStopRun" />
         </div>
-        <ScoringButtonComponent IsRed="true" />
+        <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>
 
 
 @code {
+    [Inject] IModalService _modal { get; set; }
+    [Inject] NavigationManager _navigationManager { get; set; }
+
     private EliminationRunDto runDto = new()
         {
             ChongFighter = new()
@@ -36,10 +42,30 @@
         };
 
     private RunTimer _runTimer;
-
+    private IDisposable _registerLocationChangeHandler;
     protected override async Task OnInitializedAsync()
     {
+        this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+
         await base.OnInitializedAsync();
+    }
+
+    private async Task CalcScore(bool isRed, decimal value)
+    {
+        this.CalculateAccuracyScore(isRed ? this.runDto.HongScore : this.runDto.ChongScore, value);
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private void CalculateAccuracyScore(ScoreDto dto, decimal value)
+    {
+        if (dto.Accuracy - value <= 0)
+        {
+            dto.Accuracy = 0;
+        }
+        else
+        {
+            dto.Accuracy -= value;
+        }
     }
 
     private async Task StartStopRun()
@@ -53,6 +79,25 @@
         {
             this.runDto.Running = false;
             this._runTimer.Stop();
+        }
+    }
+    private async ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        if (this.runDto.Running)
+        {
+            var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
+            if (res == EDialogResult.No)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this._registerLocationChangeHandler is not null)
+        {
+            this._registerLocationChangeHandler.Dispose();
         }
     }
 }
