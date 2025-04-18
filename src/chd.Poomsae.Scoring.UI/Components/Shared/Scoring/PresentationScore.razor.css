@@ -1,6 +1,6 @@
 ﻿.presentation-score {
     display: grid;
-    grid-template-columns: 40% 40% auto;
+    grid-template-columns: 40% 50% auto;
     color: white;
     border: 1px solid var(--chd-font-color);
     border-radius: 0.5rem;
@@ -9,9 +9,11 @@
 }
 
     .presentation-score .presentation-score-label {
+        font-size:1.2rem;
     }
 
     .presentation-score .presentation-score-slider {
+        font-size:1rem;
     }
 
         .presentation-score .presentation-score-slider input[type=range] {
@@ -20,7 +22,7 @@
         }
 
     .presentation-score .presentation-score-value {
-        justify-items: center;
+        justify-items: end;
     }
 
         .presentation-score .presentation-score-value .score-value {
@@ -28,5 +30,6 @@
             border: 1px solid white;
             border-radius: 0.5rem;
             background-color: var(--score-color);
+            font-size:1.3rem;
             font-weight: bold;
         }

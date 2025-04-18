@@ -31,6 +31,7 @@
 @code {
     [Inject] IModalService _modal { get; set; }
     [Inject] IStartRunService _runService { get; set; }
+    [Inject] IInitDtoService initDtoService { get; set; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
     private EliminationRunDto runDto;
@@ -50,6 +51,7 @@
     {
         if (this.runDto.State is not ERunState.Started) { return; }
         this.CalculateAccuracyScore(isRed ? this.runDto.HongScore : this.runDto.ChongScore, value);
+        this.runDto.Time = this._runTimer.Time;
         await this.InvokeAsync(this.StateHasChanged);
     }
 
@@ -58,6 +60,10 @@
         if (dto.Accuracy - value <= 0)
         {
             dto.Accuracy = 0;
+        }
+        else if (dto.Accuracy - value >= this.initDtoService.ScoreDto.StartAccuracy)
+        {
+            dto.Accuracy = this.initDtoService.ScoreDto.StartAccuracy;
         }
         else
         {

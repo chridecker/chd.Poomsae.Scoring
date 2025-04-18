@@ -1,6 +1,6 @@
 <div class="scoring @_css">
-    <ScoringButton IsBig="true" Value="@ValueBig" OnClick="async (d)=> await OnClickButton(d)" />
-    <ScoringButton IsBig="false" Value="@ValueSmall" OnClick="async (d)=> await OnClickButton(d)" />
+    <ScoringButton IsBig="true" Value="@ValueBig" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
+    <ScoringButton IsBig="false" Value="@ValueSmall" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
 </div>
 
 @code {

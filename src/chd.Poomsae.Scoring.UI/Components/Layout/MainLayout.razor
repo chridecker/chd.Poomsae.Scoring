@@ -37,12 +37,11 @@
 </BlazoredToasts>
 
 @code {
-    private bool _autocollapseNav = false;
-    private bool _navCollapsed = false;
+    private bool _autocollapseNav = true;
+    private bool _navCollapsed = true;
 
     protected override async Task OnInitializedAsync()
     {
-        this._navCollapsed = true;
         await base.OnInitializedAsync();
     }
 

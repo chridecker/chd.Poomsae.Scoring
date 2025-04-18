@@ -5,6 +5,10 @@
     .nav-menu ::deep .sidebar.collapsed {
     }
 
+        .nav-menu ::deep .sidebar.collapsed .toggle {
+            right: calc(-0.2 * var(--nav-toggle-height) - 0.5rem) !important;
+        }
+
      
     .nav-menu ::deep .sidebar.collapsed .menu-bar {
         height: 100%;

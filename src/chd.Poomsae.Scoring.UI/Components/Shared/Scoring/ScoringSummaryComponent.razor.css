@@ -9,13 +9,13 @@
         grid-gap: 0.2rem;
         border-top: 1px solid var(--chd-font-color);
         border-bottom: 1px solid var(--chd-font-color);
-        border-radius: 0.8rem;
+        border-radius: 0.5rem;
     }
 
         .scoring-summary-container .scores-group .scores {
             border-top: 1px solid var(--chd-grey-semi-transparent);
             border-bottom: 1px solid var(--chd-grey-semi-transparent);
-            border-radius: 1.5rem;
+            border-radius: 0.5rem;
             display: grid;
             grid-template-columns: max-content auto max-content;
             text-align: center;
