@@ -14,8 +14,9 @@ namespace chd.Poomsae.Scoring.App
         }
         protected override async void OnAppearing()
         {
-            await this.CheckPermissions();
             base.OnAppearing();
+            await this.CheckPermissions();
+            Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
         }
 
         private async Task CheckPermissions()
