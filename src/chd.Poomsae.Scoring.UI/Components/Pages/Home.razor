@@ -21,7 +21,7 @@
     <div class="scoring-container">
         <ScoringButtonComponent ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
-            <ScoringSummaryComponent ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
+            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
         <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
     </div>
@@ -82,37 +82,16 @@
         {
             this.runDto.Time = this._runTimer.Time;
             this._runTimer.Stop();
-            var modalResultBlue = await this._modal.Show<ScorePresentationModal>(runDto.ChongFighter.Fullname, new ModalParameters()
+            this.runDto.State = ERunState.Stopped;
+
+            if (!await this.OpenPresentationModal(false))
             {
-            }, new ModalOptions()
-                {
-                    Size = ModalSize.ExtraLarge,
-                }).Result;
-            if (modalResultBlue.Cancelled)
-            {
+                this.runDto.State = ERunState.Started;
+
                 this._runTimer.Start();
                 return;
             }
-            else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
-            {
-                this.runDto.ChongScore.SpeedAndPower = scoreDto.SpeedAndPower;
-                this.runDto.ChongScore.RhythmAndTempo = scoreDto.RhythmAndTempo;
-                this.runDto.ChongScore.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
-            }
-            var modalResultRed = await this._modal.Show<ScorePresentationModal>(runDto.HongFighter.Fullname, new ModalParameters(){
-                {nameof(ScorePresentationModal.IsRed),true}
-            }, new ModalOptions()
-            {
-                Size = ModalSize.ExtraLarge,
-            }).Result;
-            if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
-            {
-                this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
-                this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
-                this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
-            }
-
-            this.runDto.State = ERunState.Stopped;
+            await this.OpenPresentationModal(true);
         }
         else if (this.runDto.State is ERunState.Stopped)
         {
@@ -129,6 +108,47 @@
     private async Task SendResult()
     {
 
+    }
+
+    private async Task<bool> OpenPresentationModal(bool isRed)
+    {
+        if (this.runDto.State is not ERunState.Stopped) { return false; }
+
+        if (!isRed)
+        {
+            var modalResultBlue = await this._modal.Show<ScorePresentationModal>(runDto.ChongFighter.Fullname, new ModalOptions()
+                {
+                    Size = ModalSize.ExtraLarge,
+                }).Result;
+            if (modalResultBlue.Cancelled)
+            {
+                return false;
+            }
+            else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
+            {
+                this.runDto.ChongScore.SpeedAndPower = scoreDto.SpeedAndPower;
+                this.runDto.ChongScore.RhythmAndTempo = scoreDto.RhythmAndTempo;
+                this.runDto.ChongScore.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
+            }
+            return true;
+        }
+        else
+        {
+            var modalResultRed = await this._modal.Show<ScorePresentationModal>(runDto.HongFighter.Fullname, new ModalParameters(){
+                {nameof(ScorePresentationModal.IsRed),true}
+            }, new ModalOptions()
+            {
+                Size = ModalSize.ExtraLarge,
+            }).Result;
+            if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
+            {
+                this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
+                this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
+                this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
+            }
+        }
+        await this.InvokeAsync(this.StateHasChanged);
+        return true;
     }
 
     private async ValueTask OnLocationChanging(LocationChangingContext context)

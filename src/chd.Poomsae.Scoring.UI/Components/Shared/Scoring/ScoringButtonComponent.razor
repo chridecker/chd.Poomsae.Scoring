@@ -1,3 +1,4 @@
+@using chd.Poomsae.Scoring.Contracts.Interfaces
 <div class="scoring @_css">
     <ScoringButton IsBig="true" Value="@ValueBig" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
     <ScoringButton IsBig="false" Value="@ValueSmall" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
@@ -7,15 +8,15 @@
     [Parameter] public bool IsRed { get; set; }
     [Parameter] public decimal ValueBig { get; set; }
     [Parameter] public decimal ValueSmall { get; set; }
-
-
     [Parameter] public Func<bool, decimal, Task> OnCalcClick { get; set; }
 
+    [Inject] IVibrationHelper vibrationHelper { get; set; }
 
     private string _css => this.IsRed ? "scoring-hong" : "scoring-chong";
 
     private async Task OnClickButton(decimal value)
     {
         await this.OnCalcClick(this.IsRed, value);
+        this.vibrationHelper.Vibrate(TimeSpan.FromMilliseconds(500));
     }
 }

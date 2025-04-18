@@ -21,7 +21,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
 
-            services.AddUi<SettingManager>(configuration);
+            services.AddUi<SettingManager, VibrationHelper>(configuration);
 
             return services;
         }

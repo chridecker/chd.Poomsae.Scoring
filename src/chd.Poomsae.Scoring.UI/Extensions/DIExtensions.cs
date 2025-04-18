@@ -17,8 +17,9 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TSettingManager>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUi<TSettingManager, TVibrationHelper>(this IServiceCollection services, IConfiguration configuration)
                  where TSettingManager : BaseClientSettingManager<int, int>, ISettingManager
+            where TVibrationHelper : class, IVibrationHelper
         {
             services.AddAuthorizationCore();
             services.AddUtilities<chdProfileService, int, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, UpdateService>(ServiceLifetime.Singleton);
@@ -29,6 +30,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddSingleton<IAppInfoService, AppInfoService>();
             services.AddSingleton<IInitDtoService, InitDtoService>();
             services.AddSingleton<IStartRunService, StartRunService>();
+            services.AddSingleton<IVibrationHelper, TVibrationHelper>();
             return services;
         }
     }

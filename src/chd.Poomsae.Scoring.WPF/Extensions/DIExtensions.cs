@@ -16,7 +16,7 @@ namespace chd.Poomsae.Scoring.WPF.Extensions
     {
         public static IServiceCollection AddChdPoomsaeApp(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddUi<SettingManager>(configuration);
+            services.AddUi<SettingManager, VibrationHelper>(configuration);
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
             return services;
