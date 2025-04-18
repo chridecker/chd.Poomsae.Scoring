@@ -1,0 +1,62 @@
+﻿.scoring-summary-container {
+    display: grid;
+    grid-gap: 0.5rem;
+}
+
+    .scoring-summary-container .scores-group {
+        display: grid;
+        grid-gap: 0.5rem;
+        border-top: 1px solid var(--chd-font-color);
+        border-bottom: 1px solid var(--chd-font-color);
+        border-radius: 0.8rem;
+    }
+
+        .scoring-summary-container .scores-group .scores {
+            border-top: 1px solid var(--chd-grey-semi-transparent);
+            border-bottom: 1px solid var(--chd-grey-semi-transparent);
+            border-radius: 1.5rem;
+            display: grid;
+            grid-template-columns: max-content auto max-content;
+            text-align: center;
+            font-size: 0.9rem;
+            align-items: center;
+        }
+
+            .scoring-summary-container .scores-group .scores .score {
+                padding: 0 0.5rem 0 0.5rem;
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: white;
+            }
+
+                .scoring-summary-container .scores-group .scores .score.score-chong {
+                    background-color: royalblue;
+                    border-radius: 0.5rem;
+                }
+
+            .scoring-summary-container .scores-group .scores.accuracy .score.score-chong {
+                background-color: deepskyblue;
+            }
+
+            .scoring-summary-container .scores-group .scores.accuracy .score.score-hong {
+                background-color: indianred;
+            }
+
+            .scoring-summary-container .scores-group .scores .score.score-hong {
+                background-color: red;
+                border-radius: 0.5rem;
+            }
+
+        .scoring-summary-container .scores-group.finish {
+            grid-template-columns: auto;
+            border: none;
+            justify-content: center;
+        }
+
+            .scoring-summary-container .scores-group.finish .scores > div {
+                border: 1px solid var(--chd-font-color);
+                border-radius: 0.8rem;
+                padding: 0.2rem 0.8rem 0.2rem 0.8rem;
+                width: max-content;
+                font-weight: 600;
+            }

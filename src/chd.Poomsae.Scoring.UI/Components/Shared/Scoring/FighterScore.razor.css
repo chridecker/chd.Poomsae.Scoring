@@ -1,0 +1,57 @@
+﻿.fighter {
+    display: grid;
+}
+
+    .fighter.fighter-chong {
+        text-align: right;
+    }
+
+    .fighter.fighter-hong {
+    }
+
+    .fighter .fighter-scores {
+        display: grid;
+    }
+
+    .fighter.fighter-chong .fighter-scores {
+        grid-template-columns: 50% repeat(2,auto);
+    }
+
+    .fighter.fighter-hong .fighter-scores {
+        grid-template-columns: repeat(2,auto) 50%;
+    }
+
+
+
+    .fighter .fighter-scores .fighter-score {
+        align-content: end;
+    }
+
+        .fighter .fighter-scores .fighter-score.presentation {
+            color: darkorange;
+        }
+
+        .fighter .fighter-scores .fighter-score.accuracy {
+            color: orangered;
+        }
+
+        .fighter .fighter-scores .fighter-score.total {
+            color: yellow;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+    .fighter.fighter-hong .fighter-scores .fighter-score.presentation {
+        order:3;
+    }
+
+    .fighter.fighter-hong .fighter-scores .fighter-score.accuracy {
+        order: 2;
+    }
+
+    .fighter.fighter-hong .fighter-scores .fighter-score.total {
+        order: 1;
+    }
+
+    .fighter .fighter-name {
+    }

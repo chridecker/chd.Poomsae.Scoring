@@ -1,28 +1,14 @@
 ﻿@page "/"
 @using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
+@using chd.Poomsae.Scoring.UI.Extensions
 <div class="run-container">
     <div class="fighter-container">
-        <div class="fighter fighter-chong">
-            <div class="fighter-scores">
-                <div class="fighter-score presentation">@runDto.ChongScore.Presentation.ToString("n1")</div>
-                <div class="fighter-score accuracy">@runDto.ChongScore.Accuracy.ToString("n1")</div>
-                <div class="fighter-score total">@runDto.ChongScore.Total.ToString("n1")</div>
-            </div>
-            <div class="fighter-name">
-                @runDto.ChongFighter.Fullname
-            </div>
+        <FighterScore Fighter="@runDto.ChongFighter" Score="@runDto.ChongScore" />
+        <div class="run-middle">
+            <RunTimer @ref="this._runTimer" Time="@runDto.Time"></RunTimer>
         </div>
-        <div class="run-middle"></div>
-        <div class="fighter fighter-hong">
-            <div class="fighter-scores">
-                <div class="fighter-score total">@runDto.HongScore.Total.ToString("n1")</div>
-                <div class="fighter-score accuracy">@runDto.HongScore.Accuracy.ToString("n1")</div>
-                <div class="fighter-score presentation">@runDto.HongScore.Presentation.ToString("n1")</div>
-            </div>
-            <div class="fighter-name">
-                @runDto.HongFighter.Fullname
-            </div>
-        </div>
+        <FighterScore Fighter="@runDto.HongFighter" Score="@runDto.HongScore" IsRed="true" />
     </div>
     <div class="scoring-container">
         <div class="scoring scoring-chong">
@@ -34,27 +20,7 @@
             </div>
         </div>
         <div class="scoring-middle">
-            <div class="scores accuracy">
-                <div class="score score-chong">@runDto.ChongScore.Accuracy.ToString("n1")</div>
-                <div class="scores-names">Accuracy</div>
-                <div class="score score-hong">@runDto.HongScore.Accuracy.ToString("n1")</div>
-            </div>
-            <div class="scores">
-                <div class="score score-chong">@runDto.ChongScore.SpeedAndPower.ToString("n1")</div>
-                <div class="scores-names">Speed And Power</div>
-                <div class="score score-hong">@runDto.HongScore.SpeedAndPower.ToString("n1")</div>
-            </div>
-            <div class="scores">
-                <div class="score score-chong">@runDto.ChongScore.RhythmAndTempo.ToString("n1")</div>
-                <div class="scores-names">Rhythm And Tempo</div>
-                <div class="score score-hong">@runDto.HongScore.RhythmAndTempo.ToString("n1")</div>
-            </div>
-            <div class="scores">
-                <div class="score score-chong">@runDto.ChongScore.ExpressionAndEnergy.ToString("n1")</div>
-                <div class="scores-names">Expression And Energy</div>
-                <div class="score score-hong">@runDto.HongScore.ExpressionAndEnergy.ToString("n1")</div>
-            </div>
-            <div class="scores finish"><div class="">Finish</div></div>
+            <ScoringSummaryComponent ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" Running="@runDto.Running" StartStopRun="this.StartStopRun" />
         </div>
         <div class="scoring scoring-hong">
             <div class="scoring-button scoring-button-big">
@@ -73,19 +39,34 @@
         {
             ChongFighter = new()
             {
-                Firstname = "Christoph",
-                Lastname = "Decker"
+                Firstname = "Player",
+                Lastname = "1"
             },
             HongFighter = new()
             {
-                Firstname = "Gerhard",
-                Lastname = "Huber"
+                Firstname = "Player",
+                Lastname = "2"
             }
         };
 
+    private RunTimer _runTimer;
+
     protected override async Task OnInitializedAsync()
     {
-
         await base.OnInitializedAsync();
+    }
+
+    private async Task StartStopRun()
+    {
+        if (!this.runDto.Running)
+        {
+            this.runDto.Running = true;
+            this._runTimer.Start();
+        }
+        else
+        {
+            this.runDto.Running = false;
+            this._runTimer.Stop();
+        }
     }
 }

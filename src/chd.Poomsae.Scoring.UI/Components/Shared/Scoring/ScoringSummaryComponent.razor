@@ -1,0 +1,42 @@
+@using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.UI.Extensions
+
+
+<div class="scoring-summary-container">
+    <div class="scores-group">
+        <div class="scores accuracy">
+            <div class="score score-chong">@this.ChongScore.Accuracy.ToDisplayString()</div>
+            <div class="scores-names">Accuracy</div>
+            <div class="score score-hong">@this.HongScore.Accuracy.ToDisplayString()</div>
+        </div>
+    </div>
+    <div class="scores-group">
+        <div class="scores">
+            <div class="score score-chong">@this.ChongScore.SpeedAndPower.ToDisplayString()</div>
+            <div class="scores-names">Speed & Power</div>
+            <div class="score score-hong">@this.HongScore.SpeedAndPower.ToDisplayString()</div>
+        </div>
+        <div class="scores">
+            <div class="score score-chong">@this.ChongScore.RhythmAndTempo.ToDisplayString()</div>
+            <div class="scores-names">Rhythm/Tempo/Softness</div>
+            <div class="score score-hong">@this.HongScore.RhythmAndTempo.ToDisplayString()</div>
+        </div>
+        <div class="scores">
+            <div class="score score-chong">@this.ChongScore.ExpressionAndEnergy.ToDisplayString()</div>
+            <div class="scores-names">Expression of Energy</div>
+            <div class="score score-hong">@this.HongScore.ExpressionAndEnergy.ToDisplayString()</div>
+        </div>
+    </div>
+    <div class="scores-group finish">
+        <div class="scores ">
+            <div class="" @onclick="async ()=> await this.StartStopRun()">@(this.Running ? "Finish" : "Start")</div>
+        </div>
+    </div>
+
+</div>
+@code {
+    [Parameter] public ScoreDto ChongScore { get; set; }
+    [Parameter] public ScoreDto HongScore { get; set; }
+    [Parameter] public Func<Task> StartStopRun { get; set; }
+    [Parameter] public bool Running { get; set; }
+}

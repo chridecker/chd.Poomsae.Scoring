@@ -1,0 +1,32 @@
+<div class="run-timer">
+    @Time.ToString("mm\\:ss")
+</div>
+
+@code {
+    [Parameter] public TimeSpan Time { get; set; }
+
+    private PeriodicTimer _periodicTimer;
+    private CancellationTokenSource _cts;
+
+    public void Start()
+    {
+        this._periodicTimer = new(TimeSpan.FromSeconds(1));
+        this._cts = new CancellationTokenSource();
+        this.Refresher();
+    }
+
+    public void Stop()
+    {
+        this._periodicTimer.Dispose();
+        this._cts.Cancel();
+    }
+
+    private async void Refresher()
+    {
+        while (await this._periodicTimer.WaitForNextTickAsync(this._cts.Token))
+        {
+            this.Time = this.Time.Add(TimeSpan.FromSeconds(1));
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+}
