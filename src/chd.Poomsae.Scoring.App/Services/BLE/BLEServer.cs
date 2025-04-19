@@ -41,7 +41,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             if (run is EliminationRunDto elimination)
             {
                 this._characteristic.SetValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower), __dataConvert(elimination.ChongScore.RhythmAndTempo), __dataConvert(elimination.ChongScore.ExpressionAndEnergy), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower), __dataConvert(elimination.HongScore.RhythmAndTempo), __dataConvert(elimination.HongScore.ExpressionAndEnergy)]);
-                foreach (var device in this._gattServer.ConnectedDevices)
+                foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
+                {
+                    this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
+                }
+                foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.GattServer))
                 {
                     this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
                 }
