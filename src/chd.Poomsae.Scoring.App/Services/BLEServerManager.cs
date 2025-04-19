@@ -1,6 +1,7 @@
 ﻿using Android.Bluetooth;
 using Android.Bluetooth.LE;
 using Android.Content;
+using chd.Poomsae.Scoring.App.Services.BLE;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using Java.Util;
 using System;
