@@ -17,12 +17,12 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
 
         }
-        //public override void OnCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset,
-        //   BluetoothGattCharacteristic characteristic)
-        //{
-        //    base.OnCharacteristicReadRequest(device, requestId, offset, characteristic);
-        //    this.CharacteristicReadRequest?.Invoke(this, new BleEventArgs() { Device = device, Characteristic = characteristic, RequestId = requestId, Offset = offset });
-        //}
+        public override void OnCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset,
+           BluetoothGattCharacteristic characteristic)
+        {
+            base.OnCharacteristicReadRequest(device, requestId, offset, characteristic);
+            this.CharacteristicReadRequest?.Invoke(this, new BleEventArgs() { Device = device, Characteristic = characteristic, RequestId = requestId, Offset = offset });
+        }
 
         //public override void OnCharacteristicWriteRequest(BluetoothDevice device, int requestId, BluetoothGattCharacteristic characteristic,
         //    bool preparedWrite, bool responseNeeded, int offset, byte[] value)

@@ -25,16 +25,18 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private BluetoothGattService _resultService;
         private BluetoothGattCharacteristic _characteristic;
+        private BluetoothGattCharacteristic _characteristicName;
 
         public BLEServer(BLEGattCallback callback)
         {
             this._callback = callback;
             this._callback.NotificationSent += this._callback_NotificationSent;
+            this._callback.CharacteristicReadRequest += this.ReadRequest;
         }
 
         private void _callback_NotificationSent(object? sender, BleEventArgs e)
         {
-
+            this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
         }
         public void BroadcastResult(RunDto run)
         {
@@ -65,7 +67,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._gattServer = this._bluetoothManager.OpenGattServer(ctx, this._callback);
 
             this.CreateService();
-
+            BluetoothLeAdvertiser advertiser = this._bluetoothAdapter.BluetoothLeAdvertiser;
             var builder = new AdvertiseSettings.Builder();
             builder.SetAdvertiseMode(AdvertiseMode.LowLatency);
             builder.SetConnectable(true);
@@ -73,28 +75,30 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             builder.SetTxPowerLevel(AdvertiseTx.PowerHigh);
             AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
-            dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
-            dataBuilder.SetIncludeTxPowerLevel(true);
+            //dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
+            //dataBuilder.SetIncludeTxPowerLevel(true);
 
-            this._bluetoothAdapter.BluetoothLeAdvertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), new BleAdvertiseCallback());
+            advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), new BleAdvertiseCallback());
         }
 
         private void CreateService()
         {
             this._resultService = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), GattServiceType.Primary);
 
-            this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
+            this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
+            this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read);
             this._characteristic.AddDescriptor(new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()),
-                     GattDescriptorPermission.Read | GattDescriptorPermission.Write));
+                     GattDescriptorPermission.Read));
 
             this._resultService.AddCharacteristic(this._characteristic);
+            this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);
         }
 
-        //private async void ReadRequest(object sender, BleEventArgs e)
-        //{
-        //    e.Characteristic.SetValue(String.Format("Start!"));
-        //    this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
-        //}
+        private async void ReadRequest(object sender, BleEventArgs e)
+        {
+            e.Characteristic.SetValue(DeviceInfo.Current.Name);
+            this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
+        }
     }
 }

@@ -17,7 +17,6 @@ namespace chd.Poomsae.Scoring.App.Services
 
         public BleGattServerCallback()
         {
-
         }
 
         public override void OnCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset,
