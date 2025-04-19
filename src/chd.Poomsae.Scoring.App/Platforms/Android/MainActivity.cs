@@ -17,6 +17,7 @@ namespace chd.Poomsae.Scoring.App
         private readonly IAppInfoService _appInfoService;
         private readonly INotificationManagerService _notificationManagerService;
 
+
         public MainActivity()
         {
             this._notificationManagerService = IPlatformApplication.Current.Services.GetService<INotificationManagerService>();

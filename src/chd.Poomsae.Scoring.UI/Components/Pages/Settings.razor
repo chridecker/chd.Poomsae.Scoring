@@ -21,7 +21,10 @@
     </div>
 </div>
 
+<button @onclick="this.bLEServerManager.Start">Start BLE</button>
+
 
 @code {
     [Inject] private IInitDtoService initDtoService { get; set; }
+    [Inject] private IBLEServerManager bLEServerManager { get; set; }
 }

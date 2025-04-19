@@ -20,6 +20,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
             services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
+            services.AddSingleton<IBLEServerManager, BLEServerManager>();
 
             services.AddUi<SettingManager, VibrationHelper>(configuration);
 

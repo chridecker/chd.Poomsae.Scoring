@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35506.116 d17.12
+VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7481F42E-C0D3-4D09-8316-F8EFF31C1C7F}"
 EndProject
@@ -21,6 +21,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6BB4DCFB-6622-4462-B326-0FFD0E9C75DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6BB4DCFB-6622-4462-B326-0FFD0E9C75DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BB4DCFB-6622-4462-B326-0FFD0E9C75DB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{6BB4DCFB-6622-4462-B326-0FFD0E9C75DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BB4DCFB-6622-4462-B326-0FFD0E9C75DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ED66FC47-F6B1-4B86-B052-7D5E54BB4CA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
