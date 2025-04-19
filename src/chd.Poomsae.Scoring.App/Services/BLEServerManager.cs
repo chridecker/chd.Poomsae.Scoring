@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-    public class BLEServerManager : IBLEServerManager
+    public class BLEServerManager
     {
-        private  BluetoothManager _bluetoothManager;
+        private BluetoothManager _bluetoothManager;
         private BluetoothAdapter _bluetoothAdapter;
         private BleGattServerCallback _bluettothServerCallback;
         private BluetoothGattServer _bluetoothServer;
@@ -44,7 +44,7 @@ namespace chd.Poomsae.Scoring.App.Services
 
             _bluetoothServer.AddService(service);
 
-          
+
             Console.WriteLine("Server created!");
 
             BluetoothLeAdvertiser myBluetoothLeAdvertiser = _bluetoothAdapter.BluetoothLeAdvertiser;

@@ -32,6 +32,7 @@
     [Inject] IModalService _modal { get; set; }
     [Inject] IStartRunService _runService { get; set; }
     [Inject] IInitDtoService initDtoService { get; set; }
+    [Inject] IBroadCastService broadCastService { get; set; }
     [Inject] NavigationManager _navigationManager { get; set; }
 
     private EliminationRunDto runDto;
@@ -107,7 +108,7 @@
 
     private async Task SendResult()
     {
-
+        this.broadCastService.BroadcastResult(this.runDto);
     }
 
     private async Task<bool> OpenPresentationModal(bool isRed)

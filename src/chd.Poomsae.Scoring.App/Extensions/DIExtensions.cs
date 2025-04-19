@@ -1,5 +1,6 @@
 ﻿using Android.App.Roles;
 using chd.Poomsae.Scoring.App.Services;
+using chd.Poomsae.Scoring.App.Services.BLE;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.Poomsae.Scoring.UI.Extensions;
@@ -20,9 +21,9 @@ namespace chd.Poomsae.Scoring.App.Extensions
             services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
-            services.AddSingleton<IBLEServerManager, BLEServerManager>();
+            services.AddSingleton<BLEGattCallback>();
 
-            services.AddUi<SettingManager, VibrationHelper>(configuration);
+            services.AddUi<SettingManager, VibrationHelper, BLEServer>(configuration);
 
             return services;
         }

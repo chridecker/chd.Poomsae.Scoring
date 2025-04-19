@@ -1,5 +1,6 @@
 ﻿@inherits PageComponentBase<int,int>
 @using Blazored.Toast.Configuration
+@using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.UI.Base.Client.Implementations.Services
 @using chd.UI.Base.Contracts.Enum
 @inject IScrollInfoService scrollInfoService
@@ -25,10 +26,10 @@
 </div>
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="5"
-                MaxToastCount="3"
-                RemoveToastsOnNavigation="true"
-                ShowProgressBar="true">
+Timeout="5"
+MaxToastCount="3"
+RemoveToastsOnNavigation="true"
+ShowProgressBar="true">
     <CloseButtonContent>
         <div>
             <span>&times;</span>
@@ -40,8 +41,11 @@
     private bool _autocollapseNav = true;
     private bool _navCollapsed = true;
 
+    [Inject] IBroadCastService broadCastService { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
+        this.broadCastService.Start();
         await base.OnInitializedAsync();
     }
 
