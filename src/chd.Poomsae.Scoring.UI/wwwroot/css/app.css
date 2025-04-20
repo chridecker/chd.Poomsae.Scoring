@@ -7,6 +7,10 @@
     --main-article-height: calc(100% - var(--top-header-height)) !important;
     --sidebar-toggle-top: calc(var(--top-header-height) + 0.5rem) !important;
     --main-article-available-height: 100% !important;
+    --chd-p-blue: royalblue;
+    --chd-p-blue-accent: deepskyblue;
+    --chd-p-red-accent: indianred;
+    --chd-p-red: red;
 }
 
     *::-webkit-scrollbar {

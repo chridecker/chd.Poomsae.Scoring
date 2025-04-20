@@ -1,0 +1,61 @@
+﻿.result-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+}
+
+    .result-container .total-results {
+        display: grid;
+        grid-template-columns: auto auto;
+        height: 55vh;
+        color: white;
+    }
+
+        .result-container .total-results .total-result {
+            display: flex;
+            flex-wrap: wrap;
+            align-content:center;
+        }
+
+            .result-container .total-results .total-result .total {
+                width: 100%;
+                font-size: 5rem;
+                line-height: 5rem;
+                text-align: center;
+                font-weight: bold;
+                padding: 0.5rem;
+            }
+
+            .result-container .total-results .total-result.chong .total {
+                background-color: var(--chd-p-blue);
+            }
+
+            .result-container .total-results .total-result.hong .total {
+                background-color: var(--chd-p-red);
+            }
+
+            .result-container .total-results .total-result .detail {
+                width: 50%;
+                font-size: 3rem;
+                line-height:3rem;
+                text-align: center;
+                border: 1px solid var(--chd-font-color);
+                padding: 0.5rem;
+            }
+
+                .result-container .total-results .total-result .detail.accuracy {
+                    color: orangered;
+                }
+
+                .result-container .total-results .total-result .detail.presentation {
+                    color: darkorange;
+                }
+
+            .result-container .total-results .total-result.hong .detail.presentation {
+                order: 2;
+            }
+
+    .result-container .judge-results {
+        display: grid;
+        grid-template-columns: 25% auto;
+    }

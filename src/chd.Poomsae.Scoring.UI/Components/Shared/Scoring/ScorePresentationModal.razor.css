@@ -1,11 +1,11 @@
 ﻿.scoring-presentation {
     display: grid;
     gap: 0.5rem;
-    --score-color: royalblue;
+    --score-color: var(--chd-p-blue);
 }
 
     .scoring-presentation.score-hong {
-        --score-color: red;
+        --score-color: var(--chd-p-red);
     }
 
     .scoring-presentation .scoring {

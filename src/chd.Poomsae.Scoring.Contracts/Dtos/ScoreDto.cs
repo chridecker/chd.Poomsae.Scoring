@@ -6,7 +6,6 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
 {
     public class ScoreDto
     {
-        public decimal MaxTotal { get; set; }
         public decimal Total => this.Accuracy + this.Presentation;
         public decimal Accuracy { get; set; }
         public decimal Presentation => this.SpeedAndPower + this.RhythmAndTempo + this.ExpressionAndEnergy;
@@ -17,9 +16,16 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
         {
 
         }
+        public ScoreDto(byte[] data)
+        {
+            if (data.Length < 4) { return; }
+            this.Accuracy = data[0] * 0.1m;
+            this.SpeedAndPower = data[1] * 0.1m;
+            this.RhythmAndTempo = data[2] * 0.1m;
+            this.ExpressionAndEnergy = data[3] * 0.1m;
+        }
         public ScoreDto(InitScoreDto initDto)
         {
-            this.MaxTotal = initDto.TotalMax;
             this.Accuracy = initDto.StartAccuracy;
         }
     }

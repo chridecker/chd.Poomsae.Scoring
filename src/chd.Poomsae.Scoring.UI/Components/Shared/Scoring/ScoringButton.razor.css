@@ -8,11 +8,11 @@
 }
 
 .scoring.scoring-chong .scoring-button {
-    background-color: royalblue;
+    background-color: var(--chd-p-blue);
 }
 
 .scoring.scoring-hong .scoring-button {
-    background-color: red;
+    background-color: var(--chd-p-red);
     border-radius: var(--button-radius) 0 0 var(--button-radius);
     align-items: center !important;
 }
@@ -21,11 +21,11 @@
     height: 100%;
     width: 65%;
     border-radius: 0 var(--button-radius) var(--button-radius) 0;
-    background-color: deepskyblue;
+    background-color: var(--chd-p-blue-accent);
     padding: 0.2rem;
     display: flex;
     justify-content: end;
-    align-items:center;
+    align-items: center;
 }
 
     .scoring-button .scoring-button-inner .scoring-button-inner-button {
@@ -54,7 +54,7 @@
 }
 
 .scoring.scoring-hong .scoring-button .scoring-button-inner {
-    background-color: indianred;
+    background-color: var(--chd-p-red-accent);
     border-radius: var(--button-radius) 0 0 var(--button-radius);
     border-right: 0px;
     justify-content: start;
@@ -72,9 +72,11 @@
     background-color: inherit;
     color: black;
 }
+
 .scoring.scoring-chong .scoring-button .scoring-button-outer-button {
     margin-right: 0.5vw;
 }
+
 .scoring.scoring-hong .scoring-button .scoring-button-outer-button {
     margin-left: 0.5vw;
 }
@@ -86,13 +88,15 @@
 .scoring-button .scoring-button-outer-button .scoring-button-outer-button-value {
     font-size: 1rem;
 }
-.scoring-button .scoring-button-outer-button .scoring-button-outer-button-value ::deep svg {
-    fill: black;
-}
+
+    .scoring-button .scoring-button-outer-button .scoring-button-outer-button-value ::deep svg {
+        fill: black;
+    }
 
 .scoring-button.scoring-button-big {
     height: 35vh;
 }
+
     .scoring-button.scoring-button-big .scoring-button-inner .scoring-button-inner-button {
         margin: min(1rem,1%);
     }

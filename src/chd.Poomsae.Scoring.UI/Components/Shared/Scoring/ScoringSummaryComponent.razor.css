@@ -31,20 +31,20 @@
             }
 
                 .scoring-summary-container .scores-group .scores .score.score-chong {
-                    background-color: royalblue;
+                    background-color: var(--chd-p-blue);
                     border-radius: 0.5rem;
                 }
 
             .scoring-summary-container .scores-group .scores.accuracy .score.score-chong {
-                background-color: deepskyblue;
+                background-color: var(--chd-p-blue-accent);
             }
 
             .scoring-summary-container .scores-group .scores.accuracy .score.score-hong {
-                background-color: indianred;
+                background-color: var(--chd-p-red-accent);
             }
 
             .scoring-summary-container .scores-group .scores .score.score-hong {
-                background-color: red;
+                background-color: var(--chd-p-red);
                 border-radius: 0.5rem;
             }
 

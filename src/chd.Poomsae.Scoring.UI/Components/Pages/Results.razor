@@ -1,0 +1,54 @@
+@using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Extensions
+@page "/results"
+
+<div class="result-container">
+    <div class="total-results">
+        <div class="total-result chong">
+            <div class="total">9.1</div>
+            <div class="detail presentation">6.0</div>
+            <div class="detail accuracy">3.1</div>
+        </div>
+        <div class="total-result hong">
+            <div class="total">9.1</div>
+            <div class="detail presentation">6.0</div>
+            <div class="detail accuracy">3.1</div>
+        </div>
+    </div>
+    <div class="judge-results">
+        <div class="judge-result chong"></div>
+        <div class="judge-result hong"></div>
+    </div>
+</div>
+
+@code {
+    [Inject] IResultService resultService { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        this.resultService.SetRun(Guid.NewGuid(), new()
+            {
+                JudgeId = Guid.NewGuid(),
+                Name = "CHD",
+                ChongScore = new([34, 18, 17, 18]),
+                HongScore = new([32, 14, 19, 13]),
+            });
+
+        this.resultService.SetRun(Guid.NewGuid(), new()
+            {
+                JudgeId = Guid.NewGuid(),
+                Name = "CHD",
+                ChongScore = new([34, 18, 17, 18]),
+                HongScore = new([32, 14, 19, 13]),
+            });
+        this.resultService.SetRun(Guid.NewGuid(), new()
+            {
+                JudgeId = Guid.NewGuid(),
+                Name = "CHD",
+                ChongScore = new([34, 18, 17, 18]),
+                HongScore = new([32, 14, 19, 13]),
+            });
+
+        return base.OnInitializedAsync();
+    }
+}

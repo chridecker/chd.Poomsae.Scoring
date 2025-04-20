@@ -21,6 +21,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private BluetoothManager _bluetoothManager;
         private BluetoothAdapter _bluetoothAdapter;
         private BLEGattCallback _callback;
+        private readonly BLEAdvertisingCallback _advertisingCallback;
         private readonly ISettingManager _settingManager;
         private BluetoothGattServer _gattServer;
 
@@ -28,9 +29,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private BluetoothGattCharacteristic _characteristic;
         private BluetoothGattCharacteristic _characteristicName;
 
-        public BLEServer(BLEGattCallback callback, ISettingManager settingManager)
+        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager)
         {
             this._callback = callback;
+            this._advertisingCallback = advertisingCallback;
             this._settingManager = settingManager;
             this._callback.NotificationSent += this._callback_NotificationSent;
             this._callback.CharacteristicReadRequest += this.ReadRequest;
@@ -78,9 +80,9 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
             //dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
-            //dataBuilder.SetIncludeTxPowerLevel(true);
+            dataBuilder.SetIncludeTxPowerLevel(true);
 
-            advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), new BleAdvertiseCallback());
+            advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), this._advertisingCallback);
         }
 
         private void CreateService()
@@ -91,6 +93,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
             //this._characteristic.AddDescriptor(new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()), GattDescriptorPermission.Read));
 
+            this._characteristic.SetValue([1, 0, 0, 0, 0, 2, 0, 0, 0, 0]);
+
             this._resultService.AddCharacteristic(this._characteristic);
             this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);
@@ -100,7 +104,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
-                e.Characteristic.SetValue([1,0,0,0,0,2,0,0,0,0]);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
@@ -113,6 +116,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 }
                 e.Characteristic.SetValue(DeviceInfo.Current.Name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
+                this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
             }
         }
 
