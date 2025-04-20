@@ -16,8 +16,26 @@
         </div>
     </div>
     <div class="judge-results">
-        <div class="judge-result chong"></div>
-        <div class="judge-result hong"></div>
+        <div class="judge-result chong">
+            @foreach (var judge in this.resultService.Result.Results.Values)
+            {
+                    <div class="judge">
+                        <div class="name">@judge.Name</div>
+                        <div class="score accuracy">@judge.ChongScore.Accuracy</div>
+                        <div class="score presentation">@judge.ChongScore.Presentation</div>
+                    </div>
+            }
+        </div>
+        <div class="judge-result hong">
+            @foreach (var judge in this.resultService.Result.Results.Values)
+            {
+                    <div class="judge">
+                        <div class="name">@judge.Name</div>
+                        <div class="score accuracy">@judge.HongScore.Accuracy</div>
+                            <div class="score presentation">@judge.HongScore.Presentation</div>
+                    </div>
+            }
+        </div>
     </div>
 </div>
 

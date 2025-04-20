@@ -7,20 +7,20 @@
     .result-container .total-results {
         display: grid;
         grid-template-columns: auto auto;
-        height: 55vh;
+        height: max-content;
         color: white;
     }
 
         .result-container .total-results .total-result {
             display: flex;
             flex-wrap: wrap;
-            align-content:center;
+            align-content: center;
         }
 
             .result-container .total-results .total-result .total {
                 width: 100%;
-                font-size: 5rem;
-                line-height: 5rem;
+                font-size: 6.5rem;
+                line-height: 6.5rem;
                 text-align: center;
                 font-weight: bold;
                 padding: 0.5rem;
@@ -37,7 +37,7 @@
             .result-container .total-results .total-result .detail {
                 width: 50%;
                 font-size: 3rem;
-                line-height:3rem;
+                line-height: 3rem;
                 text-align: center;
                 border: 1px solid var(--chd-font-color);
                 padding: 0.5rem;
@@ -51,11 +51,30 @@
                     color: darkorange;
                 }
 
-            .result-container .total-results .total-result.hong .detail.presentation {
-                order: 2;
+    .result-container .judge-results {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2,auto);
+    }
+
+        .result-container .judge-results .judge-result {
+            display: flex;
+            flex-direction: column;
+        }
+
+            .result-container .judge-results .judge-result.chong {
             }
 
-    .result-container .judge-results {
-        display: grid;
-        grid-template-columns: 25% auto;
-    }
+            .result-container .judge-results .judge-result.hong {
+            }
+
+            .result-container .judge-results .judge-result .judge {
+                display: grid;
+                grid-template-columns: repeat(3,auto);
+            }
+
+                .result-container .judge-results .judge-result .judge .name {
+                }
+
+                .result-container .judge-results .judge-result .judge .score {
+                }

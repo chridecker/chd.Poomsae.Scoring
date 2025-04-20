@@ -105,6 +105,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
+                //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
@@ -116,7 +117,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 }
                 e.Characteristic.SetValue(DeviceInfo.Current.Name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
-                this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
+                //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
+
             }
         }
 
