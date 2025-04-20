@@ -11,8 +11,8 @@
 @if (runDto is null) { return; }
 
 <div class="run-container">
-    <div class="fighter-container">
-        <FighterScore Fighter="@runDto.ChongFighter" Score="@runDto.ChongScore" />
+   <div class="fighter-container">
+       <FighterScore Fighter="@runDto.ChongFighter" Score="@runDto.ChongScore" />
         <div class="run-middle">
             <RunTimer @ref="this._runTimer" Time="@runDto.Time"></RunTimer>
         </div>

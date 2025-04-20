@@ -18,7 +18,6 @@ namespace chd.Poomsae.Scoring.WPF
     {
          protected override void OnInitialized(EventArgs e)
         {
-            this.WindowStyle = WindowStyle.SingleBorderWindow;
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             base.OnInitialized(e);
         }

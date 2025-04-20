@@ -1,8 +1,15 @@
+@using chd.Poomsae.Scoring.Contracts.Constants
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 
 @page "/settings"
 
 <div class="settings">
+    <div class="device-settings">
+        <div class="device-setting">
+            <div class="setting-label">Name</div>
+            <input type="text" value="@this._name" @onchange="this.NameChanged" />
+        </div>
+    </div>
     <div class="init-settings">
         <div class="init-setting">
             <div class="setting-label">Blau:</div>
@@ -21,8 +28,23 @@
     </div>
 </div>
 
-
-
 @code {
     [Inject] private IInitDtoService initDtoService { get; set; }
+
+    [Inject] ISettingManager settingManager { get; set; }
+
+    private string _name;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._name = await this.settingManager.GetSettingLocal(SettingConstants.OwnName);
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task NameChanged(ChangeEventArgs e)
+    {
+        this._name = e.Value.ToString();
+        await this.settingManager.StoreSettingLocal(SettingConstants.OwnName, this._name);
+    }
 }

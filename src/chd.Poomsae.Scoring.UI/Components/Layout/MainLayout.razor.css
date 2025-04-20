@@ -3,6 +3,7 @@ main {
     left: var(--sidebar-width-small);
     height: var(--main-article-available-height);
     width: calc(100% - var(--sidebar-width-small));
+    --main-article-width: 100vw;
 }
 
     main.collapsed-nav {

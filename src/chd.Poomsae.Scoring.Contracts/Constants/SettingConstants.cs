@@ -6,6 +6,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
 {
     public class SettingConstants
     {
+        public const string OwnName = "Own_Name";
         public const string BaseAddress = "Base_Address";
     }
 }
