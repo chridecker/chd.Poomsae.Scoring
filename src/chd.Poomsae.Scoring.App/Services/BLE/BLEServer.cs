@@ -112,7 +112,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
                 if (string.IsNullOrWhiteSpace(name))
                 {
-                    name = DeviceInfo.Current.Name;
+                    name = DeviceInfo.Current.Name + "*";
                 }
                 e.Characteristic.SetValue(DeviceInfo.Current.Name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());

@@ -2,6 +2,7 @@
 using Android.Bluetooth.LE;
 using Android.Content;
 using chd.Poomsae.Scoring.App.Services.BLE;
+using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using Java.Util;
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-    public class BLEServerManager
+    public class BLEServerManager : IBroadCastService
     {
         private BluetoothManager _bluetoothManager;
         private BluetoothAdapter _bluetoothAdapter;
@@ -139,11 +140,10 @@ namespace chd.Poomsae.Scoring.App.Services
             }
         }
 
-
-
-
-
-
+        public void BroadcastResult(RunDto dto)
+        {
+            
+        }
     }
 
     public class BleAdvertiseCallback : AdvertiseCallback
