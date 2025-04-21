@@ -51,10 +51,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 {
                     this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
                 }
-                foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.GattServer))
-                {
-                    this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
-                }
             }
 
             byte __dataConvert(decimal d) => (byte)(d * 10);
@@ -90,7 +86,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._resultService = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), GattServiceType.Primary);
 
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
-            this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
+            this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
             var desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
             //desc.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
 
@@ -106,10 +102,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
-                var desc = e.Characteristic.GetDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()));
-
-                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
-                this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
@@ -123,8 +115,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 }
                 e.Characteristic.SetValue(name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
-                //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
-
             }
         }
 

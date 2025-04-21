@@ -88,7 +88,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 DeviceId = id,
                 DeviceName = name,
                 Chong = new(e.Characteristic.Value.Skip(1).Take(4).ToArray()),
-                Hong = new(e.Characteristic.Value.Skip(5).Take(4).ToArray()),
+                Hong = new(e.Characteristic.Value.Skip(6).Take(4).ToArray()),
             });
         }
     }
