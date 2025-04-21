@@ -92,7 +92,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
             this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
             var desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
-            desc.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
+            //desc.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
 
             this._characteristic.AddDescriptor(desc);
 
@@ -102,7 +102,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._gattServer.AddService(this._resultService);
         }
 
-        private async void ReadRequest(object sender, BleEventArgs e)
+        private void ReadRequest(object sender, BleEventArgs e)
         {
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
@@ -113,11 +113,13 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
-                var name = await this._settingManager.GetSettingLocal(SettingConstants.OwnName);
+                var name = DeviceInfo.Current.Name + "*";
 
-                if (string.IsNullOrWhiteSpace(name))
+                var nameTask = this._settingManager.GetSettingLocal(SettingConstants.OwnName);
+                Task.WaitAny(nameTask, Task.Delay(TimeSpan.FromSeconds(1)));
+                if (nameTask.IsCompleted && !string.IsNullOrWhiteSpace(name))
                 {
-                    name = DeviceInfo.Current.Name + "*";
+                    name = nameTask.Result;
                 }
                 e.Characteristic.SetValue(name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
