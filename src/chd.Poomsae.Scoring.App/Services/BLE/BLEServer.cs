@@ -36,7 +36,9 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._settingManager = settingManager;
             this._callback.NotificationSent += this._callback_NotificationSent;
             this._callback.CharacteristicReadRequest += this.ReadRequest;
+            this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
         }
+
 
         private void _callback_NotificationSent(object? sender, BleEventArgs e)
         {
@@ -96,6 +98,12 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._resultService.AddCharacteristic(this._characteristic);
             this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);
+        }
+
+
+        private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
+        {
+            this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
         }
 
         private void ReadRequest(object sender, BleEventArgs e)
