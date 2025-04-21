@@ -1,12 +1,14 @@
 ﻿.result-container {
-    height: 100%;
+    height: 100vh;
     width: 100%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
 }
 
     .result-container .total-results {
         display: grid;
         grid-template-columns: auto auto;
+        width: 100%;
         height: max-content;
         color: white;
     }
@@ -19,8 +21,8 @@
 
             .result-container .total-results .total-result .total {
                 width: 100%;
-                font-size: 6.5rem;
-                line-height: 6.5rem;
+                height: max-content;
+                font-size: max(7em,20%);
                 text-align: center;
                 font-weight: bold;
                 padding: 0.5rem;
@@ -71,10 +73,30 @@
             .result-container .judge-results .judge-result .judge {
                 display: grid;
                 grid-template-columns: repeat(3,auto);
+                border-bottom:1px solid;
             }
 
                 .result-container .judge-results .judge-result .judge .name {
                 }
 
                 .result-container .judge-results .judge-result .judge .score {
+                    font-size: 1.5rem;
+                    padding: 0.2rem;
+                    text-align:center;
+                }
+
+            .result-container .judge-results .judge-result.chong .judge .score {
+                background-color: var(--chd-p-blue);
+            }
+
+                .result-container .judge-results .judge-result.chong .judge .score.accuracy {
+                    background-color: var(--chd-p-blue-accent);
+                }
+                
+                .result-container .judge-results .judge-result.hong .judge .score {
+                background-color: var(--chd-p-red);
+            }
+
+                .result-container .judge-results .judge-result.hong .judge .score.accuracy {
+                    background-color: var(--chd-p-red-accent);
                 }

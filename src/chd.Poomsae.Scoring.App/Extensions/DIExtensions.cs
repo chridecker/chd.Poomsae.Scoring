@@ -24,7 +24,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
             services.AddSingleton<BLEGattCallback>();
             services.AddSingleton<BLEAdvertisingCallback>();
 
-            services.AddUi<SettingManager, VibrationHelper, BLEServer>(configuration);
+            services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
             //services.AddUi<SettingManager, VibrationHelper, BLEServerManager>(configuration);
 
             return services;

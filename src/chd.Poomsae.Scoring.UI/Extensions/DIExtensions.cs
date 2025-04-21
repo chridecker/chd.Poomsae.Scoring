@@ -17,10 +17,11 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TSettingManager, TVibrationHelper, TBroadCastService>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUi<TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
                  where TSettingManager : BaseClientSettingManager<int, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
             where TBroadCastService : class, IBroadCastService
+            where TBroadcastClient : class, IBroadcastClient
         {
             services.AddAuthorizationCore();
             services.AddUtilities<chdProfileService, int, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, UpdateService>(ServiceLifetime.Singleton);
@@ -34,6 +35,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddSingleton<IStartRunService, StartRunService>();
             services.AddSingleton<IVibrationHelper, TVibrationHelper>();
             services.AddSingleton<IBroadCastService, TBroadCastService>();
+            services.AddSingleton<IBroadcastClient, TBroadcastClient>();
             return services;
         }
     }

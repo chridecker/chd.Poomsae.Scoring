@@ -1,5 +1,7 @@
+@using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
+@implements IDisposable
 @page "/results"
 
 <div class="result-container">
@@ -19,21 +21,21 @@
         <div class="judge-result chong">
             @foreach (var judge in this.resultService.Result.Results.Values)
             {
-                    <div class="judge">
-                        <div class="name">@judge.Name</div>
-                        <div class="score accuracy">@judge.ChongScore.Accuracy</div>
-                        <div class="score presentation">@judge.ChongScore.Presentation</div>
-                    </div>
+                <div class="judge">
+                    <div class="name">@judge.Name</div>
+                    <div class="score accuracy">@judge.ChongScore.Accuracy</div>
+                    <div class="score presentation">@judge.ChongScore.Presentation</div>
+                </div>
             }
         </div>
         <div class="judge-result hong">
             @foreach (var judge in this.resultService.Result.Results.Values)
             {
-                    <div class="judge">
-                        <div class="name">@judge.Name</div>
-                        <div class="score accuracy">@judge.HongScore.Accuracy</div>
-                            <div class="score presentation">@judge.HongScore.Presentation</div>
-                    </div>
+                <div class="judge">
+                    <div class="name">@judge.Name</div>
+                    <div class="score accuracy">@judge.HongScore.Accuracy</div>
+                    <div class="score presentation">@judge.HongScore.Presentation</div>
+                </div>
             }
         </div>
     </div>
@@ -41,32 +43,31 @@
 
 @code {
     [Inject] IResultService resultService { get; set; }
+    [Inject] IBroadcastClient broadcastClient { get; set; }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        this.resultService.SetRun(Guid.NewGuid(), new()
-            {
-                JudgeId = Guid.NewGuid(),
-                Name = "CHD",
-                ChongScore = new([34, 18, 17, 18]),
-                HongScore = new([32, 14, 19, 13]),
-            });
 
-        this.resultService.SetRun(Guid.NewGuid(), new()
-            {
-                JudgeId = Guid.NewGuid(),
-                Name = "CHD",
-                ChongScore = new([34, 18, 17, 18]),
-                HongScore = new([32, 14, 19, 13]),
-            });
-        this.resultService.SetRun(Guid.NewGuid(), new()
-            {
-                JudgeId = Guid.NewGuid(),
-                Name = "CHD",
-                ChongScore = new([34, 18, 17, 18]),
-                HongScore = new([32, 14, 19, 13]),
-            });
+        this.broadcastClient.ResultReceived += ResultReceived;
+        await this.broadcastClient.StartScanAsync();
 
-        return base.OnInitializedAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async void ResultReceived(object? sender, ScoreReceivedEventArgs e)
+    {
+        this.resultService.SetRun(e.DeviceId, new()
+            {
+                JudgeId = e.DeviceId,
+                Name = e.DeviceName,
+                ChongScore = e.Chong,
+                HongScore = e.Hong
+            });
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        this.broadcastClient.ResultReceived -= ResultReceived;
     }
 }
