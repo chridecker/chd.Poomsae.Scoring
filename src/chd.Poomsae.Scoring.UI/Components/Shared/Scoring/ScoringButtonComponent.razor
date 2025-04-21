@@ -8,7 +8,7 @@
     [Parameter] public bool IsRed { get; set; }
     [Parameter] public decimal ValueBig { get; set; }
     [Parameter] public decimal ValueSmall { get; set; }
-    [Parameter] public Func<bool, decimal, Task> OnCalcClick { get; set; }
+    [Parameter] public Func<bool, decimal, Task<TimeSpan?> OnCalcClick { get; set; }
 
     [Inject] IVibrationHelper vibrationHelper { get; set; }
 
@@ -16,7 +16,10 @@
 
     private async Task OnClickButton(decimal value)
     {
-        await this.OnCalcClick(this.IsRed, value);
-        this.vibrationHelper.Vibrate(TimeSpan.FromMilliseconds(300));
+        var time = await this.OnCalcClick(this.IsRed, value);
+        if (time.HasValue)
+        {
+            this.vibrationHelper.Vibrate(time);
+        }
     }
 }

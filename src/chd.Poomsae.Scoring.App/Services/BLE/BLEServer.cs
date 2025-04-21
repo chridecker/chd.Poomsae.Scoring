@@ -91,10 +91,12 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
             this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
-            //this._characteristic.AddDescriptor(new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()), GattDescriptorPermission.Read));
+            var desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
+            desc.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
+
+            this._characteristic.AddDescriptor(desc);
 
             this._characteristic.SetValue([1, 0, 0, 0, 0, 2, 0, 0, 0, 0]);
-
             this._resultService.AddCharacteristic(this._characteristic);
             this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);
@@ -104,8 +106,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
+                var desc = e.Characteristic.GetDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()));
+
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
-                //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
+                this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
@@ -115,7 +119,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 {
                     name = DeviceInfo.Current.Name + "*";
                 }
-                e.Characteristic.SetValue(DeviceInfo.Current.Name);
+                e.Characteristic.SetValue(name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
                 //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
 
