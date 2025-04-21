@@ -37,7 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this._name = await this.settingManager.GetNativSetting(SettingConstants.OwnName);
+        this._name = await this.settingManager.GetSettingLocal(SettingConstants.OwnName);
 
         await base.OnInitializedAsync();
     }
