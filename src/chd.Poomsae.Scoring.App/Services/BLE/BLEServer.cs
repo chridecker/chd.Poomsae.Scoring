@@ -27,7 +27,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private BluetoothGattService _resultService;
         private BluetoothGattCharacteristic _characteristic;
+        private BluetoothGattDescriptor _desc;
         private BluetoothGattCharacteristic _characteristicName;
+
+        private List<string> readDevices = [];
 
         public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager)
         {
@@ -37,12 +40,13 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._callback.NotificationSent += this._callback_NotificationSent;
             this._callback.CharacteristicReadRequest += this.ReadRequest;
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
+            this._callback.DescriptorWriteRequest += this._callback_DescriptorWriteRequest;
         }
 
 
         private void _callback_NotificationSent(object? sender, BleEventArgs e)
         {
-            this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
+            //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
         }
         public void BroadcastResult(RunDto run)
         {
@@ -51,7 +55,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 this._characteristic.SetValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower), __dataConvert(elimination.ChongScore.RhythmAndTempo), __dataConvert(elimination.ChongScore.ExpressionAndEnergy), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower), __dataConvert(elimination.HongScore.RhythmAndTempo), __dataConvert(elimination.HongScore.ExpressionAndEnergy)]);
                 foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
                 {
-                    this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
+                    if (this.readDevices.Any(a => a == device.Address))
+                    {
+                        this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
+                    }
                 }
             }
 
@@ -89,10 +96,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
             this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
-            var desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
-            desc.SetValue(BluetoothGattDescriptor.DisableNotificationValue.ToArray());
+            this._desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
+            this._desc.SetValue(BluetoothGattDescriptor.DisableNotificationValue.ToArray());
 
-            this._characteristic.AddDescriptor(desc);
+            this._characteristic.AddDescriptor(this._desc);
 
             this._characteristic.SetValue([1, 0, 0, 0, 0, 2, 0, 0, 0, 0]);
             this._resultService.AddCharacteristic(this._characteristic);
@@ -103,29 +110,35 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
         {
-            if (e.Descriptor.Uuid == UUID.FromString(BLEConstants.Notify_Descriptor.ToString()))
+            if (e.Descriptor.Uuid == this._desc.Uuid)
             {
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
             }
         }
+        private void _callback_DescriptorWriteRequest(object? sender, BleEventArgs e)
+        {
+            if (e.Descriptor.Uuid == this._desc.Uuid)
+            {
+                this._desc.SetValue(e.Value);
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
+            }
+        }
 
-        private void ReadRequest(object sender, BleEventArgs e)
+        private async void ReadRequest(object sender, BleEventArgs e)
         {
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
-                var name = DeviceInfo.Current.Name + "*";
-
-                var nameTask = this._settingManager.GetSettingLocal(SettingConstants.OwnName);
-                Task.WaitAny(nameTask, Task.Delay(TimeSpan.FromSeconds(1)));
-                if (nameTask.IsCompleted && !string.IsNullOrWhiteSpace(name))
+                var name = await this._settingManager.GetNativSetting<string>(SettingConstants.OwnName);
+                if (string.IsNullOrWhiteSpace(name))
                 {
-                    name = nameTask.Result;
+                    name = DeviceInfo.Current.Name;
                 }
                 e.Characteristic.SetValue(name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
+                this.readDevices.Add(e.Device.Address);
             }
         }
 

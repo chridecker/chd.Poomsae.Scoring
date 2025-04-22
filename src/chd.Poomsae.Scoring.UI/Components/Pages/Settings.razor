@@ -37,7 +37,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this._name = await this.settingManager.GetSettingLocal(SettingConstants.OwnName);
+        this._name = await this.settingManager.GetNativSetting<string>(SettingConstants.OwnName);
 
         await base.OnInitializedAsync();
     }
@@ -45,6 +45,6 @@
     private async Task NameChanged(ChangeEventArgs e)
     {
         this._name = e.Value.ToString();
-        await this.settingManager.StoreSettingLocal(SettingConstants.OwnName, this._name);
+        await this.settingManager.SetNativSetting<string>(SettingConstants.OwnName, this._name);
     }
 }
