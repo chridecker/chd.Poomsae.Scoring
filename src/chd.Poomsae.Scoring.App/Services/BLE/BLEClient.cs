@@ -54,7 +54,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             var device = e.Device;
             if (device.NativeDevice is BluetoothDevice bDevice)
             {
-                _ = await this._adapter.ConnectToKnownDeviceAsync(device.Id);
+                await this._adapter.ConnectToDeviceAsync(device);
             }
         }
         private async void _adapter_DeviceConnected(object? sender, DeviceEventArgs e)

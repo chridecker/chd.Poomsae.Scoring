@@ -89,8 +89,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
             this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
-            var desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Result_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
-            //desc.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
+            var desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
+            desc.SetValue(BluetoothGattDescriptor.DisableNotificationValue.ToArray());
 
             this._characteristic.AddDescriptor(desc);
 
@@ -103,7 +103,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
         {
-            this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
+            if (e.Descriptor.Uuid == UUID.FromString(BLEConstants.Notify_Descriptor.ToString()))
+            {
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
+            }
         }
 
         private void ReadRequest(object sender, BleEventArgs e)
