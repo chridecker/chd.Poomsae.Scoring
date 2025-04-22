@@ -47,7 +47,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         this.broadcastClient.ResultReceived += ResultReceived;
         await this.broadcastClient.StartScanAsync();
 
