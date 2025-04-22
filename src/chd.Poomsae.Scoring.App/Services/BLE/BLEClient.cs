@@ -19,8 +19,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private IBluetoothLE _bluetoothLE => CrossBluetoothLE.Current;
         private IAdapter _adapter => this._bluetoothLE.Adapter;
 
-        private Dictionary<Guid, string> _nameDict = [];
-
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
 
 
@@ -67,11 +65,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic);
                 var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
 
-                this._nameDict[device.Id] = "J";
                 if (characteristicName is not null && characteristicName.CanRead)
                 {
                     var data = await characteristicName.ReadAsync();
-                    this._nameDict[device.Id] = Encoding.UTF8.GetString(data.data);
+                    //this._nameDict[device.Id] =
                 }
 
                 if (characteristic is null || !characteristic.CanUpdate) { return; }
@@ -81,8 +78,17 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
         }
 
-        private void Characteristic_ValueUpdated(object? sender, Guid id, string name, CharacteristicUpdatedEventArgs e)
+        private async void Characteristic_ValueUpdated(object? sender, Guid id, string name, CharacteristicUpdatedEventArgs e)
         {
+            var device = e.Characteristic.Service.Device;
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
+            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
+
+            if (characteristicName is not null && characteristicName.CanRead)
+            {
+                var data = await characteristicName.ReadAsync();
+                name = Encoding.ASCII.GetString(data.data.Select(s => (byte)Convert.ToInt32(s.ToString(), 16)).ToArray());
+            }
             this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
             {
                 DeviceId = id,
