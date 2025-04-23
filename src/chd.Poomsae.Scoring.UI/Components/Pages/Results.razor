@@ -19,22 +19,22 @@
     </div>
     <div class="judge-results">
         <div class="judge-result chong">
-            @foreach (var judge in this.resultService.Result.Results.Values)
+            @foreach (var judge in this._connectedDeviced)
             {
                 <div class="judge">
-                    <div class="name">@judge.Name</div>
-                    <div class="score accuracy">@judge.ChongScore.Accuracy.ToDisplayString()</div>
-                    <div class="score presentation">@judge.ChongScore.Presentation.ToDisplayString()</div>
+                    <div class="name">@judge.Value</div>
+                    <div class="score accuracy">@(ChongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString()</div>
+                    <div class="score presentation">@(ChongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString()</div>
                 </div>
             }
         </div>
         <div class="judge-result hong">
-            @foreach (var judge in this.resultService.Result.Results.Values)
+            @foreach (var judge in this._connectedDeviced)
             {
                 <div class="judge">
-                    <div class="name">@judge.Name</div>
-                    <div class="score accuracy">@judge.HongScore.Accuracy.ToDisplayString()</div>
-                    <div class="score presentation">@judge.HongScore.Presentation.ToDisplayString()</div>
+                    <div class="name">@judge.Value</div>
+                    <div class="score accuracy">@(HongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString()</div>
+                    <div class="score presentation">@(HongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString()</div>
                 </div>
             }
         </div>
@@ -45,12 +45,21 @@
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
 
+    private Dictionary<Guid, string> _connectedDeviced = [];
+
     protected override async Task OnInitializedAsync()
     {
         this.broadcastClient.ResultReceived += ResultReceived;
+        this.broadcastClient.DeviceFound += DeviceFound;
         await this.broadcastClient.StartScanAsync();
 
         await base.OnInitializedAsync();
+    }
+
+    private async void DeviceFound(object? sender, DeviceFoundEventArgs e)
+    {
+        this._connectedDeviced[e.Id] = e.Name;
+        await this.InvokeAsync(this.StateHasChanged);
     }
 
     private async void ResultReceived(object? sender, ScoreReceivedEventArgs e)
@@ -64,9 +73,12 @@
             });
         await this.InvokeAsync(this.StateHasChanged);
     }
+    private ScoreDto ChongResult(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? res.ChongScore : null;
+    private ScoreDto HongResult(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? res.HongScore : null;
 
     public void Dispose()
     {
         this.broadcastClient.ResultReceived -= ResultReceived;
+        this.broadcastClient.DeviceFound -= DeviceFound;
     }
 }

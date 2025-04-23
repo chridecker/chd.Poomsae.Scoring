@@ -10,6 +10,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IBroadcastClient 
     {
         event EventHandler<ScoreReceivedEventArgs> ResultReceived;
+        event EventHandler<DeviceFoundEventArgs> DeviceFound;
 
         Task<bool> StartScanAsync(CancellationToken cancellationToken = default);
     }

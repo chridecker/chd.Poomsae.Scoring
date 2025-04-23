@@ -48,18 +48,18 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             //this._gattServer.NotifyCharacteristicChanged(e.Device, e.Characteristic, false);
         }
+
+        public void ResetScore()
+        {
+            this._characteristic.SetValue([1, 0, 0, 0, 0, 2, 0, 0, 0, 0]);
+            this.BroadCastToAllDevices();
+        }
         public void BroadcastResult(RunDto run)
         {
             if (run is EliminationRunDto elimination)
             {
                 this._characteristic.SetValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower), __dataConvert(elimination.ChongScore.RhythmAndTempo), __dataConvert(elimination.ChongScore.ExpressionAndEnergy), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower), __dataConvert(elimination.HongScore.RhythmAndTempo), __dataConvert(elimination.HongScore.ExpressionAndEnergy)]);
-                foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
-                {
-                    if (this.readDevices.Any(a => a == device.Address))
-                    {
-                        this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
-                    }
-                }
+                this.BroadCastToAllDevices();
             }
 
             byte __dataConvert(decimal d) => (byte)(d * 10);
@@ -84,10 +84,21 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             builder.SetTxPowerLevel(AdvertiseTx.PowerHigh);
             AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
-            //dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
+            dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
             dataBuilder.SetIncludeTxPowerLevel(true);
 
             advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), this._advertisingCallback);
+        }
+
+        private void BroadCastToAllDevices()
+        {
+            foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
+            {
+                if (this.readDevices.Any(a => a == device.Address))
+                {
+                    this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
+                }
+            }
         }
 
         private void CreateService()

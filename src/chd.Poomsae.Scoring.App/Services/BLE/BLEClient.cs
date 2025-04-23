@@ -11,6 +11,8 @@ using System.Threading;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Contracts.Dtos;
+using Plugin.BLE.Abstractions;
+using Java.Util;
 
 namespace chd.Poomsae.Scoring.App.Services.BLE
 {
@@ -20,7 +22,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private IAdapter _adapter => this._bluetoothLE.Adapter;
 
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
-
+        public event EventHandler<DeviceFoundEventArgs> DeviceFound;
 
         public BLEClient()
         {
@@ -42,7 +44,13 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             if (!this._adapter.IsScanning)
             {
-                await this._adapter.StartScanningForDevicesAsync(cancellationToken: cancellationToken);
+                await this._adapter.StartScanningForDevicesAsync(new ScanFilterOptions()
+                {
+                    ServiceDataFilters = new ServiceDataFilter[]
+                    {
+                        new(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()).ToString())
+                }
+                });
             }
             return this._adapter.IsScanning;
         }
@@ -52,6 +60,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             var device = e.Device;
             if (device.NativeDevice is BluetoothDevice bDevice)
             {
+                if (string.IsNullOrWhiteSpace(device.Name)) { return; }
+                if (this._adapter.ConnectedDevices.Any(a => a.Id == device.Id)) { return; }
                 await this._adapter.ConnectToDeviceAsync(device);
             }
         }
@@ -61,22 +71,40 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             if (device.NativeDevice is BluetoothDevice navtiveDevive)
             {
                 var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
-                if (service is null) { return; }
-                var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic);
-                var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
-
-                if (characteristicName is not null && characteristicName.CanRead)
+                if (service is null)
                 {
-                    var data = await characteristicName.ReadAsync();
-                    //this._nameDict[device.Id] =
+                    await this.DisconnectDevice(device);
+                    return;
                 }
+                var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic);
 
-                if (characteristic is null || !characteristic.CanUpdate) { return; }
+                if (characteristic is null || !characteristic.CanUpdate)
+                {
+                    await this.DisconnectDevice(device);
+                    return;
+                }
 
                 characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, device.Id, device.Name, e);
                 await characteristic.StartUpdatesAsync();
+
+                var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
+                var name = device.Name;
+                if (characteristicName is not null && characteristicName.CanRead)
+                {
+                    var data = await characteristicName.ReadAsync();
+                    name = Encoding.ASCII.GetString(data.data.Select(s => (byte)Convert.ToInt32(s.ToString(), 16)).ToArray());
+                }
+
+                this.DeviceFound?.Invoke(this, new()
+                {
+                    Id = device.Id,
+                    Name = name,
+                    Address = navtiveDevive.Address
+                });
             }
         }
+
+        private async Task DisconnectDevice(IDevice device) => this._adapter.DisconnectDeviceAsync(device);
 
         private async void Characteristic_ValueUpdated(object? sender, Guid id, string name, CharacteristicUpdatedEventArgs e)
         {

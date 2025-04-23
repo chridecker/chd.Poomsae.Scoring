@@ -14,6 +14,10 @@ namespace chd.Poomsae.Scoring.WPF.Services
         {
         }
 
+        public void ResetScore()
+        {
+        }
+
         public void Start()
         {
         }

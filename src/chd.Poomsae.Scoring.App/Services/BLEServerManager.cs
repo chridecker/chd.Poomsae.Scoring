@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-    public class BLEServerManager : IBroadCastService
+    public class BLEServerManager 
     {
         private BluetoothManager _bluetoothManager;
         private BluetoothAdapter _bluetoothAdapter;

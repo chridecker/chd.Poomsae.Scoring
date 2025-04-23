@@ -9,6 +9,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IBroadCastService
     {
         void Start();
+        void ResetScore();
         void BroadcastResult(RunDto dto);
     }
 }

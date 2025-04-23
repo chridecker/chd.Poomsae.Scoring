@@ -102,6 +102,7 @@
         }
         else if (this.runDto.State is ERunState.Finished)
         {
+            this.broadCastService.ResetScore();
             this.runDto = this._runService.StartEliminiationRun();
         }
         await this.InvokeAsync(this.StateHasChanged);

@@ -11,6 +11,8 @@ namespace chd.Poomsae.Scoring.WPF.Services
     public class BLECLientDummy : IBroadcastClient
     {
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
+        public event EventHandler<DeviceFoundEventArgs> DeviceFound;
+
 
         public Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
         {
