@@ -23,12 +23,19 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         public event EventHandler<DeviceFoundEventArgs> DeviceFound;
+        public event EventHandler<Guid> DeviceDisconnected;
 
         public BLEClient()
         {
             this._adapter.DeviceDiscovered += this._adapter_DeviceDiscovered;
             this._adapter.DeviceConnected += this._adapter_DeviceConnected;
+            this._adapter.DeviceDisconnected += this._adapter_DeviceDisconnected;
             this._adapter.ScanTimeoutElapsed += this._adapter_ScanTimeoutElapsed;
+        }
+
+        private void _adapter_DeviceDisconnected(object? sender, DeviceEventArgs e)
+        {
+            this.DeviceDisconnected?.Invoke(this, e.Device.Id);
         }
 
         private async void _adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
@@ -46,10 +53,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             {
                 await this._adapter.StartScanningForDevicesAsync(new ScanFilterOptions()
                 {
-                    ServiceDataFilters = new ServiceDataFilter[]
-                    {
-                        new(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()).ToString())
-                }
+                    ServiceUuids = [BLEConstants.Result_Gatt_Service]
                 });
             }
             return this._adapter.IsScanning;
@@ -92,7 +96,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 if (characteristicName is not null && characteristicName.CanRead)
                 {
                     var data = await characteristicName.ReadAsync();
-                    name = Encoding.ASCII.GetString(data.data.Select(s => (byte)Convert.ToInt32(s.ToString(), 16)).ToArray());
+                    name = Encoding.ASCII.GetString(data.data);
                 }
 
                 this.DeviceFound?.Invoke(this, new()
@@ -115,7 +119,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             if (characteristicName is not null && characteristicName.CanRead)
             {
                 var data = await characteristicName.ReadAsync();
-                name = Encoding.ASCII.GetString(data.data.Select(s => (byte)Convert.ToInt32(s.ToString(), 16)).ToArray());
+                name = Encoding.ASCII.GetString(data.data);
             }
             this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
             {

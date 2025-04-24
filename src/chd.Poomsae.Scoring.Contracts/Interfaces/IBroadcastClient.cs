@@ -11,6 +11,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     {
         event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         event EventHandler<DeviceFoundEventArgs> DeviceFound;
+        event EventHandler<Guid> DeviceDisconnected;
 
         Task<bool> StartScanAsync(CancellationToken cancellationToken = default);
     }

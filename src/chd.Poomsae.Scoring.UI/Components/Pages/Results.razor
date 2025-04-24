@@ -12,7 +12,7 @@
             <div class="detail accuracy">@this.resultService.ChongPresentation.ToDisplayString()</div>
         </div>
         <div class="total-result hong">
-            <div class="total">@resultService.HongTotal.ToDisplayString()</div>
+            <div class="total">@this.resultService.HongTotal.ToDisplayString()</div>
             <div class="detail presentation">@this.resultService.HongAccuracy.ToDisplayString()</div>
             <div class="detail accuracy">@this.resultService.HongPresentation.ToDisplayString()</div>
         </div>
@@ -23,8 +23,8 @@
             {
                 <div class="judge">
                     <div class="name">@judge.Value</div>
-                    <div class="score accuracy">@(ChongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString()</div>
-                    <div class="score presentation">@(ChongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString()</div>
+                    <div class="score accuracy">@((ChongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString())</div>
+                    <div class="score presentation">@((ChongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString())</div>
                 </div>
             }
         </div>
@@ -33,8 +33,8 @@
             {
                 <div class="judge">
                     <div class="name">@judge.Value</div>
-                    <div class="score accuracy">@(HongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString()</div>
-                    <div class="score presentation">@(HongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString()</div>
+                    <div class="score accuracy">@((HongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString())</div>
+                    <div class="score presentation">@((HongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString())</div>
                 </div>
             }
         </div>
@@ -51,6 +51,7 @@
     {
         this.broadcastClient.ResultReceived += ResultReceived;
         this.broadcastClient.DeviceFound += DeviceFound;
+        this.broadcastClient.DeviceDisconnected += DeviceDisconnect;
         await this.broadcastClient.StartScanAsync();
 
         await base.OnInitializedAsync();
@@ -60,6 +61,15 @@
     {
         this._connectedDeviced[e.Id] = e.Name;
         await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async void DeviceDisconnect(object? sender, Guid id)
+    {
+        if (this._connectedDeviced.TryGetValue(id, out _))
+        {
+            this._connectedDeviced.Remove(id);
+            await this.InvokeAsync(this.StateHasChanged);
+        }
     }
 
     private async void ResultReceived(object? sender, ScoreReceivedEventArgs e)
@@ -80,5 +90,6 @@
     {
         this.broadcastClient.ResultReceived -= ResultReceived;
         this.broadcastClient.DeviceFound -= DeviceFound;
+        this.broadcastClient.DeviceDisconnected -= DeviceDisconnect;
     }
 }

@@ -12,7 +12,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
     {
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         public event EventHandler<DeviceFoundEventArgs> DeviceFound;
-
+        public event EventHandler<Guid> DeviceDisconnected;
 
         public Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
         {

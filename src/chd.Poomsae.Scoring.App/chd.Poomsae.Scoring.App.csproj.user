@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
     <ActiveDebugFramework>net9.0-android</ActiveDebugFramework>
-    <ActiveDebugProfile>Samsung SM-G991B (Android 14.0 - API 34)</ActiveDebugProfile>
+    <ActiveDebugProfile>HUAWEI AGS-W09 (Android 8.0 - API 26)</ActiveDebugProfile>
     <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
     <DefaultDevice>pixel_7_-_api_35</DefaultDevice>
   </PropertyGroup>
