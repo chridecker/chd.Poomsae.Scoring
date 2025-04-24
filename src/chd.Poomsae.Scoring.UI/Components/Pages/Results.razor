@@ -32,7 +32,6 @@
             @foreach (var judge in this._connectedDeviced)
             {
                 <div class="judge">
-                    <div class="name">@judge.Value</div>
                     <div class="score accuracy">@((HongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString())</div>
                     <div class="score presentation">@((HongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString())</div>
                 </div>
@@ -62,7 +61,6 @@
         this._connectedDeviced[e.Id] = e.Name;
         await this.InvokeAsync(this.StateHasChanged);
     }
-
     private async void DeviceDisconnect(object? sender, Guid id)
     {
         if (this._connectedDeviced.TryGetValue(id, out _))

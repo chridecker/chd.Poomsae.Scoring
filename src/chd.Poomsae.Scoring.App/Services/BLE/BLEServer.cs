@@ -87,10 +87,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
-
-            dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
+            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
+            {
+                dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
+            }
             dataBuilder.SetIncludeTxPowerLevel(true);
-
             advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), this._advertisingCallback);
         }
 

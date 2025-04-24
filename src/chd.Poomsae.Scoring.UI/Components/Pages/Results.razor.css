@@ -56,12 +56,13 @@
     .result-container .judge-results {
         width: 100%;
         display: grid;
-        grid-template-columns: repeat(2,auto);
+        grid-template-columns: 50% auto;
     }
 
         .result-container .judge-results .judge-result {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            width: 100%;
+            border: 1px solid white;
         }
 
             .result-container .judge-results .judge-result.chong {
@@ -73,16 +74,25 @@
             .result-container .judge-results .judge-result .judge {
                 display: grid;
                 grid-template-columns: repeat(3,auto);
-                border-bottom:1px solid;
+                border-bottom: 1px solid;
+            }
+
+            .result-container .judge-results .judge-result.hong .judge {
+                grid-template-columns: repeat(2,auto);
             }
 
                 .result-container .judge-results .judge-result .judge .name {
+                    text-align:center;
+                    align-content:center;
                 }
+
+
 
                 .result-container .judge-results .judge-result .judge .score {
                     font-size: 1.5rem;
                     padding: 0.2rem;
-                    text-align:center;
+                    text-align: center;
+                    font-weight: 500;
                 }
 
             .result-container .judge-results .judge-result.chong .judge .score {
@@ -92,8 +102,8 @@
                 .result-container .judge-results .judge-result.chong .judge .score.accuracy {
                     background-color: var(--chd-p-blue-accent);
                 }
-                
-                .result-container .judge-results .judge-result.hong .judge .score {
+
+            .result-container .judge-results .judge-result.hong .judge .score {
                 background-color: var(--chd-p-red);
             }
 

@@ -17,6 +17,7 @@ namespace chd.Poomsae.Scoring.Platforms.Android
                 if (OperatingSystem.IsAndroidVersionAtLeast(33))
                     result.Add((Manifest.Permission.AccessCoarseLocation, true));
                 result.Add((Manifest.Permission.AccessFineLocation, true));
+                result.Add((Manifest.Permission.WakeLock, true));
                 return result.ToArray();
             }
         }

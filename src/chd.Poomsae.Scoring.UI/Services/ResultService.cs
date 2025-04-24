@@ -1,6 +1,7 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Enums;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using DocumentFormat.OpenXml.Presentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,10 @@ namespace chd.Poomsae.Scoring.UI.Services
 
         public ResultDto Result => this._resultDto;
 
-        public event EventHandler<ResultDto> ResultChanged;
-        public event EventHandler<ERunState> StateChanged;
-
 
         public void SetRun(Guid id, RunResultDto runResultDto)
         {
             this._resultDto.Results[id] = runResultDto;
-            this.ResultChanged?.Invoke(this, this._resultDto);
         }
 
         public decimal ChongTotal => this.ChongAccuracy + this.ChongPresentation;

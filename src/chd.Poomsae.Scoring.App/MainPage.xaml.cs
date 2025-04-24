@@ -17,6 +17,7 @@ namespace chd.Poomsae.Scoring.App
             base.OnAppearing();
             await this.CheckPermissions();
             Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
+            DeviceDisplay.KeepScreenOn = true;
         }
 
         private async Task CheckPermissions()

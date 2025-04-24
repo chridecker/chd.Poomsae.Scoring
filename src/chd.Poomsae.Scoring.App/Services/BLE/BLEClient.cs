@@ -31,6 +31,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._adapter.DeviceConnected += this._adapter_DeviceConnected;
             this._adapter.DeviceDisconnected += this._adapter_DeviceDisconnected;
             this._adapter.ScanTimeoutElapsed += this._adapter_ScanTimeoutElapsed;
+            this._adapter.DeviceConnectionLost += this._adapter_DeviceDisconnected;
         }
 
         private void _adapter_DeviceDisconnected(object? sender, DeviceEventArgs e)
@@ -53,8 +54,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             {
                 await this._adapter.StartScanningForDevicesAsync(new ScanFilterOptions()
                 {
-                    ServiceUuids = [BLEConstants.Result_Gatt_Service]
-                });
+                    ServiceUuids = [BLEConstants.Result_Gatt_Service],
+                }, d => !string.IsNullOrWhiteSpace(d.Name) && !this._adapter.ConnectedDevices.Any(a => a.Id == d.Id));
             }
             return this._adapter.IsScanning;
         }
@@ -64,8 +65,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             var device = e.Device;
             if (device.NativeDevice is BluetoothDevice bDevice)
             {
-                if (string.IsNullOrWhiteSpace(device.Name)) { return; }
-                if (this._adapter.ConnectedDevices.Any(a => a.Id == device.Id)) { return; }
                 await this._adapter.ConnectToDeviceAsync(device);
             }
         }

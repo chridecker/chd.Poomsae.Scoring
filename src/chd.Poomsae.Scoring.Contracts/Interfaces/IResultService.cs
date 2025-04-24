@@ -17,8 +17,6 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         decimal HongTotal { get; }
 
         void SetRun(Guid judgeId, RunResultDto dto);
-        event EventHandler<ResultDto> ResultChanged;
-        event EventHandler<ERunState> StateChanged;
     }
 
 }
