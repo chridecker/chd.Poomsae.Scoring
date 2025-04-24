@@ -83,7 +83,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             builder.SetConnectable(true);
             builder.SetTimeout(0);
             builder.SetTxPowerLevel(AdvertiseTx.PowerHigh);
-            builder.SetDiscoverable(true);
+            //builder.SetDiscoverable(true);
 
             AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
