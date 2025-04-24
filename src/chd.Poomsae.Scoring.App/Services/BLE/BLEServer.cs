@@ -7,6 +7,7 @@ using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.UI.Base.Client.Implementations.Services.Base;
 using Java.Util;
 using System;
 using System.Collections.Generic;
@@ -82,8 +83,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             builder.SetConnectable(true);
             builder.SetTimeout(0);
             builder.SetTxPowerLevel(AdvertiseTx.PowerHigh);
+            builder.SetDiscoverable(true);
+
             AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
+
             dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
             dataBuilder.SetIncludeTxPowerLevel(true);
 

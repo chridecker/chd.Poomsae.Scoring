@@ -7,14 +7,14 @@
 <div class="result-container">
     <div class="total-results">
         <div class="total-result chong">
-            <div class="total">9.1</div>
-            <div class="detail presentation">6.0</div>
-            <div class="detail accuracy">3.1</div>
+            <div class="total">@this.resultService.ChongTotal.ToDisplayString()</div>
+            <div class="detail presentation">@this.resultService.ChongAccuracy.ToDisplayString()</div>
+            <div class="detail accuracy">@this.resultService.ChongPresentation.ToDisplayString()</div>
         </div>
         <div class="total-result hong">
-            <div class="total">9.1</div>
-            <div class="detail presentation">6.0</div>
-            <div class="detail accuracy">3.1</div>
+            <div class="total">@resultService.HongTotal.ToDisplayString()</div>
+            <div class="detail presentation">@this.resultService.HongAccuracy.ToDisplayString()</div>
+            <div class="detail accuracy">@this.resultService.HongPresentation.ToDisplayString()</div>
         </div>
     </div>
     <div class="judge-results">
