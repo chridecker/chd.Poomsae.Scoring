@@ -22,14 +22,15 @@ namespace chd.Poomsae.Scoring.UI.Services
             this._resultDto.Results[id] = runResultDto;
         }
 
-        public decimal ChongTotal => this.ChongAccuracy + this.ChongPresentation;
-        public decimal HongTotal => this.HongAccuracy + this.HongPresentation;
+        public decimal? ChongTotal => this.ChongAccuracy + this.ChongPresentation;
+        public decimal? HongTotal => this.HongAccuracy + this.HongPresentation;
 
-        public decimal ChongAccuracy
+        public decimal? ChongAccuracy
         {
             get
             {
-                if (!Result.Results?.Values.Any() ?? false) { return 0m; }
+                if (!Result.Results?.Values.Any() ?? false) { return null; }
+                if (Result.Results.Values.Any(a => a.ChongScore is null)) { return null; }
                 if (Result.Results.Count <= 3)
                 {
                     return this.Result.Results.Values.Select(s => s.ChongScore).Select(s => s.Accuracy).Average();
@@ -38,11 +39,13 @@ namespace chd.Poomsae.Scoring.UI.Services
                 return (accLst.Sum() - accLst.Min() - accLst.Max()) / (accLst.Count() - 2);
             }
         }
-        public decimal ChongPresentation
+        public decimal? ChongPresentation
         {
             get
             {
-                if (!Result.Results?.Values.Any() ?? false) { return 0m; }
+                if (!Result.Results?.Values.Any() ?? false) { return null; }
+                if (Result.Results.Values.Any(a => a.ChongScore is null)) { return null; }
+
                 if (Result.Results.Count <= 3)
                 {
                     return this.Result.Results.Values.Select(s => s.ChongScore).Select(s => s.Presentation).Average();
@@ -51,11 +54,13 @@ namespace chd.Poomsae.Scoring.UI.Services
                 return (accLst.Sum() - accLst.Min() - accLst.Max()) / (accLst.Count() - 2);
             }
         }
-        public decimal HongAccuracy
+        public decimal? HongAccuracy
         {
             get
             {
-                if (!Result.Results?.Values.Any() ?? false) { return 0m; }
+                if (!Result.Results?.Values.Any() ?? false) { return null; }
+                if (Result.Results.Values.Any(a => a.HongScore is null)) { return null; }
+
                 if (Result.Results.Count <= 3)
                 {
                     return this.Result.Results.Values.Select(s => s.HongScore).Select(s => s.Accuracy).Average();
@@ -64,11 +69,13 @@ namespace chd.Poomsae.Scoring.UI.Services
                 return (accLst.Sum() - accLst.Min() - accLst.Max()) / (accLst.Count() - 2);
             }
         }
-        public decimal HongPresentation
+        public decimal? HongPresentation
         {
             get
             {
-                if (!Result.Results?.Values.Any() ?? false) { return 0m; }
+                if (!Result.Results?.Values.Any() ?? false) { return null; }
+                if (Result.Results.Values.Any(a => a.HongScore is null)) { return null; }
+
                 if (Result.Results.Count <= 3)
                 {
                     return this.Result.Results.Values.Select(s => s.HongScore).Select(s => s.Presentation).Average();

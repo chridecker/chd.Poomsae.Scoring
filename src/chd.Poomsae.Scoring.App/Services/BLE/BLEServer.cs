@@ -52,7 +52,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         public void ResetScore()
         {
-            this._characteristic.SetValue([1, 0, 0, 0, 0, 2, 0, 0, 0, 0]);
+            this._characteristic.SetValue([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
             this.BroadCastToAllDevices();
         }
         public void BroadcastResult(RunDto run)
@@ -117,7 +117,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             this._characteristic.AddDescriptor(this._desc);
 
-            this._characteristic.SetValue([1, 0, 0, 0, 0, 2, 0, 0, 0, 0]);
+            this._characteristic.SetValue([0, 0, 0, 0, 0, 0 , 0, 0, 0, 0]);
             this._resultService.AddCharacteristic(this._characteristic);
             this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);

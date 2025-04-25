@@ -1,3 +1,4 @@
+@using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
@@ -7,14 +8,14 @@
 <div class="result-container">
     <div class="total-results">
         <div class="total-result chong">
-            <div class="total">@this.resultService.ChongTotal.ToDisplayString()</div>
-            <div class="detail presentation">@this.resultService.ChongAccuracy.ToDisplayString()</div>
-            <div class="detail accuracy">@this.resultService.ChongPresentation.ToDisplayString()</div>
+            <div class="total">@(this.resultService.ChongTotal?.ToDisplayString() ?? "-")</div>
+            <div class="detail presentation">@(this.resultService.ChongAccuracy?.ToDisplayString() ?? "-")</div>
+            <div class="detail accuracy">@(this.resultService.ChongPresentation?.ToDisplayString() ?? "-")</div>
         </div>
         <div class="total-result hong">
-            <div class="total">@this.resultService.HongTotal.ToDisplayString()</div>
-            <div class="detail presentation">@this.resultService.HongAccuracy.ToDisplayString()</div>
-            <div class="detail accuracy">@this.resultService.HongPresentation.ToDisplayString()</div>
+            <div class="total">@(this.resultService.HongTotal?.ToDisplayString() ?? "-")</div>
+            <div class="detail presentation">@(this.resultService.HongAccuracy?.ToDisplayString() ?? "-")</div>
+            <div class="detail accuracy">@(this.resultService.HongPresentation?.ToDisplayString() ?? "-")</div>
         </div>
     </div>
     <div class="judge-results">
@@ -22,9 +23,8 @@
             @foreach (var judge in this._connectedDeviced)
             {
                 <div class="judge">
-                    <div class="name">@judge.Value</div>
-                    <div class="score accuracy">@((ChongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString())</div>
-                    <div class="score presentation">@((ChongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString())</div>
+                    <div class="score accuracy">@((ChongResult(judge.Key)?.Accuracy.ToDisplayString() ?? "-"))</div>
+                    <div class="score presentation">@((ChongResult(judge.Key)?.Presentation.ToDisplayString() ?? "-"))</div>
                 </div>
             }
         </div>
@@ -32,8 +32,8 @@
             @foreach (var judge in this._connectedDeviced)
             {
                 <div class="judge">
-                    <div class="score accuracy">@((HongResult(judge.Key)?.Accuracy ?? 0m).ToDisplayString())</div>
-                    <div class="score presentation">@((HongResult(judge.Key)?.Presentation ?? 0m).ToDisplayString())</div>
+                    <div class="score accuracy">@((HongResult(judge.Key)?.Accuracy.ToDisplayString() ?? "-"))</div>
+                    <div class="score presentation">@((HongResult(judge.Key)?.Presentation.ToDisplayString() ?? "-"))</div>
                 </div>
             }
         </div>
@@ -43,6 +43,7 @@
 @code {
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
+    [Inject] IModalService modalService { get; set; }
 
     private Dictionary<Guid, string> _connectedDeviced = [];
 

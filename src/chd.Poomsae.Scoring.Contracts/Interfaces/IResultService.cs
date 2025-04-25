@@ -9,12 +9,12 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IResultService
     {
         ResultDto Result { get; }
-        decimal HongPresentation { get; }
-        decimal HongAccuracy { get; }
-        decimal ChongPresentation { get; }
-        decimal ChongAccuracy { get; }
-        decimal ChongTotal { get; }
-        decimal HongTotal { get; }
+        decimal? HongPresentation { get; }
+        decimal? HongAccuracy { get; }
+        decimal? ChongPresentation { get; }
+        decimal? ChongAccuracy { get; }
+        decimal? ChongTotal { get; }
+        decimal? HongTotal { get; }
 
         void SetRun(Guid judgeId, RunResultDto dto);
     }

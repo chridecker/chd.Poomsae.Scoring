@@ -16,6 +16,36 @@ namespace chd.Poomsae.Scoring.WPF.Services
 
         public Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
         {
+            var id1 = Guid.NewGuid();
+            var id2 = Guid.NewGuid();
+
+            this.DeviceFound?.Invoke(this, new DeviceFoundEventArgs()
+            {
+                Id = id1,
+                Name = "D1"
+            });
+
+
+            this.DeviceFound?.Invoke(this, new DeviceFoundEventArgs()
+            {
+                Id = id2,
+                Name = "D1"
+            });
+
+            this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
+            {
+                DeviceId = id1,
+
+            });
+
+
+            this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
+            {
+                DeviceId = id2,
+
+            });
+
+
             return Task.FromResult(true);
         }
     }

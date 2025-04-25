@@ -120,12 +120,15 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 var data = await characteristicName.ReadAsync();
                 name = Encoding.ASCII.GetString(data.data);
             }
+            var chongResult = e.Characteristic.Value[0] == 0 ? null : new ScoreDto(e.Characteristic.Value.Skip(1).Take(4).ToArray());
+            var hongResult = e.Characteristic.Value[5] == 0 ? null : new ScoreDto(e.Characteristic.Value.Skip(6).Take(4).ToArray());
+
             this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
             {
                 DeviceId = id,
                 DeviceName = name,
-                Chong = new(e.Characteristic.Value.Skip(1).Take(4).ToArray()),
-                Hong = new(e.Characteristic.Value.Skip(6).Take(4).ToArray()),
+                Chong = chongResult,
+                Hong = hongResult,
             });
         }
     }
