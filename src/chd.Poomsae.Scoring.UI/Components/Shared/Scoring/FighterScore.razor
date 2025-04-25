@@ -6,9 +6,6 @@
         <div class="fighter-score accuracy">@this.Score.Accuracy.ToDisplayString()</div>
         <div class="fighter-score total">@this.Score.Total.ToDisplayString()</div>
     </div>
-    <div class="fighter-name">
-        @this.Fighter.Fullname
-    </div>
 </div>
 @code {
     [Parameter] public ScoreDto Score { get; set; }

@@ -42,9 +42,9 @@
 }
 
     .blazored-modal.size-extra-large {
-        padding:0.5rem;
+        padding: 0.5rem;
         width: 90vw;
-        height: 100vh;
+        height: max-content;
     }
 
     .blazored-modal .bm-close {

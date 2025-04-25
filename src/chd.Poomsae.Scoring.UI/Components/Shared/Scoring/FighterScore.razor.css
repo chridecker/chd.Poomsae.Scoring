@@ -25,6 +25,7 @@
 
     .fighter .fighter-scores .fighter-score {
         align-content: end;
+        font-size:1.5rem;
     }
 
         .fighter .fighter-scores .fighter-score.presentation {
@@ -37,9 +38,9 @@
 
         .fighter .fighter-scores .fighter-score.total {
             color: yellow;
-            font-size: 2rem;
+            font-size: 2.3rem;
             font-weight: bold;
-            line-height:2rem;
+            line-height:2.3rem;
         }
 
     .fighter.fighter-hong .fighter-scores .fighter-score.presentation {
@@ -52,7 +53,4 @@
 
     .fighter.fighter-hong .fighter-scores .fighter-score.total {
         order: 1;
-    }
-
-    .fighter .fighter-name {
     }
