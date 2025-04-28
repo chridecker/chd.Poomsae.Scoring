@@ -6,7 +6,7 @@
     }
 
         .nav-menu ::deep .sidebar.collapsed .toggle {
-            right: calc(-0.2 * var(--nav-toggle-height) - 0.5rem) !important;
+            display:none;
         }
 
      
