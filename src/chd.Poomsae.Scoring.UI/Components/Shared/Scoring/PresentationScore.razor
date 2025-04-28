@@ -2,7 +2,7 @@
 <div class="presentation-score">
     <div class="presentation-score-label">@this.Text</div>
     <div class="presentation-score-slider">
-        <input type="range" min="0" max="100" step="1" value="@this._value" @oninput="this.OnInput" />
+        <input type="range" min="0" max="20" step="1" value="@this._value" @oninput="this.OnInput" />
     </div>
     <div class="presentation-score-value"><div class="score-value">@this.Value.ToDisplayString()</div></div>
 </div>
@@ -29,7 +29,7 @@
     {
         if (int.TryParse(e.Value.ToString(), out int val))
         {
-            this.Value = Math.Round((this.Max * val / 100), 1);
+            this.Value = Math.Round((this.Max * val / 20), 1);
         }
     }
 }
