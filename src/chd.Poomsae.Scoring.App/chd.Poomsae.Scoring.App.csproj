@@ -11,11 +11,11 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>chdPooScoring</ApplicationTitle>
+		<ApplicationTitle>chdPooSco</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.chd.poomsae.scoring.app</ApplicationId>
-
+		
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
