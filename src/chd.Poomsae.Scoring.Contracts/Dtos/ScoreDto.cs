@@ -24,9 +24,5 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
             this.RhythmAndTempo = data[2] * 0.1m;
             this.ExpressionAndEnergy = data[3] * 0.1m;
         }
-        public ScoreDto(InitScoreDto initDto)
-        {
-            this.Accuracy = initDto.StartAccuracy;
-        }
     }
 }

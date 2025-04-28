@@ -9,7 +9,6 @@
 </div>
 @code {
     [Parameter] public ScoreDto Score { get; set; }
-    [Parameter] public FighterDto Fighter { get; set; }
     [Parameter] public bool IsRed { get; set; }
 
     private string __css => this.IsRed ? "fighter-hong" : "fighter-chong";

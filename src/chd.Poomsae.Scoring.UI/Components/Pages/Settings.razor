@@ -10,29 +10,10 @@
             <input type="text" value="@this._name" @onchange="this.NameChanged" />
         </div>
     </div>
-    <div class="init-settings">
-        <div class="init-setting">
-            <div class="setting-label">Blau:</div>
-            <input type="text" @bind-value="this.initDtoService.FighterDto.ChongFirstname" />
-            <input type="text" @bind-value="this.initDtoService.FighterDto.ChongLastname" />
-        </div>
-        <div class="init-setting">
-            <div class="setting-label">Rot:</div>
-            <input type="text" @bind-value="this.initDtoService.FighterDto.HongFirstname" />
-            <input type="text" @bind-value="this.initDtoService.FighterDto.HongLastname" />
-        </div>
-@*         <div class="init-setting">
-            <div class="setting-label">Accuracy:</div>
-            <input type="number" @bind-value="this.initDtoService.ScoreDto.StartAccuracy" />
-        </div> *@
-    </div>
 </div>
 
 @code {
-    [Inject] private IInitDtoService initDtoService { get; set; }
-
     [Inject] ISettingManager settingManager { get; set; }
-
     private string _name;
 
     protected override async Task OnInitializedAsync()

@@ -30,7 +30,6 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddScoped<INavigationHandler, NavigationHandler>();
 
             services.AddSingleton<IAppInfoService, AppInfoService>();
-            services.AddSingleton<IInitDtoService, InitDtoService>();
             services.AddSingleton<IResultService, ResultService>();
             services.AddSingleton<IStartRunService, StartRunService>();
             services.AddSingleton<IVibrationHelper, TVibrationHelper>();
