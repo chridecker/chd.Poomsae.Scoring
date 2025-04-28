@@ -89,7 +89,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             dataBuilder.SetIncludeDeviceName(true);
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
             {
-                dataBuilder.AddServiceUuid(ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString()));
+                var id = ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString());
+                dataBuilder.AddServiceUuid(id);
             }
             dataBuilder.SetIncludeTxPowerLevel(true);
             advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), this._advertisingCallback);
