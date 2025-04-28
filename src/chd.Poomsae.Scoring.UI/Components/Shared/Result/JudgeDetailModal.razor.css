@@ -1,0 +1,51 @@
+﻿.judge-detail-results {
+    display: grid;
+    grid-gap: 0.5rem;
+}
+
+    .judge-detail-results .scores-group {
+        display: grid;
+        grid-gap: 0.2rem;
+        border-top: 1px solid var(--chd-font-color);
+        border-bottom: 1px solid var(--chd-font-color);
+        border-radius: 0.5rem;
+    }
+
+        .judge-detail-results .scores-group .scores {
+            border-top: 1px solid var(--chd-grey-semi-transparent);
+            border-bottom: 1px solid var(--chd-grey-semi-transparent);
+            border-radius: 0.5rem;
+            display: grid;
+            grid-template-columns: max-content auto max-content;
+            text-align: center;
+            font-size: 1.2rem;
+            align-items: center;
+        }
+
+            .judge-detail-results .scores-group .scores .score-names {
+                padding: 0 0.4rem 0 0.4rem;
+            }
+
+            .judge-detail-results .scores-group .scores .score {
+                padding: 0 0.5rem 0 0.5rem;
+                font-size: 1.4rem;
+                color: white;
+            }
+
+                .judge-detail-results .scores-group .scores .score.score-chong {
+                    background-color: var(--chd-p-blue);
+                    border-radius: 0.5rem;
+                }
+
+            .judge-detail-results .scores-group .scores.accuracy .score.score-chong {
+                background-color: var(--chd-p-blue-accent);
+            }
+
+            .judge-detail-results .scores-group .scores.accuracy .score.score-hong {
+                background-color: var(--chd-p-red-accent);
+            }
+
+            .judge-detail-results .scores-group .scores .score.score-hong {
+                background-color: var(--chd-p-red);
+                border-radius: 0.5rem;
+            }

@@ -1,0 +1,40 @@
+﻿ .total-result {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+     .total-result .total {
+        width: 100%;
+        height: max-content;
+        font-size: max(4rem,20%);
+        line-height: max(4rem,20%);
+        text-align: center;
+        font-weight: bold;
+        padding: 0.5rem;
+    }
+
+     .total-result.chong .total {
+        background-color: var(--chd-p-blue);
+    }
+
+     .total-result.hong .total {
+        background-color: var(--chd-p-red);
+    }
+
+     .total-result .detail {
+        width: 50%;
+        font-size: 2.5rem;
+        line-height: 2.5rem;
+        text-align: center;
+        border: 1px solid var(--chd-font-color);
+        padding: 0.5rem;
+    }
+
+         .total-result .detail.accuracy {
+            color: orangered;
+        }
+
+         .total-result .detail.presentation {
+            color: darkorange;
+        }

@@ -30,7 +30,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._adapter.DeviceDiscovered += this._adapter_DeviceDiscovered;
             this._adapter.DeviceConnected += this._adapter_DeviceConnected;
             this._adapter.DeviceDisconnected += this._adapter_DeviceDisconnected;
-            this._adapter.ScanTimeoutElapsed += this._adapter_ScanTimeoutElapsed;
             this._adapter.DeviceConnectionLost += this._adapter_DeviceDisconnected;
         }
 
@@ -39,9 +38,15 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this.DeviceDisconnected?.Invoke(this, e.Device.Id);
         }
 
-        private async void _adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
+        public async Task<Dictionary<Guid, string>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
         {
-            await this.StartScanAsync();
+            var dict = new Dictionary<Guid, string>();
+            foreach (var device in this._adapter.ConnectedDevices)
+            {
+                var readName = await this.ReadNameAsync(device, cancellationToken);
+                dict[device.Id] = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
+            }
+            return dict;
         }
 
         public async Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
@@ -58,6 +63,17 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 }, d => !string.IsNullOrWhiteSpace(d.Name) && !this._adapter.ConnectedDevices.Any(a => a.Id == d.Id));
             }
             return this._adapter.IsScanning;
+        }
+
+        public async Task<bool> DisconnectDeviceAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            if (this._adapter.ConnectedDevices.Any(a => a.Id == id))
+            {
+                var device = this._adapter.ConnectedDevices.FirstOrDefault(x => x.Id == id);
+                await this._adapter.DisconnectDeviceAsync(device, cancellationToken);
+                return true;
+            }
+            return false;
         }
 
         private async void _adapter_DeviceDiscovered(object? sender, DeviceEventArgs e)
@@ -90,13 +106,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, device.Id, device.Name, e);
                 await characteristic.StartUpdatesAsync();
 
-                var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
-                var name = device.Name;
-                if (characteristicName is not null && characteristicName.CanRead)
-                {
-                    var data = await characteristicName.ReadAsync();
-                    name = Encoding.ASCII.GetString(data.data);
-                }
+                var readName = await this.ReadNameAsync(device, CancellationToken.None);
+                var name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
 
                 this.DeviceFound?.Invoke(this, new()
                 {
@@ -112,14 +123,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private async void Characteristic_ValueUpdated(object? sender, Guid id, string name, CharacteristicUpdatedEventArgs e)
         {
             var device = e.Characteristic.Service.Device;
-            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
-            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
 
-            if (characteristicName is not null && characteristicName.CanRead)
-            {
-                var data = await characteristicName.ReadAsync();
-                name = Encoding.ASCII.GetString(data.data);
-            }
+            var readName = await this.ReadNameAsync(device, CancellationToken.None);
+            name = string.IsNullOrWhiteSpace(readName) ? name : readName;
+
             var chongResult = e.Characteristic.Value[0] == 0 ? null : new ScoreDto(e.Characteristic.Value.Skip(1).Take(4).ToArray());
             var hongResult = e.Characteristic.Value[5] == 0 ? null : new ScoreDto(e.Characteristic.Value.Skip(6).Take(4).ToArray());
 
@@ -130,6 +137,18 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 Chong = chongResult,
                 Hong = hongResult,
             });
+        }
+
+        private async Task<string> ReadNameAsync(IDevice device, CancellationToken cancellationToken)
+        {
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service, cancellationToken);
+            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic, cancellationToken);
+            if (characteristicName is not null && characteristicName.CanRead)
+            {
+                var data = await characteristicName.ReadAsync(cancellationToken);
+                return Encoding.ASCII.GetString(data.data);
+            }
+            return string.Empty;
         }
     }
 }

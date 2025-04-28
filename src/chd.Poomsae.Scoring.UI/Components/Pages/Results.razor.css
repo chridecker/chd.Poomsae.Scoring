@@ -7,105 +7,16 @@
 
     .result-container .total-results {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: 50% auto;
         width: 100%;
         height: max-content;
         color: white;
     }
 
-        .result-container .total-results .total-result {
-            display: flex;
-            flex-wrap: wrap;
-            align-content: center;
-        }
-
-            .result-container .total-results .total-result .total {
-                width: 100%;
-                height: max-content;
-                font-size: max(7em,20%);
-                text-align: center;
-                font-weight: bold;
-                padding: 0.5rem;
-            }
-
-            .result-container .total-results .total-result.chong .total {
-                background-color: var(--chd-p-blue);
-            }
-
-            .result-container .total-results .total-result.hong .total {
-                background-color: var(--chd-p-red);
-            }
-
-            .result-container .total-results .total-result .detail {
-                width: 50%;
-                font-size: 3rem;
-                line-height: 3rem;
-                text-align: center;
-                border: 1px solid var(--chd-font-color);
-                padding: 0.5rem;
-            }
-
-                .result-container .total-results .total-result .detail.accuracy {
-                    color: orangered;
-                }
-
-                .result-container .total-results .total-result .detail.presentation {
-                    color: darkorange;
-                }
+       
 
     .result-container .judge-results {
         width: 100%;
         display: grid;
         grid-template-columns: 50% auto;
     }
-
-        .result-container .judge-results .judge-result {
-            display: grid;
-            width: 100%;
-            border: 1px solid white;
-        }
-
-            .result-container .judge-results .judge-result.chong {
-            }
-
-            .result-container .judge-results .judge-result.hong {
-            }
-
-            .result-container .judge-results .judge-result .judge {
-                display: grid;
-                grid-template-columns: repeat(2,auto);
-                border-bottom: 1px solid;
-            }
-
-            .result-container .judge-results .judge-result.hong .judge {
-            }
-
-            .result-container .judge-results .judge-result .judge .name {
-                text-align: center;
-                align-content: center;
-            }
-
-
-
-            .result-container .judge-results .judge-result .judge .score {
-                font-size: 1.5rem;
-                padding: 0.2rem;
-                text-align: center;
-                font-weight: 500;
-            }
-
-            .result-container .judge-results .judge-result.chong .judge .score {
-                background-color: var(--chd-p-blue);
-            }
-
-                .result-container .judge-results .judge-result.chong .judge .score.accuracy {
-                    background-color: var(--chd-p-blue-accent);
-                }
-
-            .result-container .judge-results .judge-result.hong .judge .score {
-                background-color: var(--chd-p-red);
-            }
-
-                .result-container .judge-results .judge-result.hong .judge .score.accuracy {
-                    background-color: var(--chd-p-red-accent);
-                }

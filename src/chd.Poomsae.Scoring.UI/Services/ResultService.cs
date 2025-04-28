@@ -15,11 +15,18 @@ namespace chd.Poomsae.Scoring.UI.Services
         private ResultDto _resultDto = new();
 
         public ResultDto Result => this._resultDto;
-
+        public event EventHandler ResultReceived;
 
         public void SetRun(Guid id, RunResultDto runResultDto)
         {
             this._resultDto.Results[id] = runResultDto;
+            this.ResultReceived?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Clear()
+        {
+            this._resultDto.Results.Clear();
+            this.ResultReceived?.Invoke(this, EventArgs.Empty);
         }
 
         public decimal? ChongTotal => this.ChongAccuracy + this.ChongPresentation;

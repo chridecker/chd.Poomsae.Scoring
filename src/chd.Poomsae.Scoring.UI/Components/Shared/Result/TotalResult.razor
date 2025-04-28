@@ -1,0 +1,36 @@
+@implements IDisposable
+@using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="total-result @__css">
+    <div class="total">@(this.__result?.ToDisplayString() ?? "-")</div>
+    <div class="detail presentation">@(this.__resultAccuracy?.ToDisplayString() ?? "-")</div>
+    <div class="detail accuracy">@(this.__resultPresentation?.ToDisplayString() ?? "-")</div>
+</div>
+
+@code {
+    [Inject] IResultService resultService { get; set; }
+    [Parameter] public bool IsRed { get; set; }
+
+    private decimal? __result => this.IsRed ? this.resultService.HongTotal : this.resultService.ChongTotal;
+    private decimal? __resultAccuracy => this.IsRed ? this.resultService.HongAccuracy : this.resultService.ChongAccuracy;
+    private decimal? __resultPresentation => this.IsRed ? this.resultService.HongPresentation : this.resultService.ChongPresentation;
+
+    private string __css => this.IsRed ? "hong" : "chong";
+
+
+    protected override Task OnInitializedAsync()
+    {
+        this.resultService.ResultReceived += this.OnResult;
+        return base.OnInitializedAsync();
+    }
+
+    private async void OnResult(object? sender, EventArgs e)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        this.resultService.ResultReceived -= this.OnResult;
+    }
+}

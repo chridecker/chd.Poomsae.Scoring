@@ -14,39 +14,55 @@ namespace chd.Poomsae.Scoring.WPF.Services
         public event EventHandler<DeviceFoundEventArgs> DeviceFound;
         public event EventHandler<Guid> DeviceDisconnected;
 
-        public Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
+        public async Task<Dictionary<Guid, string>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
         {
-            var id1 = Guid.NewGuid();
-            var id2 = Guid.NewGuid();
+            return new Dictionary<Guid, string>();
+        }
 
-            this.DeviceFound?.Invoke(this, new DeviceFoundEventArgs()
+        public async Task<bool> DisconnectDeviceAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            return true;
+        }
+
+        public async Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
+        {
+            var ids = Enumerable.Range(0, 5).Select(i => Guid.NewGuid()).ToArray();
+
+            foreach (var id in ids)
             {
-                Id = id1,
-                Name = "D1"
-            });
+                this.DeviceFound?.Invoke(this, new DeviceFoundEventArgs()
+                {
+                    Id = id,
+                    Name = "D"
+                });
+            }
 
+            await Task.Delay(TimeSpan.FromSeconds(3));
 
-            this.DeviceFound?.Invoke(this, new DeviceFoundEventArgs()
+            foreach (var id in ids)
             {
-                Id = id2,
-                Name = "D1"
-            });
-
-            this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
-            {
-                DeviceId = id1,
-
-            });
-
-
-            this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
-            {
-                DeviceId = id2,
-
-            });
-
-
-            return Task.FromResult(true);
+                this.ResultReceived?.Invoke(this, new()
+                {
+                    DeviceId = id,
+                    DeviceName = "D",
+                    Chong = new ScoreDto
+                    {
+                        Accuracy = new Random().Next(0, 40) * 0.1m,
+                        ExpressionAndEnergy = new Random().Next(0, 20) * 0.1m,
+                        RhythmAndTempo = new Random().Next(0, 20) * 0.1m,
+                        SpeedAndPower = new Random().Next(0, 20) * 0.1m,
+                    },
+                    Hong = new ScoreDto
+                    {
+                        Accuracy = new Random().Next(0, 40) * 0.1m,
+                        ExpressionAndEnergy = new Random().Next(0, 20) * 0.1m,
+                        RhythmAndTempo = new Random().Next(0, 20) * 0.1m,
+                        SpeedAndPower = new Random().Next(0, 20) * 0.1m,
+                    }
+                });
+                await Task.Delay(TimeSpan.FromMilliseconds(500));
+            }
+            return true;
         }
     }
 }

@@ -1,0 +1,57 @@
+﻿.judge-result {
+    display: grid;
+    width: 100%;
+    border: 1px solid white;
+}
+
+    .judge-result.chong {
+    }
+
+    .judge-result.hong {
+    }
+
+    .judge-result .judge {
+        display: grid;
+        grid-template-columns: 50% auto;
+        border-bottom: 1px solid;
+    }
+
+    .judge-result.hong .judge {
+    }
+
+    .judge-result .judge .name {
+        text-align: center;
+        align-content: center;
+    }
+
+
+
+    .judge-result .judge .score {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        padding: 0.2rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .judge-result .judge .score.discard {
+        text-decoration: line-through;
+    }
+
+    .judge-result.chong .judge .score {
+        background-color: var(--chd-p-blue);
+    }
+
+        
+
+        .judge-result.chong .judge .score.accuracy {
+            background-color: var(--chd-p-blue-accent);
+        }
+
+    .judge-result.hong .judge .score {
+        background-color: var(--chd-p-red);
+    }
+
+        .judge-result.hong .judge .score.accuracy {
+            background-color: var(--chd-p-red-accent);
+        }

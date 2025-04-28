@@ -8,17 +8,14 @@
 
 
 <div class="page">
-    @if (this._autocollapseNav)
-    {
-        <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
-            <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse": "")" @onmouseover="() => this._navCollapsed = false">
-            </div>
-        </SwipeArea>
-    }
+    <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
+        <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse": "")" @onmouseover="() => this._navCollapsed = false">
+        </div>
+    </SwipeArea>
 
-    <NavMenu Visible="!(this._autocollapseNav && this._navCollapsed)" />
+    <NavMenu Visible="!(this._navCollapsed)" />
 
-    <main class="@(this._autocollapseNav && this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
+    <main class="@(this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
         <article id="main-article" class="content px-4" @onscroll="scrollInfoService.Scrolled">
             @Body
         </article>
@@ -26,10 +23,10 @@
 </div>
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
-Timeout="5"
-MaxToastCount="3"
-RemoveToastsOnNavigation="true"
-ShowProgressBar="true">
+                Timeout="5"
+                MaxToastCount="3"
+                RemoveToastsOnNavigation="true"
+                ShowProgressBar="true">
     <CloseButtonContent>
         <div>
             <span>&times;</span>
@@ -38,7 +35,6 @@ ShowProgressBar="true">
 </BlazoredToasts>
 
 @code {
-    private bool _autocollapseNav = true;
     private bool _navCollapsed = true;
 
     [Inject] IBroadCastService broadCastService { get; set; }

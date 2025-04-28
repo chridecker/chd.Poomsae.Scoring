@@ -17,6 +17,9 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         decimal? HongTotal { get; }
 
         void SetRun(Guid judgeId, RunResultDto dto);
+        void Clear();
+
+        event EventHandler ResultReceived;
     }
 
 }
