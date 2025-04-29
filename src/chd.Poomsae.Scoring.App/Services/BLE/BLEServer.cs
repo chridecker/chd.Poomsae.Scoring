@@ -72,7 +72,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         public async Task StartAsync()
         {
-
+            _ = await Permissions.RequestAsync<LocationPermission>();
             _ = await Permissions.RequestAsync<BluetoothPermission>();
 
             if (this._bluetoothManager is not null) { return; }
