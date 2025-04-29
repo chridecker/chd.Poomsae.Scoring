@@ -15,8 +15,8 @@ namespace chd.Poomsae.Scoring.App
 
         protected override async void OnAppearing()
         {
-            await this.CheckPermissions();
             base.OnAppearing();
+            await this.CheckPermissions();
             Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
             DeviceDisplay.KeepScreenOn = true;
         }
@@ -24,8 +24,9 @@ namespace chd.Poomsae.Scoring.App
         private async Task CheckPermissions()
         {
             PermissionStatus notifiatioNpermission = await Permissions.RequestAsync<NotificationPermission>();
+            PermissionStatus locationPermission = await Permissions.RequestAsync<LocationPermission>();
             PermissionStatus wifiPermission = await Permissions.RequestAsync<WifiPermission>();
-            //PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
+            PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
         }
         private void BlazorWebViewInitialized(object? sender, BlazorWebViewInitializedEventArgs e)
         {
