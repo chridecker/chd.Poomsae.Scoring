@@ -17,7 +17,7 @@
     </div>
 </div>
 <FloatingActionNavigation FAIconActive="magnifying-glass" TextActive="Suche" OnClick="this.Search">
-    <FloatingActionButton FAClass="eraser" Title="Alle Löschen" OnClick="this.Clear" />
+    <FloatingActionButton FAClass="eraser" Title="Alle LÃ¶schen" OnClick="this.Clear" />
 </FloatingActionNavigation>
 
 
@@ -42,6 +42,7 @@
 
     private async Task Search()
     {
+        await this.Clear();
         await this.broadcastClient.StartScanAsync(this._cts.Token);
     }
 
