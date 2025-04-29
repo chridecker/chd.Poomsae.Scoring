@@ -5,26 +5,27 @@
     height: 100vh;
 }
 
-    .single-run-container .fighter-container {
-        display: grid;
-        grid-template-columns: 40% auto 40%;
-        border-bottom: 1px solid var(--chd-font-color);
-        grid-gap: 0.5rem;
-        padding: 0.5rem;
-        height: 20vh;
+.single-run-container .fighter-container {
+    display: grid;
+    grid-template-columns: 65% 20%;
+    border-bottom: 1px solid var(--chd-font-color);
+    padding: 0.5rem;
+    height: 20vh;
+    justify-content:space-between;
+}
+
+    .single-run-container .fighter-container .run-middle {
+        order: 2;
+        border: 1px solid var(--chd-font-color);
+        border-radius: 1.5rem;
     }
 
-        .single-run-container .fighter-container .run-middle {
-            border: 1px solid var(--chd-font-color);
-            border-radius: 1.5rem;
-        }
+.single-run-container .scoring-container {
+    width: 100vw;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: auto 35% auto;
+}
 
-    .single-run-container .scoring-container {
-        width: 100vw;
-        height: 80vh;
-        display: grid;
-        grid-template-columns: auto 35% auto;
+    .single-run-container .scoring-container .scoring-middle {
     }
-
-        .single-run-container .scoring-container .scoring-middle {
-        }
