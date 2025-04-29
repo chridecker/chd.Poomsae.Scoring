@@ -70,10 +70,19 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             byte __dataConvert(decimal d) => (byte)(d * 10);
         }
 
-        public async Task StartAsync()
+        public async Task StartAsync(CancellationToken token)
         {
             _ = await Permissions.RequestAsync<LocationPermission>();
-            _ = await Permissions.RequestAsync<BluetoothPermission>();
+            var perm = await Permissions.RequestAsync<BluetoothPermission>();
+            while (perm is not PermissionStatus.Granted)
+            {
+                perm = await Permissions.RequestAsync<BluetoothPermission>();
+                await Task.Delay(250, token);
+                if (token.IsCancellationRequested || perm is PermissionStatus.Granted)
+                {
+                    break;
+                }
+            }
 
             if (this._bluetoothManager is not null) { return; }
 

@@ -1,4 +1,5 @@
 ﻿@inherits PageComponentBase<int,int>
+@implements IDisposable
 @using Blazored.Toast.Configuration
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.UI.Base.Client.Implementations.Services
@@ -35,13 +36,15 @@
 </BlazoredToasts>
 
 @code {
+    private CancellationTokenSource _cts = new();
+
     private bool _navCollapsed = true;
 
     [Inject] IBroadCastService broadCastService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        await this.broadCastService.StartAsync();
+        await this.broadCastService.StartAsync(this._cts.Token);
         await base.OnInitializedAsync();
     }
 
@@ -52,5 +55,9 @@
             this._navCollapsed = false;
             await this.InvokeAsync(this.StateHasChanged);
         }
+    }
+    public void Dispose()
+    {
+        this._cts.Cancel();
     }
 }

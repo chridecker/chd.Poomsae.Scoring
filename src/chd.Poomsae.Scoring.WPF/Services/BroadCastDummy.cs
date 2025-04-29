@@ -18,7 +18,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
         {
         }
 
-        public async Task StartAsync()
+        public async Task StartAsync(CancellationToken token)
         {
         }
     }
