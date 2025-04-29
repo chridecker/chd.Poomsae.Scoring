@@ -7,6 +7,7 @@ using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Client.Implementations.Services.Base;
 using Java.Util;
 using System;
@@ -69,8 +70,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             byte __dataConvert(decimal d) => (byte)(d * 10);
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
+
+            _ = await Permissions.RequestAsync<BluetoothPermission>();
+
             if (this._bluetoothManager is not null) { return; }
 
             var ctx = Platform.AppContext;

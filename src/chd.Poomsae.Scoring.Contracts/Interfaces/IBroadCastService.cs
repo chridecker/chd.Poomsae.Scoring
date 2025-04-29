@@ -8,7 +8,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 {
     public interface IBroadCastService
     {
-        void Start();
+        Task StartAsync();
         void ResetScore();
         void BroadcastResult(RunDto dto);
     }

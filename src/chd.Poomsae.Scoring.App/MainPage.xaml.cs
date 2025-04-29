@@ -12,6 +12,7 @@ namespace chd.Poomsae.Scoring.App
             InitializeComponent();
             this.blazorWebView.BlazorWebViewInitialized += this.BlazorWebViewInitialized;
         }
+
         protected override async void OnAppearing()
         {
             await this.CheckPermissions();
@@ -25,7 +26,7 @@ namespace chd.Poomsae.Scoring.App
             PermissionStatus notifiatioNpermission = await Permissions.RequestAsync<NotificationPermission>();
             PermissionStatus locationPermission = await Permissions.RequestAsync<LocationPermission>();
             PermissionStatus wifiPermission = await Permissions.RequestAsync<WifiPermission>();
-            PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
+            //PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
         }
         private void BlazorWebViewInitialized(object? sender, BlazorWebViewInitializedEventArgs e)
         {
