@@ -23,7 +23,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private BluetoothAdapter _bluetoothAdapter;
         private BLEGattCallback _callback;
         private readonly BLEAdvertisingCallback _advertisingCallback;
-        private readonly ISettingManager _settingManager;
         private BluetoothGattServer _gattServer;
 
         private BluetoothGattService _resultService;
@@ -33,11 +32,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private List<string> readDevices = [];
 
-        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager)
+        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback)
         {
             this._callback = callback;
             this._advertisingCallback = advertisingCallback;
-            this._settingManager = settingManager;
             this._callback.NotificationSent += this._callback_NotificationSent;
             this._callback.CharacteristicReadRequest += this.ReadRequest;
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
@@ -153,12 +151,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
-                var name = await this._settingManager.GetNativSetting<string>(SettingConstants.OwnName);
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    name = DeviceInfo.Current.Name;
-                }
-                e.Characteristic.SetValue(name);
+                e.Characteristic.SetValue(DeviceInfo.Current.Name);
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
                 this.readDevices.Add(e.Device.Address);
             }
