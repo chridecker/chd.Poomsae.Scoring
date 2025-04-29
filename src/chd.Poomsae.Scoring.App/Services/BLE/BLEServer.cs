@@ -62,6 +62,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 this._characteristic.SetValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower), __dataConvert(elimination.ChongScore.RhythmAndTempo), __dataConvert(elimination.ChongScore.ExpressionAndEnergy), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower), __dataConvert(elimination.HongScore.RhythmAndTempo), __dataConvert(elimination.HongScore.ExpressionAndEnergy)]);
                 this.BroadCastToAllDevices();
             }
+            else if (run is SingleRunDto singleRun)
+            {
+                this._characteristic.SetValue([1, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower), __dataConvert(singleRun.Score.RhythmAndTempo), __dataConvert(singleRun.Score.ExpressionAndEnergy), 0, 0, 0, 0, 0]);
+                this.BroadCastToAllDevices();
+            }
 
             byte __dataConvert(decimal d) => (byte)(d * 10);
         }
@@ -118,7 +123,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             this._characteristic.AddDescriptor(this._desc);
 
-            this._characteristic.SetValue([0, 0, 0, 0, 0, 0 , 0, 0, 0, 0]);
+            this._characteristic.SetValue([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
             this._resultService.AddCharacteristic(this._characteristic);
             this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);

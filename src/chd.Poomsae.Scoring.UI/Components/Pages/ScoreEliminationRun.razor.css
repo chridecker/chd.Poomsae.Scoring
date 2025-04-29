@@ -1,0 +1,30 @@
+﻿.run-container {
+    /*background-image: linear-gradient(to right, red, yellow);*/
+    display: grid;
+    width: 100%;
+    height: 100vh;
+}
+
+    .run-container .fighter-container {
+        display: grid;
+        grid-template-columns: 40% auto 40%;
+        border-bottom: 1px solid var(--chd-font-color);
+        grid-gap: 0.5rem;
+        padding: 0.5rem;
+        height: 20vh;
+    }
+
+        .run-container .fighter-container .run-middle {
+            border: 1px solid var(--chd-font-color);
+            border-radius: 1.5rem;
+        }
+
+    .run-container .scoring-container {
+        width: 100vw;
+        height: 80vh;
+        display: grid;
+        grid-template-columns: auto 35% auto;
+    }
+
+        .run-container .scoring-container .scoring-middle {
+        }

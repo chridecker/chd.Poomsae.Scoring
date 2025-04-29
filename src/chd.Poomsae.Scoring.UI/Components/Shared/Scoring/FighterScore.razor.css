@@ -9,6 +9,9 @@
     .fighter.fighter-hong {
     }
 
+    .fighter.fighter-neutral {
+    }
+
     .fighter .fighter-scores {
         display: grid;
     }
@@ -21,11 +24,15 @@
         grid-template-columns: repeat(2,25%) 50%;
     }
 
+    .fighter.fighter-neutral .fighter-scores {
+        grid-template-columns: repeat(2,25%) 50%;
+    }
+
 
 
     .fighter .fighter-scores .fighter-score {
         align-content: end;
-        font-size:1.5rem;
+        font-size: 1.5rem;
     }
 
         .fighter .fighter-scores .fighter-score.presentation {
@@ -40,11 +47,11 @@
             color: yellow;
             font-size: 2.3rem;
             font-weight: bold;
-            line-height:2.3rem;
+            line-height: 2.3rem;
         }
 
     .fighter.fighter-hong .fighter-scores .fighter-score.presentation {
-        order:3;
+        order: 3;
     }
 
     .fighter.fighter-hong .fighter-scores .fighter-score.accuracy {
@@ -52,5 +59,17 @@
     }
 
     .fighter.fighter-hong .fighter-scores .fighter-score.total {
+        order: 1;
+    }
+
+    .fighter.fighter-neutral .fighter-scores .fighter-score.presentation {
+        order: 3;
+    }
+
+    .fighter.fighter-neutral .fighter-scores .fighter-score.accuracy {
+        order: 2;
+    }
+
+    .fighter.fighter-neutral .fighter-scores .fighter-score.total {
         order: 1;
     }

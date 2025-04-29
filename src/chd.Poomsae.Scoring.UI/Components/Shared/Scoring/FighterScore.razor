@@ -9,7 +9,7 @@
 </div>
 @code {
     [Parameter] public ScoreDto Score { get; set; }
-    [Parameter] public bool IsRed { get; set; }
+    [Parameter] public bool? IsRed { get; set; }
 
-    private string __css => this.IsRed ? "fighter-hong" : "fighter-chong";
+    private string __css => !this.IsRed.HasValue ? "fighter-neutral" : this.IsRed.Value ? "fighter-hong" : "fighter-chong";
 }

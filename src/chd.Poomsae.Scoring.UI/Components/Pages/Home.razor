@@ -1,176 +1,36 @@
 ﻿@page "/"
-@implements IDisposable
-@using Blazored.Modal.Services
-@using chd.Poomsae.Scoring.Contracts.Constants
-@using chd.Poomsae.Scoring.Contracts.Dtos
-@using chd.Poomsae.Scoring.Contracts.Enums
-@using chd.Poomsae.Scoring.Contracts.Interfaces
-@using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
-@using chd.Poomsae.Scoring.UI.Extensions
-@using chd.UI.Base.Contracts.Enum
 
-@if (runDto is null) { return; }
-
-<div class="run-container">
-    <div class="fighter-container">
-        <FighterScore Score="@runDto.ChongScore" />
-        <div class="run-middle">
-            <RunTimer @ref="this._runTimer" Time="@runDto.Time"></RunTimer>
-        </div>
-        <FighterScore  Score="@runDto.HongScore" IsRed="true" />
+<div class="home-container">
+    <div class="home-card" @onclick="()=>this.GoTo(SINGLE)">
+        <div class="logo"><CustomIcon FAClass="person" /></div>
+        <div class="text">Einzel</div>
     </div>
-    <div class="scoring-container">
-        <ScoringButtonComponent ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
-        <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
-        </div>
-        <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
+    <div class="home-card" @onclick="()=>this.GoTo(ELIM)">
+        <div class="logo"><CustomIcon FAClass="people" /></div>
+        <div class="text">Head to Head</div>
+    </div>
+    <div class="home-card" @onclick="()=>this.GoTo(RESULTS)">
+        <div class="logo"><CustomIcon FAClass="ranking-star" /></div>
+        <div class="text">Ergebnisse</div>
     </div>
 </div>
 
 
 @code {
-    [Inject] IModalService _modal { get; set; }
-    [Inject] IStartRunService _runService { get; set; }
-    [Inject] IBroadCastService broadCastService { get; set; }
+    const string SINGLE = "singlescore";
+    const string ELIM = "eliminationscore";
+    const string RESULTS = "results";
+
     [Inject] NavigationManager _navigationManager { get; set; }
 
-    private EliminationRunDto runDto;
-
-    private RunTimer _runTimer;
-    private IDisposable _registerLocationChangeHandler;
     protected override async Task OnInitializedAsync()
     {
-        this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
-
-        this.runDto = this._runService.StartEliminiationRun();
 
         await base.OnInitializedAsync();
     }
 
-    private async Task<TimeSpan?> CalcScore(bool isRed, decimal value)
+    private void GoTo(string path)
     {
-        if (this.runDto.State is not ERunState.Started) { return null; }
-        this.CalculateAccuracyScore(isRed ? this.runDto.HongScore : this.runDto.ChongScore, value);
-        this.runDto.Time = this._runTimer.Time;
-        await this.InvokeAsync(this.StateHasChanged);
-        return Math.Abs(value) == 0.1m ? TimeSpan.FromMilliseconds(200) : TimeSpan.FromMilliseconds(300);
-    }
-
-    private void CalculateAccuracyScore(ScoreDto dto, decimal value)
-    {
-        if (dto.Accuracy - value <= 0)
-        {
-            dto.Accuracy = 0;
-        }
-        else if (dto.Accuracy - value >= ScoreConstants.MaxAccuracy)
-        {
-            dto.Accuracy = ScoreConstants.MaxAccuracy;
-        }
-        else
-        {
-            dto.Accuracy -= value;
-        }
-    }
-
-    private async Task HandleClick()
-    {
-        if (this.runDto.State is ERunState.Initial)
-        {
-            this._runTimer.Start();
-            this.runDto.State = ERunState.Started;
-        }
-        else if (this.runDto.State is ERunState.Started)
-        {
-            this.runDto.Time = this._runTimer.Time;
-            this._runTimer.Stop();
-            this.runDto.State = ERunState.Stopped;
-
-            if (!await this.OpenPresentationModal(false))
-            {
-                this.runDto.State = ERunState.Started;
-
-                this._runTimer.Start();
-                return;
-            }
-            await this.OpenPresentationModal(true);
-        }
-        else if (this.runDto.State is ERunState.Stopped)
-        {
-            this.runDto.State = ERunState.Finished;
-            await this.SendResult();
-        }
-        else if (this.runDto.State is ERunState.Finished)
-        {
-            this.broadCastService.ResetScore();
-            this.runDto = this._runService.StartEliminiationRun();
-        }
-        await this.InvokeAsync(this.StateHasChanged);
-    }
-
-    private async Task SendResult()
-    {
-        this.broadCastService.BroadcastResult(this.runDto);
-    }
-
-    private async Task<bool> OpenPresentationModal(bool isRed)
-    {
-        if (this.runDto.State is not ERunState.Stopped) { return false; }
-
-        if (!isRed)
-        {
-            var modalResultBlue = await this._modal.Show<ScorePresentationModal>("Blue", new ModalOptions()
-                {
-                    Size = ModalSize.ExtraLarge,
-                }).Result;
-            if (modalResultBlue.Cancelled)
-            {
-                return false;
-            }
-            else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
-            {
-                this.runDto.ChongScore.SpeedAndPower = scoreDto.SpeedAndPower;
-                this.runDto.ChongScore.RhythmAndTempo = scoreDto.RhythmAndTempo;
-                this.runDto.ChongScore.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
-            }
-            return true;
-        }
-        else
-        {
-            var modalResultRed = await this._modal.Show<ScorePresentationModal>("Red", new ModalParameters(){
-                {nameof(ScorePresentationModal.IsRed),true}
-            }, new ModalOptions()
-            {
-                Size = ModalSize.ExtraLarge,
-            }).Result;
-            if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
-            {
-                this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
-                this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
-                this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
-            }
-        }
-        await this.InvokeAsync(this.StateHasChanged);
-        return true;
-    }
-
-    private async ValueTask OnLocationChanging(LocationChangingContext context)
-    {
-        if (this.runDto.State is ERunState.Started or ERunState.Stopped)
-        {
-            var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
-            if (res == EDialogResult.No)
-            {
-                context.PreventNavigation();
-            }
-        }
-    }
-
-    public void Dispose()
-    {
-        if (this._registerLocationChangeHandler is not null)
-        {
-            this._registerLocationChangeHandler.Dispose();
-        }
+        this._navigationManager.NavigateTo(path, false);
     }
 }

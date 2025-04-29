@@ -8,5 +8,6 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IStartRunService
     {
         EliminationRunDto StartEliminiationRun();
+        SingleRunDto StartSingleRun();
     }
 }

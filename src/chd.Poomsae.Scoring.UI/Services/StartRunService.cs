@@ -33,5 +33,19 @@ namespace chd.Poomsae.Scoring.UI.Services
 
             return dto;
         }
+
+        public SingleRunDto StartSingleRun()
+        {
+            var dto = new SingleRunDto()
+            {
+                Score = new()
+                {
+                    Accuracy = ScoreConstants.MaxAccuracy
+                },
+                State = ERunState.Initial
+            };
+
+            return dto;
+        }
     }
 }

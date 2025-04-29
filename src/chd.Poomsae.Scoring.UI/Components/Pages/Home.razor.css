@@ -1,33 +1,41 @@
-﻿.run-container {
-    /*background-image: linear-gradient(to right, red, yellow);*/
-    display: grid;
-    width: 100%;
+﻿.home-container {
     height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
 }
 
-    .run-container .fighter-container {
-        display: grid;
-        grid-template-columns: 40% auto 40%;
-        border-bottom: 1px solid var(--chd-font-color);
-        grid-gap: 0.5rem;
+    .home-container .home-card {
+        aspect-ratio: 2/1;
+        min-width: 10rem;
+        width: auto;
+        border: 1px solid;
+        border-radius: 0.5rem;
         padding: 0.5rem;
-        height: 20vh;
+        justify-items: center;
+        align-items: center;
+        align-content: center;
+        font-size: 1.5rem;
+        background: linear-gradient(to right, var(--chd-p-blue),var(--chd-p-red));
     }
 
-        .run-container .fighter-container .run-middle {
-            border: 1px solid var(--chd-font-color);
-            border-radius: 1.5rem;
+        .home-container .home-card:has(:hover) {
+            background: linear-gradient(to right, var(--chd-p-blue-accent),var(--chd-p-red-accent));
         }
 
-    .run-container .scoring-container {
-        width: 100vw;
-        height: 80vh;
-        display: grid;
-        grid-template-columns: auto 35% auto;
-    }
-
-        .run-container .scoring-container .scoring-middle {
-            
+        .home-container .home-card .logo {
         }
 
-            
+            .home-container .home-card .logo ::deep svg {
+                height: 3rem;
+            }
+
+        .home-container .home-card:nth-child(even) .logo ::deep svg {
+        }
+
+        .home-container .home-card .text {
+        }

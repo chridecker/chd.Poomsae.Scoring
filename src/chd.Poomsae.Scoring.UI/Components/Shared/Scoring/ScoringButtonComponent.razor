@@ -1,22 +1,28 @@
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 <div class="scoring @_css">
-    <ScoringButton IsBig="true" Value="@ValueBig" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
-    <ScoringButton IsBig="false" Value="@ValueSmall" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
+    @if (this.ValueBig.HasValue)
+    {
+        <ScoringButton IsBig="true" Value="@ValueBig.Value" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
+    }
+    @if (this.ValueSmall.HasValue)
+    {
+        <ScoringButton IsBig="false" Value="@ValueSmall.Value" OnClick="async (d)=> await OnClickButton(d)" OnRevertClick="async (d) => await this.OnClickButton(d *(-1))" />
+    }
 </div>
 
 @code {
-    [Parameter] public bool IsRed { get; set; }
-    [Parameter] public decimal ValueBig { get; set; }
-    [Parameter] public decimal ValueSmall { get; set; }
+    [Parameter] public bool? IsRed { get; set; }
+    [Parameter] public decimal? ValueBig { get; set; }
+    [Parameter] public decimal? ValueSmall { get; set; }
     [Parameter] public Func<bool, decimal, Task<TimeSpan?>> OnCalcClick { get; set; }
 
     [Inject] IVibrationHelper vibrationHelper { get; set; }
 
-    private string _css => this.IsRed ? "scoring-hong" : "scoring-chong";
+    private string _css => !this.IsRed.HasValue ? " scoring-neutral " : this.IsRed.Value ? "scoring-hong" : "scoring-chong";
 
     private async Task OnClickButton(decimal value)
     {
-        var time = await this.OnCalcClick(this.IsRed, value);
+        var time = await this.OnCalcClick(this.IsRed ?? false, value);
         if (time.HasValue)
         {
             this.vibrationHelper.Vibrate(time.Value);

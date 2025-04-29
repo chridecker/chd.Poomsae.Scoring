@@ -2,7 +2,7 @@
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
-@if(!this.ConnectedDevices.Any()){ return; }
+@if (!this.ConnectedDevices.Any()) { return; }
 <div class="judge-result @__css">
     @foreach (var judge in this.ConnectedDevices)
     {

@@ -1,0 +1,158 @@
+@page "/singlescore"
+@implements IDisposable
+@using Blazored.Modal.Services
+@using chd.Poomsae.Scoring.Contracts.Constants
+@using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.Contracts.Enums
+@using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+
+@if (runDto is null) { return; }
+
+<div class="single-run-container">
+    <div class="fighter-container">
+        <div></div>
+        <div class="run-middle">
+            <RunTimer @ref="this._runTimer" Time="@runDto.Time"></RunTimer>
+        </div>
+        <FighterScore Score="@runDto.Score" />
+    </div>
+    <div class="scoring-container">
+        <ScoringButtonComponent IsRed="false" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
+        <div class="scoring-middle">
+            <ScoringSummaryComponent OpenModal="async (x)=>await this.OpenPresentationModal()" HongScore="@runDto.Score" State="@runDto.State" HandleState="this.HandleClick" />
+        </div>
+        <ScoringButtonComponent ValueBig="0.1m" OnCalcClick="this.CalcScore" />
+    </div>
+</div>
+
+
+@code {
+    [Inject] IModalService _modal { get; set; }
+    [Inject] IStartRunService _runService { get; set; }
+    [Inject] IBroadCastService broadCastService { get; set; }
+    [Inject] NavigationManager _navigationManager { get; set; }
+
+    private SingleRunDto runDto;
+
+    private RunTimer _runTimer;
+    private IDisposable _registerLocationChangeHandler;
+    protected override async Task OnInitializedAsync()
+    {
+        this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+
+        this.runDto = this._runService.StartSingleRun();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task<TimeSpan?> CalcScore(bool isRed, decimal value)
+    {
+        if (this.runDto.State is not ERunState.Started) { return null; }
+        this.CalculateAccuracyScore(this.runDto.Score, value);
+        this.runDto.Time = this._runTimer.Time;
+        await this.InvokeAsync(this.StateHasChanged);
+        return Math.Abs(value) == 0.1m ? TimeSpan.FromMilliseconds(200) : TimeSpan.FromMilliseconds(300);
+    }
+
+    private void CalculateAccuracyScore(ScoreDto dto, decimal value)
+    {
+        if (dto.Accuracy - value <= 0)
+        {
+            dto.Accuracy = 0;
+        }
+        else if (dto.Accuracy - value >= ScoreConstants.MaxAccuracy)
+        {
+            dto.Accuracy = ScoreConstants.MaxAccuracy;
+        }
+        else
+        {
+            dto.Accuracy -= value;
+        }
+    }
+
+    private async Task HandleClick()
+    {
+        if (this.runDto.State is ERunState.Initial)
+        {
+            this._runTimer.Start();
+            this.runDto.State = ERunState.Started;
+        }
+        else if (this.runDto.State is ERunState.Started)
+        {
+            this.runDto.Time = this._runTimer.Time;
+            this._runTimer.Stop();
+            this.runDto.State = ERunState.Stopped;
+
+            if (!await this.OpenPresentationModal())
+            {
+                this.runDto.State = ERunState.Started;
+                this._runTimer.Start();
+                return;
+            }
+        }
+        else if (this.runDto.State is ERunState.Stopped)
+        {
+            this.runDto.State = ERunState.Finished;
+            await this.SendResult();
+        }
+        else if (this.runDto.State is ERunState.Finished)
+        {
+            this.broadCastService.ResetScore();
+            this.runDto = this._runService.StartSingleRun();
+        }
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async Task SendResult()
+    {
+        this.broadCastService.BroadcastResult(this.runDto);
+    }
+
+    private async Task<bool> OpenPresentationModal()
+    {
+        if (this.runDto.State is not ERunState.Stopped) { return false; }
+
+        var modalResultBlue = await this._modal.Show<ScorePresentationModal>("Presentation", new ModalParameters(){
+                {nameof(ScorePresentationModal.IsRed),true}
+            },
+            new ModalOptions()
+                {
+                    Size = ModalSize.ExtraLarge,
+                }).Result;
+        if (modalResultBlue.Cancelled)
+        {
+            return false;
+        }
+        else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
+        {
+            this.runDto.Score.SpeedAndPower = scoreDto.SpeedAndPower;
+            this.runDto.Score.RhythmAndTempo = scoreDto.RhythmAndTempo;
+            this.runDto.Score.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
+        }
+        await this.InvokeAsync(this.StateHasChanged);
+        return true;
+    }
+
+    private async ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        if (this.runDto.State is ERunState.Started or ERunState.Stopped)
+        {
+            var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
+            if (res == EDialogResult.No)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this._registerLocationChangeHandler is not null)
+        {
+            this._registerLocationChangeHandler.Dispose();
+        }
+    }
+}

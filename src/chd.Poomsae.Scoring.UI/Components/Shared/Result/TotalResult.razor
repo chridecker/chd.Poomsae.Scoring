@@ -2,9 +2,9 @@
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="total-result @__css">
-    <div class="total">@(this.__result?.ToDisplayString() ?? "-")</div>
-    <div class="detail presentation">@(this.__resultAccuracy?.ToDisplayString() ?? "-")</div>
-    <div class="detail accuracy">@(this.__resultPresentation?.ToDisplayString() ?? "-")</div>
+    <div class="total">@(this.__result.ToDisplayString())</div>
+    <div class="detail presentation">@(this.__resultAccuracy.ToDisplayString())</div>
+    <div class="detail accuracy">@(this.__resultPresentation.ToDisplayString())</div>
 </div>
 
 @code {
