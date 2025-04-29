@@ -41,7 +41,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this.broadCastService.Start();
+        await this.broadCastService.StartAsync();
         await base.OnInitializedAsync();
     }
 
