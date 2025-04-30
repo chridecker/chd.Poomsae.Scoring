@@ -72,11 +72,12 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         public async Task StartAsync(CancellationToken token)
         {
-            _ = await Permissions.RequestAsync<LocationPermission>();
-            var perm = await Permissions.RequestAsync<BluetoothPermission>();
+            var perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
             while (perm is not PermissionStatus.Granted)
             {
-                perm = await Permissions.RequestAsync<BluetoothPermission>();
+                _ = await Permissions.RequestAsync<BluetoothPermission>();
+
+                perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
                 await Task.Delay(250, token);
                 if (token.IsCancellationRequested || perm is PermissionStatus.Granted)
                 {

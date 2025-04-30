@@ -23,10 +23,10 @@ namespace chd.Poomsae.Scoring.App
 
         private async Task CheckPermissions()
         {
+            PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
             PermissionStatus notifiatioNpermission = await Permissions.RequestAsync<NotificationPermission>();
             PermissionStatus locationPermission = await Permissions.RequestAsync<LocationPermission>();
             PermissionStatus wifiPermission = await Permissions.RequestAsync<WifiPermission>();
-            PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
         }
         private void BlazorWebViewInitialized(object? sender, BlazorWebViewInitializedEventArgs e)
         {
