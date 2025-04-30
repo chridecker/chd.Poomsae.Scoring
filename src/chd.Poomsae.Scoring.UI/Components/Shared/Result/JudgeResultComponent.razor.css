@@ -7,6 +7,7 @@
 }
 
     .judge .name {
+        color:white;
         width: 100%;
         font-size: 0.8rem;
         line-height: 0.8rem;
@@ -22,14 +23,17 @@
         line-height: 1.5rem;
     }
 
+        .judge .score.discard {
+            text-decoration:line-through;
+        }
         .judge .score.accuracy {
             color: var(--chd-p-accuracy);
-            order: 2;
+            order: 3;
         }
 
         .judge .score.presentation {
             color: var(--chd-p-presentation);
-            order: 3;
+            order: 2;
         }
 
 .judges.hong .judge {
@@ -41,11 +45,11 @@
     }
 
     .judges.hong .judge .score.accuracy {
-        order: 3;
+        order: 2;
     }
 
     .judges.hong .judge .score.presentation {
-        order: 2;
+        order: 3;
     }
 
 

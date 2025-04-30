@@ -33,7 +33,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
                 this.DeviceFound?.Invoke(this, new()
                 {
                     Id = id,
-                    Name = $"D{id}"
+                    Name = $"S21 von Christoph"
                 });
             }
 
