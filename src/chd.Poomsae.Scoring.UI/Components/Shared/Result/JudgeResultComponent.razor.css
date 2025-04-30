@@ -1,0 +1,57 @@
+﻿.judge {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--chd-p-blue-accent);
+    border-radius: 0.5rem;
+    padding: 0.1rem;
+}
+
+    .judge .name {
+        width: 100%;
+        font-size: 0.8rem;
+        order: 1;
+    }
+
+     .judge .score {
+        width: 50%;
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+    }
+
+        .judge .score.accuracy {
+            color: var(--chd-p-accuracy);
+            order: 2;
+        }
+
+        .judge .score.presentation {
+            color: var(--chd-p-presentation);
+            order: 3;
+        }
+
+.judges.hong .judge {
+    border: 1px solid var(--chd-p-red-accent);
+}
+.judges.hong .judge .name {
+    text-align: right;
+}
+
+.judges.hong .judge .score.accuracy {
+    order: 3;
+}
+
+.judges.hong .judge .score.presentation {
+    order: 2;
+}
+
+
+
+@media only screen and (min-height: 600px) {
+    .judge .name {
+        font-size: 1.5rem;
+    }
+
+    .judge .score {
+        font-size: 2.5rem;
+        line-height: 2.5rem;
+    }

@@ -1,38 +1,65 @@
-﻿ .total-result {
+﻿.total {
     display: flex;
     flex-wrap: wrap;
-    align-content: center;
+    font-weight: bold;
 }
 
-     .total-result .total {
-        width: 100%;
-        font-size: 6rem;
-        line-height: 6.3rem;
+    .total .part-score {
+        height: 30%;
+        width: 50%;
+        font-size: 3rem;
         text-align: center;
-        font-weight: bold;
-        padding: 0.5rem;
+        align-content: center;
     }
 
-     .total-result.chong .total {
+    .total .overall {
+        order: 3;
+        color: white;
+        width: 100%;
+        height: 70%;
+        font-size: 5rem;
+        text-align: center;
+        align-content: center;
+        border-radius: 0.5rem;
+    }
+
+    .total .part-score.accuracy {
+        color: var(--chd-p-accuracy);
+    }
+
+    .total .part-score.presentation {
+        color: var(--chd-p-presentation);
+    }
+
+    .total.chong .accuracy {
+        order: 2;
+    }
+
+    .total.chong .presentation {
+        order: 1;
+    }
+
+    .total.hong .accuracy {
+        order: 1;
+    }
+
+    .total.hong .presentation {
+        order: 2;
+    }
+
+    .total.chong .overall {
         background-color: var(--chd-p-blue);
     }
 
-     .total-result.hong .total {
+    .total.hong .overall {
         background-color: var(--chd-p-red);
     }
 
-     .total-result .detail {
-        width: 50%;
-        font-size: 2.6rem;
-        text-align: center;
-        border: 1px solid var(--chd-font-color);
-        padding: 0.5rem;
+@media only screen and (min-height: 600px) {
+    .total .part-score {
+        font-size: 5rem;
     }
 
-         .total-result .detail.accuracy {
-            color: orangered;
-        }
-
-         .total-result .detail.presentation {
-            color: darkorange;
-        }
+    .total .overall {
+        font-size: 9rem;
+    }

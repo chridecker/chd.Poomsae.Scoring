@@ -23,11 +23,11 @@
     }
 
         .home-container .home-card:nth-child(odd) {
-            background: linear-gradient(to right, var(--chd-p-blue),var(--chd-bg));
+            background: var(--chd-p-blue-gradient);
         }
 
         .home-container .home-card:nth-child(even) {
-            background: linear-gradient(to right, var(--chd-p-red),var(--chd-bg));
+            background: var(--chd-p-red-gradient);
         }
 
         .home-container .home-card:nth-child(odd):has(:hover) {
@@ -50,6 +50,7 @@
         .home-container .home-card:nth-child(even):has(:hover) .logo ::deep svg {
             fill: var(--chd-p-red);
         }
+
         .home-container .home-card:nth-child(odd):has(:hover) .logo ::deep svg {
             fill: var(--chd-p-blue)
         }

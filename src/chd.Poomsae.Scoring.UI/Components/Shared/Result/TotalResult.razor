@@ -1,10 +1,10 @@
 @implements IDisposable
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
-<div class="total-result @__css">
-    <div class="total">@(this.__result.ToDisplayString())</div>
-    <div class="detail presentation">@(this.__resultAccuracy.ToDisplayString())</div>
-    <div class="detail accuracy">@(this.__resultPresentation.ToDisplayString())</div>
+<div class="total @__css">
+    <div class="part-score accuracy">@(this.__resultAccuracy.ToDisplayString())</div>
+    <div class="part-score presentation">@(this.__resultPresentation.ToDisplayString())</div>
+    <div class="overall">@(this.__result.ToDisplayString())</div>
 </div>
 
 @code {

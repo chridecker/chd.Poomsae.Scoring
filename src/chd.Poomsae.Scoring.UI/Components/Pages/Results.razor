@@ -7,14 +7,10 @@
 @page "/results"
 
 <div class="result-container">
-    <div class="total-results">
-        <TotalResult />
-        <TotalResult IsRed="true" />
-    </div>
-    <div class="judge-results">
-        <JudgeResult ConnectedDevices="this._connectedDeviced" />
-        <JudgeResult ConnectedDevices="this._connectedDeviced" IsRed="true" />
-    </div>
+    <JudgesComponent IsRed="false" Devices="this._connectedDevices" />
+    <TotalResult IsRed="false" />
+    <TotalResult IsRed="true" />
+    <JudgesComponent IsRed="true" Devices="this._connectedDevices" />
 </div>
 <FloatingActionNavigation FAIconActive="magnifying-glass" TextActive="Suche" OnClick="this.Search">
     <FloatingActionButton FAClass="eraser" Title="Alle Löschen" OnClick="this.Clear" />
@@ -27,7 +23,7 @@
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
 
-    private Dictionary<Guid, string> _connectedDeviced = [];
+    private Dictionary<Guid, string> _connectedDevices = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,7 +31,7 @@
         this.broadcastClient.DeviceFound += DeviceFound;
         this.broadcastClient.DeviceDisconnected += DeviceDisconnect;
 
-        this._connectedDeviced = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
+        this._connectedDevices = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
 
         await base.OnInitializedAsync();
     }
@@ -49,24 +45,24 @@
     private async Task Clear()
     {
         this.resultService.Clear();
-        foreach (var deviceId in this._connectedDeviced.Keys)
+        foreach (var deviceId in this._connectedDevices.Keys)
         {
             await this.broadcastClient.DisconnectDeviceAsync(deviceId, this._cts.Token);
         }
-        this._connectedDeviced = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
+        this._connectedDevices = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
         await this.InvokeAsync(this.StateHasChanged);
     }
 
     private async void DeviceFound(object? sender, DeviceFoundEventArgs e)
     {
-        this._connectedDeviced[e.Id] = e.Name;
+        this._connectedDevices[e.Id] = e.Name;
         await this.InvokeAsync(this.StateHasChanged);
     }
     private async void DeviceDisconnect(object? sender, Guid id)
     {
-        if (this._connectedDeviced.TryGetValue(id, out _))
+        if (this._connectedDevices.TryGetValue(id, out _))
         {
-            this._connectedDeviced.Remove(id);
+            this._connectedDevices.Remove(id);
             await this.InvokeAsync(this.StateHasChanged);
         }
     }

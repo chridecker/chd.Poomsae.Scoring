@@ -1,21 +1,9 @@
 ﻿.result-container {
     height: 100vh;
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 2fr 3fr 3fr 2fr;
+    grid-gap:0 0.2rem;
 }
 
-    .result-container .total-results {
-        display: grid;
-        grid-template-columns: 50% auto;
-        width: 100%;
-        color: white;
-    }
-
-       
-
-    .result-container .judge-results {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 50% auto;
-    }
+   

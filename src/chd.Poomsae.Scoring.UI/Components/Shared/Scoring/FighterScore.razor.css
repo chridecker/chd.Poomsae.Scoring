@@ -39,15 +39,15 @@
     }
 
         .fighter .fighter-scores .fighter-score.presentation {
-            color: darkorange;
+            color: var(--chd-p-presentation);
         }
 
         .fighter .fighter-scores .fighter-score.accuracy {
-            color: orangered;
+            color: var(--chd-p-accuracy);
         }
 
         .fighter .fighter-scores .fighter-score.total {
-            color: yellow;
+            color: var(--chd-p-total);
             font-size: 2.3rem;
             font-weight: bold;
             line-height: 2.3rem;
