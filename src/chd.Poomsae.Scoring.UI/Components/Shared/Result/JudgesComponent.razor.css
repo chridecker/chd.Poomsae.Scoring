@@ -3,7 +3,6 @@
     flex-direction: column;
     gap: 0.2rem;
     padding: 0.2rem;
-    overflow:scroll;
-    justify-content:center;
+    overflow: scroll;
+    justify-content: center;
 }
-    

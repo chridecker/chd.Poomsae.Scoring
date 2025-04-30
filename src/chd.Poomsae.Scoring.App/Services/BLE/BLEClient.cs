@@ -22,8 +22,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private IAdapter _adapter => this._bluetoothLE.Adapter;
 
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
-        public event EventHandler<DeviceFoundEventArgs> DeviceFound;
-        public event EventHandler<Guid> DeviceDisconnected;
+        public event EventHandler<DeviceDto> DeviceFound;
+        public event EventHandler<DeviceDto> DeviceDisconnected;
 
         public BLEClient()
         {
@@ -35,18 +35,22 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private void _adapter_DeviceDisconnected(object? sender, DeviceEventArgs e)
         {
-            this.DeviceDisconnected?.Invoke(this, e.Device.Id);
+            this.DeviceDisconnected?.Invoke(this, new() { Id = e.Device.Id, Name = e.Device.Name });
         }
 
-        public async Task<Dictionary<Guid, string>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
+        public async Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
         {
-            var dict = new Dictionary<Guid, string>();
+            var lst = new List<DeviceDto>();
             foreach (var device in this._adapter.ConnectedDevices)
             {
                 var readName = await this.ReadNameAsync(device, cancellationToken);
-                dict[device.Id] = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
+                lst.Add(new()
+                {
+                    Id = device.Id,
+                    Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName
+                });
             }
-            return dict;
+            return lst;
         }
 
         public async Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
@@ -103,37 +107,38 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                     return;
                 }
 
-                characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, device.Id, device.Name, e);
+
+                var dto = new DeviceDto()
+                {
+                    Id = device.Id,
+                    Name = device.Name
+                };
+
+                characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, dto, e);
                 await characteristic.StartUpdatesAsync();
 
                 var readName = await this.ReadNameAsync(device, CancellationToken.None);
                 var name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
 
-                this.DeviceFound?.Invoke(this, new()
-                {
-                    Id = device.Id,
-                    Name = name,
-                    Address = navtiveDevive.Address
-                });
+                this.DeviceFound?.Invoke(this, dto);
             }
         }
 
         private async Task DisconnectDevice(IDevice device) => this._adapter.DisconnectDeviceAsync(device);
 
-        private async void Characteristic_ValueUpdated(object? sender, Guid id, string name, CharacteristicUpdatedEventArgs e)
+        private async void Characteristic_ValueUpdated(object? sender, DeviceDto dto, CharacteristicUpdatedEventArgs e)
         {
             var device = e.Characteristic.Service.Device;
 
             var readName = await this.ReadNameAsync(device, CancellationToken.None);
-            name = string.IsNullOrWhiteSpace(readName) ? name : readName;
+            dto.Name = string.IsNullOrWhiteSpace(readName) ? dto.Name : readName;
 
             var chongResult = e.Characteristic.Value[0] == 0 ? null : new ScoreDto(e.Characteristic.Value.Skip(1).Take(4).ToArray());
             var hongResult = e.Characteristic.Value[5] == 0 ? null : new ScoreDto(e.Characteristic.Value.Skip(6).Take(4).ToArray());
 
             this.ResultReceived?.Invoke(this, new ScoreReceivedEventArgs()
             {
-                DeviceId = id,
-                DeviceName = name,
+                Device = dto,
                 Chong = chongResult,
                 Hong = hongResult,
             });

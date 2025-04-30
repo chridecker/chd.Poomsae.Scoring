@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.WPF.Services
 {
-    public class BLECLientDummy : IBroadcastClient
+    public class BLEClientDummy : IBroadcastClient
     {
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
-        public event EventHandler<DeviceFoundEventArgs> DeviceFound;
-        public event EventHandler<Guid> DeviceDisconnected;
+        public event EventHandler<DeviceDto> DeviceFound;
+        public event EventHandler<DeviceDto> DeviceDisconnected;
 
-        public async Task<Dictionary<Guid, string>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
+        public async Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
         {
-            return new Dictionary<Guid, string>();
+            return [];
         }
 
         public async Task<bool> DisconnectDeviceAsync(Guid id, CancellationToken cancellationToken = default)
@@ -30,10 +30,10 @@ namespace chd.Poomsae.Scoring.WPF.Services
 
             foreach (var id in ids)
             {
-                this.DeviceFound?.Invoke(this, new DeviceFoundEventArgs()
+                this.DeviceFound?.Invoke(this, new()
                 {
                     Id = id,
-                    Name = "D"
+                    Name = $"D{id}"
                 });
             }
 
@@ -43,8 +43,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
             {
                 this.ResultReceived?.Invoke(this, new()
                 {
-                    DeviceId = id,
-                    DeviceName = "D",
+                    Device = new() { Id = id },
                     Chong = new ScoreDto
                     {
                         Accuracy = new Random().Next(0, 40) * 0.1m,

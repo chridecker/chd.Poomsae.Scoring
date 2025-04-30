@@ -4,10 +4,9 @@ using System.Text;
 
 namespace chd.Poomsae.Scoring.Contracts.Dtos
 {
-    public class DeviceFoundEventArgs : EventArgs
+    public class DeviceDto
     {
         public Guid Id { get; set; }
-        public string Address { get; set; }
         public string Name { get; set; }
     }
 }

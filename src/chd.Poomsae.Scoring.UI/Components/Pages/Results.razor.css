@@ -3,7 +3,5 @@
     width: 100%;
     display: grid;
     grid-template-columns: 2fr 3fr 3fr 2fr;
-    grid-gap:0 0.2rem;
+    grid-gap: 0 0.2rem;
 }
-
-   

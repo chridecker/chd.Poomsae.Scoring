@@ -1,18 +1,23 @@
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+
 <div class="judges @_css">
     @foreach (var device in this.Devices)
     {
-        <JudgeResultComponent Name="@device.Value" IsRed="this.IsRed" Score="this.Result(device.Key)" />
+        <JudgeResultComponent Name="@device.Name" IsRed="this.IsRed" Score="this.Result(device.Id)" />
     }
 </div>
 
+
 @code {
     [Inject] IResultService resultService { get; set; }
+    [Inject] IBroadcastClient broadcastClient{ get; set; }
 
     [Parameter] public bool IsRed { get; set; }
-    [Parameter] public IEnumerable<KeyValuePair<Guid, string>> Devices { get; set; }
+    [Parameter] public List<DeviceDto> Devices { get; set; } = [];
+
     private ScoreDto Result(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? (this.IsRed ? res.HongScore : res.ChongScore) : null;
 
     private string _css => this.IsRed ? "hong" : "chong";

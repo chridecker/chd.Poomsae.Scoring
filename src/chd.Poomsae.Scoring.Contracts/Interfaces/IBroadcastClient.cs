@@ -10,10 +10,10 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IBroadcastClient
     {
         event EventHandler<ScoreReceivedEventArgs> ResultReceived;
-        event EventHandler<DeviceFoundEventArgs> DeviceFound;
-        event EventHandler<Guid> DeviceDisconnected;
+        event EventHandler<DeviceDto> DeviceFound;
+        event EventHandler<DeviceDto> DeviceDisconnected;
 
-        Task<Dictionary<Guid, string>> CurrentConnectedDevices(CancellationToken cancellationToken = default);
+        Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default);
 
         Task<bool> StartScanAsync(CancellationToken cancellationToken = default);
         Task<bool> DisconnectDeviceAsync(Guid id, CancellationToken cancellationToken = default);

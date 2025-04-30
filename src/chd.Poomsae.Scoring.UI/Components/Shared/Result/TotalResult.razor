@@ -15,7 +15,7 @@
     private decimal? __resultAccuracy => this.IsRed ? this.resultService.HongAccuracy : this.resultService.ChongAccuracy;
     private decimal? __resultPresentation => this.IsRed ? this.resultService.HongPresentation : this.resultService.ChongPresentation;
 
-    private string __css => this.IsRed ? "hong" : "chong";
+    private string __css => (this.IsRed ? "hong" : "chong") + " " + (this.__result.HasValue ? "" : " inactive ") ;
 
 
     protected override Task OnInitializedAsync()
