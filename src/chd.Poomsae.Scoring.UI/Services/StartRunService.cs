@@ -28,7 +28,7 @@ namespace chd.Poomsae.Scoring.UI.Services
                 {
                     Accuracy = ScoreConstants.MaxAccuracy
                 },
-                State = ERunState.Initial
+                State = ERunState.Started
             };
 
             return dto;
@@ -42,7 +42,7 @@ namespace chd.Poomsae.Scoring.UI.Services
                 {
                     Accuracy = ScoreConstants.MaxAccuracy
                 },
-                State = ERunState.Initial
+                State = ERunState.Started
             };
 
             return dto;

@@ -10,7 +10,8 @@
     }
 
     .fighter.fighter-neutral {
-        text-align: right;
+        display:flex;
+        width:max-content;
     }
 
     .fighter .fighter-scores {
@@ -27,12 +28,10 @@
     }
 
     .fighter.fighter-neutral .fighter-scores {
-        display: flex;
-        gap: 10%;
-        justify-content: end;
+        display: grid;
+        grid-template-columns: repeat(3,auto);
+        grid-gap: 3rem;
     }
-
-
 
     .fighter .fighter-scores .fighter-score {
         align-content: end;

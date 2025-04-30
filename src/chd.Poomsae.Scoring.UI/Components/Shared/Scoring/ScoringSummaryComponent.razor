@@ -44,9 +44,7 @@
 
     private string _middleButtonText => this.State switch
     {
-        ERunState.Initial => "Start",
-        ERunState.Started => "Stop",
-        ERunState.Stopped => "Senden",
+        ERunState.Started => "Senden",
         ERunState.Finished => "Neustart",
         _ => string.Empty
     };

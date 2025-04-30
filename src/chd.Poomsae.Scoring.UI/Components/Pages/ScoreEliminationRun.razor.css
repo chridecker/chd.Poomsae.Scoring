@@ -1,5 +1,4 @@
 ﻿.run-container {
-    /*background-image: linear-gradient(to right, red, yellow);*/
     display: grid;
     width: 100%;
     height: 100vh;
@@ -7,9 +6,9 @@
 
     .run-container .fighter-container {
         display: grid;
-        grid-template-columns: 40% auto 40%;
+        grid-template-columns: repeat(2,1fr);
         border-bottom: 1px solid var(--chd-font-color);
-        grid-gap: 0.5rem;
+        grid-gap: 15%;
         padding: 0.5rem;
         height: 20vh;
     }

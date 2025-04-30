@@ -14,9 +14,6 @@
 <div class="run-container">
     <div class="fighter-container">
         <FighterScore Score="@runDto.ChongScore" IsRed="false" />
-        <div class="run-middle">
-            <RunTimer @ref="this._runTimer" Time="@runDto.Time"></RunTimer>
-        </div>
         <FighterScore Score="@runDto.HongScore" IsRed="true" />
     </div>
     <div class="scoring-container">
@@ -37,7 +34,6 @@
 
     private EliminationRunDto runDto;
 
-    private RunTimer _runTimer;
     private IDisposable _registerLocationChangeHandler;
     protected override async Task OnInitializedAsync()
     {
@@ -52,7 +48,6 @@
     {
         if (this.runDto.State is not ERunState.Started) { return null; }
         this.CalculateAccuracyScore(isRed ? this.runDto.HongScore : this.runDto.ChongScore, value);
-        this.runDto.Time = this._runTimer.Time;
         await this.InvokeAsync(this.StateHasChanged);
         return Math.Abs(value) == 0.1m ? TimeSpan.FromMilliseconds(200) : TimeSpan.FromMilliseconds(300);
     }
@@ -75,30 +70,20 @@
 
     private async Task HandleClick()
     {
-        if (this.runDto.State is ERunState.Initial)
+        if (this.runDto.State is ERunState.Started)
         {
-            this._runTimer.Start();
-            this.runDto.State = ERunState.Started;
-        }
-        else if (this.runDto.State is ERunState.Started)
-        {
-            this.runDto.Time = this._runTimer.Time;
-            this._runTimer.Stop();
-            this.runDto.State = ERunState.Stopped;
-
-            if (!await this.OpenPresentationModal(false))
+            if (!this.runDto.ChongScore.Presentation.HasValue
+            && !await this.OpenPresentationModal(false))
             {
-                this.runDto.State = ERunState.Started;
-
-                this._runTimer.Start();
                 return;
             }
-            await this.OpenPresentationModal(true);
-        }
-        else if (this.runDto.State is ERunState.Stopped)
-        {
+            if (!this.runDto.HongScore.Presentation.HasValue
+            && !await this.OpenPresentationModal(true))
+            {
+                return;
+            }
+            this.broadCastService.BroadcastResult(this.runDto);
             this.runDto.State = ERunState.Finished;
-            await this.SendResult();
         }
         else if (this.runDto.State is ERunState.Finished)
         {
@@ -108,21 +93,18 @@
         await this.InvokeAsync(this.StateHasChanged);
     }
 
-    private async Task SendResult()
+    private async Task<bool>
+    OpenPresentationModal(bool isRed)
     {
-        this.broadCastService.BroadcastResult(this.runDto);
-    }
-
-    private async Task<bool> OpenPresentationModal(bool isRed)
-    {
-        if (this.runDto.State is not ERunState.Stopped) { return false; }
+        if (this.runDto.State is not ERunState.Started) { return false; }
 
         if (!isRed)
         {
-            var modalResultBlue = await this._modal.Show<ScorePresentationModal>("Blue", new ModalOptions()
-                {
-                    Size = ModalSize.ExtraLarge,
-                }).Result;
+            var modalResultBlue = await this._modal.Show<ScorePresentationModal>
+                ("Blue", new ModalOptions()
+                    {
+                        Size = ModalSize.ExtraLarge,
+                    }).Result;
             if (modalResultBlue.Cancelled)
             {
                 return false;
@@ -137,26 +119,28 @@
         }
         else
         {
-            var modalResultRed = await this._modal.Show<ScorePresentationModal>("Red", new ModalParameters(){
-                {nameof(ScorePresentationModal.IsRed),true}
-            }, new ModalOptions()
-            {
-                Size = ModalSize.ExtraLarge,
-            }).Result;
+            var modalResultRed = await this._modal.Show<ScorePresentationModal>
+                ("Red", new ModalParameters(){
+            {nameof(ScorePresentationModal.IsRed),true}
+                    }, new ModalOptions()
+                    {
+                        Size = ModalSize.ExtraLarge,
+                    }).Result;
             if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
             {
                 this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
                 this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
                 this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
+                return true;
             }
         }
         await this.InvokeAsync(this.StateHasChanged);
-        return true;
+        return false;
     }
 
     private async ValueTask OnLocationChanging(LocationChangingContext context)
     {
-        if (this.runDto.State is ERunState.Started or ERunState.Stopped)
+        if (this.runDto.State is ERunState.Started)
         {
             var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
             if (res == EDialogResult.No)
