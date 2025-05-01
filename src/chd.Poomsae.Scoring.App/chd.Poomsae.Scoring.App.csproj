@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-android34.0</TargetFrameworks>
+		<TargetFrameworks>net9.0-android</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>chd.Poomsae.Scoring.App</RootNamespace>
 		<UseMaui>true</UseMaui>
