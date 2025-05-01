@@ -20,8 +20,11 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<PublishAot>False</PublishAot>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">29.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 		<WindowsPackageType>None</WindowsPackageType>
+
+		<SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+		<TargetAndroidVersion>34</TargetAndroidVersion>
 
 	</PropertyGroup>
 
