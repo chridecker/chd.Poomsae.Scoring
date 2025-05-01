@@ -93,6 +93,7 @@
 
     .total .overall {
         font-size: 9rem;
+        border-radius:2rem;
     }
 }
 
