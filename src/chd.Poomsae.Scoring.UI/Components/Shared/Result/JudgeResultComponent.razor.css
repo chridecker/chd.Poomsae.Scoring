@@ -1,7 +1,7 @@
 ﻿.judge {
     display: flex;
     flex-wrap: wrap;
-    background: var(--chd-p-blue-accent-gradient);
+    background: var(--chd-p-blue-gradient);
     border-radius: 0.5rem;
     padding: 0.2rem;
 }
@@ -37,7 +37,7 @@
         }
 
 .judges.hong .judge {
-    background: var(--chd-p-red-accent-gradient-left);
+    background: var(--chd-p-red-gradient-left);
 }
 
     .judges.hong .judge .name {
