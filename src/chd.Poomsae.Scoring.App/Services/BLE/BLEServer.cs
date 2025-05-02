@@ -130,7 +130,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             {
                 if (this.readDevices.Any(a => a == device.Address))
                 {
-                    this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false, this._resultCharacteristicValue.ToArray());
+                    if (Android.OS.Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+                    {
+                        this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false, this._resultCharacteristicValue.ToArray());
+                    }
                     this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
                 }
             }
@@ -146,7 +149,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._desc.SetValue(this._resultCharacteristicValue.ToArray());
 
             this._characteristic.AddDescriptor(this._desc);
-
 
             this._characteristic.SetValue(this._resultCharacteristicValue.ToArray());
             this._resultService.AddCharacteristic(this._characteristic);
@@ -166,9 +168,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             if (e.Descriptor.Uuid == this._desc.Uuid)
             {
-                this._resultNotifyDescValue = e.Value;
-                this._desc.SetValue(e.Value);
-                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Value);
+                if (this._resultNotifyDescValue == BluetoothGattDescriptor.DisableNotificationValue) { }
+                this._resultNotifyDescValue = BluetoothGattDescriptor.EnableNotificationValue;
+                this._desc.SetValue(this._resultNotifyDescValue.ToArray());
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, this._resultNotifyDescValue.ToArray());
             }
         }
 
