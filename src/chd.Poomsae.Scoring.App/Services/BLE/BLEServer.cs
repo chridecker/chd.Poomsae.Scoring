@@ -168,8 +168,14 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             if (e.Descriptor.Uuid == this._desc.Uuid)
             {
-                if (this._resultNotifyDescValue == BluetoothGattDescriptor.DisableNotificationValue) { }
-                this._resultNotifyDescValue = BluetoothGattDescriptor.EnableNotificationValue;
+                if (this._resultNotifyDescValue == BluetoothGattDescriptor.DisableNotificationValue)
+                {
+                    this._resultNotifyDescValue = BluetoothGattDescriptor.EnableNotificationValue;
+                }
+                else
+                {
+                    this._resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue;
+                }
                 this._desc.SetValue(this._resultNotifyDescValue.ToArray());
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, this._resultNotifyDescValue.ToArray());
             }
