@@ -1,0 +1,49 @@
+@implements IDisposable
+@using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.Contracts.Interfaces
+
+
+<div class="devices-container">
+    @foreach (var device in this._discoveredDevices)
+    {
+        <DiscoveredDeviceComponent Device="device" OnCLick="this.Connect" />
+    }
+</div>
+
+
+@code {
+    [Inject] IBroadcastClient broadcastClient { get; set; }
+    private CancellationTokenSource _cts = new();
+
+    private List<DeviceDto> _discoveredDevices = [];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.broadcastClient.DeviceDiscovered += this.DeviceDiscovered;
+        await this.broadcastClient.StartDiscoverAsync(this._cts.Token);
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Connect(DeviceDto dto)
+    {
+        if (await this.broadcastClient.ConnectDeviceAsync(dto, this._cts.Token))
+        {
+            this._discoveredDevices.Remove(dto);
+        }
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async void DeviceDiscovered(object? sender, DeviceDto dto)
+    {
+        if (this._discoveredDevices.Any(a => a.Id == dto.Id)) { return; }
+        this._discoveredDevices.Add(dto);
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        this._cts.Cancel();
+        this.broadcastClient.DeviceDiscovered -= this.DeviceDiscovered;
+    }
+}

@@ -13,6 +13,13 @@ namespace chd.Poomsae.Scoring.WPF.Services
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         public event EventHandler<DeviceDto> DeviceFound;
         public event EventHandler<DeviceDto> DeviceDisconnected;
+        public event EventHandler<DeviceDto> DeviceDiscovered;
+
+        public async Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default)
+        {
+            this.DeviceFound?.Invoke(this, dto);
+            return true;
+        }
 
         public async Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
         {
@@ -24,7 +31,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
             return true;
         }
 
-        public async Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> StartAutoConnectAsync(CancellationToken cancellationToken = default)
         {
             var ids = Enumerable.Range(0, 5).Select(i => Guid.NewGuid()).ToArray();
 
@@ -61,6 +68,12 @@ namespace chd.Poomsae.Scoring.WPF.Services
                 });
                 await Task.Delay(TimeSpan.FromMilliseconds(500));
             }
+            return true;
+        }
+
+        public async Task<bool> StartDiscoverAsync(CancellationToken cancellationToken = default)
+        {
+            this.DeviceDiscovered(this, new DeviceDto { Id = Guid.NewGuid(), Name = "Test" });
             return true;
         }
     }

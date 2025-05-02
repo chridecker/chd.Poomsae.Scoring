@@ -1,0 +1,11 @@
+@using chd.Poomsae.Scoring.Contracts.Dtos
+
+<div class="discovered-device" @onclick="async ()=>await  this.OnCLick(this.Device)">
+    <CustomIcon FAClass="gamepad" />
+    <div class="name">@Device.Name</div>
+</div>
+
+@code {
+    [Parameter] public DeviceDto Device { get; set; }
+    [Parameter] public Func<DeviceDto, Task> OnCLick { get; set; }
+}

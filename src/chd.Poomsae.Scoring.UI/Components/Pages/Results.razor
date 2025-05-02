@@ -12,7 +12,8 @@
     <TotalResult IsRed="true" />
     <JudgesComponent IsRed="true" Devices="this._connectedDevices" />
 </div>
-<FloatingActionNavigation FAIconActive="magnifying-glass" TextActive="Suche" OnClick="this.Search" >
+<FloatingActionNavigation FAIconActive="magnifying-glass" TextActive="Auto Suche" OnClick="this.Search">
+    <FloatingActionButton FAClass="magnifying-glass" Title="Erweiterte Suche" OnClick="this.Discover" />
     <FloatingActionButton FAClass="eraser" Title="Alle Löschen" OnClick="this.Clear" />
 </FloatingActionNavigation>
 
@@ -33,14 +34,22 @@
         this.broadcastClient.DeviceDisconnected += DeviceDisconnect;
 
         this._connectedDevices = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
-        
+
         await base.OnInitializedAsync();
+    }
+
+    private async Task Discover()
+    {
+        await this.modalService.Show<DiscoverDevices>(new ModalOptions()
+            {
+                Size = ModalSize.Large
+            }).Result;
     }
 
     private async Task Search()
     {
         await this.Clear();
-        await this.broadcastClient.StartScanAsync(this._cts.Token);
+        await this.broadcastClient.StartAutoConnectAsync(this._cts.Token);
     }
 
     private async Task Clear()

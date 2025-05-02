@@ -22,15 +22,22 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private IAdapter _adapter => this._bluetoothLE.Adapter;
 
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
+        public event EventHandler<DeviceDto> DeviceDiscovered;
         public event EventHandler<DeviceDto> DeviceFound;
         public event EventHandler<DeviceDto> DeviceDisconnected;
 
         public BLEClient()
         {
-            this._adapter.DeviceDiscovered += this._adapter_DeviceDiscovered;
+            this._adapter.ScanTimeoutElapsed += this._adapter_ScanTimeoutElapsed;
             this._adapter.DeviceConnected += this._adapter_DeviceConnected;
             this._adapter.DeviceDisconnected += this._adapter_DeviceDisconnected;
             this._adapter.DeviceConnectionLost += this._adapter_DeviceDisconnected;
+        }
+
+        private void _adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
+        {
+            this._adapter.DeviceDiscovered -= this._adapter_DeviceDiscoveredAuto;
+            this._adapter.DeviceDiscovered -= this._adapter_DeviceDiscovered;
         }
 
         private void _adapter_DeviceDisconnected(object? sender, DeviceEventArgs e)
@@ -52,8 +59,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             return lst;
         }
-
-        public async Task<bool> StartScanAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> StartDiscoverAsync(CancellationToken cancellationToken = default)
         {
             if (this._bluetoothLE.State is not BluetoothState.On or BluetoothState.TurningOn)
             {
@@ -61,6 +67,21 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             if (!this._adapter.IsScanning)
             {
+                this._adapter.DeviceDiscovered += this._adapter_DeviceDiscovered;
+                await this._adapter.StartScanningForDevicesAsync([], d => !string.IsNullOrWhiteSpace(d.Name) && !this._adapter.ConnectedDevices.Any(a => a.Id == d.Id));
+            }
+            return this._adapter.IsScanning;
+        }
+
+        public async Task<bool> StartAutoConnectAsync(CancellationToken cancellationToken = default)
+        {
+            if (this._bluetoothLE.State is not BluetoothState.On or BluetoothState.TurningOn)
+            {
+                await this._bluetoothLE.TrySetStateAsync(true);
+            }
+            if (!this._adapter.IsScanning)
+            {
+                this._adapter.DeviceDiscovered += this._adapter_DeviceDiscoveredAuto;
                 await this._adapter.StartScanningForDevicesAsync(new ScanFilterOptions()
                 {
                     ServiceUuids = [BLEConstants.Result_Gatt_Service],
@@ -79,13 +100,31 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             return false;
         }
+        public async Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default)
+        {
+            var d = await this._adapter.ConnectToKnownDeviceAsync(dto.Id, cancellationToken: cancellationToken);
+            return d is not null;
+        }
 
-        private async void _adapter_DeviceDiscovered(object? sender, DeviceEventArgs e)
+        private async void _adapter_DeviceDiscoveredAuto(object? sender, DeviceEventArgs e)
         {
             var device = e.Device;
             if (device.NativeDevice is BluetoothDevice bDevice)
             {
                 await this._adapter.ConnectToDeviceAsync(device);
+            }
+        }
+
+        private void _adapter_DeviceDiscovered(object? sender, DeviceEventArgs e)
+        {
+            var device = e.Device;
+            if (device.NativeDevice is BluetoothDevice bDevice)
+            {
+                this.DeviceDiscovered?.Invoke(this, new DeviceDto
+                {
+                    Id = device.Id,
+                    Name = device.Name
+                });
             }
         }
         private async void _adapter_DeviceConnected(object? sender, DeviceEventArgs e)

@@ -12,10 +12,13 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         event EventHandler<DeviceDto> DeviceFound;
         event EventHandler<DeviceDto> DeviceDisconnected;
+        event EventHandler<DeviceDto> DeviceDiscovered;
 
         Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default);
 
-        Task<bool> StartScanAsync(CancellationToken cancellationToken = default);
+        Task<bool> StartAutoConnectAsync(CancellationToken cancellationToken = default);
+        Task<bool> StartDiscoverAsync(CancellationToken cancellationToken = default);
         Task<bool> DisconnectDeviceAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default);
     }
 }
