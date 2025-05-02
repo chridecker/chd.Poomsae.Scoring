@@ -33,6 +33,9 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private List<string> readDevices = [];
 
+        private IList<byte> _resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue;
+        private IList<byte> _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback)
         {
             this._callback = callback;
@@ -43,6 +46,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._callback.DescriptorWriteRequest += this._callback_DescriptorWriteRequest;
         }
 
+        private void SetResultValue(IList<byte> data)
+        {
+            this._resultCharacteristicValue = data;
+        }
+
 
         private void _callback_NotificationSent(object? sender, BleEventArgs e)
         {
@@ -51,19 +59,22 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         public void ResetScore()
         {
-            this._characteristic.SetValue([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            this.SetResultValue([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            this._characteristic.SetValue(this._resultCharacteristicValue.ToArray());
             this.BroadCastToAllDevices();
         }
         public void BroadcastResult(RunDto run)
         {
             if (run is EliminationRunDto elimination)
             {
-                this._characteristic.SetValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower ?? 0m), __dataConvert(elimination.ChongScore.RhythmAndTempo ?? 0m), __dataConvert(elimination.ChongScore.ExpressionAndEnergy ?? 0m), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower ?? 0m), __dataConvert(elimination.HongScore.RhythmAndTempo ?? 0m), __dataConvert(elimination.HongScore.ExpressionAndEnergy ?? 0m)]);
+                this.SetResultValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower ?? 0m), __dataConvert(elimination.ChongScore.RhythmAndTempo ?? 0m), __dataConvert(elimination.ChongScore.ExpressionAndEnergy ?? 0m), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower ?? 0m), __dataConvert(elimination.HongScore.RhythmAndTempo ?? 0m), __dataConvert(elimination.HongScore.ExpressionAndEnergy ?? 0m)]);
+                this._characteristic.SetValue(this._resultCharacteristicValue.ToArray());
                 this.BroadCastToAllDevices();
             }
             else if (run is SingleRunDto singleRun)
             {
-                this._characteristic.SetValue([1, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m), 0, 0, 0, 0, 0]);
+                this.SetResultValue([1, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m), 0, 0, 0, 0, 0]);
+                this._characteristic.SetValue(this._resultCharacteristicValue.ToArray());
                 this.BroadCastToAllDevices();
             }
 
@@ -119,6 +130,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             {
                 if (this.readDevices.Any(a => a == device.Address))
                 {
+                    this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false, this._resultCharacteristicValue.ToArray());
                     this._gattServer.NotifyCharacteristicChanged(device, this._characteristic, false);
                 }
             }
@@ -131,11 +143,12 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read, GattPermission.Read);
             this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
             this._desc = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
-            this._desc.SetValue(BluetoothGattDescriptor.DisableNotificationValue.ToArray());
+            this._desc.SetValue(this._resultCharacteristicValue.ToArray());
 
             this._characteristic.AddDescriptor(this._desc);
 
-            this._characteristic.SetValue([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+            this._characteristic.SetValue(this._resultCharacteristicValue.ToArray());
             this._resultService.AddCharacteristic(this._characteristic);
             this._resultService.AddCharacteristic(this._characteristicName);
             this._gattServer.AddService(this._resultService);
@@ -146,15 +159,16 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             if (e.Descriptor.Uuid == this._desc.Uuid)
             {
-                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, this._resultNotifyDescValue.ToArray());
             }
         }
         private void _callback_DescriptorWriteRequest(object? sender, BleEventArgs e)
         {
             if (e.Descriptor.Uuid == this._desc.Uuid)
             {
+                this._resultNotifyDescValue = e.Value;
                 this._desc.SetValue(e.Value);
-                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Descriptor.GetValue());
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Value);
             }
         }
 
