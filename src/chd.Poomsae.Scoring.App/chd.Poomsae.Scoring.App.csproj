@@ -26,6 +26,10 @@
 		<SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 
+  <PublishTrimmed>true</PublishTrimmed>
+  <TrimMode>link</TrimMode>
+  <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU'">
