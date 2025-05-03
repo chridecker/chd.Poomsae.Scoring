@@ -14,6 +14,8 @@ namespace chd.Poomsae.Scoring.WPF.Services
         public event EventHandler<DeviceDto> DeviceFound;
         public event EventHandler<DeviceDto> DeviceDisconnected;
         public event EventHandler<DeviceDto> DeviceDiscovered;
+        public event EventHandler ScanTimeout;
+
 
         public async Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default)
         {
@@ -43,7 +45,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
                     Name = $"S21 von Christoph"
                 });
             }
-
+            this.ScanTimeout?.Invoke(this, EventArgs.Empty);
             await Task.Delay(TimeSpan.FromSeconds(3));
 
             foreach (var id in ids)

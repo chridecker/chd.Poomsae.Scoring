@@ -13,6 +13,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         event EventHandler<DeviceDto> DeviceFound;
         event EventHandler<DeviceDto> DeviceDisconnected;
         event EventHandler<DeviceDto> DeviceDiscovered;
+        event EventHandler ScanTimeout;
 
         Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default);
 

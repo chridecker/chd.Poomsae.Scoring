@@ -25,6 +25,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         public event EventHandler<DeviceDto> DeviceDiscovered;
         public event EventHandler<DeviceDto> DeviceFound;
         public event EventHandler<DeviceDto> DeviceDisconnected;
+        public event EventHandler ScanTimeout;
 
         public BLEClient()
         {
@@ -38,6 +39,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             this._adapter.DeviceDiscovered -= this._adapter_DeviceDiscoveredAuto;
             this._adapter.DeviceDiscovered -= this._adapter_DeviceDiscovered;
+            this.ScanTimeout?.Invoke(this, e);
         }
 
         private void _adapter_DeviceDisconnected(object? sender, DeviceEventArgs e)
