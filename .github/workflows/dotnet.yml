@@ -41,7 +41,7 @@ jobs:
         $YEAR=& Get-Date -UFormat "%y%j"
         $HOUR=& Get-Date -format HHmm
         $VERSION="$MAJOR.$MINOR.$YEAR.$HOUR"
-        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-android /p:ApplicationDisplayVersion=$VERSION /p:ApplicationVersion=${{ github.run_number}} /p:AndroidSigningKeyPass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidSigningStorePass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=chdpoomsaescoring.keystore /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidVersionCode=${{github.run_number}} /p:PublishTrimmed=true
+        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-android /p:ApplicationDisplayVersion=$VERSION /p:ApplicationVersion=${{ github.run_number}} /p:AndroidSigningKeyPass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidSigningStorePass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=chdpoomsaescoring.keystore /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidVersionCode=${{github.run_number}} 
         
     - name: Upload APK Build Artifact
       uses: actions/upload-artifact@v4.4.2
