@@ -1,6 +1,4 @@
-﻿
-
-.scoring .scoring-button {
+﻿.scoring .scoring-button {
     background-color: var(--chd-p-blue);
 }
 
@@ -8,21 +6,22 @@
     background-color: var(--chd-p-blue);
 }
 
-.scoring.scoring-hong .scoring-button {
-    background-color: var(--chd-p-red);
-    border-radius: var(--button-radius) 0 0 var(--button-radius);
-    align-items: center !important;
-}
-
-.scoring.scoring-neutral .scoring-button {
+.scoring.scoring-chong .scoring-button {
     background-color: var(--chd-p-blue);
     border-radius: var(--button-radius) 0 0 var(--button-radius);
     align-items: center !important;
 }
+.scoring.scoring-hong .scoring-button {
+    background-color: var(--chd-p-red);
+}
+
+.scoring.scoring-neutral .scoring-button {
+    background-color: var(--chd-p-blue);
+}
 
 .scoring-button {
     width: 90%;
-    border-radius: 0 var(--button-radius) var(--button-radius) 0;
+    border-radius: 0  var(--button-radius) var(--button-radius) 0;
     padding: 0.1rem 0;
     display: flex;
     justify-content: space-between;
@@ -34,7 +33,7 @@
         height: 100%;
         width: 65%;
         border-radius: 0 var(--button-radius) var(--button-radius) 0;
-        background-color: var(--chd-p-blue-accent);
+        background-color: var(--chd-p-red-accent);
         padding: 0.2rem;
         display: flex;
         justify-content: end;
@@ -66,8 +65,8 @@
         font-size: 1.5rem;
     }
 
-.scoring.scoring-hong .scoring-button .scoring-button-inner {
-    background-color: var(--chd-p-red-accent);
+.scoring.scoring-chong .scoring-button .scoring-button-inner {
+    background-color: var(--chd-p-blue-accent);
     border-radius: var(--button-radius) 0 0 var(--button-radius);
     border-right: 0px;
     justify-content: start;
@@ -76,7 +75,7 @@
 
 .scoring.scoring-neutral .scoring-button .scoring-button-inner {
     background-color: var(--chd-p-blue-accent);
-    border-radius: var(--button-radius) 0 0 var(--button-radius);
+    border-radius: 0  var(--button-radius)   var(--button-radius) 0;
     border-right: 0px;
     justify-content: start;
     order: 2;
@@ -98,11 +97,11 @@
     margin-right: 0.5vw;
 }
 
-.scoring.scoring-chong .scoring-button .scoring-button-outer-button {
+.scoring.scoring-hong .scoring-button .scoring-button-outer-button {
     margin-right: 0.5vw;
 }
 
-.scoring.scoring-hong .scoring-button .scoring-button-outer-button {
+.scoring.scoring-chong .scoring-button .scoring-button-outer-button {
     margin-left: 0.5vw;
 }
 .scoring.scoring-neutral .scoring-button .scoring-button-outer-button {

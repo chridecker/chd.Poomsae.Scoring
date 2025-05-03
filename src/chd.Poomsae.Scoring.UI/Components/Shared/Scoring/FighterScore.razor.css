@@ -2,11 +2,11 @@
     display: grid;
 }
 
-    .fighter.fighter-chong {
+    .fighter.fighter-hong {
         text-align: right;
     }
 
-    .fighter.fighter-hong {
+    .fighter.fighter-chong {
     }
 
     .fighter.fighter-neutral {
@@ -19,11 +19,11 @@
     }
 
 
-    .fighter.fighter-chong .fighter-scores {
+    .fighter.fighter-hong .fighter-scores {
         grid-template-columns: 50% repeat(2,25%);
     }
 
-    .fighter.fighter-hong .fighter-scores {
+    .fighter.fighter-chong .fighter-scores {
         grid-template-columns: repeat(2,25%) 50%;
     }
 
@@ -53,8 +53,19 @@
             line-height: 2.3rem;
         }
 
-    .fighter.fighter-hong .fighter-scores .fighter-score.presentation {
+    .fighter.fighter-chong .fighter-scores .fighter-score.presentation {
         order: 3;
+    }
+
+    .fighter.fighter-chong .fighter-scores .fighter-score.accuracy {
+        order: 2;
+    }
+
+    .fighter.fighter-chong .fighter-scores .fighter-score.total {
+        order: 1;
+    }
+    .fighter.fighter-hong .fighter-scores .fighter-score.presentation {
+        order: 1;
     }
 
     .fighter.fighter-hong .fighter-scores .fighter-score.accuracy {
@@ -62,7 +73,7 @@
     }
 
     .fighter.fighter-hong .fighter-scores .fighter-score.total {
-        order: 1;
+        order: 3;
     }
 
     .fighter.fighter-neutral .fighter-scores .fighter-score.presentation {

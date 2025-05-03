@@ -62,3 +62,14 @@
                 font-weight: 600;
                 font-size: 1rem;
             }
+
+.single-run-container .scoring-summary-container .scores-group .scores .scores-names {
+    order: 2
+}
+
+.single-run-container .scoring-summary-container .scores-group .scores .score.score-chong {
+    order: 1;
+}
+.single-run-container .scoring-summary-container .scores-group .scores .score.score-hong {
+    order: 3;
+}

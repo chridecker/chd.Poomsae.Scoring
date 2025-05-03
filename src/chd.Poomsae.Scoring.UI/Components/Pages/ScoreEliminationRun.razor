@@ -13,15 +13,15 @@
 
 <div class="run-container">
     <div class="fighter-container">
-        <FighterScore Score="@runDto.ChongScore" IsRed="false" />
         <FighterScore Score="@runDto.HongScore" IsRed="true" />
+        <FighterScore Score="@runDto.ChongScore" IsRed="false" />
     </div>
     <div class="scoring-container">
-        <ScoringButtonComponent IsRed="false" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
             <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
-        <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent IsRed="false" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>
 

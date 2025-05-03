@@ -16,11 +16,11 @@
         <FighterScore Score="@runDto.Score" />
     </div>
     <div class="scoring-container">
-        <ScoringButtonComponent IsRed="false" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent ValueBig="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
             <ScoringSummaryComponent OpenModal="async (x)=>await this.OpenPresentationModal()" HongScore="@runDto.Score" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
-        <ScoringButtonComponent ValueBig="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent IsRed="false" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>
 

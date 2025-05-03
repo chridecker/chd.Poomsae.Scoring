@@ -6,18 +6,18 @@
     --button-radius: 20vh;
 }
 
-    .scoring.scoring-hong {
+    .scoring.scoring-chong {
         justify-items: end;
         align-items: end;
     }
 
-        .scoring.scoring-hong ::deep .scoring-button {
+        .scoring.scoring-chong ::deep .scoring-button {
             justify-items: end;
             align-items: end;
         }
 
 
-    .scoring.scoring-neutral {
+    /*.scoring.scoring-neutral {
         justify-items: end;
         align-items: end;
     }
@@ -26,3 +26,4 @@
             justify-items: end;
             align-items: end;
         }
+*/
