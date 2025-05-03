@@ -17,12 +17,9 @@
         }
 
 
-    /*.scoring.scoring-neutral {
-        justify-items: end;
-        align-items: end;
-    }
 
-        .scoring.scoring-neutral ::deep .scoring-button {
+
+       /* .scoring.scoring-neutral ::deep .scoring-button {
             justify-items: end;
             align-items: end;
         }

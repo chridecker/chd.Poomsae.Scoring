@@ -1,9 +1,4 @@
 ﻿.scoring .scoring-button {
-    background-color: var(--chd-p-blue);
-}
-
-.scoring.scoring-chong .scoring-button {
-    background-color: var(--chd-p-blue);
 }
 
 .scoring.scoring-chong .scoring-button {
@@ -77,8 +72,6 @@
     background-color: var(--chd-p-blue-accent);
     border-radius: 0  var(--button-radius)   var(--button-radius) 0;
     border-right: 0px;
-    justify-content: start;
-    order: 2;
 }
 
 .scoring-button .scoring-button-outer-button {

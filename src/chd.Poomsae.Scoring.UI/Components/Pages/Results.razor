@@ -3,6 +3,7 @@
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Shared.Result
 @using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
 @implements IDisposable
 @page "/results"
 
@@ -22,6 +23,8 @@
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
     [Inject] IModalService modalService { get; set; }
+    [Inject] NavigationManager _navigationManager { get; set; }
+    private IDisposable _registerLocationChangeHandler;
 
     private CancellationTokenSource _cts = new();
     private List<DeviceDto> _connectedDevices = [];
@@ -30,6 +33,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+
         this.broadcastClient.ResultReceived += ResultReceived;
         this.broadcastClient.DeviceFound += DeviceFound;
         this.broadcastClient.DeviceDisconnected += DeviceDisconnect;
@@ -106,6 +111,19 @@
         await this.InvokeAsync(this.StateHasChanged);
     }
 
+    private async ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        if (this._connectedDevices.Any())
+        {
+            var res = await this.modalService.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
+            if (res == EDialogResult.No)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+
+
     public void Dispose()
     {
         this._cts.Cancel();
@@ -113,6 +131,11 @@
         this.broadcastClient.DeviceFound -= DeviceFound;
         this.broadcastClient.DeviceDisconnected -= DeviceDisconnect;
         this.broadcastClient.ScanTimeout -= this.ScanFinished;
+
+        if (this._registerLocationChangeHandler is not null)
+        {
+            this._registerLocationChangeHandler.Dispose();
+        }
 
         this._cts.Dispose();
     }
