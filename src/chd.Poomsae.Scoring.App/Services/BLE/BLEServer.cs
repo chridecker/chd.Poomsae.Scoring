@@ -33,7 +33,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private List<string> readDevices = [];
 
-        private byte[] _resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue;
+        private byte[] _resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
         private byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback)
