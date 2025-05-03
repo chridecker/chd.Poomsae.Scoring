@@ -26,18 +26,25 @@
 		<SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 
-  <PublishTrimmed>true</PublishTrimmed>
-  <TrimMode>link</TrimMode>
-  <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>link</TrimMode>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
 
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android|AnyCPU'">
+		<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android|AnyCPU'">
+		<RunAOTCompilation>False</RunAOTCompilation>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU'">
-	  <AndroidKeyStore>False</AndroidKeyStore>
+		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android34.0|AnyCPU'">
-	  <AndroidKeyStore>False</AndroidKeyStore>
+		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -74,8 +81,8 @@
 			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 		<Content Include="Resources\Splash\logo.svg">
-		  <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
 
