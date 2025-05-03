@@ -7,10 +7,10 @@
 @page "/results"
 
 <div class="result-container">
-    <JudgesComponent IsRed="false" Devices="this._connectedDevices" />
-    <TotalResult IsRed="false" />
-    <TotalResult IsRed="true" />
     <JudgesComponent IsRed="true" Devices="this._connectedDevices" />
+    <TotalResult IsRed="true" />
+    <TotalResult IsRed="false" />
+    <JudgesComponent IsRed="false" Devices="this._connectedDevices" />
 </div>
 <FloatingActionNavigation FAIconActive="magnifying-glass-plus" TextActive="Automatisches Hinzufügen" OnClick="this.Search">
     <FloatingActionButton FAClass="magnifying-glass" Title="Erweiterte Suche" OnClick="this.Discover" />

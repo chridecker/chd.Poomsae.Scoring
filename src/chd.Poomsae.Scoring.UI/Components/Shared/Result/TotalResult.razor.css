@@ -3,6 +3,14 @@
     flex-wrap: wrap;
     font-weight: bold;
 }
+.total.chong{
+    background:var(--chd-p-blue-transparent);
+    padding-left:0.1rem;
+}
+    .total.hong {
+        background: var(--chd-p-red-transparent);
+        padding-right: 0.1rem;
+    }
 
     .total .part-score {
         height: 30%;
@@ -14,7 +22,7 @@
     }
 
     .total .overall {
-        order: 3;
+        order: 1;
         color: white;
         width: 100%;
         height: 69%;
@@ -37,11 +45,11 @@
     }
 
     .total.chong .presentation {
-        order: 1;
+        order: 3;
     }
 
     .total.hong .accuracy {
-        order: 1;
+        order: 3;
     }
 
     .total.hong .presentation {
@@ -49,11 +57,11 @@
     }
 
     .total.chong .overall {
-        background: var(--chd-p-blue);
+        background: var(--chd-p-blue-gradient-top);
     }
 
     .total.hong .overall {
-        background: var(--chd-p-red);
+        background: var(--chd-p-red-gradient-top);
     }
 
     .total.chong.inactive .overall {

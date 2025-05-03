@@ -1,7 +1,7 @@
 ﻿.judge {
     display: flex;
     flex-wrap: wrap;
-    background: var(--chd-p-blue-gradient);
+    background: var(--chd-p-blue-gradient-left);
     border-radius: 0.5rem;
     padding: 0.2rem;
 }
@@ -37,18 +37,28 @@
         }
 
 .judges.hong .judge {
-    background: var(--chd-p-red-gradient-left);
+    background: var(--chd-p-red-gradient);
 }
 
-    .judges.hong .judge .name {
+    .judges.chong .judge .name {
         text-align: right;
+    }
+    .judges.chong .judge .name {
+        text-align: left;
     }
 
     .judges.hong .judge .score.accuracy {
-        order: 2;
+        order: 3;
     }
 
     .judges.hong .judge .score.presentation {
+        order: 2;
+    }
+    .judges.chong .judge .score.accuracy {
+        order: 2;
+    }
+
+    .judges.chong .judge .score.presentation {
         order: 3;
     }
 

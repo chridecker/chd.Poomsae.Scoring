@@ -4,5 +4,12 @@
     gap: 0.2rem;
     padding: 0.2rem;
     overflow: scroll;
-    justify-content: center;
+    justify-content: start;
 }
+    .judges.chong {
+        background: var(--chd-p-blue-transparent);
+    }
+
+    .judges.hong {
+        background: var(--chd-p-red-transparent);
+    }

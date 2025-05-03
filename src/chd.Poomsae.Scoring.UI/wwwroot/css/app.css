@@ -10,6 +10,7 @@
     --chd-p-blue: rgb(65,105,225);
     --chd-p-blue-transparent: rgba(65,105,225,0.1);
     --chd-p-blue-semi-transparent: rgba(65,105,225,0.5);
+    --chd-p-blue-gradient-top: linear-gradient(to top,var(--chd-p-blue) 0%,var(--chd-p-blue-transparent) 99%);
     --chd-p-blue-gradient: linear-gradient(to right,var(--chd-p-blue) 0%,var(--chd-p-blue-transparent) 100%);
     --chd-p-blue-gradient-left: linear-gradient(to left, var(--chd-p-blue) 0%,var(--chd-p-blue-transparent) 90%);
     --chd-p-blue-accent: rgb(0,191,255);
@@ -25,6 +26,7 @@
     --chd-p-red: rgb(255,0,0);
     --chd-p-red-transparent: rgba(255,0,0,0.1);
     --chd-p-red-semi-transparent: rgba(255,0,0,0.5);
+    --chd-p-red-gradient-top: linear-gradient(to top, var(--chd-p-red) 0%,var(--chd-p-red-transparent) 99%);
     --chd-p-red-gradient: linear-gradient(to right, var(--chd-p-red) 0%,var(--chd-p-red-transparent) 90%);
     --chd-p-red-gradient-left: linear-gradient(to left, var(--chd-p-red) 0%,var(--chd-p-red-transparent) 90%);
     /*--chd-p-red-gradient-left: linear-gradient(to left,transparent 0%, var(--chd-p-red) 10%,var(--chd-bg) 90%);*/
