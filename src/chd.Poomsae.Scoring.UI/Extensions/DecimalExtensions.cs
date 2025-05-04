@@ -10,7 +10,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DecimalExtensions
     {
-        public static string ToDisplayString(this decimal value) => value >= 10 ? value.ToString("n0",CultureInfo.InvariantCulture) : value.ToString("n1", CultureInfo.InvariantCulture);
-        public static string ToDisplayString(this decimal? value) => !value.HasValue ? "-" : value.Value.ToDisplayString();
+        public static string ToDisplayString(this decimal value) => value >= 10 ? value.ToString("n0", CultureInfo.InvariantCulture) : value.ToString("n1", CultureInfo.InvariantCulture);
+        public static string ToDisplayString(this decimal? value, string replacement = "-") => !value.HasValue ? replacement : value.Value.ToDisplayString();
     }
 }

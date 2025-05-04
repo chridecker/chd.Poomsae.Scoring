@@ -5,11 +5,9 @@
 }
 .total.chong{
     background:var(--chd-p-blue-transparent);
-    padding-left:0.1rem;
 }
     .total.hong {
         background: var(--chd-p-red-transparent);
-        padding-right: 0.1rem;
     }
 
     .total .part-score {
@@ -18,15 +16,13 @@
         font-size: 3rem;
         text-align: center;
         align-content: center;
-        border-radius: 0.5rem;
     }
 
     .total .overall {
         order: 1;
         color: white;
         width: 100%;
-        height: 69%;
-        border-radius: 0.5rem;
+        height: 70%;
         font-size: 5rem;
         text-align: center;
         align-content: center;
@@ -34,10 +30,14 @@
 
     .total .part-score.accuracy {
         color: var(--chd-p-accuracy);
+        /*background: linear-gradient(to top, gray 0%, transparent 90%);*/
+        /*background: var(--chd-p-accuracy-gradient-top);*/
     }
 
     .total .part-score.presentation {
-        color: var(--chd-p-presentation);
+        color:var(--chd-p-presentation);
+        /*background: linear-gradient(to top, darkgrey 0%, transparent 90%);*/
+        /*background: var(--chd-p-presentation-gradient-top);*/
     }
 
     .total.chong .accuracy {
@@ -65,11 +65,11 @@
     }
 
     .total.chong.inactive .overall {
-        background: var(--chd-p-blue-semi-transparent);
+        background: var(--chd-p-blue-semi-gradient-top);
     }
 
     .total.hong.inactive .overall {
-        background: var(--chd-p-red-semi-transparent);
+        background: var(--chd-p-red-semi-gradient-top);
     }
 
 
@@ -101,7 +101,6 @@
 
     .total .overall {
         font-size: 9rem;
-        border-radius:2rem;
     }
 }
 

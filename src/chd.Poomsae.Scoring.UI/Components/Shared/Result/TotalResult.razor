@@ -2,8 +2,8 @@
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="total @__css">
-    <div class="part-score accuracy">@(this.__resultAccuracy.ToDisplayString())</div>
-    <div class="part-score presentation">@(this.__resultPresentation.ToDisplayString())</div>
+    <div class="part-score accuracy">@(this.__resultAccuracy.ToDisplayString(string.Empty))</div>
+    <div class="part-score presentation">@(this.__resultPresentation.ToDisplayString(string.Empty))</div>
     <div class="overall">@(this.__result.ToDisplayString())</div>
 </div>
 
@@ -15,7 +15,7 @@
     private decimal? __resultAccuracy => this.IsRed ? this.resultService.HongAccuracy : this.resultService.ChongAccuracy;
     private decimal? __resultPresentation => this.IsRed ? this.resultService.HongPresentation : this.resultService.ChongPresentation;
 
-    private string __css => (this.IsRed ? "hong" : "chong") + " " + (this.__result.HasValue ? "" : " inactive ") ;
+    private string __css => (this.IsRed ? "hong" : "chong") + " " + (this.__result.HasValue ? "" : " inactive ");
 
 
     protected override Task OnInitializedAsync()

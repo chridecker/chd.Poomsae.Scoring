@@ -2,21 +2,29 @@
 }
 
 .scoring.scoring-chong .scoring-button {
-    background-color: var(--chd-p-blue);
+    background: linear-gradient(to left, var(--chd-p-blue) 0%, var(--chd-p-blue-semi-transparent) 90%);
+    /*background: var(--chd-p-blue);*/
     border-radius: var(--button-radius) 0 0 var(--button-radius);
     align-items: center !important;
 }
+
 .scoring.scoring-hong .scoring-button {
-    background-color: var(--chd-p-red);
+    background: linear-gradient(to right, var(--chd-p-red) 0%, var(--chd-p-red-semi-transparent) 90%);
+    /*background: var(--chd-p-red);*/
 }
 
 .scoring.scoring-neutral .scoring-button {
-    background-color: var(--chd-p-blue);
+    /*background: var(--chd-p-blue);*/
+    background: linear-gradient(to left, var(--chd-p-blue) 0%, var(--chd-p-blue-semi-transparent) 90%);
+}
+
+.scoring.scoring-neutral:first-child .scoring-button {
+    background: linear-gradient(to right, var(--chd-p-blue) 0%, var(--chd-p-blue-semi-transparent) 90%);
 }
 
 .scoring-button {
     width: 90%;
-    border-radius: 0  var(--button-radius) var(--button-radius) 0;
+    border-radius: 0 var(--button-radius) var(--button-radius) 0;
     padding: 0.1rem 0;
     display: flex;
     justify-content: space-between;
@@ -28,7 +36,8 @@
         height: 100%;
         width: 65%;
         border-radius: 0 var(--button-radius) var(--button-radius) 0;
-        background-color: var(--chd-p-red-accent);
+        /*background: linear-gradient(to right, var(--chd-p-red-accent) 0%, var(--chd-p-red-accent-semi-transparent) 90%);*/
+        background: var(--chd-p-red-accent);
         padding: 0.2rem;
         display: flex;
         justify-content: end;
@@ -61,7 +70,8 @@
     }
 
 .scoring.scoring-chong .scoring-button .scoring-button-inner {
-    background-color: var(--chd-p-blue-accent);
+    background: var(--chd-p-blue-accent);
+    /*background: linear-gradient(to left, var(--chd-p-blue-accent) 0%, var(--chd-p-blue-accent-transparent) 99%);*/
     border-radius: var(--button-radius) 0 0 var(--button-radius);
     border-right: 0px;
     justify-content: start;
@@ -69,8 +79,8 @@
 }
 
 .scoring.scoring-neutral .scoring-button .scoring-button-inner {
-    background-color: var(--chd-p-blue-accent);
-    border-radius: 0  var(--button-radius)   var(--button-radius) 0;
+    background: var(--chd-p-blue-accent);
+    border-radius: 0 var(--button-radius) var(--button-radius) 0;
     border-right: 0px;
 }
 
@@ -97,6 +107,7 @@
 .scoring.scoring-chong .scoring-button .scoring-button-outer-button {
     margin-left: 0.5vw;
 }
+
 .scoring.scoring-neutral .scoring-button .scoring-button-outer-button {
     margin-left: 0.5vw;
 }
