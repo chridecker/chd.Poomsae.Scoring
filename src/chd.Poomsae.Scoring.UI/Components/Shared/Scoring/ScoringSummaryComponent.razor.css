@@ -2,7 +2,25 @@
     padding-top: 10vh;
     display: grid;
     grid-gap: 0.5rem;
+    justify-items: center;
 }
+
+    .scoring-summary-container .device-name {
+        border: 1px solid;
+        text-align: center;
+        padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.8rem;
+        width: max-content;
+        align-content: center;
+        align-items: center;
+        justify-content:center;
+        justify-items:center;
+    }
+
+        .scoring-summary-container .device-name ::deep svg {
+            height: 1.2rem;
+        }
 
     .scoring-summary-container .scores-group {
         display: grid;
@@ -10,6 +28,7 @@
         border-top: 1px solid var(--chd-font-color);
         border-bottom: 1px solid var(--chd-font-color);
         border-radius: 0.5rem;
+        width: 100%;
     }
 
         .scoring-summary-container .scores-group .scores {
@@ -22,6 +41,14 @@
             font-size: 0.8rem;
             align-items: center;
         }
+
+            .scoring-summary-container .scores-group .scores.accuracy .scores-names {
+                background: linear-gradient(to left, var(--chd-p-accuracy-transparent) 0%, var(--chd-p-accuracy-semi-transparent) 50%,var(--chd-p-accuracy-transparent) 99%);
+            }
+
+            .scoring-summary-container .scores-group .scores.presentation .scores-names {
+                background: linear-gradient(to left, var(--chd-p-presentation-transparent) 0%, var(--chd-p-presentation-semi-transparent) 50%,var(--chd-p-presentation-transparent) 99%);
+            }
 
             .scoring-summary-container .scores-group .scores .score {
                 padding: 0 0.5rem 0 0.5rem;
@@ -70,6 +97,7 @@
 .single-run-container .scoring-summary-container .scores-group .scores .score.score-chong {
     order: 1;
 }
+
 .single-run-container .scoring-summary-container .scores-group .scores .score.score-hong {
     order: 3;
 }

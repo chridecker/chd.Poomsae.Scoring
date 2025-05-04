@@ -24,6 +24,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private BluetoothAdapter _bluetoothAdapter;
         private BLEGattCallback _callback;
         private readonly BLEAdvertisingCallback _advertisingCallback;
+        private readonly ISettingManager _settingManager;
         private BluetoothGattServer _gattServer;
 
         private BluetoothGattService _resultService;
@@ -36,10 +37,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private byte[] _resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
         private byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback)
+        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager)
         {
             this._callback = callback;
             this._advertisingCallback = advertisingCallback;
+            this._settingManager = settingManager;
             this._callback.NotificationSent += this._callback_NotificationSent;
             this._callback.CharacteristicReadRequest += this.ReadRequest;
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
@@ -181,8 +183,11 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             else if (e.Characteristic.InstanceId == this._characteristicName.InstanceId)
             {
-                e.Characteristic.SetValue(DeviceInfo.Current.Name);
-                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Characteristic.GetValue());
+                var name = await this._settingManager.GetName();
+                name = string.IsNullOrWhiteSpace(name) ? DeviceInfo.Current.Name : name;
+
+                e.Characteristic.SetValue(name);
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, Encoding.ASCII.GetBytes(name));
                 this.readDevices.Add(e.Device.Address);
             }
         }

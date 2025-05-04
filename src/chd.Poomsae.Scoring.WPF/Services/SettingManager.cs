@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+﻿using chd.Poomsae.Scoring.Contracts.Constants;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.UI.Base.Client.Implementations.Services.Base;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
@@ -18,8 +19,15 @@ namespace chd.Poomsae.Scoring.WPF.Services
         {
         }
 
-        public async Task<T?>GetNativSetting<T>(string key) where T : class
+        public async Task<T?> GetNativSetting<T>(string key) where T : class
         => await base.GetSettingLocal<T>(key);
+
+        public async Task<string> GetName()
+        {
+            var name = await this.GetNativSetting<string>(SettingConstants.OwnName);
+            return string.IsNullOrWhiteSpace(name) ? Environment.MachineName : name;
+        }
+        public async Task SetName(string name) => await this.SetNativSetting(SettingConstants.OwnName, name);
 
         public async Task SetNativSetting<T>(string key, T value) where T : class
         {

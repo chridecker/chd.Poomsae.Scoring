@@ -1,0 +1,27 @@
+@using chd.Poomsae.Scoring.Contracts.Interfaces
+
+<div class="device-name-container">
+    <input type="text" value="@_deviceName" @oninput="async (e)=> await this.Change(e.Value)" />
+</div>
+
+@code {
+    [Inject] ISettingManager settingManager { get; set; }
+
+    private string _deviceName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._deviceName = await this.settingManager.GetName();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Change(object? val)
+    {
+        if (val is not null)
+        {
+            this._deviceName = (string)val;
+            await this.settingManager.SetName(this._deviceName);
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+}

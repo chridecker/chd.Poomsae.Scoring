@@ -1,0 +1,10 @@
+﻿.device-name-container {
+
+}
+
+.device-name-container input[type=text]{
+    text-align:center;
+    padding:0.2rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+}

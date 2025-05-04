@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+﻿using chd.Poomsae.Scoring.Contracts.Constants;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.UI.Base.Client.Implementations.Services.Base;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-     public class SettingManager : BaseClientSettingManager<int, int>, ISettingManager
+    public class SettingManager : BaseClientSettingManager<int, int>, ISettingManager
     {
         public SettingManager(ILogger<SettingManager> logger, IProtecedLocalStorageHandler protecedLocalStorageHandler,
             NavigationManager navigationManager) : base(logger, protecedLocalStorageHandler, navigationManager)
@@ -33,5 +34,12 @@ namespace chd.Poomsae.Scoring.App.Services
             Preferences.Default.Set<T>(key, value);
             return Task.CompletedTask;
         }
+
+        public async Task<string> GetName()
+        {
+            var name = await this.GetNativSetting<string>(SettingConstants.OwnName);
+            return string.IsNullOrWhiteSpace(name) ? DeviceInfo.Current.Name : name;
+        }
+        public async Task SetName(string name) => await this.SetNativSetting(SettingConstants.OwnName, name);
     }
 }
