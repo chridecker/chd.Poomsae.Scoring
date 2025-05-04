@@ -14,6 +14,10 @@ on:
         description: 'Create an AAB Artifact'
         required: true
         default: 'true'
+      use_apk:
+        description: 'Create an APK Artifact'
+        required: true
+        default: 'false'
 
 jobs:
   build:
@@ -44,6 +48,7 @@ jobs:
         dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-android /p:ApplicationDisplayVersion=$VERSION /p:ApplicationVersion=${{ github.run_number}} /p:AndroidSigningKeyPass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidSigningStorePass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=chdpoomsaescoring.keystore /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidVersionCode=${{github.run_number}} 
         
     - name: Upload APK Build Artifact
+      if: ${{ github.event.inputs.use_apk == 'true' }}
       uses: actions/upload-artifact@v4.4.2
       with:
         name: chdPoomsaeScoring
