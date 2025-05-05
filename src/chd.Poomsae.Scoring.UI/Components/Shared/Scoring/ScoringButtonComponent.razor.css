@@ -6,21 +6,7 @@
     --button-radius: 20vh;
 }
 
-    .scoring.scoring-chong {
-        justify-items: end;
+    .scoring.button-right {
         align-items: end;
     }
 
-        .scoring.scoring-chong ::deep .scoring-button {
-            justify-items: end;
-            align-items: end;
-        }
-
-
-
-
-       /* .scoring.scoring-neutral ::deep .scoring-button {
-            justify-items: end;
-            align-items: end;
-        }
-*/

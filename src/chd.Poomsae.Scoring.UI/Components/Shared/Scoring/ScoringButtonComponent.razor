@@ -1,4 +1,6 @@
+@using chd.Poomsae.Scoring.Contracts.Enums
 @using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Extensions
 <div class="scoring @_css">
     @if (this.ValueBig.HasValue)
     {
@@ -11,18 +13,19 @@
 </div>
 
 @code {
-    [Parameter] public bool? IsRed { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
+    [Parameter] public EScoringButtonDirection Direction { get; set; }
     [Parameter] public decimal? ValueBig { get; set; }
     [Parameter] public decimal? ValueSmall { get; set; }
-    [Parameter] public Func<bool, decimal, Task<TimeSpan?>> OnCalcClick { get; set; }
+    [Parameter] public Func<EScoringButtonColor, decimal, Task<TimeSpan?>> OnCalcClick { get; set; }
 
     [Inject] IVibrationHelper vibrationHelper { get; set; }
 
-    private string _css => !this.IsRed.HasValue ? " scoring-neutral " : this.IsRed.Value ? "scoring-hong" : "scoring-chong";
+    private string _css => this.Color.GetCssClass() + " " + this.Direction.GetCssClass();
 
     private async Task OnClickButton(decimal value)
     {
-        var time = await this.OnCalcClick(this.IsRed ?? false, value);
+        var time = await this.OnCalcClick(this.Color, value);
         if (time.HasValue)
         {
             this.vibrationHelper.Vibrate(time.Value);

@@ -16,11 +16,11 @@
         <FighterScore Score="@runDto.Score" />
     </div>
     <div class="scoring-container">
-        <ScoringButtonComponent ValueBig="0.3m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Blue" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
             <ScoringSummaryComponent OpenModal="async (x)=>await this.OpenPresentationModal()" HongScore="@runDto.Score" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
-        <ScoringButtonComponent IsRed="false" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>
 
@@ -41,7 +41,7 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task<TimeSpan?> CalcScore(bool isRed, decimal value)
+    private async Task<TimeSpan?> CalcScore(EScoringButtonColor color, decimal value)
     {
         if (this.runDto.State is not ERunState.Started) { return null; }
         this.CalculateAccuracyScore(this.runDto.Score, value);

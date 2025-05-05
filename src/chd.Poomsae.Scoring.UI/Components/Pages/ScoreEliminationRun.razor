@@ -17,11 +17,11 @@
         <FighterScore Score="@runDto.ChongScore" IsRed="false" />
     </div>
     <div class="scoring-container">
-        <ScoringButtonComponent IsRed="true" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Red" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
             <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
-        <ScoringButtonComponent IsRed="false" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.3m" ValueSmall="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>
 
@@ -44,10 +44,10 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task<TimeSpan?> CalcScore(bool isRed, decimal value)
+    private async Task<TimeSpan?> CalcScore(EScoringButtonColor color, decimal value)
     {
         if (this.runDto.State is not ERunState.Started) { return null; }
-        this.CalculateAccuracyScore(isRed ? this.runDto.HongScore : this.runDto.ChongScore, value);
+        this.CalculateAccuracyScore(color is EScoringButtonColor.Red ? this.runDto.HongScore : this.runDto.ChongScore, value);
         await this.InvokeAsync(this.StateHasChanged);
         return Math.Abs(value) == 0.1m ? TimeSpan.FromMilliseconds(200) : TimeSpan.FromMilliseconds(300);
     }
@@ -122,10 +122,10 @@
             var modalResultRed = await this._modal.Show<ScorePresentationModal>
                 ("Red", new ModalParameters(){
             {nameof(ScorePresentationModal.IsRed),true}
-                    }, new ModalOptions()
-                    {
-                        Size = ModalSize.ExtraLarge,
-                    }).Result;
+                            }, new ModalOptions()
+                            {
+                                Size = ModalSize.ExtraLarge,
+                            }).Result;
             if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
             {
                 this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;

@@ -159,7 +159,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                 await characteristic.StartUpdatesAsync();
 
                 var readName = await this.ReadNameAsync(device, CancellationToken.None);
-                var name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
+                dto.Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
 
                 this.DeviceFound?.Invoke(this, dto);
             }

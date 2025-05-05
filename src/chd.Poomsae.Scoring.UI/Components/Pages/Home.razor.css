@@ -57,3 +57,11 @@
 
         .home-container .home-card .text {
         }
+
+@media only screen and (min-width: 600px) {
+    .home-container .home-card {
+        min-width: 17rem;
+        font-size: 2.5rem;
+    }
+
+}
