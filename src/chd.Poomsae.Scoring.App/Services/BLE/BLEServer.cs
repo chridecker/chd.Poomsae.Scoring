@@ -6,6 +6,7 @@ using Android.Provider;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
+using chd.Poomsae.Scoring.Contracts.Enums;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Client.Implementations.Services.Base;
@@ -75,7 +76,14 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
             else if (run is SingleRunDto singleRun)
             {
-                this.SetResultValue([1, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m), 0, 0, 0, 0, 0]);
+                if (singleRun.Color is EScoringButtonColor.Blue)
+                {
+                    this.SetResultValue([1, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m), 0, 0, 0, 0, 0]);
+                }
+                else if (singleRun.Color is EScoringButtonColor.Red)
+                {
+                    this.SetResultValue([0, 0, 0, 0, 0, 2, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m)]);
+                }
                 this._characteristic.SetValue(this._resultCharacteristicValue);
                 this.BroadCastToAllDevices();
             }

@@ -16,11 +16,11 @@
         <FighterScore Score="@runDto.Score" />
     </div>
     <div class="scoring-container">
-        <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Blue" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="async (x)=>await this.OpenPresentationModal()" HongScore="@runDto.Score" State="@runDto.State" HandleState="this.HandleClick" />
+            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.Score" State="@runDto.State" HandleState="this.HandleClick" />
         </div>
-        <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="this.runDto.Color" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>
 
@@ -71,7 +71,7 @@
         {
             if (!this.runDto.Score.Presentation.HasValue)
             {
-                await this.OpenPresentationModal();
+                await this.OpenPresentationModal(this.runDto.Color);
             }
             this.broadCastService.BroadcastResult(this.runDto);
             this.runDto.State = ERunState.Finished;
@@ -84,16 +84,16 @@
         await this.InvokeAsync(this.StateHasChanged);
     }
 
-    private async Task<bool> OpenPresentationModal()
+    private async Task<bool> OpenPresentationModal(EScoringButtonColor color)
     {
         if (this.runDto.State is not ERunState.Started) { return false; }
         var modalResultBlue = await this._modal.Show<ScorePresentationModal>("Presentation", new ModalParameters(){
                 {nameof(ScorePresentationModal.IsRed),true}
-            },
-            new ModalOptions()
-                {
-                    Size = ModalSize.ExtraLarge,
-                }).Result;
+                },
+        new ModalOptions()
+            {
+                Size = ModalSize.ExtraLarge,
+            }).Result;
         if (modalResultBlue.Cancelled)
         {
             return false;
@@ -127,4 +127,4 @@
             this._registerLocationChangeHandler.Dispose();
         }
     }
-}
+            }

@@ -63,6 +63,7 @@
             aspect-ratio: 1/1;
             height: min(8rem,100%);
             border: 1px solid white;
+            box-shadow: var(--chd-bg) 1px 0 2px inset, var(--chd-bg) -1px 0 2px inset;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -89,6 +90,7 @@
         aspect-ratio: 1/1;
         height: min(5rem,50%);
         border: 1px solid black;
+        box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-font-color) -1px 0 2px inset;
         border-radius: 50%;
         display: flex;
         justify-content: center;

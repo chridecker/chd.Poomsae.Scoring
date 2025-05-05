@@ -42,7 +42,8 @@ namespace chd.Poomsae.Scoring.UI.Services
                 {
                     Accuracy = ScoreConstants.MaxAccuracy
                 },
-                State = ERunState.Started
+                State = ERunState.Started,
+                Color = EScoringButtonColor.Blue
             };
 
             return dto;

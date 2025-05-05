@@ -7,7 +7,7 @@
 
 
 <div class="scoring-summary-container">
-    <div class="device-name" @onclick="this.ChangeName"><CustomIcon FAClass="gamepad"/> @this._deviceName</div>
+    <div class="device-name" @onclick="this.ChangeName"><CustomIcon FAClass="gamepad" /> @this._deviceName</div>
     <div class="scores-group">
         <div class="scores accuracy">
             <div class="score score-hong">@this.HongScore?.Accuracy.ToDisplayString()</div>
@@ -17,21 +17,21 @@
     </div>
     <div class="scores-group">
         <div class="scores presentation">
-            <div class="score score-hong" @onclick="async() => await this.OpenModal(true)">@this.HongScore?.RhythmAndTempo.ToDisplayString()</div>
+            <div class="score score-hong" @onclick="async() => await this.OpenModal(EScoringButtonColor.Red)">@this.HongScore?.RhythmAndTempo.ToDisplayString()</div>
             <div class="scores-names">Rhythm/Tempo/Softness</div>
-            <div class="score score-chong" @onclick="async() => await this.OpenModal(false)">@this.ChongScore?.RhythmAndTempo.ToDisplayString()</div>
+            <div class="score score-chong" @onclick="async() => await this.OpenModal(EScoringButtonColor.Blue)">@this.ChongScore?.RhythmAndTempo.ToDisplayString()</div>
 
         </div>
         <div class="scores presentation ">
-            <div class="score score-hong" @onclick="async() => await this.OpenModal(true)">@this.HongScore?.SpeedAndPower.ToDisplayString()</div>
+            <div class="score score-hong" @onclick="async() => await this.OpenModal(EScoringButtonColor.Red)">@this.HongScore?.SpeedAndPower.ToDisplayString()</div>
             <div class="scores-names">Speed & Power</div>
-            <div class="score score-chong" @onclick="async() => await this.OpenModal(false)">@this.ChongScore?.SpeedAndPower.ToDisplayString()</div>
+            <div class="score score-chong" @onclick="async() => await this.OpenModal(EScoringButtonColor.Blue)">@this.ChongScore?.SpeedAndPower.ToDisplayString()</div>
 
         </div>
         <div class="scores presentation">
-            <div class="score score-hong" @onclick="async() => await this.OpenModal(true)">@this.HongScore?.ExpressionAndEnergy.ToDisplayString()</div>
+            <div class="score score-hong" @onclick="async() => await this.OpenModal(EScoringButtonColor.Red)">@this.HongScore?.ExpressionAndEnergy.ToDisplayString()</div>
             <div class="scores-names">Expression of Energy</div>
-            <div class="score score-chong" @onclick="async() => await this.OpenModal(false)">@this.ChongScore?.ExpressionAndEnergy.ToDisplayString()</div>
+            <div class="score score-chong" @onclick="async() => await this.OpenModal(EScoringButtonColor.Blue)">@this.ChongScore?.ExpressionAndEnergy.ToDisplayString()</div>
         </div>
     </div>
     <div class="scores-group finish">
@@ -49,7 +49,7 @@
     [Parameter] public ScoreDto? HongScore { get; set; }
     [Parameter] public Func<Task> HandleState { get; set; }
     [Parameter] public ERunState State { get; set; }
-    [Parameter] public Func<bool, Task<bool>> OpenModal { get; set; }
+    [Parameter] public Func<EScoringButtonColor, Task<bool>> OpenModal { get; set; }
 
     private string _deviceName = string.Empty;
 
@@ -60,7 +60,7 @@
     }
     private async Task ChangeName()
     {
-        await this.modalService.Show<DeviceNameModal>("Name eingeben",new ModalOptions()
+        await this.modalService.Show<DeviceNameModal>("Name eingeben", new ModalOptions()
         {
         }).Result;
         this._deviceName = await this.settingManager.GetName();
