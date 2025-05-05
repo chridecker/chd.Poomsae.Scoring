@@ -1,19 +1,20 @@
 @page "/singlescore"
-@implements IDisposable
-@using Blazored.Modal.Services
+@inherits BaseScoringComponent<SingleRunDto>
 @using chd.Poomsae.Scoring.Contracts.Constants
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Enums
 @using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Components.Pages.Base
 @using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
 
-@if (runDto is null) { return; }
+@if (this.runDto is null) { return; }
 
 <div class="single-run-container">
     <div class="fighter-container">
         <FighterScore Score="@runDto.Score" />
+        <IconButton FAClass="rotate" OnClick="this.ChangeColor" />
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
@@ -26,74 +27,42 @@
 
 
 @code {
-    [Inject] IModalService _modal { get; set; }
-    [Inject] IStartRunService _runService { get; set; }
-    [Inject] IBroadCastService broadCastService { get; set; }
-    [Inject] NavigationManager _navigationManager { get; set; }
+    protected override SingleRunDto CreateDto() => this._runService.StartSingleRun();
 
-    private SingleRunDto runDto;
-    private IDisposable _registerLocationChangeHandler;
-    protected override async Task OnInitializedAsync()
+    protected override ScoreDto HandleScore(EScoringButtonColor color) => this.runDto.Score;
+
+    protected override async Task<bool> HandleStartedState()
     {
-        this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
-        this.runDto = this._runService.StartSingleRun();
-
-        await base.OnInitializedAsync();
+        if (!this.runDto.Score.Presentation.HasValue)
+        {
+            await this.OpenPresentationModal(this.runDto.Color);
+        }
+        return true;
     }
 
-    private async Task<TimeSpan?> CalcScore(EScoringButtonColor color, decimal value)
+    private async Task ChangeColor()
     {
-        if (this.runDto.State is not ERunState.Started) { return null; }
-        this.CalculateAccuracyScore(this.runDto.Score, value);
+        var res = await this._modal.ShowDialog("Farbe wechseln?", EDialogButtons.YesNo);
+        if (res is EDialogResult.No) { return; }
+        this.runDto.Color = __colorChange();
         await this.InvokeAsync(this.StateHasChanged);
-        return Math.Abs(value) == 0.1m ? TimeSpan.FromMilliseconds(200) : TimeSpan.FromMilliseconds(300);
+
+        EScoringButtonColor __colorChange() => this.runDto.Color switch
+        {
+            EScoringButtonColor.Blue => EScoringButtonColor.Red,
+            _ => EScoringButtonColor.Blue
+        };
     }
 
-    private void CalculateAccuracyScore(ScoreDto dto, decimal value)
-    {
-        if (dto.Accuracy - value <= 0)
-        {
-            dto.Accuracy = 0;
-        }
-        else if (dto.Accuracy - value >= ScoreConstants.MaxAccuracy)
-        {
-            dto.Accuracy = ScoreConstants.MaxAccuracy;
-        }
-        else
-        {
-            dto.Accuracy -= value;
-        }
-    }
-
-    private async Task HandleClick()
-    {
-        if (this.runDto.State is ERunState.Started)
-        {
-            if (!this.runDto.Score.Presentation.HasValue)
-            {
-                await this.OpenPresentationModal(this.runDto.Color);
-            }
-            this.broadCastService.BroadcastResult(this.runDto);
-            this.runDto.State = ERunState.Finished;
-        }
-        else if (this.runDto.State is ERunState.Finished)
-        {
-            this.broadCastService.ResetScore();
-            this.runDto = this._runService.StartSingleRun();
-        }
-        await this.InvokeAsync(this.StateHasChanged);
-    }
 
     private async Task<bool> OpenPresentationModal(EScoringButtonColor color)
     {
         if (this.runDto.State is not ERunState.Started) { return false; }
         var modalResultBlue = await this._modal.Show<ScorePresentationModal>("Presentation", new ModalParameters(){
-                {nameof(ScorePresentationModal.IsRed),true}
-                },
-        new ModalOptions()
-            {
-                Size = ModalSize.ExtraLarge,
-            }).Result;
+                {nameof(ScorePresentationModal.IsRed),true} }, new ModalOptions()
+                {
+                    Size = ModalSize.ExtraLarge,
+                }).Result;
         if (modalResultBlue.Cancelled)
         {
             return false;
@@ -107,24 +76,4 @@
         await this.InvokeAsync(this.StateHasChanged);
         return true;
     }
-
-    private async ValueTask OnLocationChanging(LocationChangingContext context)
-    {
-        if (this.runDto.State is ERunState.Started)
-        {
-            var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
-            if (res == EDialogResult.No)
-            {
-                context.PreventNavigation();
-            }
-        }
-    }
-
-    public void Dispose()
-    {
-        if (this._registerLocationChangeHandler is not null)
-        {
-            this._registerLocationChangeHandler.Dispose();
-        }
-    }
-            }
+}

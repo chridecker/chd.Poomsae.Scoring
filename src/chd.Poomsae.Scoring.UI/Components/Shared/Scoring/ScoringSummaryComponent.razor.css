@@ -95,11 +95,18 @@
                 font-size: 1rem;
             }
 
-.single-run-container .scoring-summary-container .scores-group .scores .scores-names {
+.single-run-container .scoring-summary-container .scores-group .scores {
+    grid-template-columns: auto repeat(2,max-content);
 }
 
-.single-run-container .scoring-summary-container .scores-group .scores .score.score-chong {
-}
+    .single-run-container .scoring-summary-container .scores-group .scores .scores-names {
+        order: 1;
+    }
 
-.single-run-container .scoring-summary-container .scores-group .scores .score.score-hong {
-}
+    .single-run-container .scoring-summary-container .scores-group .scores .score.score-chong {
+        order: 3;
+    }
+
+    .single-run-container .scoring-summary-container .scores-group .scores .score.score-hong {
+        order: 3;
+    }
