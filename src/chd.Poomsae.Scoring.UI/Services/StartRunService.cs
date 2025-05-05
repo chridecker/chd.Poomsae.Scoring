@@ -34,7 +34,7 @@ namespace chd.Poomsae.Scoring.UI.Services
             return dto;
         }
 
-        public SingleRunDto StartSingleRun()
+        public SingleRunDto StartSingleRun(EScoringButtonColor color)
         {
             var dto = new SingleRunDto()
             {
@@ -43,7 +43,7 @@ namespace chd.Poomsae.Scoring.UI.Services
                     Accuracy = ScoreConstants.MaxAccuracy
                 },
                 State = ERunState.Started,
-                Color = EScoringButtonColor.Blue
+                Color = color
             };
 
             return dto;

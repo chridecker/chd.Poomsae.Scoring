@@ -19,7 +19,22 @@ namespace chd.Poomsae.Scoring.UI.Services
 
         public void SetRun(Guid id, RunResultDto runResultDto)
         {
-            this._resultDto.Results[id] = runResultDto;
+            if (this._resultDto.Results.ContainsKey(id)
+                && (runResultDto.ChongScore is not null || runResultDto.HongScore is not null))
+            {
+                if (runResultDto.ChongScore is not null)
+                {
+                    this._resultDto.Results[id].ChongScore = runResultDto.ChongScore;
+                }
+                if (runResultDto.HongScore is not null)
+                {
+                    this._resultDto.Results[id].HongScore = runResultDto.HongScore;
+                }
+            }
+            else
+            {
+                this._resultDto.Results[id] = runResultDto;
+            }
             this.ResultReceived?.Invoke(this, EventArgs.Empty);
         }
 

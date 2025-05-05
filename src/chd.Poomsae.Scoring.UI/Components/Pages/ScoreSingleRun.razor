@@ -32,7 +32,7 @@
 
 
 @code {
-    protected override SingleRunDto CreateDto() => this._runService.StartSingleRun();
+    protected override SingleRunDto CreateDto() => this._runService.StartSingleRun(this.runDto?.Color ?? EScoringButtonColor.Blue);
 
     protected override ScoreDto HandleScore(EScoringButtonColor color) => this.runDto.Score;
 
@@ -50,15 +50,16 @@
     {
         var res = await this._modal.ShowDialog("Farbe wechseln?", EDialogButtons.YesNo);
         if (res is EDialogResult.No) { return; }
-        this.runDto.Color = __colorChange();
-        await this.InvokeAsync(this.StateHasChanged);
+        this.runDto = this._runService.StartSingleRun(__colorChange());
 
-        EScoringButtonColor __colorChange() => this.runDto.Color switch
-        {
-            EScoringButtonColor.Blue => EScoringButtonColor.Red,
-            _ => EScoringButtonColor.Blue
-        };
+        await this.InvokeAsync(this.StateHasChanged);
     }
+
+    private EScoringButtonColor __colorChange() => (this.runDto is null, this.runDto?.Color ?? EScoringButtonColor.None) switch
+    {
+        (false, EScoringButtonColor.Blue) => EScoringButtonColor.Red,
+        _ => EScoringButtonColor.Blue
+    };
 
 
     private async Task<bool> OpenPresentationModal(EScoringButtonColor color)
