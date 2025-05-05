@@ -54,7 +54,10 @@
         if (color is EScoringButtonColor.Blue)
         {
             var modalResultBlue = await this._modal.Show<ScorePresentationModal>
-                ("Blue", new ModalOptions()
+                ("Blue", new ModalParameters()
+                    {
+                    {nameof(ScorePresentationModal.Color),color}
+                    }, new ModalOptions()
                     {
                         Size = ModalSize.ExtraLarge,
                     }).Result;
@@ -74,11 +77,11 @@
         {
             var modalResultRed = await this._modal.Show<ScorePresentationModal>
                 ("Red", new ModalParameters(){
-            {nameof(ScorePresentationModal.IsRed),true}
-                                        }, new ModalOptions()
-                                        {
-                                            Size = ModalSize.ExtraLarge,
-                                        }).Result;
+            {nameof(ScorePresentationModal.Color),color}
+                                            }, new ModalOptions()
+                                            {
+                                                Size = ModalSize.ExtraLarge,
+                                            }).Result;
             if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
             {
                 this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;

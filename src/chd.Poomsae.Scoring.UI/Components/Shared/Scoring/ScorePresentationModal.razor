@@ -1,5 +1,6 @@
 @using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.Contracts.Enums
 
 <div class="scoring-presentation @_css">
     <div class="scoring">
@@ -20,7 +21,7 @@
 
     [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
 
-    [Parameter] public bool IsRed { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
 
-    private string _css => this.IsRed ? "score-hong" : "score-chong";
+    private string _css => this.Color is EScoringButtonColor.Red ? "score-hong" : "score-chong";
 }

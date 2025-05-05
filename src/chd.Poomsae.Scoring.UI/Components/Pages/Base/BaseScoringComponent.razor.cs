@@ -93,6 +93,10 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
                     context.PreventNavigation();
                 }
             }
+            else
+            {
+                this.broadCastService.ResetScore();
+            }
         }
 
         public void Dispose()

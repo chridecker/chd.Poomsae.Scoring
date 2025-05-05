@@ -12,7 +12,7 @@
     <div class="scores-names">@Text</div>
     @if (this.ChongScore is not null)
     {
-        <div class="score score-chong" @onclick="async() => await this.Click(EScoringButtonColor.Red)">@this.GetValue(this.ChongScore)</div>
+        <div class="score score-chong" @onclick="async() => await this.Click(EScoringButtonColor.Blue)">@this.GetValue(this.ChongScore)</div>
     }
 </div>
 @code {
@@ -26,10 +26,8 @@
     PropertyInfo _propertyInfo => typeof(ScoreDto).GetProperty(this.Property);
 
 
-    private async Task Click(EScoringButtonColor color)
-    {
-        await this.OnClick?.Invoke(color);
-    }
+    private Task Click(EScoringButtonColor color) => this.OnClick?.Invoke(color);
+
 
     private string GetValue(ScoreDto dto)
     {
