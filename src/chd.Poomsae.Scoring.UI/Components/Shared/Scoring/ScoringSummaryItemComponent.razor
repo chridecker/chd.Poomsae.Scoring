@@ -1,0 +1,50 @@
+@using System.Reflection
+@using chd.Poomsae.Scoring.Contracts.Dtos
+@using chd.Poomsae.Scoring.Contracts.Enums
+@using chd.Poomsae.Scoring.UI.Extensions
+
+
+<div class="scores">
+    @if (this.HongScore is not null)
+    {
+        <div class="score score-hong" @onclick="async() => await this.Click(EScoringButtonColor.Red)">@this.GetValue(this.HongScore)</div>
+    }
+    <div class="scores-names">@Text</div>
+    @if (this.ChongScore is not null)
+    {
+        <div class="score score-chong" @onclick="async() => await this.Click(EScoringButtonColor.Red)">@this.GetValue(this.ChongScore)</div>
+    }
+</div>
+@code {
+    [Parameter] public ScoreDto ChongScore { get; set; }
+    [Parameter] public ScoreDto HongScore { get; set; }
+    [Parameter] public string Text { get; set; }
+    [Parameter] public string Property { get; set; }
+    [Parameter] public Func<EScoringButtonColor, Task<bool>>? OnClick { get; set; }
+
+
+    PropertyInfo _propertyInfo => typeof(ScoreDto).GetProperty(this.Property);
+
+
+    private async Task Click(EScoringButtonColor color)
+    {
+        await this.OnClick?.Invoke(color);
+    }
+
+    private string GetValue(ScoreDto dto)
+    {
+        if (this._propertyInfo is null) { return string.Empty; }
+
+        var val = this._propertyInfo.GetValue(dto);
+        if (Nullable.GetUnderlyingType(_propertyInfo.PropertyType) != null
+        && Nullable.GetUnderlyingType(this._propertyInfo.PropertyType) == typeof(decimal))
+        {
+            return ((decimal?)val).ToDisplayString();
+        }
+        else if (val is decimal d)
+        {
+            return d.ToDisplayString();
+        }
+        return string.Empty;
+    }
+}

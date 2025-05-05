@@ -63,7 +63,6 @@
             aspect-ratio: 1/1;
             height: min(8rem,100%);
             border: 1px solid white;
-            box-shadow: var(--chd-bg) 1px 0 2px inset, var(--chd-bg) -1px 0 2px inset;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -71,15 +70,22 @@
             background-color: inherit;
         }
 
-            .scoring-button .scoring-button-inner .scoring-button-inner-button:active {
-                border-width: 2px;
-            }
+.scoring.button-left .scoring-button .scoring-button-inner .scoring-button-inner-button {
+    box-shadow: var(--chd-bg) 1px 0 2px inset, var(--chd-font-color) -1px 0 2px inset;
+}
+.scoring.button-right .scoring-button .scoring-button-inner .scoring-button-inner-button {
+    box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-bg) -1px 0 2px inset;
+}
 
-            .scoring-button .scoring-button-inner .scoring-button-inner-button .scoring-button-inner-button-value {
-                color: white;
-                font-weight: bold;
-                font-size: 2.8rem;
-            }
+    .scoring-button .scoring-button-inner .scoring-button-inner-button:active {
+        border-width: 2px;
+    }
+
+    .scoring-button .scoring-button-inner .scoring-button-inner-button .scoring-button-inner-button-value {
+        color: white;
+        font-weight: bold;
+        font-size: 2.8rem;
+    }
 
     .scoring-button.scoring-button-small .scoring-button-inner .scoring-button-inner-button .scoring-button-inner-button-value {
         font-size: 1.5rem;
@@ -89,8 +95,7 @@
     .scoring-button .scoring-button-outer-button {
         aspect-ratio: 1/1;
         height: min(5rem,50%);
-        border: 1px solid black;
-        box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-font-color) -1px 0 2px inset;
+        border: 1px solid var(--chd-bg);
         border-radius: 50%;
         display: flex;
         justify-content: center;
@@ -100,12 +105,14 @@
     }
 
 .scoring.button-left .scoring-button .scoring-button-outer-button {
+    box-shadow: var(--chd-bg) 1px 0 1px inset, var(--chd-font-color) -1px 0 1px inset;
     margin-right: 0.5vw;
 }
 
 .scoring.button-right .scoring-button .scoring-button-outer-button {
+    box-shadow: var(--chd-font-color) 1px 0 1px inset, var(--chd-bg) -1px 0 1px inset;
     margin-left: 0.5vw;
-    order:1;
+    order: 1;
 }
 
 

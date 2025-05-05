@@ -14,12 +14,17 @@
 <div class="single-run-container">
     <div class="fighter-container">
         <FighterScore Score="@runDto.Score" />
-        <IconButton FAClass="rotate" OnClick="this.ChangeColor" />
+        <div class="change-button button-@(this.runDto.Color is EScoringButtonColor.Red ? "blue" : "red")" @onclick="this.ChangeColor">
+            <CustomIcon FAClass="rotate" />
+        </div>
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.Score" State="@runDto.State" HandleState="this.HandleClick" />
+            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal"
+                                     ChongScore="@(this.runDto.Color is EScoringButtonColor.Blue ?  runDto.Score : null)"
+                                     HongScore="@(this.runDto.Color is EScoringButtonColor.Red ?  runDto.Score : null)"
+                                     State="@runDto.State" HandleState="this.HandleClick" />
         </div>
         <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="this.runDto.Color" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
     </div>
@@ -39,6 +44,7 @@
         }
         return true;
     }
+
 
     private async Task ChangeColor()
     {

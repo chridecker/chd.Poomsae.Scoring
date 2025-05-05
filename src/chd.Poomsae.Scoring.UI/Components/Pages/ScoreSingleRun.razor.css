@@ -9,8 +9,35 @@
     border-bottom: 1px solid var(--chd-font-color);
     padding: 0.5rem;
     height: 20vh;
-    justify-content:center;
+    justify-content: center;
+    align-items: center;
 }
+
+    .single-run-container .fighter-container .change-button {
+        position: absolute;
+        right: 1.5rem;
+        padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+        border: 1px solid;
+        border-radius: 2rem;
+        box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-bg) -2px 0 2px inset;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        justify-items: center;
+    }
+
+        .single-run-container .fighter-container .change-button.button-red {
+            background: var(--chd-p-red-semi-transparent);
+        }
+
+        .single-run-container .fighter-container .change-button.button-blue {
+            background: var(--chd-p-blue-semi-transparent);
+        }
+
+        .single-run-container .fighter-container .change-button ::deep svg {
+            fill:white;
+            height: 1.2rem;
+        }
 
 .single-run-container .scoring-container {
     width: 100vw;

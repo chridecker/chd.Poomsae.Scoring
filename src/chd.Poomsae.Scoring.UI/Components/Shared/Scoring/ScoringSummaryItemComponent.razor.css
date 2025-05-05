@@ -1,0 +1,69 @@
+﻿
+.scores {
+    border-top: 1px solid var(--chd-grey-semi-transparent);
+    border-bottom: 1px solid var(--chd-grey-semi-transparent);
+    border-radius: 0.5rem;
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    text-align: center;
+    font-size: 0.8rem;
+    align-items: center;
+}
+
+    .scores .score {
+        padding: 0 0.5rem 0 0.5rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+    }
+
+        .scores .score.score-chong {
+            box-shadow: var(--chd-font-color) -2px 0 2px inset, var(--chd-bg) 1px 0 2px inset;
+            background-color: var(--chd-p-blue);
+            border-radius: 0.5rem;
+        }
+
+        .scores .score.score-hong {
+            box-shadow: var(--chd-bg) -1px 0 2px inset, var(--chd-font-color) 2px 0 2px inset;
+            background-color: var(--chd-p-red);
+            border-radius: 0.5rem;
+        }
+
+.scores-group.accuracy .scores .scores-names {
+    background: linear-gradient(to left, var(--chd-p-accuracy-transparent) 0%, var(--chd-p-accuracy-semi-transparent) 50%,var(--chd-p-accuracy-transparent) 99%);
+    box-shadow: var(--chd-p-accuracy-semi-transparent) 0 1px 3px, var(--chd-p-accuracy-semi-transparent) 0 -1px 3px;
+}
+
+.scores-group.presentation .scores .scores-names {
+    background: linear-gradient(to left, var(--chd-p-presentation-transparent) 0%, var(--chd-p-presentation-semi-transparent) 50%,var(--chd-p-presentation-transparent) 99%);
+    box-shadow: var(--chd-p-presentation-semi-transparent) 0 1px 3px, var(--chd-p-presentation-semi-transparent) 0 -1px 3px;
+}
+
+.scores-group.accuracy .scores .score {
+    box-shadow: var(--chd-font-color) -1px 0 2px, var(--chd-font-color) 1px 0 2px;
+}
+.scores-group.accuracy .scores .score.score-chong {
+    background-color: var(--chd-p-blue-accent);
+}
+
+.scores-group.accuracy .scores .score.score-hong {
+    background-color: var(--chd-p-red-accent);
+}
+
+
+
+.single-run-container .scoring-summary-container .scores-group .scores {
+    grid-template-columns: auto repeat(2,max-content);
+}
+
+    .single-run-container .scoring-summary-container .scores-group .scores .scores-names {
+        order: 1;
+    }
+
+    .single-run-container .scoring-summary-container .scores-group .scores .score.score-chong {
+        order: 3;
+    }
+
+    .single-run-container .scoring-summary-container .scores-group .scores .score.score-hong {
+        order: 3;
+    }

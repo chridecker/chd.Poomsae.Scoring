@@ -31,55 +31,6 @@
         width: 100%;
     }
 
-        .scoring-summary-container .scores-group .scores {
-            border-top: 1px solid var(--chd-grey-semi-transparent);
-            border-bottom: 1px solid var(--chd-grey-semi-transparent);
-            border-radius: 0.5rem;
-            display: grid;
-            grid-template-columns: max-content auto max-content;
-            text-align: center;
-            font-size: 0.8rem;
-            align-items: center;
-        }
-
-            .scoring-summary-container .scores-group .scores.accuracy .scores-names {
-                background: linear-gradient(to left, var(--chd-p-accuracy-transparent) 0%, var(--chd-p-accuracy-semi-transparent) 50%,var(--chd-p-accuracy-transparent) 99%);
-                box-shadow: var(--chd-p-accuracy-semi-transparent) 0 1px 3px, var(--chd-p-accuracy-semi-transparent) 0 -1px 3px;
-            }
-
-            .scoring-summary-container .scores-group .scores.presentation .scores-names {
-                background: linear-gradient(to left, var(--chd-p-presentation-transparent) 0%, var(--chd-p-presentation-semi-transparent) 50%,var(--chd-p-presentation-transparent) 99%);
-                box-shadow: var(--chd-p-presentation-semi-transparent) 0 1px 3px, var(--chd-p-presentation-semi-transparent) 0 -1px 3px;
-            }
-
-            .scoring-summary-container .scores-group .scores .score {
-                padding: 0 0.5rem 0 0.5rem;
-                font-size: 1.1rem;
-                font-weight: 600;
-                color: white;
-                box-shadow: var(--chd-font-color) -1px 0 2px, var(--chd-font-color) 1px 0 2px;
-            }
-
-                .scoring-summary-container .scores-group .scores .score.score-chong {
-                    background-color: var(--chd-p-blue);
-                    border-radius: 0.5rem;
-                }
-
-                .scoring-summary-container .scores-group .scores .score.score-hong {
-                    background-color: var(--chd-p-red);
-                    border-radius: 0.5rem;
-                }
-
-            .scoring-summary-container .scores-group .scores.accuracy .score.score-chong {
-                background-color: var(--chd-p-blue-accent);
-            }
-
-            .scoring-summary-container .scores-group .scores.accuracy .score.score-hong {
-                background-color: var(--chd-p-red-accent);
-            }
-
-
-
         .scoring-summary-container .scores-group.finish {
             grid-template-columns: auto;
             border: none;
@@ -88,25 +39,10 @@
 
             .scoring-summary-container .scores-group.finish .scores > div {
                 border: 1px solid var(--chd-font-color);
+                box-shadow: var(--chd-bg) 1px 0 1px inset,var(--chd-font-color) -1px 0 1px inset;
                 border-radius: 0.8rem;
                 padding: 0.2rem 0.8rem 0.2rem 0.8rem;
                 width: max-content;
                 font-weight: 600;
                 font-size: 1rem;
             }
-
-.single-run-container .scoring-summary-container .scores-group .scores {
-    grid-template-columns: auto repeat(2,max-content);
-}
-
-    .single-run-container .scoring-summary-container .scores-group .scores .scores-names {
-        order: 1;
-    }
-
-    .single-run-container .scoring-summary-container .scores-group .scores .score.score-chong {
-        order: 3;
-    }
-
-    .single-run-container .scoring-summary-container .scores-group .scores .score.score-hong {
-        order: 3;
-    }
