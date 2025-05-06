@@ -55,12 +55,12 @@
         {
             var modalResultBlue = await this._modal.Show<ScorePresentationModal>
                 ("Blue", new ModalParameters()
-                    {
+                        {
                     {nameof(ScorePresentationModal.Color),color}
-                    }, new ModalOptions()
-                    {
-                        Size = ModalSize.ExtraLarge,
-                    }).Result;
+                        }, new ModalOptions()
+                        {
+                            Size = ModalSize.ExtraLarge,
+                        }).Result;
             if (modalResultBlue.Cancelled)
             {
                 return false;
@@ -71,6 +71,7 @@
                 this.runDto.ChongScore.RhythmAndTempo = scoreDto.RhythmAndTempo;
                 this.runDto.ChongScore.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
             }
+            await this.InvokeAsync(this.StateHasChanged);
             return true;
         }
         else
@@ -78,15 +79,16 @@
             var modalResultRed = await this._modal.Show<ScorePresentationModal>
                 ("Red", new ModalParameters(){
             {nameof(ScorePresentationModal.Color),color}
-                                            }, new ModalOptions()
-                                            {
-                                                Size = ModalSize.ExtraLarge,
-                                            }).Result;
+                                                }, new ModalOptions()
+                                                {
+                                                    Size = ModalSize.ExtraLarge,
+                                                }).Result;
             if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
             {
                 this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
                 this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
                 this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
+                await this.InvokeAsync(this.StateHasChanged);
                 return true;
             }
         }

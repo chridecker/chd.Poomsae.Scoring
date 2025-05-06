@@ -10,6 +10,7 @@
 
     .presentation-score .presentation-score-label {
         font-size:1.2rem;
+        overflow:hidden;
     }
 
     .presentation-score .presentation-score-slider {
