@@ -7,7 +7,6 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos.Base
 {
     public abstract class RunDto
     {
-        public JudgeDto Judge { get; set; } = new();
         public ERunState State { get; set; }
     }
 }

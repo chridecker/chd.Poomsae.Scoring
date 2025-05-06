@@ -13,9 +13,9 @@
     <TotalResult IsRed="false" />
     <JudgesComponent IsRed="false" Devices="this._connectedDevices" />
 </div>
-<FloatingActionNavigation FAIconActive="magnifying-glass-plus" TextActive="Automatisches Hinzufügen" OnClick="this.Search">
-    <FloatingActionButton FAClass="magnifying-glass" Title="Erweiterte Suche" OnClick="this.Discover" />
-    <FloatingActionButton FAClass="eraser" Title="Alle Löschen" OnClick="this.Clear" />
+<FloatingActionNavigation FAIconActive="magnifying-glass-plus" TextActive="Geräte automatisches Hinzufügen" OnClick="this.Search">
+    <FloatingActionButton FAClass="magnifying-glass" Title="Erweiterte Gerätesuche" OnClick="this.Discover" />
+    <FloatingActionButton FAClass="eraser" Title="Geräte Löschen" OnClick="this.Clear" />
 </FloatingActionNavigation>
 
 
@@ -50,7 +50,7 @@
     {
         await this.modalService.Show<DiscoverDevices>(new ModalOptions()
             {
-                Size = ModalSize.Large
+                Size = ModalSize.ExtraLarge
             }).Result;
     }
 
