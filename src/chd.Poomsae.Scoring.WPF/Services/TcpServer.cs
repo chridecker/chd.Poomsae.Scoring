@@ -28,7 +28,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
         public event EventHandler<DeviceDto> DeviceDisconnected;
         public event EventHandler<DeviceDto> DeviceDiscovered;
         public event EventHandler ScanTimeout;
-
+        public event EventHandler<DeviceDto> DeviceNameChanged;
 
         private ConcurrentDictionary<Guid, string> _connectedDevices = [];
 
@@ -66,7 +66,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
             while (!cancellationToken.IsCancellationRequested)
             {
                 var client = await this._server.AcceptTcpClientAsync(cancellationToken);
-                this.ScanTimeout?.Invoke(this,EventArgs.Empty);
+                this.ScanTimeout?.Invoke(this, EventArgs.Empty);
                 _ = this.HandleClient(Guid.NewGuid(), client, cancellationToken);
             }
         }
@@ -100,11 +100,18 @@ namespace chd.Poomsae.Scoring.WPF.Services
             if (data.Length != 2 || !(data[0] == "NAME" || data[0] == "RESULT")) { return; }
             if (data[0] == "NAME")
             {
-                if (!this._connectedDevices.ContainsKey(id)
-                  || this._connectedDevices[id] != data[1])
+                if (!this._connectedDevices.ContainsKey(id))
                 {
                     this._connectedDevices[id] = data[1];
                     this.DeviceFound?.Invoke(this, new DeviceDto
+                    {
+                        Id = id,
+                        Name = data[1]
+                    });
+                }
+                else if (this._connectedDevices[id] != data[1])
+                {
+                    this.DeviceNameChanged?.Invoke(this, new DeviceDto
                     {
                         Id = id,
                         Name = data[1]

@@ -27,6 +27,14 @@ namespace chd.Poomsae.Scoring.WPF.Services
             this._optionsMonitor = optionsMonitor;
             this._settingManager = settingManager;
         }
+
+        public async Task BroadcastNameChange()
+        {
+            var name = await this._settingManager.GetName();
+            var text = $"NAME:{name}\r\n";
+            this._client.Client.Send(Encoding.ASCII.GetBytes(text));
+        }
+
         public void BroadcastResult(RunDto run)
         {
             if (this._optionsMonitor.CurrentValue.IsServer || this._client is null || !this._client.Connected) { return; }
@@ -91,9 +99,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
                 {
                     try
                     {
-                        var name = await this._settingManager.GetName();
-                        var text = $"NAME:{name}\r\n";
-                        this._client.Client.Send(Encoding.ASCII.GetBytes(text));
+                        await this.BroadcastNameChange();
                     }
                     catch
                     {

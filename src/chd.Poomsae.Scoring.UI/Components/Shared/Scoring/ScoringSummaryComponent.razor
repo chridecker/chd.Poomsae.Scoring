@@ -27,6 +27,7 @@
 @code {
     [Inject] private ISettingManager settingManager { get; set; }
     [Inject] private IModalService modalService { get; set; }
+    [Inject] private IBroadCastService broadCastService { get; set; }
 
     [Parameter] public ScoreDto? ChongScore { get; set; }
     [Parameter] public ScoreDto? HongScore { get; set; }
@@ -47,10 +48,13 @@
         {
         }).Result;
         this._deviceName = await this.settingManager.GetName();
+
+        await this.broadCastService.BroadcastNameChange();
+
         await this.InvokeAsync(this.StateHasChanged);
     }
 
-        private string _middleButtonText => this.State switch
+    private string _middleButtonText => this.State switch
     {
         ERunState.Started => "Senden",
         ERunState.Finished => "Neustart",

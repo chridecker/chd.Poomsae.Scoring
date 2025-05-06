@@ -25,6 +25,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         public event EventHandler<DeviceDto> DeviceDiscovered;
         public event EventHandler<DeviceDto> DeviceFound;
         public event EventHandler<DeviceDto> DeviceDisconnected;
+        public event EventHandler<DeviceDto> DeviceNameChanged;
         public event EventHandler ScanTimeout;
 
         public BLEClient()
@@ -148,12 +149,18 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                     return;
                 }
 
-
                 var dto = new DeviceDto()
                 {
                     Id = device.Id,
                     Name = device.Name
                 };
+
+                var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
+                if (characteristicName.CanUpdate)
+                {
+                    characteristicName.ValueUpdated += (s, e) => this.Name_ValueUpdated(s, dto, e);
+                    await characteristicName.StartUpdatesAsync();
+                }
 
                 characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, dto, e);
                 await characteristic.StartUpdatesAsync();
@@ -166,6 +173,17 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         }
 
         private async Task DisconnectDevice(IDevice device) => this._adapter.DisconnectDeviceAsync(device);
+
+        private void Name_ValueUpdated(object? sender, DeviceDto dto, CharacteristicUpdatedEventArgs e)
+        {
+            var name = Encoding.ASCII.GetString(e.Characteristic.Value);
+            this.DeviceNameChanged?.Invoke(this, new DeviceDto
+            {
+                Id = dto.Id,
+                Name = name
+            });
+        }
+
 
         private async void Characteristic_ValueUpdated(object? sender, DeviceDto dto, CharacteristicUpdatedEventArgs e)
         {

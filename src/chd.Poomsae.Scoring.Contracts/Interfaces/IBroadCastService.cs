@@ -12,5 +12,6 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         Task StartAsync(CancellationToken cancellationToken);
         void ResetScore();
         void BroadcastResult(RunDto dto);
+        Task BroadcastNameChange();
     }
 }

@@ -39,6 +39,7 @@
         this.broadcastClient.DeviceFound += DeviceFound;
         this.broadcastClient.DeviceDisconnected += DeviceDisconnect;
         this.broadcastClient.ScanTimeout += this.ScanFinished;
+        this.broadcastClient.DeviceNameChanged += this.DeviceFound;
 
         this._connectedDevices = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
 
@@ -129,6 +130,7 @@
         this._cts.Cancel();
         this.broadcastClient.ResultReceived -= ResultReceived;
         this.broadcastClient.DeviceFound -= DeviceFound;
+        this.broadcastClient.DeviceNameChanged -= DeviceFound;
         this.broadcastClient.DeviceDisconnected -= DeviceDisconnect;
         this.broadcastClient.ScanTimeout -= this.ScanFinished;
 
