@@ -113,14 +113,15 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._gattServer = this._bluetoothManager.OpenGattServer(ctx, this._callback);
 
             await this.CreateService();
-            BluetoothLeAdvertiser advertiser = this._bluetoothAdapter.BluetoothLeAdvertiser;
+            var advertiser = this._bluetoothAdapter.BluetoothLeAdvertiser;
+
             var builder = new AdvertiseSettings.Builder();
             builder.SetAdvertiseMode(AdvertiseMode.LowLatency);
             builder.SetConnectable(true);
             builder.SetTimeout(0);
             builder.SetTxPowerLevel(AdvertiseTx.PowerHigh);
 
-            AdvertiseData.Builder dataBuilder = new AdvertiseData.Builder();
+            var dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
             {
@@ -163,7 +164,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._descNotifyNameChanged = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
             this._descNotifyNameChanged.SetValue(this._nameNotifyDescValue);
 
-            this._characteristicName.AddDescriptor(this._descNotifyResult);
+            this._characteristicName.AddDescriptor(this._descNotifyNameChanged);
 
             var name = await this.GetName();
             this._characteristicName.SetValue(name.Item1);
