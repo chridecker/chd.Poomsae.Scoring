@@ -4,6 +4,7 @@ using chd.Poomsae.Scoring.Contracts.Constants;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Maui.Android.InAppUpdates;
 
 namespace chd.Poomsae.Scoring.App
 {
@@ -25,6 +26,8 @@ namespace chd.Poomsae.Scoring.App
 
             builder.Services.AddMauiBlazorWebView();
             builder.AddServices();
+            builder.UseAndroidInAppUpdates();
+
             return builder.Build();
         }
         private static void AddServices(this MauiAppBuilder builder)

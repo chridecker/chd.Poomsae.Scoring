@@ -81,7 +81,9 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.60" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
+		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 		<PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
+		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 	</ItemGroup>
 
 	<ItemGroup>
