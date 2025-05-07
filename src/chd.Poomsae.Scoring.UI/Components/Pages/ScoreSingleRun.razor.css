@@ -12,6 +12,16 @@
     align-items: center;
 }
 
+  /*  .single-run-container .fighter-container.blue {
+        background: var(--chd-p-blue-semi-transparent);
+    }
+
+    .single-run-container .fighter-container.red {
+        background: var(--chd-p-red-semi-transparent);
+    }*/
+
+
+
     .single-run-container .fighter-container .change-button {
         position: absolute;
         left: 1.5rem;

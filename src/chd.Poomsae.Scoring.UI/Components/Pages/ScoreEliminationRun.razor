@@ -14,8 +14,8 @@
 
 <div class="run-container">
     <div class="fighter-container">
-        <FighterScore Score="@runDto.HongScore" IsRed="true" />
-        <FighterScore Score="@runDto.ChongScore" IsRed="false">
+        <FighterScore Score="@runDto.HongScore" Color="EScoringButtonColor.Red" />
+        <FighterScore Score="@runDto.ChongScore" Color="EScoringButtonColor.Blue">
             <ButtonContent>
                 <StateButton State="@runDto.State" HandleState="this.HandleClick" />
             </ButtonContent>

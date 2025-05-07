@@ -18,8 +18,8 @@
 </div>
 @code {
     [Parameter] public ScoreDto Score { get; set; }
-    [Parameter] public bool? IsRed { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
     [Parameter] public RenderFragment? ButtonContent { get; set; }
 
-    private string __css => !this.IsRed.HasValue ? "fighter-neutral" : this.IsRed.Value ? "fighter-hong" : "fighter-chong";
+    private string __css => this.Color is EScoringButtonColor.None ? "fighter-neutral" : this.Color is EScoringButtonColor.Red ? "fighter-hong" : "fighter-chong";
 }

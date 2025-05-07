@@ -5,11 +5,11 @@
 
     .fighter.fighter-hong {
         text-align: right;
-        background: var(--chd-red-transparent);
+        background: var(--chd-p-red-semi-gradient-left);
     }
 
     .fighter.fighter-chong {
-        background: var(--chd-blue-transparent);
+        background: var(--chd-p-blue-semi-gradient);
     }
 
     .fighter.fighter-neutral {
