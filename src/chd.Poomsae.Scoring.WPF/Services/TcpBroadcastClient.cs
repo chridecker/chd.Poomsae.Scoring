@@ -30,6 +30,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
 
         public async Task BroadcastNameChange()
         {
+            if (this._optionsMonitor.CurrentValue.IsServer || this._client is null || !this._client.Connected) { return; }
             var name = await this._settingManager.GetName();
             var text = $"NAME:{name}\r\n";
             this._client.Client.Send(Encoding.ASCII.GetBytes(text));

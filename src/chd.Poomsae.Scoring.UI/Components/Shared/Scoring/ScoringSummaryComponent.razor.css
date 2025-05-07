@@ -1,30 +1,33 @@
 ﻿.scoring-summary-container {
-    padding-top: 0.5rem;
+    padding-top: 1.5rem;
     display: flex;
-    flex-direction:column;
-    align-content:center;
-    align-items:center;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
     justify-items: center;
-    justify-content:space-around;
-    height:80%;
+    justify-content: space-around;
+    height: 90%;
     width: 100%;
 }
 
     .scoring-summary-container .device-name {
         border: 1px solid;
         text-align: center;
-        padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+        padding: 0.5rem;
         border-radius: 0.5rem;
         font-size: 0.8rem;
+        line-height: 0.8rem;
         width: max-content;
         align-content: center;
         align-items: center;
         justify-content: center;
         justify-items: center;
+        order: 2;
     }
 
         .scoring-summary-container .device-name ::deep svg {
-            height: 1.2rem;
+            margin-top: -0.2rem;
+            height: 1rem;
         }
 
     .scoring-summary-container .scores-group {

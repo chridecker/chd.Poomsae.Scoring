@@ -8,7 +8,7 @@
 
 
 <div class="scoring-summary-container">
-    <div class="device-name" @onclick="this.ChangeName"><CustomIcon FAClass="gamepad" /> @this._deviceName</div>
+    <div class="device-name" @onclick="this.ChangeName"><CustomIcon FAClass="user-tie" /> @this._deviceName</div>
     <div class="scores-group accuracy">
         <ScoringSummaryItemComponent Text="@TextConstants.Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
     </div>
