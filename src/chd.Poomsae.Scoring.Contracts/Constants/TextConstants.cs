@@ -19,6 +19,8 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string LeaveSiteQuestion = "Wollen Sie die Seite wirklich verlassen?";
         public const string EnterNameTitle = "Anzeigenamen ändern";
 
+        public const string ScoresSend = "Wertung gesendet!";
+
         public const string Blue = "Blau";
         public const string Red = "Rot";
 

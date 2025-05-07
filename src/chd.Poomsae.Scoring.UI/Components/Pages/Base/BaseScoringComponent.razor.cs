@@ -57,6 +57,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
                 this.broadCastService.BroadcastResult(this.runDto);
                 this.runDto.State = ERunState.Finished;
+                _ = await this._modal.ShowDialog(TextConstants.ScoresSend, EDialogButtons.OK);
             }
             else if (this.runDto.State is ERunState.Finished)
             {

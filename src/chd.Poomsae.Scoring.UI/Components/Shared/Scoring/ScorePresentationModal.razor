@@ -8,9 +8,14 @@
         <PresentationScore Dto="this.Dto" Text="@TextConstants.RhythmAndTempo" Max="2" Property="@nameof(ScoreDto.RhythmAndTempo)" />
         <PresentationScore Dto="this.Dto" Text="@TextConstants.ExpressionAndEnergy" Max="2" Property="@nameof(ScoreDto.ExpressionAndEnergy)" />
     </div>
+    <div class="buttons">
+        <button class="btn btn-primary" @onclick="async ()=>await this.ModalInstance.CloseAsync()">Übernehmen</button>
+    </div>
 </div>
 
 @code {
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+
     [Parameter] public EScoringButtonColor Color { get; set; }
     [Parameter] public ScoreDto Dto { get; set; }
 
