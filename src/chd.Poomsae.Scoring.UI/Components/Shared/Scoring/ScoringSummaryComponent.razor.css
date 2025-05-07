@@ -1,5 +1,5 @@
 ﻿.scoring-summary-container {
-    padding-top: 10vh;
+    padding-top: 0.5rem;
     display: grid;
     grid-gap: 0.5rem;
     justify-items: center;

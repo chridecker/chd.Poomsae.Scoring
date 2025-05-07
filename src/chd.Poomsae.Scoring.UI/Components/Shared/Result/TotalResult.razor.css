@@ -3,9 +3,11 @@
     flex-wrap: wrap;
     font-weight: bold;
 }
-.total.chong{
-    background:var(--chd-p-blue-transparent);
-}
+
+    .total.chong {
+        background: var(--chd-p-blue-transparent);
+    }
+
     .total.hong {
         background: var(--chd-p-red-transparent);
     }
@@ -13,9 +15,12 @@
     .total .part-score {
         height: 30%;
         width: 50%;
-        font-size: 3rem;
+        padding:0.2rem 0 0 0;
         text-align: center;
         align-content: center;
+        display: flex;
+        flex-direction: column;
+        font-size: 3rem;
     }
 
     .total .overall {
@@ -30,14 +35,17 @@
 
     .total .part-score.accuracy {
         color: var(--chd-p-accuracy);
-        /*background: linear-gradient(to top, gray 0%, transparent 90%);*/
-        /*background: var(--chd-p-accuracy-gradient-top);*/
     }
 
     .total .part-score.presentation {
-        color:var(--chd-p-presentation);
-        /*background: linear-gradient(to top, darkgrey 0%, transparent 90%);*/
-        /*background: var(--chd-p-presentation-gradient-top);*/
+        color: var(--chd-p-presentation);
+    }
+
+    .total .part-score .part-score-title {
+        font-size: 1rem;
+    }
+
+    .total .part-score .part-score-value {
     }
 
     .total.chong .accuracy {
@@ -88,6 +96,9 @@
     .total .part-score {
         font-size: 4rem;
     }
+        .total .part-score .part-score-title {
+            font-size: 1.5rem;
+        }
 
     .total .overall {
         font-size: 7rem;
@@ -98,6 +109,9 @@
     .total .part-score {
         font-size: 5rem;
     }
+        .total .part-score .part-score-title {
+            font-size: 1.5rem;
+        }
 
     .total .overall {
         font-size: 9rem;
@@ -109,9 +123,11 @@
     .total .part-score {
         font-size: 7rem;
     }
+    .total .part-score .part-score-title {
+        font-size: 2rem;
+    }
 
     .total .overall {
         font-size: 12rem;
     }
 }
-

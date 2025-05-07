@@ -15,6 +15,7 @@
         font-size: 1.1rem;
         font-weight: 600;
         color: white;
+        width: 2.5rem;
     }
 
         .scores .score.score-chong {
@@ -42,13 +43,14 @@
 .scores-group.accuracy .scores .score {
     box-shadow: var(--chd-font-color) -1px 0 2px, var(--chd-font-color) 1px 0 2px;
 }
-.scores-group.accuracy .scores .score.score-chong {
-    background-color: var(--chd-p-blue-accent);
-}
 
-.scores-group.accuracy .scores .score.score-hong {
-    background-color: var(--chd-p-red-accent);
-}
+    .scores-group.accuracy .scores .score.score-chong {
+        background-color: var(--chd-p-blue-accent);
+    }
+
+    .scores-group.accuracy .scores .score.score-hong {
+        background-color: var(--chd-p-red-accent);
+    }
 
 
 
