@@ -10,12 +10,12 @@
 <div class="scoring-summary-container">
     <div class="device-name" @onclick="this.ChangeName"><CustomIcon FAClass="gamepad" /> @this._deviceName</div>
     <div class="scores-group accuracy">
-        <ScoringSummaryItemComponent Text="Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
+        <ScoringSummaryItemComponent Text="@TextConstants.Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
     </div>
     <div class="scores-group presentation">
-        <ScoringSummaryItemComponent Text="Rhythm/Tempo/Softness" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.RhythmAndTempo)" />
-        <ScoringSummaryItemComponent Text="Speed & Power" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.SpeedAndPower)" />
-        <ScoringSummaryItemComponent Text="Expression of Energy" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.ExpressionAndEnergy)" />
+        <ScoringSummaryItemComponent Text="@TextConstants.RhythmAndTempo" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.RhythmAndTempo)" />
+        <ScoringSummaryItemComponent Text="@TextConstants.SpeedAndPower" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.SpeedAndPower)" />
+        <ScoringSummaryItemComponent Text="@TextConstants.ExpressionAndEnergy" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.ExpressionAndEnergy)" />
     </div>
     <div class="scores-group finish">
         <div class="scores">
@@ -44,7 +44,7 @@
     }
     private async Task ChangeName()
     {
-        await this.modalService.Show<DeviceNameModal>("Name eingeben", new ModalOptions()
+        await this.modalService.Show<DeviceNameModal>(TextConstants.EnterNameTitle, new ModalOptions()
         {
         }).Result;
         this._deviceName = await this.settingManager.GetName();
@@ -56,8 +56,8 @@
 
     private string _middleButtonText => this.State switch
     {
-        ERunState.Started => "Senden",
-        ERunState.Finished => "Neustart",
+        ERunState.Started => TextConstants.Send,
+        ERunState.Finished => TextConstants.Restart,
         _ => string.Empty
     };
 }

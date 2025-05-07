@@ -87,7 +87,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             if (this.runDto.State is ERunState.Started)
             {
-                var res = await this._modal.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
+                var res = await this._modal.ShowDialog(TextConstants.LeaveSiteQuestion, EDialogButtons.YesNo);
                 if (res == EDialogResult.No)
                 {
                     context.PreventNavigation();

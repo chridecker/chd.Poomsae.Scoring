@@ -48,7 +48,7 @@
 
     private async Task ChangeColor()
     {
-        var res = await this._modal.ShowDialog("Farbe wechseln?", EDialogButtons.YesNo);
+        var res = await this._modal.ShowDialog(TextConstants.ChangeColorQuestion, EDialogButtons.YesNo);
         if (res is EDialogResult.No) { return; }
         this.runDto = this._runService.StartSingleRun(__colorChange());
 
@@ -65,7 +65,7 @@
     private async Task<bool> OpenPresentationModal(EScoringButtonColor color)
     {
         if (this.runDto.State is not ERunState.Started) { return false; }
-        var modalResultBlue = await this._modal.Show<ScorePresentationModal>("Presentation", new ModalParameters(){
+        var modalResultBlue = await this._modal.Show<ScorePresentationModal>(TextConstants.Presentation, new ModalParameters(){
                 {nameof(ScorePresentationModal.Color),color} }, new ModalOptions()
                 {
                     Size = ModalSize.ExtraLarge,

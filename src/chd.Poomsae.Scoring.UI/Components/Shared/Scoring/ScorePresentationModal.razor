@@ -4,9 +4,9 @@
 
 <div class="scoring-presentation @_css">
     <div class="scoring">
-        <PresentationScore Text="Speed & Power" Max="2" ValueChanged="(d) => this._dto.SpeedAndPower = d" />
-        <PresentationScore Text="Rhythm/Tempo/Softness" Max="2" ValueChanged="(d) => this._dto.RhythmAndTempo = d" />
-        <PresentationScore Text="Expression of Energy" Max="2" ValueChanged="(d) => this._dto.ExpressionAndEnergy = d" />
+        <PresentationScore Text="@TextConstants.SpeedAndPower" Max="2" ValueChanged="(d) => this._dto.SpeedAndPower = d" />
+        <PresentationScore Text="@TextConstants.RhythmAndTempo" Max="2" ValueChanged="(d) => this._dto.RhythmAndTempo = d" />
+        <PresentationScore Text="@TextConstants.ExpressionAndEnergy" Max="2" ValueChanged="(d) => this._dto.ExpressionAndEnergy = d" />
     </div>
     <div class="buttons">
         <button class="btn btn-primary" @onclick="async ()=> await this.ModalInstance.CloseAsync(ModalResult.Ok(this._dto))">Übernehmen</button>

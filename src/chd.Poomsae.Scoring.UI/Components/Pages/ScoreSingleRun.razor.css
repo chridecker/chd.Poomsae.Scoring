@@ -7,7 +7,6 @@
 .single-run-container .fighter-container {
     display: flex;
     border-bottom: 1px solid var(--chd-font-color);
-    padding: 0.5rem;
     height: 20vh;
     justify-content: center;
     align-items: center;

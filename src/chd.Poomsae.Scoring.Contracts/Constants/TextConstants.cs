@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace chd.Poomsae.Scoring.Contracts.Constants
+{
+    public  class TextConstants
+    {
+        public const string Accuracy = "Technik";
+        public const string Presentation = "Präsentation";
+        public const string SpeedAndPower = "Geschwindigkeit und Kraft";
+        public const string RhythmAndTempo = "Rhythmus und Tempo";
+        public const string ExpressionAndEnergy = "Ausdruck von Energie";
+
+        public const string ChangeColorQuestion = "Farbe wechseln?";
+
+        public const string LeaveSiteQuestion = "Wollen Sie die Seite wirklich verlassen?";
+        public const string EnterNameTitle = "Anzeigenamen ändern";
+
+        public const string Blue = "Blau";
+        public const string Red = "Rot";
+
+        public const string Send = "Senden";
+        public const string Restart = "Neustart";
+
+        public const string Single= "Einzel";
+        public const string Eliminiation = "Head to Head";
+        public const string Results = "Ergebnisse";
+
+        public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
+        public const string SearchDevices = "Erweiterte Gerätesuche";
+        public const string RemoveDevices = "Geräte Löschen";
+
+    }
+}

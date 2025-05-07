@@ -13,9 +13,9 @@
     <TotalResult IsRed="false" />
     <JudgesComponent IsRed="false" Devices="this._connectedDevices" />
 </div>
-<FloatingActionNavigation FAIconActive="magnifying-glass-plus" TextActive="Geräte automatisches Hinzufügen" OnClick="this.Search">
-    <FloatingActionButton FAClass="magnifying-glass" Title="Erweiterte Gerätesuche" OnClick="this.Discover" />
-    <FloatingActionButton FAClass="eraser" Title="Geräte Löschen" OnClick="this.Clear" />
+<FloatingActionNavigation FAIconActive="magnifying-glass-plus" TextActive="@TextConstants.AddDeviceAuto" OnClick="this.Search">
+    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
+    <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
 </FloatingActionNavigation>
 
 
@@ -116,7 +116,7 @@
     {
         if (this._connectedDevices.Any())
         {
-            var res = await this.modalService.ShowDialog("Wollen Sie die Seite wirklich verlassen?", EDialogButtons.YesNo);
+            var res = await this.modalService.ShowDialog(TextConstants.LeaveSiteQuestion, EDialogButtons.YesNo);
             if (res == EDialogResult.No)
             {
                 context.PreventNavigation();

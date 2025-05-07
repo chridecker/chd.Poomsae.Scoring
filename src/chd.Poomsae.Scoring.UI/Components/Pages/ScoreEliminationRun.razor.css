@@ -8,15 +8,8 @@
         display: grid;
         grid-template-columns: repeat(2,1fr);
         border-bottom: 1px solid var(--chd-font-color);
-        grid-gap: 15%;
-        padding: 0.5rem;
         height: 20vh;
     }
-
-        .run-container .fighter-container .run-middle {
-            border: 1px solid var(--chd-font-color);
-            border-radius: 1.5rem;
-        }
 
     .run-container .scoring-container {
         width: 100vw;

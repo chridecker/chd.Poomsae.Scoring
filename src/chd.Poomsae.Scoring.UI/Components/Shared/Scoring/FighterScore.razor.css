@@ -1,17 +1,21 @@
 ﻿.fighter {
     display: grid;
+    padding:0.5rem;
 }
 
     .fighter.fighter-hong {
         text-align: right;
+        background:var(--chd-red-transparent);
     }
 
     .fighter.fighter-chong {
+        background: var(--chd-blue-transparent);
     }
 
     .fighter.fighter-neutral {
-        display:flex;
-        width:max-content;
+        display: flex;
+        width: max-content;
+        height:100%;
     }
 
     .fighter .fighter-scores {
@@ -36,7 +40,10 @@
     .fighter .fighter-scores .fighter-score {
         align-content: end;
         font-size: 1.5rem;
+        text-align: center;
     }
+
+
 
         .fighter .fighter-scores .fighter-score.presentation {
             color: var(--chd-p-presentation);
@@ -48,10 +55,28 @@
 
         .fighter .fighter-scores .fighter-score.total {
             color: var(--chd-p-total);
-            font-size: 2.3rem;
+            font-size: 2.5rem;
             font-weight: bold;
-            line-height: 2.3rem;
+            line-height: 2.5rem;
         }
+
+        .fighter .fighter-scores .fighter-score.part-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+            .fighter .fighter-scores .fighter-score.part-score .part-score-title {
+                font-size: 0.8rem;
+                line-height: 0.8rem;
+            }
+
+            .fighter .fighter-scores .fighter-score.part-score .part-score-value {
+                font-size: 1.5rem;
+                line-height: 1.5rem;
+            }
 
     .fighter.fighter-chong .fighter-scores .fighter-score.presentation {
         order: 3;
@@ -64,6 +89,7 @@
     .fighter.fighter-chong .fighter-scores .fighter-score.total {
         order: 1;
     }
+
     .fighter.fighter-hong .fighter-scores .fighter-score.presentation {
         order: 1;
     }

@@ -26,7 +26,11 @@ namespace chd.Poomsae.Scoring.App
 
             builder.Services.AddMauiBlazorWebView();
             builder.AddServices();
-            builder.UseAndroidInAppUpdates();
+            builder.UseAndroidInAppUpdates(options =>
+            {
+                options.ShowDownload = true;
+                options.ImmediateUpdatePriority = 5;
+            } );
 
             return builder.Build();
         }
