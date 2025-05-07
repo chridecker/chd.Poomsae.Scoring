@@ -53,7 +53,7 @@
     private async Task ChangeColor()
     {
         var res = await this._modal.ShowDialog(TextConstants.ChangeColorQuestion, EDialogButtons.YesNo);
-        if (res is EDialogResult.No) { return; }
+        if (res is not EDialogResult.Yes) { return; }
         this.runDto = this._runService.StartSingleRun(__colorChange());
 
         await this.InvokeAsync(this.StateHasChanged);

@@ -10,15 +10,16 @@
     height: 20vh;
     justify-content: center;
     align-items: center;
+    background: var(--chd-p-red-blue-semi-gradient);
 }
 
-  /*  .single-run-container .fighter-container.blue {
-        background: var(--chd-p-blue-semi-transparent);
+    .single-run-container .fighter-container.blue {
+        background: var(--chd-p-blue-semi-gradient-middle);
     }
 
     .single-run-container .fighter-container.red {
-        background: var(--chd-p-red-semi-transparent);
-    }*/
+        background: var(--chd-p-red-semi-gradient-middle);
+    }
 
 
 

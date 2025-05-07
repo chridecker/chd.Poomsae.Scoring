@@ -11,6 +11,7 @@
     --chd-p-blue-transparent: rgba(65,105,225,0.1);
     --chd-p-blue-semi-transparent: rgba(65,105,225,0.5);
     --chd-p-blue-gradient-top: linear-gradient(to top,var(--chd-p-blue) 0%,var(--chd-p-blue-semi-transparent) 90%);
+    --chd-p-blue-semi-gradient-middle: linear-gradient(to left,transparent,var(--chd-p-blue-semi-transparent), var(--chd-p-blue-semi-transparent),transparent);
     --chd-p-blue-semi-gradient: linear-gradient(to left, var(--chd-p-blue-semi-transparent) 0%,var(--chd-p-blue-transparent) 50%, transparent);
     --chd-p-blue-semi-gradient-top: linear-gradient(to top,var(--chd-p-blue-semi-transparent) 0%,var(--chd-p-blue-transparent) 99%);
     --chd-p-blue-gradient: linear-gradient(to right,var(--chd-p-blue) 0%,var(--chd-p-blue-transparent) 100%);
@@ -28,11 +29,13 @@
     --chd-p-red: rgb(255,0,0);
     --chd-p-red-transparent: rgba(255,0,0,0.1);
     --chd-p-red-semi-transparent: rgba(255,0,0,0.5);
+    --chd-p-red-semi-gradient-middle: linear-gradient(to left,transparent,var(--chd-p-red-semi-transparent), var(--chd-p-red-semi-transparent),transparent);
     --chd-p-red-gradient-top: linear-gradient(to top, var(--chd-p-red) 0%,var(--chd-p-red-semi-transparent) 90%);
     --chd-p-red-semi-gradient-top: linear-gradient(to top, var(--chd-p-red-semi-transparent) 0%,var(--chd-p-red-transparent) 99%);
     --chd-p-red-gradient: linear-gradient(to right, var(--chd-p-red) 0%,var(--chd-p-red-transparent) 90%);
     --chd-p-red-gradient-left: linear-gradient(to left, var(--chd-p-red) 0%,var(--chd-p-red-transparent) 90%);
     --chd-p-red-semi-gradient-left: linear-gradient(to right, var(--chd-p-red-semi-transparent) 0%,var(--chd-p-red-transparent) 50%, transparent);
+    --chd-p-red-blue-semi-gradient: linear-gradient(to right, var(--chd-p-red-semi-transparent),var(--chd-p-red-transparent),transparent, var(--chd-p-blue-transparent), var(--chd-p-blue-semi-transparent));
     /*--chd-p-red-gradient-left: linear-gradient(to left,transparent 0%, var(--chd-p-red) 10%,var(--chd-bg) 90%);*/
     --chd-p-accuracy: rgb(255,69,0);
     --chd-p-accuracy-gradient-top: linear-gradient(to top, var(--chd-p-accuracy) 0%,var(--chd-p-accuracy-transparent)99%);
