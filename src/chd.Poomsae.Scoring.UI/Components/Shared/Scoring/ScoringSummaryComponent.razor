@@ -13,16 +13,10 @@
         <ScoringSummaryItemComponent Text="@TextConstants.Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
     </div>
     <div class="scores-group presentation">
-        <ScoringSummaryItemComponent Text="@TextConstants.RhythmAndTempo" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.RhythmAndTempo)" />
         <ScoringSummaryItemComponent Text="@TextConstants.SpeedAndPower" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.SpeedAndPower)" />
+        <ScoringSummaryItemComponent Text="@TextConstants.RhythmAndTempo" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.RhythmAndTempo)" />
         <ScoringSummaryItemComponent Text="@TextConstants.ExpressionAndEnergy" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.ExpressionAndEnergy)" />
     </div>
-    <div class="scores-group finish">
-        <div class="scores">
-            <div class="" @onclick="this.HandleState">@_middleButtonText</div>
-        </div>
-    </div>
-
 </div>
 @code {
     [Inject] private ISettingManager settingManager { get; set; }
@@ -31,8 +25,7 @@
 
     [Parameter] public ScoreDto? ChongScore { get; set; }
     [Parameter] public ScoreDto? HongScore { get; set; }
-    [Parameter] public Func<Task> HandleState { get; set; }
-    [Parameter] public ERunState State { get; set; }
+
     [Parameter] public Func<EScoringButtonColor, Task<bool>> OpenModal { get; set; }
 
     private string _deviceName = string.Empty;
@@ -53,11 +46,4 @@
 
         await this.InvokeAsync(this.StateHasChanged);
     }
-
-    private string _middleButtonText => this.State switch
-    {
-        ERunState.Started => TextConstants.Send,
-        ERunState.Finished => TextConstants.Restart,
-        _ => string.Empty
-    };
 }

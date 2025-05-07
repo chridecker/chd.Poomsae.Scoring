@@ -1,0 +1,17 @@
+﻿.send-button {
+    width:max-content;
+    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+    border: 1px solid;
+    border-radius: 2rem;
+    box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-bg) -2px 0 2px inset;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+}
+
+    .send-button ::deep svg {
+        fill: white;
+        height: 1.2rem;
+        margin-top: -0.1rem;
+    }

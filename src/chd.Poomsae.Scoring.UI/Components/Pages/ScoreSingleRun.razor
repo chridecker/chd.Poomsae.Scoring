@@ -13,18 +13,22 @@
 
 <div class="single-run-container">
     <div class="fighter-container">
-        <FighterScore Score="@runDto.Score" />
         <div class="change-button button-@(this.runDto.Color is EScoringButtonColor.Red ? "blue" : "red")" @onclick="this.ChangeColor">
             <CustomIcon FAClass="rotate" />
         </div>
+        <FighterScore Score="@runDto.Score">
+            <ButtonContent>
+                <StateButton State="@runDto.State" HandleState="this.HandleClick" />
+            </ButtonContent>
+        </FighterScore>
+
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
             <ScoringSummaryComponent OpenModal="this.OpenPresentationModal"
                                      ChongScore="@(this.runDto.Color is EScoringButtonColor.Blue ?  runDto.Score : null)"
-                                     HongScore="@(this.runDto.Color is EScoringButtonColor.Red ?  runDto.Score : null)"
-                                     State="@runDto.State" HandleState="this.HandleClick" />
+                                     HongScore="@(this.runDto.Color is EScoringButtonColor.Red ?  runDto.Score : null)" />
         </div>
         <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="this.runDto.Color" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
     </div>

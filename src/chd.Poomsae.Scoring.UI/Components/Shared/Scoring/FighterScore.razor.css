@@ -1,11 +1,11 @@
 ﻿.fighter {
     display: grid;
-    padding:0.5rem;
+    padding: 0.5rem;
 }
 
     .fighter.fighter-hong {
         text-align: right;
-        background:var(--chd-red-transparent);
+        background: var(--chd-red-transparent);
     }
 
     .fighter.fighter-chong {
@@ -15,7 +15,7 @@
     .fighter.fighter-neutral {
         display: flex;
         width: max-content;
-        height:100%;
+        height: 100%;
     }
 
     .fighter .fighter-scores {
@@ -24,16 +24,16 @@
 
 
     .fighter.fighter-hong .fighter-scores {
-        grid-template-columns: 50% repeat(2,25%);
+        grid-template-columns: repeat(4,25%);
     }
 
     .fighter.fighter-chong .fighter-scores {
-        grid-template-columns: repeat(2,25%) 50%;
+        grid-template-columns: repeat(4,25%);
     }
 
     .fighter.fighter-neutral .fighter-scores {
         display: grid;
-        grid-template-columns: repeat(3,auto);
+        grid-template-columns: repeat(4,auto);
         grid-gap: 3rem;
     }
 
@@ -78,6 +78,10 @@
                 line-height: 1.5rem;
             }
 
+    .fighter.fighter-chong .fighter-scores .action-button {
+        order: 4;
+    }
+
     .fighter.fighter-chong .fighter-scores .fighter-score.presentation {
         order: 3;
     }
@@ -100,6 +104,10 @@
 
     .fighter.fighter-hong .fighter-scores .fighter-score.total {
         order: 3;
+    }
+
+    .fighter.fighter-neutral .fighter-scores .action-button {
+        order: 4;
     }
 
     .fighter.fighter-neutral .fighter-scores .fighter-score.presentation {

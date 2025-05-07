@@ -15,12 +15,16 @@
 <div class="run-container">
     <div class="fighter-container">
         <FighterScore Score="@runDto.HongScore" IsRed="true" />
-        <FighterScore Score="@runDto.ChongScore" IsRed="false" />
+        <FighterScore Score="@runDto.ChongScore" IsRed="false">
+            <ButtonContent>
+                <StateButton State="@runDto.State" HandleState="this.HandleClick" />
+            </ButtonContent>
+            </FighterScore>
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Red" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" State="@runDto.State" HandleState="this.HandleClick" />
+            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore"  />
         </div>
         <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
     </div>

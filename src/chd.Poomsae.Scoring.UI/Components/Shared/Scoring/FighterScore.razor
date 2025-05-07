@@ -2,6 +2,9 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="fighter @this.__css">
     <div class="fighter-scores">
+        <div class="action-button">
+            @ButtonContent
+        </div>
         <div class="fighter-score part-score presentation">
             <div class="part-score-title">@TextConstants.Presentation</div>
             <div class="part-score-value">@this.Score.Presentation.ToDisplayString()</div>
@@ -16,6 +19,7 @@
 @code {
     [Parameter] public ScoreDto Score { get; set; }
     [Parameter] public bool? IsRed { get; set; }
+    [Parameter] public RenderFragment? ButtonContent { get; set; }
 
     private string __css => !this.IsRed.HasValue ? "fighter-neutral" : this.IsRed.Value ? "fighter-hong" : "fighter-chong";
 }

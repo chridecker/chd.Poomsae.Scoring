@@ -1,0 +1,26 @@
+<div class="send-button" @onclick="this.HandleState">
+    @switch (this.State)
+    {
+        case ERunState.Started:
+            <CustomIcon FAClass="@_iconClass" />
+            break;
+        case ERunState.Finished:
+            <CustomIcon FAClass="@_iconClass" />
+            break;
+        default:
+            break;
+    }
+</div>
+
+@code {
+    [Parameter] public Func<Task> HandleState { get; set; }
+    [Parameter] public ERunState State { get; set; }
+
+
+    private string _iconClass => this.State switch
+    {
+        ERunState.Started => "paper-plane",
+        ERunState.Finished => "rotate-left",
+        _ => string.Empty
+    };
+}

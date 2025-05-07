@@ -11,6 +11,11 @@
         height: 20vh;
     }
 
+.run-container .fighter-container ::deep .send-button {
+    position: absolute;
+    right: 1.5rem;
+}
+
     .run-container .scoring-container {
         width: 100vw;
         height: 80vh;

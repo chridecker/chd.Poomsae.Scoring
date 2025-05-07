@@ -1,5 +1,5 @@
 ﻿.scoring-summary-container {
-    padding-top: 0.5rem;
+    padding-top: 1.5rem;
     display: grid;
     grid-gap: 0.5rem;
     justify-items: center;
@@ -30,19 +30,3 @@
         border-radius: 0.5rem;
         width: 100%;
     }
-
-        .scoring-summary-container .scores-group.finish {
-            grid-template-columns: auto;
-            border: none;
-            justify-content: center;
-        }
-
-            .scoring-summary-container .scores-group.finish .scores > div {
-                border: 1px solid var(--chd-font-color);
-                box-shadow: var(--chd-bg) 1px 0 1px inset,var(--chd-font-color) -1px 0 1px inset;
-                border-radius: 0.8rem;
-                padding: 0.2rem 0.8rem 0.2rem 0.8rem;
-                width: max-content;
-                font-weight: 600;
-                font-size: 1rem;
-            }

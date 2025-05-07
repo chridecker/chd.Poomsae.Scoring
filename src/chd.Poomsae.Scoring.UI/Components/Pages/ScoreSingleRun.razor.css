@@ -14,7 +14,7 @@
 
     .single-run-container .fighter-container .change-button {
         position: absolute;
-        right: 1.5rem;
+        left: 1.5rem;
         padding: 0.5rem 0.7rem 0.5rem 0.7rem;
         border: 1px solid;
         border-radius: 2rem;
@@ -34,9 +34,17 @@
         }
 
         .single-run-container .fighter-container .change-button ::deep svg {
-            fill:white;
+            fill: white;
             height: 1.2rem;
+            margin-top: -0.1rem;
         }
+
+    .single-run-container .fighter-container ::deep .send-button {
+        position: absolute;
+        right: 1.5rem;
+    }
+
+
 
 .single-run-container .scoring-container {
     width: 100vw;
