@@ -66,6 +66,22 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             await this.InvokeAsync(this.StateHasChanged);
         }
 
+        protected void CheckPresentationScoreForNull(ScoreDto dto)
+        {
+            if (!dto.SpeedAndPower.HasValue)
+            {
+                dto.SpeedAndPower = 0;
+            }
+            if (!dto.ExpressionAndEnergy.HasValue)
+            {
+                dto.ExpressionAndEnergy = 0;
+            }
+            if (!dto.RhythmAndTempo.HasValue)
+            {
+                dto.RhythmAndTempo = 0;
+            }
+        }
+
         private void CalculateAccuracyScore(ScoreDto dto, decimal value)
         {
             if (dto is null) { return; }

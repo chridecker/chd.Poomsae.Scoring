@@ -20,7 +20,7 @@
     [Parameter] public ScoreDto HongScore { get; set; }
     [Parameter] public string Text { get; set; }
     [Parameter] public string Property { get; set; }
-    [Parameter] public Func<EScoringButtonColor, Task<bool>>? OnClick { get; set; }
+    [Parameter] public Func<EScoringButtonColor, Task>? OnClick { get; set; }
 
 
     PropertyInfo _propertyInfo => typeof(ScoreDto).GetProperty(this.Property);

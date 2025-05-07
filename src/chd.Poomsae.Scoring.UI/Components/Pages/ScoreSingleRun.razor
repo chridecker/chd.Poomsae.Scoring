@@ -66,25 +66,17 @@
     };
 
 
-    private async Task<bool> OpenPresentationModal(EScoringButtonColor color)
+    private async Task OpenPresentationModal(EScoringButtonColor color)
     {
-        if (this.runDto.State is not ERunState.Started) { return false; }
+        if (this.runDto.State is not ERunState.Started) { return; }
         var modalResultBlue = await this._modal.Show<ScorePresentationModal>(TextConstants.Presentation, new ModalParameters(){
-                {nameof(ScorePresentationModal.Color),color} }, new ModalOptions()
-                {
-                    Size = ModalSize.ExtraLarge,
-                }).Result;
-        if (modalResultBlue.Cancelled)
+                {nameof(ScorePresentationModal.Color),color},
+                {nameof(ScorePresentationModal.Dto), this.runDto.Score},
+        }, new ModalOptions()
         {
-            return false;
-        }
-        else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
-        {
-            this.runDto.Score.SpeedAndPower = scoreDto.SpeedAndPower;
-            this.runDto.Score.RhythmAndTempo = scoreDto.RhythmAndTempo;
-            this.runDto.Score.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
-        }
+            Size = ModalSize.ExtraLarge,
+        }).Result;
+        this.CheckPresentationScoreForNull(this.runDto.Score);
         await this.InvokeAsync(this.StateHasChanged);
-        return true;
     }
 }

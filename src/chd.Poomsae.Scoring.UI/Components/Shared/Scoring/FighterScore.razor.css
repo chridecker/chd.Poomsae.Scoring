@@ -33,7 +33,7 @@
 
     .fighter.fighter-neutral .fighter-scores {
         display: grid;
-        grid-template-columns: repeat(4,auto);
+        grid-template-columns: repeat(3,25%) 0%;
         grid-gap: 3rem;
     }
 
@@ -108,6 +108,7 @@
 
     .fighter.fighter-neutral .fighter-scores .action-button {
         order: 4;
+        width:0;
     }
 
     .fighter.fighter-neutral .fighter-scores .fighter-score.presentation {

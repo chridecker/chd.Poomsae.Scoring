@@ -1,8 +1,13 @@
 ﻿.scoring-summary-container {
-    padding-top: 1.5rem;
-    display: grid;
-    grid-gap: 0.5rem;
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction:column;
+    align-content:center;
+    align-items:center;
     justify-items: center;
+    justify-content:space-around;
+    height:80%;
+    width: 100%;
 }
 
     .scoring-summary-container .device-name {

@@ -19,12 +19,12 @@
             <ButtonContent>
                 <StateButton State="@runDto.State" HandleState="this.HandleClick" />
             </ButtonContent>
-            </FighterScore>
+        </FighterScore>
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Red" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
         <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore"  />
+            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore" />
         </div>
         <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
     </div>
@@ -38,65 +38,46 @@
     protected override ScoreDto HandleScore(EScoringButtonColor color) => color is EScoringButtonColor.Red ? this.runDto.HongScore : color is EScoringButtonColor.Blue ? this.runDto.ChongScore : null;
     protected override async Task<bool> HandleStartedState()
     {
-        if (!this.runDto.ChongScore.Presentation.HasValue
-           && !await this.OpenPresentationModal(EScoringButtonColor.Blue))
+        if (!this.runDto.ChongScore.Presentation.HasValue)
         {
-            return false;
+            await this.OpenPresentationModal(EScoringButtonColor.Blue);
         }
-        if (!this.runDto.HongScore.Presentation.HasValue
-        && !await this.OpenPresentationModal(EScoringButtonColor.Red))
+        if (!this.runDto.HongScore.Presentation.HasValue)
         {
-            return false;
+            await this.OpenPresentationModal(EScoringButtonColor.Red);
         }
         return true;
     }
 
-    private async Task<bool> OpenPresentationModal(EScoringButtonColor color)
+    private async Task OpenPresentationModal(EScoringButtonColor color)
     {
-        if (this.runDto.State is not ERunState.Started) { return false; }
+        if (this.runDto.State is not ERunState.Started) { return; }
 
         if (color is EScoringButtonColor.Blue)
         {
             var modalResultBlue = await this._modal.Show<ScorePresentationModal>
                 (TextConstants.Blue, new ModalParameters()
-                        {
-                    {nameof(ScorePresentationModal.Color),color}
-                        }, new ModalOptions()
-                        {
-                            Size = ModalSize.ExtraLarge,
-                        }).Result;
-            if (modalResultBlue.Cancelled)
-            {
-                return false;
-            }
-            else if (modalResultBlue.Data is PresentatioScoreDto scoreDto)
-            {
-                this.runDto.ChongScore.SpeedAndPower = scoreDto.SpeedAndPower;
-                this.runDto.ChongScore.RhythmAndTempo = scoreDto.RhythmAndTempo;
-                this.runDto.ChongScore.ExpressionAndEnergy = scoreDto.ExpressionAndEnergy;
-            }
-            await this.InvokeAsync(this.StateHasChanged);
-            return true;
+                                                                            {
+                    {nameof(ScorePresentationModal.Color),color},
+                    {nameof(ScorePresentationModal.Dto),this.runDto.ChongScore}
+                }, new ModalOptions()
+                {
+                    Size = ModalSize.ExtraLarge,
+                }).Result;
+            this.CheckPresentationScoreForNull(this.runDto.ChongScore);
         }
         else
         {
             var modalResultRed = await this._modal.Show<ScorePresentationModal>
                 (TextConstants.Red, new ModalParameters(){
-            {nameof(ScorePresentationModal.Color),color}
-                                                }, new ModalOptions()
-                                                {
-                                                    Size = ModalSize.ExtraLarge,
-                                                }).Result;
-            if (modalResultRed.Data is PresentatioScoreDto scoreDto2)
-            {
-                this.runDto.HongScore.SpeedAndPower = scoreDto2.SpeedAndPower;
-                this.runDto.HongScore.RhythmAndTempo = scoreDto2.RhythmAndTempo;
-                this.runDto.HongScore.ExpressionAndEnergy = scoreDto2.ExpressionAndEnergy;
-                await this.InvokeAsync(this.StateHasChanged);
-                return true;
-            }
+            {nameof(ScorePresentationModal.Color),color },
+            {nameof(ScorePresentationModal.Dto),this.runDto.HongScore}
+                        }, new ModalOptions()
+                        {
+                            Size = ModalSize.ExtraLarge,
+                        }).Result;
+            this.CheckPresentationScoreForNull(this.runDto.HongScore);
         }
         await this.InvokeAsync(this.StateHasChanged);
-        return false;
     }
 }

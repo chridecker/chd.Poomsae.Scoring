@@ -1,35 +1,48 @@
+@using System.Reflection
+@using System.Globalization
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="presentation-score">
     <div class="presentation-score-label">@this.Text</div>
     <div class="presentation-score-slider">
-        <input type="range" min="0" max="20" step="1" value="@this._value" @oninput="this.OnInput" />
+        <input type="range" min="0" max="@this.Max" step="0.1" value="@this._propertyValue.ToDisplayString()" @oninput="this.OnInput" />
     </div>
-    <div class="presentation-score-value"><div class="score-value">@this.Value.ToDisplayString()</div></div>
+    <div class="presentation-score-value"><div class="score-value">@this._propertyValue.ToDisplayString()</div></div>
 </div>
 
 @code {
-    private decimal _value;
-    [Parameter]
-    public decimal Value
-    {
-        get => this._value;
-        set
-        {
-            this._value = value;
-            this.ValueChanged.InvokeAsync(value);
-        }
-    }
-    [Parameter]
-    public EventCallback<decimal> ValueChanged { get; set; }
 
+    [Parameter] public ScoreDto Dto { get; set; }
     [Parameter] public string Text { get; set; }
     [Parameter] public decimal Max { get; set; }
+    [Parameter] public string Property { get; set; }
+
+    PropertyInfo _propertyInfo => typeof(ScoreDto).GetProperty(this.Property);
+
+    private decimal _propertyValue
+    {
+        get
+        {
+            if (this._propertyInfo is null) { return 0; }
+
+            var val = this._propertyInfo.GetValue(this.Dto);
+            if (Nullable.GetUnderlyingType(_propertyInfo.PropertyType) != null
+            && Nullable.GetUnderlyingType(this._propertyInfo.PropertyType) == typeof(decimal))
+            {
+                return ((decimal?)val) ?? 0;
+            }
+            else if (val is decimal d)
+            {
+                return d;
+            }
+            return 0;
+        }
+    }
 
     private async Task OnInput(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value.ToString(), out int val))
+        if (decimal.TryParse(e.Value.ToString(), CultureInfo.InvariantCulture, out var val))
         {
-            this.Value = Math.Round((this.Max * val / 20), 1);
+            this._propertyInfo.SetValue(this.Dto, val);
         }
     }
 }
