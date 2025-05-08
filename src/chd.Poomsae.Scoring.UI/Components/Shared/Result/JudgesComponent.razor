@@ -16,7 +16,7 @@
     [Inject] IBroadcastClient broadcastClient{ get; set; }
 
     [Parameter] public bool IsRed { get; set; }
-    [Parameter] public List<DeviceDto> Devices { get; set; } = [];
+    [Parameter] public IEnumerable<DeviceDto> Devices { get; set; } = [];
 
     private ScoreDto Result(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? (this.IsRed ? res.HongScore : res.ChongScore) : null;
 
