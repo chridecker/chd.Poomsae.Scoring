@@ -13,12 +13,12 @@ namespace chd.Poomsae.Scoring.App.Services
 {
     public class GoogleSignInManager : ISignInManager
     {
-        private IActivityResultLauncher _signInLauncher;
+        private ActivityResultLauncher _signInLauncher;
 
         public event EventHandler<Exception> LoginFailed;
         public event EventHandler<(string, string)> LoginSucceded;
 
-        public void SetLauncher(IActivityResultLauncher signInLauncher)
+        public void SetLauncher(ActivityResultLauncher signInLauncher)
         {
             this._signInLauncher = signInLauncher;
         }
