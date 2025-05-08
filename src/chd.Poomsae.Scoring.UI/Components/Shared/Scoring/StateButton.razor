@@ -1,13 +1,18 @@
+@using chd.UI.Base.Contracts.Enum
 @implements IDisposable
 
-<div class="send-button @_iconClass" @onclick="this.HandleState">
+<div class="send-button" @onclick="this.HandleState">
     @switch (this.State, this.broadCastService.ConnectedDevices > 0)
     {
         case (ERunState.Started, true):
-            <CustomIcon FAClass="@_iconClass" />
+            <CustomIcon Style="EIconStyle.Regular" FAClass="paper-plane" />
+            break;
+
+        case (ERunState.Started, false):
+            <CustomIcon FAClass="thumbs-up" />
             break;
         default:
-            <CustomIcon FAClass="@_iconClass" />
+            <CustomIcon FAClass="rotate-left" />
             break;
     }
 </div>
@@ -29,12 +34,6 @@
     {
         await this.InvokeAsync(this.StateHasChanged);
     }
-
-    private string _iconClass => (this.State, this.broadCastService.ConnectedDevices > 0) switch
-    {
-        (ERunState.Started, true) => "bluetooth",
-        _ => "rotate-left"
-    };
 
     public void Dispose()
     {

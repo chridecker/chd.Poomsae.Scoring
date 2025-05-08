@@ -49,11 +49,15 @@
     --chd-p-total: yellow;
     --floating-action-button-bottom: 0rem !important;
     --nav-toggle-height: 0 !important;
+    --chd-main-color-theme: var(--chd-p-blue) !important;
+    --chd-main-color-theme-transparent: var(--chd-p-blue-transparent) !important;
+    --chd-main-color-theme-semi-transparent: var(--chd-p-blue-semi-transparent) !important;
 }
 
-    *::-webkit-scrollbar {
-        display: none;
-    }
+
+*::-webkit-scrollbar {
+    display: none;
+}
 
 .fab-navigation {
 }

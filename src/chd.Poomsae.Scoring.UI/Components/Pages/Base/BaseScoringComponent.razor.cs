@@ -59,10 +59,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
                 {
                     await this.SendResults();
                 }
-                else
-                {
-                    this.ResetResults();
-                }
+                this.runDto.State = ERunState.Finished;
             }
             else if (this.runDto.State is ERunState.Finished)
             {
@@ -97,7 +94,6 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         private async Task SendResults()
         {
             this.broadCastService.BroadcastResult(this.runDto);
-            this.runDto.State = ERunState.Finished;
             _ = await this._modal.ShowDialog(TextConstants.ScoresSend, EDialogButtons.OK);
         }
         private void CalculateAccuracyScore(ScoreDto dto, decimal value)

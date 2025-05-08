@@ -8,10 +8,9 @@
     align-items: center;
     align-content: center;
     justify-items: center;
+    background: var(--chd-p-blue-semi-transparent);
 }
-
-    .send-button.bluetooth {
-        background: var(--chd-bluetooth-blue);
+    .send-button ::deep svg[fontawesome-icon=paper-plane] {
     }
 
     .send-button ::deep svg {

@@ -1,3 +1,4 @@
+@implements IDisposable
 @using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Constants
 @using chd.Poomsae.Scoring.Contracts.Dtos
@@ -8,7 +9,13 @@
 
 
 <div class="scoring-summary-container">
-    <div class="device-name" @onclick="this.ChangeName"><CustomIcon FAClass="user-tie" /> @this._deviceName</div>
+    <div class="device-name" @onclick="this.ChangeName">
+        <CustomIcon FAClass="user-tie" />@this._deviceName
+        @if (this.broadCastService.ConnectedDevices > 0)
+        {
+            <CustomIcon FAClass="bluetooth" />
+        }
+    </div>
     <div class="scores-group accuracy">
         <ScoringSummaryItemComponent Text="@TextConstants.Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
     </div>
@@ -32,6 +39,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this.broadCastService.DeviceConnectionChanged += this.DeviceConneced;
         this._deviceName = await this.settingManager.GetName();
         await base.OnInitializedAsync();
     }
@@ -45,5 +53,11 @@
         await this.broadCastService.BroadcastNameChange();
 
         await this.InvokeAsync(this.StateHasChanged);
+    }
+    private async void DeviceConneced(object? sender, DeviceConnectionChangedEventArgs e) => await this.InvokeAsync(this.StateHasChanged);
+
+    public void Dispose()
+    {
+        this.broadCastService.DeviceConnectionChanged -= this.DeviceConneced;
     }
 }

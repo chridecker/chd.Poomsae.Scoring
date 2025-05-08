@@ -25,9 +25,18 @@
         order: 2;
     }
 
-        .scoring-summary-container .device-name ::deep svg {
+        .scoring-summary-container .device-name ::deep svg[fontawesome-icon=user-tie] {
             margin-top: -0.2rem;
             height: 1rem;
+        }
+         .scoring-summary-container .device-name ::deep svg[fontawesome-icon=bluetooth] {
+            margin-top: -0.2rem;
+            height: 1rem;
+            background:var(--chd-bluetooth-blue);
+            border-radius: 50%;
+            padding:0.1rem;
+            opacity:01;
+            border:1px solid;
         }
 
     .scoring-summary-container .scores-group {
