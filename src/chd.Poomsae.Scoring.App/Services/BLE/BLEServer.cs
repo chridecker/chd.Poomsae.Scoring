@@ -220,18 +220,19 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private void _callback_DeviceConnectionStateChanged(object? sender, BleEventArgs e)
         {
-            if (e.NewState == ProfileState.Connected
-                && !this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
-            {
-                this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
-                this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
-                {
-                    Connected = true,
-                    Id = e.Device.ParseDeviceId(),
-                    Name = e.Device.Name
-                });
-            }
-            else if (e.NewState == ProfileState.Disconnected
+            //if (e.NewState == ProfileState.Connected
+            //    && !this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
+            //{
+            //    this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
+            //    this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
+            //    {
+            //        Connected = true,
+            //        Id = e.Device.ParseDeviceId(),
+            //        Name = e.Device.Name
+            //    });
+            //}
+            //else
+            if (e.NewState == ProfileState.Disconnected
                 && this._connectedDevices.TryRemove(e.Device.ParseDeviceId(), out _))
             {
                 this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
@@ -288,6 +289,16 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                     e.Characteristic.SetValue(name.Item1);
                 }
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, name.Item2);
+                if (!this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
+                {
+                    this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
+                    this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
+                    {
+                        Connected = true,
+                        Id = e.Device.ParseDeviceId(),
+                        Name = e.Device.Name
+                    });
+                }
             }
         }
 
