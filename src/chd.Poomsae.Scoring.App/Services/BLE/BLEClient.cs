@@ -95,7 +95,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         public async Task<bool> DisconnectDeviceAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            if (this._adapter.ConnectedDevices.Any(a => a.Id == id))
+            if (this._adapter.ConnectedDevices.Any(a => a.Id == id && a.State == DeviceState.Connected))
             {
                 var device = this._adapter.ConnectedDevices.FirstOrDefault(x => x.Id == id);
                 await this._adapter.DisconnectDeviceAsync(device, cancellationToken);
@@ -105,7 +105,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         }
         public async Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default)
         {
-            var d = await this._adapter.ConnectToKnownDeviceAsync(dto.Id, cancellationToken: cancellationToken);
+            var d = await this._adapter.ConnectToKnownDeviceAsync(dto.Id, new ConnectParameters(true, true), cancellationToken: cancellationToken);
             return d is not null;
         }
 

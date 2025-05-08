@@ -79,6 +79,7 @@
             }
 
     .fighter.fighter-chong .fighter-scores .action-button {
+        align-content:center;
         order: 4;
     }
 
@@ -121,4 +122,11 @@
 
     .fighter.fighter-neutral .fighter-scores .fighter-score.total {
         order: 2;
+    }
+
+    @media only screen and (min-height: 500px){
+        .fighter .fighter-scores .fighter-score.total {
+            font-size: 3.5rem;
+            line-height: 3.5rem;
+        }
     }
