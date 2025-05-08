@@ -4,7 +4,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.Activity;
+using AndroidX.Activity.Result;
+using AndroidX.Activity.Result.Contract;
 using AndroidX.Core.View;
+using chd.Poomsae.Scoring.App.Services;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using System.Text.Json;
@@ -16,12 +19,14 @@ namespace chd.Poomsae.Scoring.App
     {
         private readonly IAppInfoService _appInfoService;
         private readonly INotificationManagerService _notificationManagerService;
+        private readonly ISignInManager _signInManager;
 
 
         public MainActivity()
         {
             this._notificationManagerService = IPlatformApplication.Current.Services.GetService<INotificationManagerService>();
             this._appInfoService = IPlatformApplication.Current.Services.GetService<IAppInfoService>();
+            this._signInManager = IPlatformApplication.Current.Services.GetService<ISignInManager>();
         }
 
         protected override void OnCreate(Bundle? savedInstanceState)
@@ -37,12 +42,43 @@ namespace chd.Poomsae.Scoring.App
             // Hide system bars
             windowInsetsController.Hide(WindowInsetsCompat.Type.SystemBars());
             windowInsetsController.SystemBarsBehavior = WindowInsetsControllerCompat.BehaviorShowTransientBarsBySwipe;
+
+            this.CreateAndRegisterGoogleSignIn();
         }
+
+
 
         protected override void OnNewIntent(Intent? intent)
         {
             base.OnNewIntent(intent);
             this.CreateNotificationFromIntent(intent);
+        }
+
+        private void CreateAndRegisterGoogleSignIn()
+        {
+            var signInLauncher = RegisterForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result =>
+                    {
+                        var task = GoogleSignIn.GetSignedInAccountFromIntent(result.Data);
+                        try
+                        {
+                            var account = task.GetResult(Java.Lang.Class.FromType(typeof(Java.Lang.Exception)));
+                            // Erfolg: Konto erhalten
+                            var email = account.Email;
+                            var name = account.DisplayName;
+                            this._signInManager.InvokeLoginSuccess(email, name);
+                        }
+                        catch (Exception ex)
+                        {
+                            this._signInManager.InvokeLoginFailed(ex);
+                        }
+                    }
+                );
+            if (this._signInManager is GoogleSignInManager gM)
+            {
+                gM.SetLauncher(signInLauncher);
+            }
         }
 
         private void CreateNotificationFromIntent(Intent intent)

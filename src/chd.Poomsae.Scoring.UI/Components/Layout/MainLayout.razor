@@ -1,5 +1,6 @@
 ﻿@inherits PageComponentBase<int,int>
 @implements IDisposable
+@using Blazored.Modal.Services
 @using Blazored.Toast.Configuration
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.UI.Base.Client.Implementations.Services
@@ -24,10 +25,10 @@
 </div>
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
-                Timeout="5"
-                MaxToastCount="3"
-                RemoveToastsOnNavigation="true"
-                ShowProgressBar="true">
+Timeout="5"
+MaxToastCount="3"
+RemoveToastsOnNavigation="true"
+ShowProgressBar="true">
     <CloseButtonContent>
         <div>
             <span>&times;</span>
@@ -41,9 +42,17 @@
     private bool _navCollapsed = true;
 
     [Inject] IBroadCastService broadCastService { get; set; }
+    [Inject] ISignInManager signInManager { get; set; }
+    [Inject] IModalService modalService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        this.signInManager.LoginFailed += async (s, e) => await this.modalService.ShowException(e, true);
+        this.signInManager.LoginSucceded += async (s, e) => await this.modalService.ShowDialog($"{e.Item1} / {e.Item2}", EDialogButtons.OK);
+
+
+        this.signInManager.SignIn();
+
         await this.broadCastService.StartAsync(this._cts.Token);
         await base.OnInitializedAsync();
     }

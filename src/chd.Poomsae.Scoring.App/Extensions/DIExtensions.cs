@@ -20,6 +20,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
         {
             services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
 
+            services.AddSingleton<ISignInManager, GoogleSignInManager>();
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
             services.AddSingleton<BLEGattCallback>();
             services.AddSingleton<BLEAdvertisingCallback>();
