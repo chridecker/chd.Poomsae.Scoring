@@ -169,7 +169,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
             {
-                if (this._connectedDevices.Any(a => a == device.Address))
+                if (this._connectedDevices.ContainsKey(device.ParseDeviceId()))
                 {
                     this.NotifyCharacteristicChange(device, characteristic, false, value);
                 }
