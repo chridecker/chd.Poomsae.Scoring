@@ -27,7 +27,7 @@
 
     private async Task Connect(DeviceDto dto)
     {
-        if (await this.broadcastClient.ConnectDeviceAsync(dto, this._cts.Token))
+        if (await this.broadcastClient.ConnectDeviceAsync(dto))
         {
             this._discoveredDevices.Remove(dto);
         }

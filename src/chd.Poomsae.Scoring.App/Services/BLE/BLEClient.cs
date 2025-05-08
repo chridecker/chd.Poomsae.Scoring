@@ -105,15 +105,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         }
         public async Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default)
         {
-            var d = this._adapter.DiscoveredDevices.FirstOrDefault(x => x.Id == dto.Id);
-            if (d is not null)
-            {
-                try
-                {
-                    await this._adapter.ConnectToDeviceAsync(d, new ConnectParameters(true), cancellationToken: cancellationToken);
-                }
-                catch { }
-            }
+            var d = await this._adapter.ConnectToKnownDeviceAsync(dto.Id, cancellationToken: cancellationToken);
             return d is not null;
         }
 
