@@ -10,9 +10,9 @@
     justify-items: center;
 }
 
-.send-button.bluetooth {
-    background: rgb(0,130,252);
-}
+    .send-button.bluetooth {
+        background: var(--chd-bluetooth-blue);
+    }
 
     .send-button ::deep svg {
         fill: white;

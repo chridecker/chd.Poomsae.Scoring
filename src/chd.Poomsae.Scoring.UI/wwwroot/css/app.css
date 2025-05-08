@@ -37,6 +37,7 @@
     --chd-p-red-semi-gradient-left: linear-gradient(to right, var(--chd-p-red-semi-transparent) 0%,var(--chd-p-red-transparent) 50%, transparent);
     --chd-p-red-blue-semi-gradient: linear-gradient(to right, var(--chd-p-red-semi-transparent),var(--chd-p-red-transparent),transparent, var(--chd-p-blue-transparent), var(--chd-p-blue-semi-transparent));
     /*--chd-p-red-gradient-left: linear-gradient(to left,transparent 0%, var(--chd-p-red) 10%,var(--chd-bg) 90%);*/
+    --chd-bluetooth-blue: rgb(0,130,252);
     --chd-p-accuracy: rgb(255,69,0);
     --chd-p-accuracy-gradient-top: linear-gradient(to top, var(--chd-p-accuracy) 0%,var(--chd-p-accuracy-transparent)99%);
     --chd-p-accuracy-semi-transparent: rgba(255,69,0,0.5);
