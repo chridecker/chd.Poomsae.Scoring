@@ -97,7 +97,7 @@
     {
         if (this._connectedDevices.Any(a => a.Id == e.Id))
         {
-            this._connectedDevices.Remove(e);
+            this._connectedDevices.Remove(this._connectedDevices.FirstOrDefault(a => a.Id == e.Id));
             await this.InvokeAsync(this.StateHasChanged);
         }
     }

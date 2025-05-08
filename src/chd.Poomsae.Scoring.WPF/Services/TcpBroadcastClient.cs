@@ -3,8 +3,10 @@ using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using chd.Poomsae.Scoring.Contracts.Enums;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.WPF.Settings;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,11 +24,17 @@ namespace chd.Poomsae.Scoring.WPF.Services
 
         private TcpClient _client;
 
+        private ConcurrentDictionary<Guid, string> _connectedDevices = [];
+
         public TcpBroadcastClient(IOptionsMonitor<SettingDto> optionsMonitor, ISettingManager settingManager)
         {
             this._optionsMonitor = optionsMonitor;
             this._settingManager = settingManager;
         }
+
+        public int ConnectedDevices => this._connectedDevices.Count;
+
+        public event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
 
         public async Task BroadcastNameChange()
         {
@@ -90,6 +98,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
                     {
                         this._client = new TcpClient();
                         this._client.Connect(IPAddress.Parse(this._optionsMonitor.CurrentValue.ServerAddress), this._optionsMonitor.CurrentValue.ServerPort);
+
                         break;
                     }
                     catch { }
@@ -100,6 +109,24 @@ namespace chd.Poomsae.Scoring.WPF.Services
                 {
                     try
                     {
+                        if (this._client.Available > 0)
+                        {
+                            var stream = this._client.GetStream();
+                            var reader = new StreamReader(stream, Encoding.UTF8);
+                            var id = await reader.ReadLineAsync(token);
+                            var name = await reader.ReadLineAsync(token);
+
+                            if (Guid.TryParse(id, out var deviceId))
+                            {
+                                this._connectedDevices.TryAdd(deviceId, name);
+                                this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
+                                {
+                                    Connected = true,
+                                    Id = deviceId,
+                                    Name = name
+                                });
+                            }
+                        }
                         await this.BroadcastNameChange();
                     }
                     catch
@@ -108,6 +135,11 @@ namespace chd.Poomsae.Scoring.WPF.Services
                     }
                     await Task.Delay(TimeSpan.FromSeconds(5), token);
                 }
+                this._connectedDevices.Clear();
+                this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
+                {
+                    Connected = false,
+                });
             }
         }
     }

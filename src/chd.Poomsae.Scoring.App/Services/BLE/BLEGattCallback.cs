@@ -1,4 +1,5 @@
 ﻿using Android.Bluetooth;
+using Android.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,20 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         public event EventHandler<BleEventArgs> DescriptorReadRequest;
         public event EventHandler<BleEventArgs> DescriptorWriteRequest;
         public event EventHandler<BleEventArgs> CharacteristicWriteRequest;
+        public event EventHandler<BleEventArgs> DeviceConnectionStateChanged;
         public BLEGattCallback()
         {
 
+        }
+
+        public override void OnConnectionStateChange(BluetoothDevice? device, [GeneratedEnum] ProfileState status, [GeneratedEnum] ProfileState newState)
+        {
+            base.OnConnectionStateChange(device, status, newState);
+            this.DeviceConnectionStateChanged?.Invoke(this, new BleEventArgs
+            {
+                Device = device,
+                NewState = newState
+            });
         }
 
         public override void OnDescriptorWriteRequest(BluetoothDevice? device, int requestId, BluetoothGattDescriptor? descriptor, bool preparedWrite, bool responseNeeded, int offset, byte[]? value)
@@ -39,7 +51,10 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             base.OnDescriptorReadRequest(device, requestId, offset, descriptor);
             this.DescriptorReadRequest?.Invoke(this, new BleEventArgs
             {
-                Device = device, RequestId = requestId,Descriptor = descriptor, Characteristic = descriptor.Characteristic,
+                Device = device,
+                RequestId = requestId,
+                Descriptor = descriptor,
+                Characteristic = descriptor.Characteristic,
                 Offset = offset
             });
         }

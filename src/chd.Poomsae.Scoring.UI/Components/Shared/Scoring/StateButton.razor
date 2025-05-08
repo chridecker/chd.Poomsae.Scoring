@@ -1,26 +1,43 @@
-<div class="send-button" @onclick="this.HandleState">
-    @switch (this.State)
+@implements IDisposable
+
+<div class="send-button @_iconClass" @onclick="this.HandleState">
+    @switch (this.State, this.broadCastService.ConnectedDevices > 0)
     {
-        case ERunState.Started:
-            <CustomIcon FAClass="@_iconClass" />
-            break;
-        case ERunState.Finished:
+        case (ERunState.Started, true):
             <CustomIcon FAClass="@_iconClass" />
             break;
         default:
+            <CustomIcon FAClass="@_iconClass" />
             break;
     }
 </div>
 
 @code {
+    [Inject] IBroadCastService broadCastService { get; set; }
+
     [Parameter] public Func<Task> HandleState { get; set; }
     [Parameter] public ERunState State { get; set; }
 
 
-    private string _iconClass => this.State switch
+    protected override async Task OnInitializedAsync()
     {
-        ERunState.Started => "paper-plane",
-        ERunState.Finished => "rotate-left",
-        _ => string.Empty
+        this.broadCastService.DeviceConnectionChanged += this.DeviceConnectionChanged;
+        await base.OnInitializedAsync();
+    }
+
+    private async void DeviceConnectionChanged(object? sender, DeviceConnectionChangedEventArgs e)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private string _iconClass => (this.State, this.broadCastService.ConnectedDevices > 0) switch
+    {
+        (ERunState.Started, true) => "bluetooth",
+        _ => "rotate-left"
     };
+
+    public void Dispose()
+    {
+        this.broadCastService.DeviceConnectionChanged -= this.DeviceConnectionChanged;
+    }
 }

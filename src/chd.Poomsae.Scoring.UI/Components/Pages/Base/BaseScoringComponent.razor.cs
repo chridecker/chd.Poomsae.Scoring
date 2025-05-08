@@ -55,17 +55,23 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             {
                 if (!await this.HandleStartedState()) { return; }
 
-                this.broadCastService.BroadcastResult(this.runDto);
-                this.runDto.State = ERunState.Finished;
-                _ = await this._modal.ShowDialog(TextConstants.ScoresSend, EDialogButtons.OK);
+                if (this.broadCastService.ConnectedDevices > 0)
+                {
+                    await this.SendResults();
+                }
+                else
+                {
+                    this.ResetResults();
+                }
             }
             else if (this.runDto.State is ERunState.Finished)
             {
-                this.broadCastService.ResetScore();
-                this.runDto = this.CreateDto();
+                this.ResetResults();
             }
             await this.InvokeAsync(this.StateHasChanged);
         }
+
+
 
         protected void CheckPresentationScoreForNull(ScoreDto dto)
         {
@@ -82,7 +88,18 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
                 dto.RhythmAndTempo = 0;
             }
         }
+        private void ResetResults()
+        {
+            this.broadCastService.ResetScore();
+            this.runDto = this.CreateDto();
+        }
 
+        private async Task SendResults()
+        {
+            this.broadCastService.BroadcastResult(this.runDto);
+            this.runDto.State = ERunState.Finished;
+            _ = await this._modal.ShowDialog(TextConstants.ScoresSend, EDialogButtons.OK);
+        }
         private void CalculateAccuracyScore(ScoreDto dto, decimal value)
         {
             if (dto is null) { return; }

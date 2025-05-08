@@ -16,5 +16,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         public byte[] Value { get; set; }
         public int RequestId { get; set; }
         public int Offset { get; set; }
+        public ProfileState NewState { get; set; }
     }
 }

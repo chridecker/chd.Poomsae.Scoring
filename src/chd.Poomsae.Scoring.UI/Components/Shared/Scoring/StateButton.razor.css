@@ -1,5 +1,5 @@
 ﻿.send-button {
-    width:max-content;
+    width: max-content;
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
     border: 1px solid;
     border-radius: 2rem;
@@ -8,6 +8,10 @@
     align-items: center;
     align-content: center;
     justify-items: center;
+}
+
+.send-button.bluetooth {
+    background: rgb(0,130,252);
 }
 
     .send-button ::deep svg {

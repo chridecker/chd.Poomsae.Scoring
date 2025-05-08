@@ -3,6 +3,7 @@ using Android.Bluetooth.LE;
 using Android.Content;
 using Android.OS;
 using Android.Provider;
+using chd.Poomsae.Scoring.App.Extensions;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
@@ -11,9 +12,11 @@ using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Client.Implementations.Services.Base;
 using Java.Util;
+using Javax.Security.Auth;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,11 +40,15 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private BluetoothGattDescriptor _descNotifyNameChanged;
         private BluetoothGattCharacteristic _characteristicName;
 
-        private List<string> readDevices = [];
+        private ConcurrentDictionary<Guid, BluetoothDevice> _connectedDevices = [];
 
         private byte[] _resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
         private byte[] _nameNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
         private byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+        public event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
+
+        public int ConnectedDevices => this._connectedDevices.Count;
 
         public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager)
         {
@@ -51,6 +58,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._callback.CharacteristicReadRequest += this.ReadRequest;
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
             this._callback.DescriptorWriteRequest += this._callback_DescriptorWriteRequest;
+            this._callback.DeviceConnectionStateChanged += this._callback_DeviceConnectionStateChanged;
         }
 
         public async Task BroadcastNameChange()
@@ -130,8 +138,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._bluetoothManager = (BluetoothManager)ctx.GetSystemService(Context.BluetoothService);
             this._bluetoothAdapter = this._bluetoothManager.Adapter;
 
-
             this._gattServer = this._bluetoothManager.OpenGattServer(ctx, this._callback);
+            this._gattServer.ClearServices();
 
             await this.CreateService();
             var advertiser = this._bluetoothAdapter.BluetoothLeAdvertiser;
@@ -161,7 +169,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         {
             foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
             {
-                if (this.readDevices.Any(a => a == device.Address))
+                if (this._connectedDevices.Any(a => a == device.Address))
                 {
                     this.NotifyCharacteristicChange(device, characteristic, false, value);
                 }
@@ -210,7 +218,30 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._gattServer.AddService(this._resultService);
         }
 
-
+        private void _callback_DeviceConnectionStateChanged(object? sender, BleEventArgs e)
+        {
+            if (e.NewState == ProfileState.Connected
+                && !this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
+            {
+                this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
+                this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
+                {
+                    Connected = true,
+                    Id = e.Device.ParseDeviceId(),
+                    Name = e.Device.Name
+                });
+            }
+            else if (e.NewState == ProfileState.Disconnected
+                && this._connectedDevices.TryRemove(e.Device.ParseDeviceId(), out _))
+            {
+                this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
+                {
+                    Connected = false,
+                    Id = e.Device.ParseDeviceId(),
+                    Name = e.Device.Name
+                });
+            }
+        }
         private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
         {
             if (e.Descriptor.Uuid == this._descNotifyResult.Uuid)
@@ -257,7 +288,6 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
                     e.Characteristic.SetValue(name.Item1);
                 }
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, name.Item2);
-                this.readDevices.Add(e.Device.Address);
             }
         }
 

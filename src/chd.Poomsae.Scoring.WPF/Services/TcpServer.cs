@@ -22,6 +22,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
         private readonly IOptionsMonitor<SettingDto> _optionsMonitor;
 
         private readonly TcpListener _server;
+        private readonly Guid _id;
 
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         public event EventHandler<DeviceDto> DeviceFound;
@@ -36,6 +37,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
         {
             this._optionsMonitor = optionsMonitor;
             this._server = new TcpListener(IPAddress.Any, this._optionsMonitor.CurrentValue.ServerPort);
+            this._id = Guid.NewGuid();
         }
 
         public async Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
@@ -79,6 +81,10 @@ namespace chd.Poomsae.Scoring.WPF.Services
 
             try
             {
+                var sb = new StringBuilder();
+                sb.AppendLine(this._id.ToString());
+                sb.AppendLine(Environment.MachineName);
+                await writer.WriteAsync(sb, token);
                 while (!token.IsCancellationRequested)
                 {
                     var message = await reader.ReadLineAsync(token);
@@ -91,7 +97,13 @@ namespace chd.Poomsae.Scoring.WPF.Services
             finally
             {
                 client.Close();
+                this.DeviceDisconnected?.Invoke(this, new DeviceDto
+                {
+                    Id = id,
+                    Name = string.Empty
+                });
             }
+
         }
 
         private async Task HandleMessage(Guid id, string message)

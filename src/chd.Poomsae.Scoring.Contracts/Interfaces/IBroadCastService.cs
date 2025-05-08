@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.Contracts.Dtos.Base;
+﻿using chd.Poomsae.Scoring.Contracts.Dtos;
+using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,8 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 {
     public interface IBroadCastService
     {
+        event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
+        int ConnectedDevices {get;}
         Task StartAsync(CancellationToken cancellationToken);
         void ResetScore();
         void BroadcastResult(RunDto dto);
