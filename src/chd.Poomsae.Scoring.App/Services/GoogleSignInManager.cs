@@ -15,8 +15,8 @@ namespace chd.Poomsae.Scoring.App.Services
     {
         private IActivityResultLauncher _signInLauncher;
 
-        event EventHandler<Exception> LoginFailed;
-        event EventHandler<(string, string)> LoginSucceded;
+        public event EventHandler<Exception> LoginFailed;
+        public event EventHandler<(string, string)> LoginSucceded;
 
         public void SetLauncher(IActivityResultLauncher signInLauncher)
         {
