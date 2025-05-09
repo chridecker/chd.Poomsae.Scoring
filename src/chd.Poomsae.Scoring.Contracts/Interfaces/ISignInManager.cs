@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.Contracts.Interfaces
@@ -11,8 +12,6 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 
         event EventHandler<Exception> LoginFailed;
         event EventHandler<(string,string)> LoginSucceded;
-        void SignIn();
-        void InvokeLoginFailed(Exception ex);
-        void InvokeLoginSuccess(string email, string name);
+        Task SignIn(CancellationToken cancellationToken);
     }
 }
