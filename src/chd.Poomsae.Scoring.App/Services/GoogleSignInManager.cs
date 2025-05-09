@@ -20,9 +20,9 @@ namespace chd.Poomsae.Scoring.App.Services
         public event EventHandler<Exception> LoginFailed;
         public event EventHandler<(string, string)> LoginSucceded;
 
-        public void SignIn(CancellationToken cancellationToken) => this.StartGoogleSignIn(cancellationToken);
+        public Task SignIn(CancellationToken cancellationToken) => this.StartGoogleSignIn(cancellationToken);
 
-        private void StartGoogleSignIn(CancellationToken cancellationToken)
+        private async Task StartGoogleSignIn(CancellationToken cancellationToken)
         {
             var clientId = "202887990694-glhr25sti3iu90c6altj9lmtpgiaa2n3.apps.googleusercontent.com";
             var redirectUri = "com.companyname.chd.poomsae.scoring.app:/oauth2redirect";
