@@ -1,5 +1,5 @@
 ﻿.scoring-summary-container {
-    padding-top: 1.5rem;
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -10,13 +10,7 @@
     width: 100%;
 }
 
-    .scoring-summary-container .device-name {
-        border: 1px solid;
-        text-align: center;
-        padding: 0.5rem;
-        border-radius: 0.5rem;
-        font-size: 0.8rem;
-        line-height: 0.8rem;
+    .scoring-summary-container .state-button {
         width: max-content;
         align-content: center;
         align-items: center;
@@ -24,20 +18,6 @@
         justify-items: center;
         order: 2;
     }
-
-        .scoring-summary-container .device-name ::deep svg[fontawesome-icon=user-tie] {
-            margin-top: -0.2rem;
-            height: 1rem;
-        }
-         .scoring-summary-container .device-name ::deep svg[fontawesome-icon=bluetooth] {
-            margin-top: -0.2rem;
-            height: 1rem;
-            background:var(--chd-bluetooth-blue);
-            border-radius: 50%;
-            padding:0.1rem;
-            opacity:01;
-            border:1px solid;
-        }
 
     .scoring-summary-container .scores-group {
         display: grid;

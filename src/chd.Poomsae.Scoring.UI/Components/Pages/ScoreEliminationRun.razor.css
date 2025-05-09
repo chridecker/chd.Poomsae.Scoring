@@ -11,7 +11,7 @@
         height: 20vh;
     }
 
-.run-container .fighter-container ::deep .send-button {
+.run-container .fighter-container ::deep .user-button {
     position: absolute;
     right: 1.5rem;
 }

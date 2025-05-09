@@ -8,8 +8,9 @@
     align-items: center;
     align-content: center;
     justify-items: center;
-    background: var(--chd-p-blue-semi-transparent);
+    background: var(--chd-blue-transparent);
 }
+
     .send-button ::deep svg[fontawesome-icon=paper-plane] {
     }
 

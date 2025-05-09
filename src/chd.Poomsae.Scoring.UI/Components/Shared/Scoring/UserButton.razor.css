@@ -1,0 +1,45 @@
+﻿.user-button {
+    border: 1px solid;
+    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+    border-radius: 50%;
+    box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-bg) -2px 0 2px inset;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+    .user-button ::deep svg[fontawesome-icon=user-tie] {
+        fill: white;
+        height: 1.2rem;
+        margin-top: -0.2rem;
+    }
+
+    .user-button ::deep svg[fontawesome-icon=bluetooth] {
+        position: absolute;
+        margin-top: -0.5rem;
+        margin-left: -0.5rem;
+        height: 0.8rem;
+        background: var(--chd-bluetooth-blue);
+        border-radius: 50%;
+        padding: 0.1rem;
+        border: 1px solid;
+        opacity: 0.8;
+    }
+
+
+@media only screen and (min-height: 540px) {
+    .user-button {
+        padding: 0.8rem 1rem 0.8rem 1rem;
+    }
+
+        .user-button ::deep svg[fontawesome-icon=user-tie] {
+            height: 2.2rem;
+        }
+
+        .user-button ::deep svg[fontawesome-icon=bluetooth] {
+            margin-top: -0.8rem;
+            margin-left: -0.8rem;
+            height: 1rem;
+        }
+}

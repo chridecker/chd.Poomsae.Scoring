@@ -1,4 +1,3 @@
-@implements IDisposable
 @using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Constants
 @using chd.Poomsae.Scoring.Contracts.Dtos
@@ -9,13 +8,6 @@
 
 
 <div class="scoring-summary-container">
-    <div class="device-name" @onclick="this.ChangeName">
-        <CustomIcon FAClass="user-tie" />@this._deviceName
-        @if (this.broadCastService.ConnectedDevices > 0)
-        {
-            <CustomIcon FAClass="bluetooth" />
-        }
-    </div>
     <div class="scores-group accuracy">
         <ScoringSummaryItemComponent Text="@TextConstants.Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
     </div>
@@ -24,40 +16,20 @@
         <ScoringSummaryItemComponent Text="@TextConstants.RhythmAndTempo" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.RhythmAndTempo)" />
         <ScoringSummaryItemComponent Text="@TextConstants.ExpressionAndEnergy" OnClick="this.OpenModal" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.ExpressionAndEnergy)" />
     </div>
+    @if (this.ButtonContent is not null)
+    {
+        <div class="state-button">
+            @this.ButtonContent
+        </div>
+    }
 </div>
 @code {
-    [Inject] private ISettingManager settingManager { get; set; }
-    [Inject] private IModalService modalService { get; set; }
     [Inject] private IBroadCastService broadCastService { get; set; }
 
     [Parameter] public ScoreDto? ChongScore { get; set; }
     [Parameter] public ScoreDto? HongScore { get; set; }
-
     [Parameter] public Func<EScoringButtonColor, Task> OpenModal { get; set; }
 
-    private string _deviceName = string.Empty;
+    [Parameter] public RenderFragment? ButtonContent { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        this.broadCastService.DeviceConnectionChanged += this.DeviceConneced;
-        this._deviceName = await this.settingManager.GetName();
-        await base.OnInitializedAsync();
-    }
-    private async Task ChangeName()
-    {
-        await this.modalService.Show<DeviceNameModal>(TextConstants.EnterNameTitle, new ModalOptions()
-        {
-        }).Result;
-        this._deviceName = await this.settingManager.GetName();
-
-        await this.broadCastService.BroadcastNameChange();
-
-        await this.InvokeAsync(this.StateHasChanged);
-    }
-    private async void DeviceConneced(object? sender, DeviceConnectionChangedEventArgs e) => await this.InvokeAsync(this.StateHasChanged);
-
-    public void Dispose()
-    {
-        this.broadCastService.DeviceConnectionChanged -= this.DeviceConneced;
-    }
 }

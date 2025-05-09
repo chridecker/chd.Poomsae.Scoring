@@ -1,0 +1,41 @@
+@implements IDisposable
+
+<div class="user-button" @onclick="this.ChangeName">
+    <CustomIcon FAClass="user-tie" />
+    @if (this.broadCastService.ConnectedDevices > 0)
+    {
+        <CustomIcon FAClass="bluetooth" />
+    }
+</div>
+
+@code{
+    [Inject] private ISettingManager settingManager { get; set; }
+    [Inject] private IBroadCastService broadCastService { get; set; }
+    [Inject] private IModalService modalService { get; set; }
+
+    private string _deviceName = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.broadCastService.DeviceConnectionChanged += this.DeviceConneced;
+        this._deviceName = await this.settingManager.GetName();
+        await base.OnInitializedAsync();
+    }
+    private async Task ChangeName()
+    {
+        await this.modalService.Show<DeviceNameModal>(TextConstants.EnterNameTitle, new ModalOptions()
+        {
+        }).Result;
+        this._deviceName = await this.settingManager.GetName();
+
+        await this.broadCastService.BroadcastNameChange();
+
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+    private async void DeviceConneced(object? sender, DeviceConnectionChangedEventArgs e) => await this.InvokeAsync(this.StateHasChanged);
+
+    public void Dispose()
+    {
+        this.broadCastService.DeviceConnectionChanged -= this.DeviceConneced;
+    }
+}
