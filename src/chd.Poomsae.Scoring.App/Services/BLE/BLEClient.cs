@@ -21,6 +21,8 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private IBluetoothLE _bluetoothLE => CrossBluetoothLE.Current;
         private IAdapter _adapter => this._bluetoothLE.Adapter;
 
+        private PeriodicTimer _periodicTimer;
+
         public event EventHandler<ScoreReceivedEventArgs> ResultReceived;
         public event EventHandler<DeviceDto> DeviceDiscovered;
         public event EventHandler<DeviceDto> DeviceFound;
@@ -34,7 +36,28 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             this._adapter.DeviceConnected += this._adapter_DeviceConnected;
             this._adapter.DeviceDisconnected += this._adapter_DeviceDisconnected;
             this._adapter.DeviceConnectionLost += this._adapter_DeviceDisconnected;
+
+            this._periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+            this.Timer();
         }
+
+        private void Timer() => Task.Run(async () =>
+        {
+            while (await this._periodicTimer.WaitForNextTickAsync())
+            {
+                foreach (var device in this._adapter.ConnectedDevices)
+                {
+                    try
+                    {
+                        _ = await this.ReadNameAsync(device, CancellationToken.None);
+                    }
+                    catch (Exception ex)
+                    {
+                        await this.DisconnectDevice(device);
+                    }
+                }
+            }
+        });
 
         private void _adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
         {
@@ -53,12 +76,18 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             var lst = new List<DeviceDto>();
             foreach (var device in this._adapter.ConnectedDevices)
             {
-                var readName = await this.ReadNameAsync(device, cancellationToken);
-                lst.Add(new()
+                try
                 {
-                    Id = device.Id,
-                    Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName
-                });
+                    var readName = await this.ReadNameAsync(device, cancellationToken);
+                    lst.Add(new()
+                    {
+                        Id = device.Id,
+                        Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName
+                    });
+                }
+                catch (Exception ex)
+                {
+                }
             }
             return lst;
         }
@@ -105,7 +134,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         }
         public async Task<bool> ConnectDeviceAsync(DeviceDto dto, CancellationToken cancellationToken = default)
         {
-            var d = await this._adapter.ConnectToKnownDeviceAsync(dto.Id, cancellationToken: cancellationToken);
+            var d = await this._adapter.ConnectToKnownDeviceAsync(dto.Id, new ConnectParameters(), cancellationToken: cancellationToken);
             return d is not null;
         }
 
@@ -172,7 +201,15 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             }
         }
 
-        private async Task DisconnectDevice(IDevice device) => this._adapter.DisconnectDeviceAsync(device);
+        private async Task DisconnectDevice(IDevice device)
+        {
+            try
+            {
+                await
+                    this._adapter.DisconnectDeviceAsync(device);
+            }
+            catch { }
+        }
 
         private void Name_ValueUpdated(object? sender, DeviceDto dto, CharacteristicUpdatedEventArgs e)
         {
@@ -209,8 +246,12 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic, cancellationToken);
             if (characteristicName is not null && characteristicName.CanRead)
             {
-                var data = await characteristicName.ReadAsync(cancellationToken);
-                return Encoding.ASCII.GetString(data.data);
+                var (data, state) = await characteristicName.ReadAsync(cancellationToken);
+                if (state != (int)GattStatus.Success)
+                {
+                    throw new Exception("Error on Read Operation");
+                }
+                return Encoding.ASCII.GetString(data);
             }
             return string.Empty;
         }

@@ -28,9 +28,8 @@ namespace chd.Poomsae.Scoring.App
             builder.AddServices();
             builder.UseAndroidInAppUpdates(options =>
             {
-                options.ShowDownload = true;
-                options.ImmediateUpdatePriority = 5;
-            } );
+                options.ImmediateUpdatePriority = 6;
+            });
 
             return builder.Build();
         }
