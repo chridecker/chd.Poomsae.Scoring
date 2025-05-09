@@ -25,15 +25,13 @@
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
-        <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal"
+            <ScoringSummaryComponent State="@this.runDto.State" OpenModal="this.OpenPresentationModal"
                                      ChongScore="@(this.runDto.Color is EScoringButtonColor.Blue ?  runDto.Score : null)"
                                      HongScore="@(this.runDto.Color is EScoringButtonColor.Red ?  runDto.Score : null)">
                 <ButtonContent>
                     <StateButton State="@runDto.State" HandleState="this.HandleClick" />
                 </ButtonContent>
             </ScoringSummaryComponent>
-        </div>
         <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="this.runDto.Color" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
     </div>
 </div>

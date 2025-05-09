@@ -20,13 +20,13 @@
 
         .scores .score.score-chong {
             box-shadow: var(--chd-font-color) -2px 0 2px inset, var(--chd-bg) 1px 0 2px inset;
-            background-color: var(--chd-p-blue);
+            background: var(--chd-p-blue);
             border-radius: 0.5rem;
         }
 
         .scores .score.score-hong {
             box-shadow: var(--chd-bg) -1px 0 2px inset, var(--chd-font-color) 2px 0 2px inset;
-            background-color: var(--chd-p-red);
+            background: var(--chd-p-red);
             border-radius: 0.5rem;
         }
 
@@ -45,14 +45,17 @@
 }
 
     .scores-group.accuracy .scores .score.score-chong {
-        background-color: var(--chd-p-blue-accent);
+        background: var(--chd-p-blue-accent);
     }
 
     .scores-group.accuracy .scores .score.score-hong {
-        background-color: var(--chd-p-red-accent);
+        background: var(--chd-p-red-accent);
     }
 
 
+.scoring-summary-container.finished .scores .score {
+    background: var(--chd-sub-color-theme) !important;
+}
 
 .single-run-container .scoring-summary-container .scores-group .scores {
     grid-template-columns: auto repeat(2,max-content);

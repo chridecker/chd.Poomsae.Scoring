@@ -23,13 +23,11 @@
     </div>
     <div class="scoring-container">
         <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Red" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
-        <div class="scoring-middle">
-            <ScoringSummaryComponent OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore">
+        <ScoringSummaryComponent State="@this.runDto.State" OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore">
                 <ButtonContent>
                     <StateButton State="@runDto.State" HandleState="this.HandleClick" />
                 </ButtonContent>
             </ScoringSummaryComponent>
-        </div>
         <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
     </div>
 </div>

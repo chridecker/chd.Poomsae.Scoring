@@ -7,7 +7,7 @@
 @using chd.UI.Base.Contracts.Enum
 
 
-<div class="scoring-summary-container">
+<div class="scoring-summary-container @(this.State is ERunState.Finished ? " finished " : "")">
     <div class="scores-group accuracy">
         <ScoringSummaryItemComponent Text="@TextConstants.Accuracy" ChongScore="this.ChongScore" HongScore="this.HongScore" Property="@nameof(ScoreDto.Accuracy)" />
     </div>
@@ -26,6 +26,7 @@
 @code {
     [Inject] private IBroadCastService broadCastService { get; set; }
 
+    [Parameter] public ERunState State{ get; set; }
     [Parameter] public ScoreDto? ChongScore { get; set; }
     [Parameter] public ScoreDto? HongScore { get; set; }
     [Parameter] public Func<EScoringButtonColor, Task> OpenModal { get; set; }
