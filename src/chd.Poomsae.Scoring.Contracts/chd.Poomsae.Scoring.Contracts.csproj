@@ -6,7 +6,7 @@
 	  <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="chd.UI.Base.Contracts" Version="1.0.25120.113" />
+		<PackageReference Include="chd.UI.Base.Contracts" Version="1.0.25130.114" />
 	</ItemGroup>
 
 </Project>
