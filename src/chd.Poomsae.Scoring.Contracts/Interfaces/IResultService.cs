@@ -18,6 +18,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 
         void SetRun(Guid deviceId, RunResultDto dto);
         void Clear();
+        bool Clear(Guid id);
 
         event EventHandler ResultReceived;
     }

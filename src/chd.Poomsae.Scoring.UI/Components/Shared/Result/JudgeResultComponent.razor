@@ -3,36 +3,12 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="judge">
     <div class="name">@this.Name</div>
-    <div class="score accuracy @__cssDiscardAccuracy(this.Score?.Accuracy)">@(this.Score?.Accuracy.ToDisplayString() ?? "-")</div>
-    <div class="score presentation @__cssDiscardPresentation(this.Score?.Presentation)">@(this.Score?.Presentation.ToDisplayString() ?? "-")</div>
+    <div class="score accuracy">@(this.Score?.Accuracy.ToDisplayString() ?? "-")</div>
+    <div class="score presentation">@(this.Score?.Presentation.ToDisplayString() ?? "-")</div>
 </div>
 
 @code {
-    [Inject] IResultService resultService { get; set; }
-
     [Parameter] public string Name { get; set; }
     [Parameter] public ScoreDto Score { get; set; }
-    [Parameter] public bool IsRed { get; set; }
-
-
-    private string __cssDiscardAccuracy(decimal? val) => this.IsDiscardValueAccuracy(val) ? "discard" : "";
-    private string __cssDiscardPresentation(decimal? val) => this.IsDiscardValuePresentation(val) ? "discard" : "";
-
-    private bool IsDiscardValueAccuracy(decimal? val)
-    {
-        if (!val.HasValue || this.resultService.Result.Results.Values.Count <= 3) { return false; }
-
-        var minVal = this.resultService.Result.Results.Values.Select(s => this.IsRed ? s.HongScore : s.ChongScore).Min(s => s.Accuracy);
-        var maxVal = this.resultService.Result.Results.Values.Select(s => this.IsRed ? s.HongScore : s.ChongScore).Max(s => s.Accuracy);
-        return val == minVal || val == maxVal;
-    }
-
-    private bool IsDiscardValuePresentation(decimal? val)
-    {
-        if (!val.HasValue || this.resultService.Result.Results.Values.Count <= 3) { return false; }
-
-        var minVal = this.resultService.Result.Results.Values.Select(s => this.IsRed ? s.HongScore : s.ChongScore).Min(s => s.Presentation);
-        var maxVal = this.resultService.Result.Results.Values.Select(s => this.IsRed ? s.HongScore : s.ChongScore).Max(s => s.Presentation);
-        return val == minVal || val == maxVal;
-    }
+    [Parameter] public EScoringButtonColor Color { get; set; }
 }

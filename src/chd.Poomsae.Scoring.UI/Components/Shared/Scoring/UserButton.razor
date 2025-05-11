@@ -8,7 +8,7 @@
     }
 </div>
 
-@code{
+@code {
     [Inject] private ISettingManager settingManager { get; set; }
     [Inject] private IBroadCastService broadCastService { get; set; }
     [Inject] private IModalService modalService { get; set; }
@@ -24,8 +24,9 @@
     private async Task ChangeName()
     {
         await this.modalService.Show<DeviceNameModal>(TextConstants.EnterNameTitle, new ModalOptions()
-        {
-        }).Result;
+            {
+                Position = ModalPosition.TopCenter
+            }).Result;
         this._deviceName = await this.settingManager.GetName();
 
         await this.broadCastService.BroadcastNameChange();

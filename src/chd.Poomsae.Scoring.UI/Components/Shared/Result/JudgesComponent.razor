@@ -6,19 +6,19 @@
 <div class="judges @_css">
     @foreach (var device in this.Devices)
     {
-        <JudgeResultComponent Name="@device.Name" IsRed="this.IsRed" Score="this.Result(device.Id)" />
+        <JudgeResultComponent Name="@device.Name" Color="this.Color" Score="this.Result(device.Id)" />
     }
 </div>
 
 
 @code {
     [Inject] IResultService resultService { get; set; }
-    [Inject] IBroadcastClient broadcastClient{ get; set; }
+    [Inject] IBroadcastClient broadcastClient { get; set; }
 
-    [Parameter] public bool IsRed { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
     [Parameter] public IEnumerable<DeviceDto> Devices { get; set; } = [];
 
-    private ScoreDto Result(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? (this.IsRed ? res.HongScore : res.ChongScore) : null;
+    private ScoreDto Result(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? (this.Color is EScoringButtonColor.Red ? res.HongScore : res.ChongScore) : null;
 
-    private string _css => this.IsRed ? "hong" : "chong";
+    private string _css => this.Color is EScoringButtonColor.Red ? "hong" : this.Color is EScoringButtonColor.Blue ? "chong" : "";
 }

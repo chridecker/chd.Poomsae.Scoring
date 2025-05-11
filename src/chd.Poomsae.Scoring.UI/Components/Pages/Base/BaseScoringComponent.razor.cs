@@ -63,7 +63,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             }
             else if (this.runDto.State is ERunState.Finished)
             {
-                this.ResetResults();
+                await this.ResetResults();
             }
             await this.InvokeAsync(this.StateHasChanged);
         }
@@ -85,10 +85,14 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
                 dto.RhythmAndTempo = 0;
             }
         }
-        private void ResetResults()
+        private async Task ResetResults()
         {
-            this.broadCastService.ResetScore();
-            this.runDto = this.CreateDto();
+            var res = await this._modal.ShowDialog(TextConstants.ResetScoreQuestion, EDialogButtons.YesNo);
+            if (res is EDialogResult.Yes)
+            {
+                this.broadCastService.ResetScore();
+                this.runDto = this.CreateDto();
+            }
         }
 
         private async Task SendResults()

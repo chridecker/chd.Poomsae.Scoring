@@ -38,6 +38,8 @@ namespace chd.Poomsae.Scoring.UI.Services
             this.ResultReceived?.Invoke(this, EventArgs.Empty);
         }
 
+        public bool Clear(Guid id) => this.Result.Results.Remove(id);
+
         public void Clear()
         {
             this._resultDto.Results.Clear();
@@ -57,7 +59,7 @@ namespace chd.Poomsae.Scoring.UI.Services
                 {
                     return this.Result.Results.Values.Select(s => s.ChongScore).Select(s => s.Accuracy).Average();
                 }
-                var accLst = this.Result.Results.Values.Select(s => s.ChongScore).Select(s => s.Accuracy);
+                var accLst = this.Result.Results.Values.Select(s => s.ChongScore).Select(s => s?.Accuracy);
                 return (accLst.Sum() - accLst.Min() - accLst.Max()) / (accLst.Count() - 2);
             }
         }

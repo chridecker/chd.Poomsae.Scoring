@@ -15,6 +15,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string ExpressionAndEnergy = "Ausdruck von Energie";
 
         public const string ChangeColorQuestion = "Farbe wechseln?";
+        public const string ResetScoreQuestion = "Wertung zurücksetzen?";
 
         public const string LeaveSiteQuestion = "Wollen Sie die Seite wirklich verlassen?";
         public const string EnterNameTitle = "Anzeigenamen ändern";

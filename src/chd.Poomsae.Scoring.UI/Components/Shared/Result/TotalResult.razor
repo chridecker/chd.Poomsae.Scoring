@@ -15,13 +15,13 @@
 
 @code {
     [Inject] IResultService resultService { get; set; }
-    [Parameter] public bool IsRed { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
 
-    private decimal? __result => this.IsRed ? this.resultService.HongTotal : this.resultService.ChongTotal;
-    private decimal? __resultAccuracy => this.IsRed ? this.resultService.HongAccuracy : this.resultService.ChongAccuracy;
-    private decimal? __resultPresentation => this.IsRed ? this.resultService.HongPresentation : this.resultService.ChongPresentation;
+    private decimal? __result => this.Color is EScoringButtonColor.Red ? this.resultService.HongTotal : this.resultService.ChongTotal;
+    private decimal? __resultAccuracy => this.Color is EScoringButtonColor.Red ? this.resultService.HongAccuracy : this.resultService.ChongAccuracy;
+    private decimal? __resultPresentation => this.Color is EScoringButtonColor.Red ? this.resultService.HongPresentation : this.resultService.ChongPresentation;
 
-    private string __css => (this.IsRed ? "hong" : "chong") + " " + (this.__result.HasValue ? "" : " inactive ");
+    private string __css => (this.Color is EScoringButtonColor.Red ? "hong" : this.Color is EScoringButtonColor.Blue ? "chong" : "") + " " + (this.__result.HasValue ? "" : " inactive ");
 
 
     protected override Task OnInitializedAsync()
