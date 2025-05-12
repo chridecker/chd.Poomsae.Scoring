@@ -1,11 +1,12 @@
-﻿@inherits PageComponentBase<int,int>
+﻿@inherits PageComponentBase<Guid,int>
 @implements IDisposable
+@using Blazored.Modal.Services
 @using Blazored.Toast.Configuration
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.UI.Base.Client.Implementations.Services
 @using chd.UI.Base.Contracts.Enum
 @inject IScrollInfoService scrollInfoService
-@inject IHandleUserIdLogin<int> handleUserIdLogin
+@inject IModalService modalService
 
 
 <div class="page">
@@ -44,8 +45,20 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this._profileService.UserChanged += this.UserChanged;
+        _ = await this._profileService.LoginAsync(new(), this._cts.Token);
+
+
         await this.broadCastService.StartAsync(this._cts.Token);
         await base.OnInitializedAsync();
+    }
+
+    private async void UserChanged(object? sender, UserDto<Guid, int> user)
+    {
+        if (user is PSUserDto dto)
+        {
+            await this.modalService.ShowDialog($"user:{dto.Email}", EDialogButtons.OK);
+        }
     }
 
     private async Task OnLabelSwiped(ESwipeDirection e)
