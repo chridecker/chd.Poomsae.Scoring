@@ -12,6 +12,7 @@ using Plugin.Firebase.Auth;
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Google;
 using Plugin.Firebase.Firestore;
+using Firebase;
 
 namespace chd.Poomsae.Scoring.App
 {
@@ -74,5 +75,6 @@ namespace chd.Poomsae.Scoring.App
             }
             return new ConfigurationBuilder().Build();
         }
+      
     }
 }
