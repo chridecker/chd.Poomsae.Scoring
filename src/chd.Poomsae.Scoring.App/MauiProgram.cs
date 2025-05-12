@@ -10,6 +10,7 @@ using Plugin.Firebase.Auth.Platforms.Android.Extensions;
 using Microsoft.Maui.LifecycleEvents;
 using Plugin.Firebase.Auth;
 using Plugin.Firebase.Core.Platforms.Android;
+using Plugin.Firebase.Auth.Google;
 
 namespace chd.Poomsae.Scoring.App
 {
@@ -55,6 +56,7 @@ namespace chd.Poomsae.Scoring.App
             });
 
             builder.Services.AddSingleton(_ => CrossFirebaseAuth.Current);
+            builder.Services.AddSingleton(_ => CrossFirebaseAuthGoogle.Current);
             return builder;
         }
 
