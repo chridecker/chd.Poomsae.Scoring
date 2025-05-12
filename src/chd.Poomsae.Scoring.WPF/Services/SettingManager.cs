@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.WPF.Services
 {
-    public class SettingManager : BaseClientSettingManager<int, int>, ISettingManager
+    public class SettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
     {
         public SettingManager(ILogger<SettingManager> logger, IProtecedLocalStorageHandler protecedLocalStorageHandler, NavigationManager navigationManager)
             : base(logger, protecedLocalStorageHandler, navigationManager)

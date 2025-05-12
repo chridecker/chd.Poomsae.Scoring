@@ -30,7 +30,6 @@ namespace chd.Poomsae.Scoring.App.Extensions
 #elif IOS
             services.AddiOS();
             services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);   
-  services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
 #endif
 
             return services;
