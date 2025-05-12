@@ -1,7 +1,9 @@
-﻿using Blazorise;
+﻿using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Client.Implementations.Authorization;
+using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Dtos.Authentication;
 using Firebase;
 using Firebase.Auth;
@@ -20,11 +22,16 @@ namespace chd.Poomsae.Scoring.App.Services
     {
         private readonly IFirebaseAuthGoogle _firebaseAuthGoogle;
         private readonly FirestoreManager _firestoreManager;
+        private readonly IModalService modalService;
 
-        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, FirestoreManager firestoreManager)
+        private PSUserDto _userDto;
+        private DateTime? _lastLogin;
+
+        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, FirestoreManager firestoreManager, IModalService modalService)
         {
             this._firebaseAuthGoogle = firebaseAuthGoogle;
             this._firestoreManager = firestoreManager;
+            this.modalService = modalService;
         }
         private async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
@@ -43,7 +50,7 @@ namespace chd.Poomsae.Scoring.App.Services
                     }
                 }
 
-                //var user = await CrossFirebaseAuth.Current.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at","ch3510ri");
+                //var user = await CrossFirebaseAuth.Current.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
                 var user = await this._firebaseAuthGoogle.SignInWithGoogleAsync();
                 if (user != null)
                 {
@@ -61,20 +68,56 @@ namespace chd.Poomsae.Scoring.App.Services
             }
             catch (Exception ex)
             {
-
+                await this.modalService.ShowDialog(ex.Message, chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
             }
             return null;
         }
 
         protected override async Task<UserPermissionDto<int>> GetPermissions(UserDto<Guid, int> dto, CancellationToken cancellationToken = default)
         {
-            return new UserPermissionDto<int>();
+            var perm = new UserPermissionDto<int>();
+            var lst = new List<UserRightDto<int>>();
+            if (dto is PSUserDto psUser)
+            {
+                if (psUser.IsAdmin)
+                {
+                    lst.Add(new UserRightDto<int>()
+                    {
+                        Id = RightConstants.IS_ADMIN,
+                        Name = "Admin"
+                    });
+
+                    lst.Add(new UserRightDto<int>()
+                    {
+                        Id = RightConstants.IS_ALLOWED,
+                        Name = "Allowed"
+                    });
+                }
+                else if (psUser.HasLicense || (psUser.ValidTo > DateTime.Now))
+                {
+                    lst.Add(new UserRightDto<int>()
+                    {
+                        Id = RightConstants.IS_ALLOWED,
+                        Name = "Allowed"
+                    });
+                }
+            }
+
+
+            perm.UserRightLst = lst;
+            return perm;
         }
 
         protected override async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
         {
-            var user = await this.SignIn(cancellationToken);
-            return user;
+            if (this._userDto is not null && this._lastLogin.HasValue && this._lastLogin.Value > DateTime.Now.AddHours(-1))
+            {
+                return this._userDto;
+            }
+
+            this._userDto = await this.SignIn(cancellationToken);
+            this._lastLogin = DateTime.Now;
+            return this._userDto;
         }
     }
 }
