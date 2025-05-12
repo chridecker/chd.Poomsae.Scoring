@@ -5,6 +5,11 @@ using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Maui.Android.InAppUpdates;
+using Plugin.Firebase;
+using Plugin.Firebase.Auth.Platforms.Android.Extensions;
+using Microsoft.Maui.LifecycleEvents;
+using Plugin.Firebase.Auth;
+using Plugin.Firebase.Core.Platforms.Android;
 
 namespace chd.Poomsae.Scoring.App
 {
@@ -15,6 +20,7 @@ namespace chd.Poomsae.Scoring.App
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .RegisterFirebaseServices()
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
@@ -39,6 +45,17 @@ namespace chd.Poomsae.Scoring.App
             builder.Services.AddBlazoredModal();
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Services.AddAppServices(builder.Configuration);
+        }
+        private static MauiAppBuilder RegisterFirebaseServices(this MauiAppBuilder builder)
+        {
+            builder.ConfigureLifecycleEvents(events =>
+            {
+                events.AddAndroid(android => android.OnCreate((activity, _) =>
+                    CrossFirebase.Initialize(activity)));
+            });
+
+            builder.Services.AddSingleton(_ => CrossFirebaseAuth.Current);
+            return builder;
         }
 
         private static IConfiguration GetLocalSetting()
