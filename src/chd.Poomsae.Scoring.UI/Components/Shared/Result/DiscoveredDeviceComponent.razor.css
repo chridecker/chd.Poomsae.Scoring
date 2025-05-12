@@ -5,15 +5,18 @@
     display: flex;
     justify-content: center;
     justify-items: center;
-    align-content:center;
+    align-content: center;
     align-items: center;
     gap: 0.3rem;
 }
+
+    .discovered-device.selected {
+        border-color: var(--chd-main-color-theme);
+    }
 
     .discovered-device ::deep svg {
         height: 1.5rem;
     }
 
     .discovered-device .name {
-
     }

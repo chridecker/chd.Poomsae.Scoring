@@ -1,4 +1,10 @@
-﻿.devices-container {
-    display: flex;
-    flex-wrap:wrap;
+﻿.discover-modal-container {
+    display:grid;
 }
+
+    .discover-modal-container .devices-container {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+    }
+
+.discover-modal-container .buttons{}

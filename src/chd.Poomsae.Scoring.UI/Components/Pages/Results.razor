@@ -50,10 +50,17 @@
 
     private async Task Discover()
     {
-        await this.modalService.Show<DiscoverDevices>(new ModalOptions()
+        var result = await this.modalService.Show<DiscoverDevices>(new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
+        if (result.Confirmed && result.Data is List<DeviceDto> lst)
+        {
+            foreach (var d in lst)
+            {
+                await this.broadcastClient.ConnectDeviceAsync(d);
+            }
+        }
     }
 
     private async Task Search()

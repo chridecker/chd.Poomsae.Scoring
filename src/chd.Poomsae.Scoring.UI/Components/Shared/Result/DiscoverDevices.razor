@@ -2,20 +2,26 @@
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 
-
-<div class="devices-container">
-    @foreach (var device in this._discoveredDevices)
-    {
-        <DiscoveredDeviceComponent Device="device" OnCLick="this.Connect" />
-    }
+<div class="discover-modal-container">
+    <div class="devices-container">
+        @foreach (var device in this._discoveredDevices)
+        {
+            <DiscoveredDeviceComponent Device="device" Selected="d => this._selectedDevices.Any(a => a.Id == d.Id )" OnCLick="this.AddToConnected" />
+        }
+    </div>
+    <div class="buttons">
+        <button class="btn btn-primary" @onclick="this.Connect">Verbinden</button>
+    </div>
 </div>
 
-
 @code {
+    [CascadingParameter] BlazoredModalInstance Instance { get; set; }
+
     [Inject] IBroadcastClient broadcastClient { get; set; }
     private CancellationTokenSource _cts = new();
 
     private List<DeviceDto> _discoveredDevices = [];
+    private List<DeviceDto> _selectedDevices = [];
 
 
     protected override async Task OnInitializedAsync()
@@ -25,13 +31,22 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task Connect(DeviceDto dto)
+    private async Task AddToConnected(DeviceDto dto)
     {
-        if (await this.broadcastClient.ConnectDeviceAsync(dto))
+        if (this._selectedDevices.Any(a => a.Id == dto.Id))
         {
-            this._discoveredDevices.Remove(dto);
+            this._selectedDevices.Remove(dto);
+        }
+        else
+        {
+            this._selectedDevices.Add(dto);
         }
         await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async Task Connect()
+    {
+        await this.Instance.CloseAsync(ModalResult.Ok(this._selectedDevices));
     }
 
     private async void DeviceDiscovered(object? sender, DeviceDto dto)
@@ -40,6 +55,7 @@
         this._discoveredDevices.Add(dto);
         await this.InvokeAsync(this.StateHasChanged);
     }
+
 
     public void Dispose()
     {
