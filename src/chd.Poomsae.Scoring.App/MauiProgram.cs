@@ -52,7 +52,10 @@ namespace chd.Poomsae.Scoring.App
             builder.ConfigureLifecycleEvents(events =>
             {
                 events.AddAndroid(android => android.OnCreate((activity, _) =>
-                    CrossFirebase.Initialize(activity)));
+                {
+                    CrossFirebase.Initialize(activity);
+                    FirebaseAuthGoogleImplementation.Initialize("202887990694-pqlnces3r17n6q74i7vrgsbpr3at7njl.apps.googleusercontent.com");
+                }));
             });
 
             builder.Services.AddSingleton(_ => CrossFirebaseAuth.Current);
