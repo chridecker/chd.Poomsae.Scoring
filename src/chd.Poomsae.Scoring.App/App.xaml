@@ -7,6 +7,7 @@
         <ResourceDictionary>
                 <Color x:Key="CHDFontColor">#CCCCDC</Color>
                 <Color x:Key="CHDBlack">#000000</Color>
+                <Color x:Key="CHDWhite">#FFFFFF</Color>
                 <Color x:Key="PageBackgroundColor">#181B1F</Color>
                 <Color x:Key="CHDBg">#181B1F</Color>
                 <Style TargetType="Label">

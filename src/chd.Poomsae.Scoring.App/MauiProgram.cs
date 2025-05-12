@@ -11,6 +11,7 @@ using Microsoft.Maui.LifecycleEvents;
 using Plugin.Firebase.Auth;
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Google;
+using Plugin.Firebase.Firestore;
 
 namespace chd.Poomsae.Scoring.App
 {
@@ -57,9 +58,6 @@ namespace chd.Poomsae.Scoring.App
                     FirebaseAuthGoogleImplementation.Initialize("202887990694-pqlnces3r17n6q74i7vrgsbpr3at7njl.apps.googleusercontent.com");
                 }));
             });
-
-            builder.Services.AddSingleton(_ => CrossFirebaseAuth.Current);
-            builder.Services.AddSingleton(_ => CrossFirebaseAuthGoogle.Current);
             return builder;
         }
 
