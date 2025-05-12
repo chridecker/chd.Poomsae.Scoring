@@ -1,4 +1,5 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Dtos;
+using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Client.Implementations.Authorization;
 using chd.UI.Base.Contracts.Dtos.Authentication;
 using Firebase;
@@ -19,10 +20,25 @@ namespace chd.Poomsae.Scoring.App.Services
         {
 
         }
-        private async Task<PSUserDto> SignIn()
+        private async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
             {
+                var perm = await Permissions.CheckStatusAsync<InternetPermission>();
+                while (perm is not PermissionStatus.Granted)
+                {
+                    _ = await Permissions.RequestAsync<InternetPermission>();
+
+                    perm = await Permissions.CheckStatusAsync<InternetPermission>();
+                    await Task.Delay(250, cancellationToken);
+                    if (cancellationToken.IsCancellationRequested || perm is PermissionStatus.Granted)
+                    {
+                        break;
+                    }
+                }
+
+
+
                 //var user =await CrossFirebaseAuth.Current.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at","ch3510ri");
                 var user = await CrossFirebaseAuthGoogle.Current.SignInWithGoogleAsync();
 
@@ -53,7 +69,7 @@ namespace chd.Poomsae.Scoring.App.Services
 
         protected override async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
         {
-            var user = await this.SignIn();
+            var user = await this.SignIn(cancellationToken);
             return user;
         }
     }
