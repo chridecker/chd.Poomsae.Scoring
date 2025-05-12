@@ -6,6 +6,7 @@ using chd.Poomsae.Scoring.Platforms.Android;
 using chd.Poomsae.Scoring.UI.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Plugin.Firebase.Auth.Google;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -7,6 +7,7 @@ using AndroidX.Activity;
 using AndroidX.Core.View;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.UI.Base.Contracts.Interfaces.Services;
+using Firebase;
 using System.Text.Json;
 
 namespace chd.Poomsae.Scoring.App
@@ -27,6 +28,8 @@ namespace chd.Poomsae.Scoring.App
         protected override void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+
+            FirebaseApp.InitializeApp(this);
 
             this.OnBackPressedDispatcher.AddCallback(this, new BackPress(this._appInfoService));
 
