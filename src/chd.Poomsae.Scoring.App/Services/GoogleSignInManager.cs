@@ -1,4 +1,7 @@
-﻿using Blazored.Modal.Services;
+﻿using Android.AdServices.OnDevicePersonalization;
+using Android.Gms.Auth.Api.SignIn;
+using AndroidX.Fragment.App;
+using Blazored.Modal.Services;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Platforms.Android;
@@ -9,6 +12,7 @@ using Firebase;
 using Firebase.Auth;
 using Plugin.Firebase.Auth;
 using Plugin.Firebase.Auth.Google;
+using Plugin.Firebase.Auth.Google.Platforms.Android;
 using Plugin.Firebase.Firestore;
 using System;
 using System.Collections.Generic;
@@ -49,7 +53,6 @@ namespace chd.Poomsae.Scoring.App.Services
                         break;
                     }
                 }
-
                 //var user = await CrossFirebaseAuth.Current.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
                 var user = await this._firebaseAuthGoogle.SignInWithGoogleAsync();
                 if (user != null)
