@@ -15,6 +15,7 @@ using Plugin.Firebase.Firestore;
 using Firebase;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
+using chd.Poomsae.Scoring.Contracts.Settings;
 
 namespace chd.Poomsae.Scoring.App
 {

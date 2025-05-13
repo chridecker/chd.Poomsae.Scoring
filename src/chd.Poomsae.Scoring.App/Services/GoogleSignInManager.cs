@@ -76,41 +76,6 @@ namespace chd.Poomsae.Scoring.App.Services
             return null;
         }
 
-        protected override async Task<UserPermissionDto<int>> GetPermissions(UserDto<Guid, int> dto, CancellationToken cancellationToken = default)
-        {
-            var perm = new UserPermissionDto<int>();
-            var lst = new List<UserRightDto<int>>();
-            if (dto is PSUserDto psUser)
-            {
-                if (psUser.IsAdmin)
-                {
-                    lst.Add(new UserRightDto<int>()
-                    {
-                        Id = RightConstants.IS_ADMIN,
-                        Name = "Admin"
-                    });
-
-                    lst.Add(new UserRightDto<int>()
-                    {
-                        Id = RightConstants.IS_ALLOWED,
-                        Name = "Allowed"
-                    });
-                }
-                else if (psUser.HasLicense || (psUser.ValidTo > DateTime.Now))
-                {
-                    lst.Add(new UserRightDto<int>()
-                    {
-                        Id = RightConstants.IS_ALLOWED,
-                        Name = "Allowed"
-                    });
-                }
-            }
-
-
-            perm.UserRightLst = lst;
-            return perm;
-        }
-
         protected override async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
         {
             if (this._userDto is not null && this._lastLogin.HasValue && this._lastLogin.Value > DateTime.Now.AddHours(-1))
