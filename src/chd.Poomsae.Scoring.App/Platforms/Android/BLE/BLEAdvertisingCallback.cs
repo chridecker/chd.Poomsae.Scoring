@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chd.Poomsae.Scoring.App.Services.BLE
+namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 {
     public class BLEAdvertisingCallback : AdvertiseCallback
     {

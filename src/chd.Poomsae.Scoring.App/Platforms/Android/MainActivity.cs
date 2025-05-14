@@ -6,6 +6,7 @@ using Android.Views;
 using AndroidX.Activity;
 using AndroidX.Core.View;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using System.Text.Json;
 
@@ -51,17 +52,17 @@ namespace chd.Poomsae.Scoring.App
             {
                 //var reply = this.GetReply(intent);
 
-                var id = intent.GetIntExtra(Platforms.Android.NotificationManagerService.IdKey, 0);
-                var title = intent.GetStringExtra(Platforms.Android.NotificationManagerService.TitleKey);
-                var message = intent.GetStringExtra(Platforms.Android.NotificationManagerService.MessageKey);
-                var cancel = intent.GetBooleanExtra(Platforms.Android.NotificationManagerService.CancelKey, false);
+                var id = intent.GetIntExtra(NotificationManagerService.IdKey, 0);
+                var title = intent.GetStringExtra(NotificationManagerService.TitleKey);
+                var message = intent.GetStringExtra(NotificationManagerService.MessageKey);
+                var cancel = intent.GetBooleanExtra(NotificationManagerService.CancelKey, false);
                 object intentData = null;
 
-                if (intent.HasExtra(Platforms.Android.NotificationManagerService.DataKey))
+                if (intent.HasExtra(NotificationManagerService.DataKey))
                 {
 
-                    string data = intent.GetStringExtra(Platforms.Android.NotificationManagerService.DataKey);
-                    string type = intent.GetStringExtra(Platforms.Android.NotificationManagerService.DataTypeKey);
+                    string data = intent.GetStringExtra(NotificationManagerService.DataKey);
+                    string type = intent.GetStringExtra(NotificationManagerService.DataTypeKey);
 
                     var t = Type.GetType(type);
                     intentData = JsonSerializer.Deserialize(data, t);

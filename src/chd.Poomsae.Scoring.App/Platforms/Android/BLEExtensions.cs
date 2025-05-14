@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chd.Poomsae.Scoring.App.Extensions
+namespace chd.Poomsae.Scoring.App.Platforms.Android
 {
     public static class BLEExtensions
     {

@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chd.Poomsae.Scoring.App.Services.BLE
+namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 {
     public class BLEGattCallback : BluetoothGattServerCallback
     {

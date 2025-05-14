@@ -1,8 +1,13 @@
-﻿using Android.App.Roles;
+﻿#if ANDROID
+using chd.Poomsae.Scoring.App.Platforms.Android;
+using chd.Poomsae.Scoring.App.Platforms.Android.BLE;
+#elif IOS
+using chd.Poomsae.Scoring.App.Platforms.iOS;    
+using chd.Poomsae.Scoring.App.Platforms.iOS.BLE;    
+#endif
 using chd.Poomsae.Scoring.App.Services;
 using chd.Poomsae.Scoring.App.Services.BLE;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
-using chd.Poomsae.Scoring.Platforms.Android;
 using chd.Poomsae.Scoring.UI.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -18,14 +23,12 @@ namespace chd.Poomsae.Scoring.App.Extensions
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
-
-            services.AddSingleton<INotificationManagerService, NotificationManagerService>();
-            services.AddSingleton<BLEGattCallback>();
-            services.AddSingleton<BLEAdvertisingCallback>();
-
+#if ANDROID
+            services.AddAndroidServices(configuration);
             services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
-            //services.AddUi<SettingManager, VibrationHelper, BLEServerManager>(configuration);
+#elif IOS
+  services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
+#endif
 
             return services;
         }

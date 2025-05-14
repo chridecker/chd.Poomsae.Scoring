@@ -1,5 +1,6 @@
-﻿using AndroidX.Activity;
+﻿#if ANDROID
 using chd.Poomsae.Scoring.Platforms.Android;
+#endif
 using Microsoft.AspNetCore.Components.WebView;
 using Microsoft.Maui.Platform;
 
@@ -17,25 +18,31 @@ namespace chd.Poomsae.Scoring.App
         {
             base.OnAppearing();
             await this.CheckPermissions();
-
+#if ANDROID
             Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.SensorLandscape;
+#endif
             DeviceDisplay.KeepScreenOn = true;
         }
 
         private async Task CheckPermissions()
         {
+#if ANDROID
+
             PermissionStatus blueToothPermission = await Permissions.RequestAsync<BluetoothPermission>();
             PermissionStatus notifiatioNpermission = await Permissions.RequestAsync<NotificationPermission>();
             PermissionStatus locationPermission = await Permissions.RequestAsync<LocationPermission>();
             PermissionStatus wifiPermission = await Permissions.RequestAsync<WifiPermission>();
+#endif
         }
         private void BlazorWebViewInitialized(object? sender, BlazorWebViewInitializedEventArgs e)
         {
+#if ANDROID
+
             try
             {
-                if (e.WebView.Context?.GetActivity() is not ComponentActivity activity)
+                if (e.WebView.Context?.GetActivity() is not AndroidX.Activity.ComponentActivity activity)
                 {
-                    throw new InvalidOperationException($"The permission-managing WebChromeClient requires that the current activity be a '{nameof(ComponentActivity)}'.");
+                    throw new InvalidOperationException($"The permission-managing WebChromeClient requires that the current activity be a '{nameof(AndroidX.Activity.ComponentActivity)}'.");
                 }
 
                 e.WebView.Settings.JavaScriptEnabled = true;
@@ -48,7 +55,7 @@ namespace chd.Poomsae.Scoring.App
             {
                 // do something if error appears
             }
-
+#endif
         }
     }
 }

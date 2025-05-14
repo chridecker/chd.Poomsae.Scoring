@@ -3,7 +3,6 @@ using Android.Bluetooth.LE;
 using Android.Content;
 using Android.OS;
 using Android.Provider;
-using chd.Poomsae.Scoring.App.Extensions;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
@@ -22,7 +21,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chd.Poomsae.Scoring.App.Services.BLE
+namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 {
     public class BLEServer : IBroadCastService
     {
@@ -152,7 +151,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
             var dataBuilder = new AdvertiseData.Builder();
             dataBuilder.SetIncludeDeviceName(true);
-            if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.S)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
             {
                 var id = ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString());
                 dataBuilder.AddServiceUuid(id);
@@ -178,7 +177,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
 
         private void NotifyCharacteristicChange(BluetoothDevice device, BluetoothGattCharacteristic characteristic, bool confirm, byte[] value)
         {
-            if (Android.OS.Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
             {
                 this._gattServer.NotifyCharacteristicChanged(device, characteristic, confirm, value);
             }

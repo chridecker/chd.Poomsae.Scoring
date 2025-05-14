@@ -5,14 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Android.Bluetooth;
 using Plugin.BLE.Abstractions.EventArgs;
 using System.Threading;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using Plugin.BLE.Abstractions;
-using Java.Util;
 
 namespace chd.Poomsae.Scoring.App.Services.BLE
 {
@@ -141,64 +139,55 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
         private async void _adapter_DeviceDiscoveredAuto(object? sender, DeviceEventArgs e)
         {
             var device = e.Device;
-            if (device.NativeDevice is BluetoothDevice bDevice)
-            {
-                await this._adapter.ConnectToDeviceAsync(device);
-            }
+            await this._adapter.ConnectToDeviceAsync(device);
         }
 
         private void _adapter_DeviceDiscovered(object? sender, DeviceEventArgs e)
         {
             var device = e.Device;
-            if (device.NativeDevice is BluetoothDevice bDevice)
+            this.DeviceDiscovered?.Invoke(this, new DeviceDto
             {
-                this.DeviceDiscovered?.Invoke(this, new DeviceDto
-                {
-                    Id = device.Id,
-                    Name = device.Name
-                });
-            }
+                Id = device.Id,
+                Name = device.Name
+            });
         }
         private async void _adapter_DeviceConnected(object? sender, DeviceEventArgs e)
         {
             var device = e.Device;
-            if (device.NativeDevice is BluetoothDevice navtiveDevive)
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
+            if (service is null)
             {
-                var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
-                if (service is null)
-                {
-                    await this.DisconnectDevice(device);
-                    return;
-                }
-                var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic);
-
-                if (characteristic is null || !characteristic.CanUpdate)
-                {
-                    await this.DisconnectDevice(device);
-                    return;
-                }
-
-                var dto = new DeviceDto()
-                {
-                    Id = device.Id,
-                    Name = device.Name
-                };
-
-                var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
-                if (characteristicName.CanUpdate)
-                {
-                    characteristicName.ValueUpdated += (s, e) => this.Name_ValueUpdated(s, dto, e);
-                    await characteristicName.StartUpdatesAsync();
-                }
-
-                characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, dto, e);
-                await characteristic.StartUpdatesAsync();
-
-                var readName = await this.ReadNameAsync(device, CancellationToken.None);
-                dto.Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
-
-                this.DeviceFound?.Invoke(this, dto);
+                await this.DisconnectDevice(device);
+                return;
             }
+            var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic);
+
+            if (characteristic is null || !characteristic.CanUpdate)
+            {
+                await this.DisconnectDevice(device);
+                return;
+            }
+
+            var dto = new DeviceDto()
+            {
+                Id = device.Id,
+                Name = device.Name
+            };
+
+            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
+            if (characteristicName.CanUpdate)
+            {
+                characteristicName.ValueUpdated += (s, e) => this.Name_ValueUpdated(s, dto, e);
+                await characteristicName.StartUpdatesAsync();
+            }
+
+            characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, dto, e);
+            await characteristic.StartUpdatesAsync();
+
+            var readName = await this.ReadNameAsync(device, CancellationToken.None);
+            dto.Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
+
+            this.DeviceFound?.Invoke(this, dto);
         }
 
         private async Task DisconnectDevice(IDevice device)
@@ -247,7 +236,7 @@ namespace chd.Poomsae.Scoring.App.Services.BLE
             if (characteristicName is not null && characteristicName.CanRead)
             {
                 var (data, state) = await characteristicName.ReadAsync(cancellationToken);
-                if (state != (int)GattStatus.Success)
+                if (state != 0)
                 {
                     throw new Exception("Error on Read Operation");
                 }
