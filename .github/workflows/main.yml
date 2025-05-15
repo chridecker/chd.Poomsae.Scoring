@@ -1,0 +1,74 @@
+name: Build MAUI iOS App
+
+on:
+  workflow_dispatch: # manuell auslösbar
+    inputs: 
+      build_config:
+        description: 'How to build debug/release'
+        required: true
+        default: 'Release'
+      use_ipa:
+        description: 'Create an IPA Artifact'
+        required: true
+        default: 'true'
+
+jobs:
+  build-ios:
+    env:
+      BUILD_CONFIG: ${{ github.event.inputs.build_config }}
+      
+    runs-on: macos-13
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.x'
+
+    - name: Install MAUI workloads
+      run: |
+        dotnet workload install maui
+        dotnet workload install maui-ios
+
+    - name: Decrypt signing certificate
+      run: |
+        mkdir -p ~/certs
+        echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ~/certs/cert.p12
+
+    - name: Install certificate
+      run: |
+        security create-keychain -p "pass" build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p "pass" build.keychain
+        security import ~/certs/cert.p12 -k build.keychain -P "${{ secrets.P12_PASSWORD }}" -T /usr/bin/codesign
+
+    - name: Install provisioning profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        echo "${{ secrets.IOS_PROVISION_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build MAUI iOS App (Release)
+      run: |
+        $MAJOR=1
+        $MINOR=1
+        $YEAR=& Get-Date -UFormat "%y%j"
+        $HOUR=& Get-Date -format HHmm
+        $VERSION="$MAJOR.$MINOR.$YEAR.$HOUR"
+        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-ios
+          /p:ApplicationDisplayVersion=$VERSION 
+          /p:ApplicationVersion=${{ github.run_number}} 
+          /p:RuntimeIdentifier=ios-arm64 \
+          /p:BuildIpa=true \
+          /p:CodesignKey="Apple Distribution" \
+          /p:CodesignProvision="Your Provisioning Profile Name"
+
+    - name: Upload artifact
+      if: ${{ github.event.inputs.use_ipa == 'true' }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ios-app
+        path: ./output/*.ipa
