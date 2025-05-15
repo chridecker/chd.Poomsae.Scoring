@@ -19,8 +19,10 @@ namespace chd.Poomsae.Scoring.App.Extensions
                 HasLicense = dto.HasLicense,
                 ValidTo = dto.ValidTo,
                 Username = dto.Username,
+                FirstName = dto.Username.Split(' ')[0],
+                LastName = dto.Username.Split(' ').Length > 1 ? dto.Username.Split(" ")[1] : string.Empty,
             };
-        
+
         public static FireStoreUserDto ToFSUser(this PSUserDto dto)
             => new FireStoreUserDto()
             {
@@ -29,7 +31,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
                 IsAdmin = dto.IsAdmin,
                 HasLicense = dto.HasLicense,
                 ValidTo = dto.ValidTo,
-                Username = dto.Username,
+                Username = dto.Username ?? string.Empty
             };
     }
 }

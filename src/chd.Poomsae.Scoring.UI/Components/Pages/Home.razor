@@ -32,7 +32,7 @@
 
     private void GoTo(string path)
     {
-        if (this._profileService.HasUserRight([RightConstants.IS_ALLOWED]))
+        // if (this._profileService.HasUserRight([RightConstants.IS_ALLOWED]))
         {
             this._navigationManager.NavigateTo(path, false);
         }

@@ -1,5 +1,5 @@
 ﻿@inherits PageComponentBase<Guid,int>
-@implements IDisposable
+@implements IAsyncDisposable
 @using Blazored.Modal.Services
 @using Blazored.Toast.Configuration
 @using chd.Poomsae.Scoring.Contracts.Interfaces
@@ -57,7 +57,9 @@
     {
         if (user is PSUserDto dto)
         {
+#if DEBUG
             await this.modalService.ShowDialog($"user:{dto.Email}", EDialogButtons.OK);
+#endif
         }
     }
 
@@ -69,8 +71,10 @@
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
+        this._profileService.UserChanged -= this.UserChanged;
+        await this._profileService.LogoutAsync(this._cts.Token);
         this._cts.Cancel();
     }
 }
