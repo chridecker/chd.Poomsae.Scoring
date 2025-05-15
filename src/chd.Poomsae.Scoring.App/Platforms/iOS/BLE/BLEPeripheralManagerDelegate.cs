@@ -12,10 +12,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
     public class BLEPeripheralManagerDelegate : CBPeripheralManagerDelegate
     {
         public event EventHandler<CBATTRequest> ReadRequest;
-        public BLEPeripheralManagerDelegate()
-        {
-            
-        }
 
         public override async void ReadRequestReceived(CBPeripheralManager peripheral, CBATTRequest request)
         {
