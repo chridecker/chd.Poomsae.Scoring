@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:chd.Poomsae.Scoring.App"
              xmlns:ui="clr-namespace:chd.Poomsae.Scoring.UI.Components;assembly=chd.Poomsae.Scoring.UI"
              x:Class="chd.Poomsae.Scoring.App.MainPage"
-             BackgroundColor="{DynamicResource CHDBg}">
+             BackgroundColor="{DynamicResource CHDWhite}">
 
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
         <BlazorWebView.RootComponents>

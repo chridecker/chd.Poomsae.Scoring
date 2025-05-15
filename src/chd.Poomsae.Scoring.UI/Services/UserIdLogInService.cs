@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.UI.Services
 {
-    public class UserIdLogInService : BaseUserIdLoginService<int>
+    public class UserIdLogInService : BaseUserIdLoginService<Guid>
     {
         public UserIdLogInService(IProtecedLocalStorageHandler protecedLocalStorageHandler) : base(protecedLocalStorageHandler)
         {

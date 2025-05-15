@@ -12,19 +12,21 @@ using System.Threading.Tasks;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.UI.Base.Client.Extensions;
 using chd.Poomsae.Scoring.UI.Services;
+using chd.UI.Base.Client.Implementations.Authorization;
 
 namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
-                 where TSettingManager : BaseClientSettingManager<int, int>, ISettingManager
+        public static IServiceCollection AddUi<TProfileService,TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
+                 where TProfileService : ProfileService<Guid, int>
+                 where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
             where TBroadCastService : class, IBroadCastService
             where TBroadcastClient : class, IBroadcastClient
         {
             services.AddAuthorizationCore();
-            services.AddUtilities<chdProfileService, int, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, UpdateService>(ServiceLifetime.Singleton);
+            services.AddUtilities<TProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, UpdateService>(ServiceLifetime.Singleton);
             services.AddMauiModalHandler();
             services.AddScoped<INavigationHistoryStateContainer, NavigationHistoryStateContainer>();
             services.AddScoped<INavigationHandler, NavigationHandler>();

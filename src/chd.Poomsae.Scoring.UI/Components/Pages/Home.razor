@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inherits PageComponentBase<Guid,int>
 
 <div class="home-container">
     <div class="home-card" @onclick="()=>this.GoTo(SINGLE)">
@@ -31,6 +32,9 @@
 
     private void GoTo(string path)
     {
-        this._navigationManager.NavigateTo(path, false);
+        if (this._profileService.HasUserRight([RightConstants.IS_ALLOWED]))
+        {
+            this._navigationManager.NavigateTo(path, false);
+        }
     }
 }

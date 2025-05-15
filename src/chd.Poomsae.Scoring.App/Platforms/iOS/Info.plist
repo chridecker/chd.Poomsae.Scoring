@@ -38,5 +38,14 @@
 			<string>bluetooth-peripheral</string>
 			<!-- Nur wenn du Peripheral/Server bist -->
 		</array>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.companyname.chd.poomsae.scoring.app</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>
