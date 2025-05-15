@@ -32,5 +32,11 @@
 		<string>Diese App benötigt Bluetooth, um Geräte in der Nähe zu erkennen.</string>
 		<key>NSBluetoothPeripheralUsageDescription</key>
 		<string>Bluetooth wird benötigt, um mit externen Geräten zu kommunizieren.</string>
+		<key>UIBackgroundModes</key>
+		<array>
+			<string>bluetooth-central</string>
+			<string>bluetooth-peripheral</string>
+			<!-- Nur wenn du Peripheral/Server bist -->
+		</array>
 	</dict>
 </plist>

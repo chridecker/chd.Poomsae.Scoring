@@ -24,9 +24,11 @@ namespace chd.Poomsae.Scoring.App.Extensions
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
         {
 #if ANDROID
-            services.AddAndroidServices(configuration);
+            services.AddAndroidServices();
             services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
 #elif IOS
+            services.AddiOS();
+            services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);   
   services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
 #endif
 

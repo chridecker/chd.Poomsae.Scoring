@@ -12,7 +12,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddAndroidServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAndroidServices(this IServiceCollection services)
         {
             services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();

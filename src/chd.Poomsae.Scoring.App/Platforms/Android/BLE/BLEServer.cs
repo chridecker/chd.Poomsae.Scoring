@@ -20,10 +20,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using chd.Poomsae.Scoring.App.Services.BLE.Base;
+using Blazored.Modal.Services;
+
 
 namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 {
-    public class BLEServer : IBroadCastService
+    public class BLEServer : BaseBLEServer<BluetoothDevice, BluetoothGattService, BluetoothGattCharacteristic, BluetoothGattDescriptor>, IBroadCastService
     {
         private BluetoothManager _bluetoothManager;
         private BluetoothAdapter _bluetoothAdapter;
@@ -31,100 +34,23 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
         private readonly BLEAdvertisingCallback _advertisingCallback;
         private readonly ISettingManager _settingManager;
         private BluetoothGattServer _gattServer;
-        private IBluetoothLE _bluetoothLE => CrossBluetoothLE.Current;
 
-        private BluetoothGattService _resultService;
-        private BluetoothGattCharacteristic _characteristic;
-        private BluetoothGattDescriptor _descNotifyResult;
-        private BluetoothGattDescriptor _descNotifyNameChanged;
-        private BluetoothGattCharacteristic _characteristicName;
 
-        private ConcurrentDictionary<Guid, BluetoothDevice> _connectedDevices = [];
-
-        private byte[] _resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
-        private byte[] _nameNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
-        private byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-        public event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
-
-        public int ConnectedDevices => this._connectedDevices.Count;
-
-        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager)
+        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager, IModalService modalService) 
+            : base(settingManager, modalService, BluetoothGattDescriptor.DisableNotificationValue)
         {
             this._callback = callback;
             this._advertisingCallback = advertisingCallback;
-            this._settingManager = settingManager;
+
             this._callback.CharacteristicReadRequest += this.ReadRequest;
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
             this._callback.DescriptorWriteRequest += this._callback_DescriptorWriteRequest;
             this._callback.DeviceConnectionStateChanged += this._callback_DeviceConnectionStateChanged;
         }
 
-        public async Task BroadcastNameChange()
+        protected override async Task StartNativeAsync(CancellationToken token)
         {
-            var name = await this.GetName();
-            if (Build.VERSION.SdkInt < BuildVersionCodes.Tiramisu)
-            {
-                this._characteristicName.SetValue(name.Item1);
-            }
-            this.BroadCastToAllDevices(this._characteristicName, name.Item2);
-        }
-
-
-        public void ResetScore()
-        {
-            this.SetResultValue([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-            if (Build.VERSION.SdkInt < BuildVersionCodes.Tiramisu)
-            {
-                this._characteristic.SetValue(this._resultCharacteristicValue);
-            }
-            this.BroadCastToAllDevices(this._characteristic, this._resultCharacteristicValue);
-        }
-        public void BroadcastResult(RunDto run)
-        {
-            if (run is EliminationRunDto elimination)
-            {
-                this.SetResultValue([1, __dataConvert(elimination.ChongScore.Accuracy), __dataConvert(elimination.ChongScore.SpeedAndPower ?? 0m), __dataConvert(elimination.ChongScore.RhythmAndTempo ?? 0m), __dataConvert(elimination.ChongScore.ExpressionAndEnergy ?? 0m), 2, __dataConvert(elimination.HongScore.Accuracy), __dataConvert(elimination.HongScore.SpeedAndPower ?? 0m), __dataConvert(elimination.HongScore.RhythmAndTempo ?? 0m), __dataConvert(elimination.HongScore.ExpressionAndEnergy ?? 0m)]);
-                if (Build.VERSION.SdkInt < BuildVersionCodes.Tiramisu)
-                {
-                    this._characteristic.SetValue(this._resultCharacteristicValue);
-                }
-                this.BroadCastToAllDevices(this._characteristic, this._resultCharacteristicValue);
-            }
-            else if (run is SingleRunDto singleRun)
-            {
-                if (singleRun.Color is EScoringButtonColor.Blue)
-                {
-                    this.SetResultValue([1, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m), 0, 0, 0, 0, 0]);
-                }
-                else if (singleRun.Color is EScoringButtonColor.Red)
-                {
-                    this.SetResultValue([0, 0, 0, 0, 0, 2, __dataConvert(singleRun.Score.Accuracy), __dataConvert(singleRun.Score.SpeedAndPower ?? 0m), __dataConvert(singleRun.Score.RhythmAndTempo ?? 0m), __dataConvert(singleRun.Score.ExpressionAndEnergy ?? 0m)]);
-                }
-                if (Build.VERSION.SdkInt < BuildVersionCodes.Tiramisu)
-                {
-                    this._characteristic.SetValue(this._resultCharacteristicValue);
-                }
-                this.BroadCastToAllDevices(this._characteristic, this._resultCharacteristicValue);
-            }
-
-            byte __dataConvert(decimal d) => (byte)(d * 10);
-        }
-
-        public async Task StartAsync(CancellationToken token)
-        {
-            var perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
-            while (perm is not PermissionStatus.Granted)
-            {
-                _ = await Permissions.RequestAsync<BluetoothPermission>();
-
-                perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
-                await Task.Delay(250, token);
-                if (token.IsCancellationRequested || perm is PermissionStatus.Granted)
-                {
-                    break;
-                }
-            }
+            _ = await Permissions.RequestAsync<BluetoothPermission>();
 
             if (this._bluetoothLE.State is not BluetoothState.On or BluetoothState.TurningOn)
             {
@@ -159,13 +85,13 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             dataBuilder.SetIncludeTxPowerLevel(true);
             advertiser.StartAdvertising(builder.Build(), dataBuilder.Build(), this._advertisingCallback);
         }
-        private void SetResultValue(byte[] data)
-        {
-            this._resultCharacteristicValue = data;
-        }
 
-        private void BroadCastToAllDevices(BluetoothGattCharacteristic characteristic, byte[] value)
+        protected override void BroadCastToAllDevices(BluetoothGattCharacteristic characteristic, byte[] value)
         {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.Tiramisu)
+            {
+                characteristic.SetValue(value);
+            }
             foreach (var device in this._bluetoothManager.GetConnectedDevices(ProfileType.Gatt))
             {
                 if (this._connectedDevices.ContainsKey(device.ParseDeviceId()))
@@ -189,7 +115,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 
         private async Task CreateService()
         {
-            this._resultService = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), GattServiceType.Primary);
+            this._service = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), GattServiceType.Primary);
 
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
             this._descNotifyNameChanged = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
@@ -211,35 +137,18 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
                 this._characteristic.SetValue(this._resultCharacteristicValue);
             }
 
-            this._resultService.AddCharacteristic(this._characteristic);
-            this._resultService.AddCharacteristic(this._characteristicName);
+            this._service.AddCharacteristic(this._characteristic);
+            this._service.AddCharacteristic(this._characteristicName);
 
-            this._gattServer.AddService(this._resultService);
+            this._gattServer.AddService(this._service);
         }
 
         private void _callback_DeviceConnectionStateChanged(object? sender, BleEventArgs e)
         {
-            //if (e.NewState == ProfileState.Connected
-            //    && !this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
-            //{
-            //    this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
-            //    this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
-            //    {
-            //        Connected = true,
-            //        Id = e.Device.ParseDeviceId(),
-            //        Name = e.Device.Name
-            //    });
-            //}
-            //else
             if (e.NewState == ProfileState.Disconnected
                 && this._connectedDevices.TryRemove(e.Device.ParseDeviceId(), out _))
             {
-                this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
-                {
-                    Connected = false,
-                    Id = e.Device.ParseDeviceId(),
-                    Name = e.Device.Name
-                });
+                this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), e.Device.Name, false);
             }
         }
         private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
@@ -291,21 +200,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
                 if (!this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
                 {
                     this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
-                    this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
-                    {
-                        Connected = true,
-                        Id = e.Device.ParseDeviceId(),
-                        Name = e.Device.Name
-                    });
+                    this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), e.Device.Name, true);
                 }
             }
-        }
-
-        private async Task<(string, byte[])> GetName()
-        {
-            var name = await this._settingManager.GetName();
-            name = string.IsNullOrWhiteSpace(name) ? DeviceInfo.Current.Name : name;
-            return (name, Encoding.ASCII.GetBytes(name));
         }
 
     }
