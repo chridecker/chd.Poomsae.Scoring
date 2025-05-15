@@ -27,7 +27,13 @@ namespace chd.Poomsae.Scoring.WPF.Services
             var name = await this.GetNativSetting<string>(SettingConstants.OwnName);
             return string.IsNullOrWhiteSpace(name) ? Environment.MachineName : name;
         }
+        public async Task<string> GetToken()
+        {
+            var name = await this.GetNativSetting<string>(SettingConstants.License);
+            return string.IsNullOrWhiteSpace(name) ? string.Empty : name;
+        }
         public async Task SetName(string name) => await this.SetNativSetting(SettingConstants.OwnName, name);
+        public async Task SetToken(string name) => await this.SetNativSetting(SettingConstants.License, name);
 
         public async Task SetNativSetting<T>(string key, T value) where T : class
         {

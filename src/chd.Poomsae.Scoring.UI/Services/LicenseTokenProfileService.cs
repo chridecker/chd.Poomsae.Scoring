@@ -33,9 +33,15 @@ namespace chd.Poomsae.Scoring.UI.Services
 
         public async Task RenewLicense(CancellationToken cancellationToken = default)
         {
-            await this._settingManager.SetNativSetting(SettingConstants.License, string.Empty);
+            await this._settingManager.SetToken(string.Empty);
             await this.LogoutAsync(cancellationToken);
             await this.LoginAsync(new(), cancellationToken);
+        }
+
+        public async Task<(PSUserDto, DateTime)> GetLicense(CancellationToken cancellationToken = default)
+        {
+            var token = await this._settingManager.GetToken();
+            return this._tokenService.ValidateLicenseToken(token);
         }
 
         protected override async Task<UserPermissionDto<int>> GetPermissions(UserDto<Guid, int> dto, CancellationToken cancellationToken = default)
@@ -102,7 +108,7 @@ namespace chd.Poomsae.Scoring.UI.Services
 
         private async Task<(PSUserDto, DateTime)> GetUserFromToken()
         {
-            var token = await this._settingManager.GetNativSetting<string>(SettingConstants.License);
+            var token = await this._settingManager.GetToken();
             if (string.IsNullOrWhiteSpace(token)) { return (null, DateTime.MinValue); }
             return this._tokenService.ValidateLicenseToken(token);
         }
@@ -110,7 +116,7 @@ namespace chd.Poomsae.Scoring.UI.Services
         private async Task GenerateToken(PSUserDto user, DateTime expiryDate)
         {
             var token = this._tokenService.GenerateLicenseToken(user, expiryDate);
-            await this._settingManager.SetNativSetting(SettingConstants.License, token);
+            await this._settingManager.SetToken(token);
         }
 
 
