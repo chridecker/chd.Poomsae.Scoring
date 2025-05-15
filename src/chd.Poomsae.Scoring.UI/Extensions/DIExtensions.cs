@@ -18,8 +18,8 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TProfileService,TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
-                 where TProfileService : ProfileService<Guid, int>
+        public static IServiceCollection AddUi<TProfileService, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
+                 where TProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
                  where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
             where TBroadCastService : class, IBroadCastService
@@ -31,6 +31,9 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddScoped<INavigationHistoryStateContainer, NavigationHistoryStateContainer>();
             services.AddScoped<INavigationHandler, NavigationHandler>();
 
+            services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton);
+
+            services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<IAppInfoService, AppInfoService>();
             services.AddSingleton<IResultService, ResultService>();
             services.AddSingleton<IStartRunService, StartRunService>();

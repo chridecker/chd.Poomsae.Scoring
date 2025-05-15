@@ -11,7 +11,6 @@ using Plugin.Firebase.Firestore;
 using Firebase;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
-using chd.Poomsae.Scoring.Contracts.Settings;
 #if ANDROID
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Platforms.Android.Extensions;
@@ -77,7 +76,7 @@ namespace chd.Poomsae.Scoring.App
         private static IConfiguration GetAppSettingsConfig()
         {
             var fileName = "appsettings.json";
-            var appSettingsFileName = "chdScoring.App.appsettings.json";
+            var appSettingsFileName = "chd.Poomsae.Scoring.App.appsettings.json";
             var assembly = Assembly.GetExecutingAssembly();
             using var resStream = assembly.GetManifestResourceStream(appSettingsFileName);
             if (resStream == null)
@@ -91,13 +90,10 @@ namespace chd.Poomsae.Scoring.App
 
         private static IConfiguration GetLocalSetting()
         {
-            if (Preferences.ContainsKey(SettingConstants.LicenseKey))
+            if (Preferences.ContainsKey(SettingConstants.License))
             {
-                var pref = Preferences.Default.Get<string>(SettingConstants.LicenseKey, string.Empty);
-                var dict = new Dictionary<string, string>()
-                {
-                    {$"{nameof(LicenseSettings)}:{nameof(LicenseSettings.LicenseKey)}",pref }
-                };
+                //var pref = Preferences.Default.Get<string>(SettingConstants.LicenseKey, string.Empty);
+                var dict = new Dictionary<string, string>();
                 return new ConfigurationBuilder().AddInMemoryCollection(dict).Build();
             }
             return new ConfigurationBuilder().Build();

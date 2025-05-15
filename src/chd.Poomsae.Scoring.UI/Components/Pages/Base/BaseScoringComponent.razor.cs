@@ -15,10 +15,12 @@ using chd.UI.Base.Contracts.Enum;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using chd.Poomsae.Scoring.Contracts.Constants;
+using chd.UI.Base.Contracts.Interfaces.Authentication;
+using chd.UI.Base.Components.Base;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
-    public abstract class BaseScoringComponent<TRunDto> : ComponentBase, IDisposable
+    public abstract class BaseScoringComponent<TRunDto> : PageComponentBase<Guid, int>, IDisposable
         where TRunDto : RunDto
     {
         [Inject] private NavigationManager _navigationManager { get; set; }
@@ -29,6 +31,8 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         protected TRunDto runDto;
 
         private IDisposable _registerLocationChangeHandler;
+
+        protected bool _isLicensed = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -51,6 +55,8 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task HandleClick()
         {
+            if (!this._profileService.HasUserRight([RightConstants.IS_ALLOWED])) { return; }
+
             if (this.runDto.State is ERunState.Started)
             {
                 if (!await this.HandleStartedState()) { return; }

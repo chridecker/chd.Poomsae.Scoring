@@ -1,15 +1,10 @@
 ﻿using Blazored.Modal.Services;
-using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
-using chd.Poomsae.Scoring.Contracts.Settings;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.Poomsae.Scoring.UI.Services;
-using chd.UI.Base.Client.Implementations.Authorization;
 using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Dtos.Authentication;
-using Firebase;
-using Firebase.Auth;
-using Microsoft.Extensions.Options;
 using Plugin.Firebase.Auth;
 using Plugin.Firebase.Auth.Google;
 using Plugin.Firebase.Firestore;
@@ -24,22 +19,23 @@ namespace chd.Poomsae.Scoring.App.Services
     public class GoogleSignInManager : LicenseTokenProfileService
     {
         private readonly IFirebaseAuthGoogle _firebaseAuthGoogle;
+        private readonly IFirebaseAuth _firebaseAuth;
         private readonly FirestoreManager _firestoreManager;
         private readonly IModalService _modalService;
 
-        private PSUserDto _userDto;
-        private DateTime? _lastLogin;
 
-        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, FirestoreManager firestoreManager, IModalService modalService,
-            IOptionsMonitor<LicenseSettings> optionsMonitor) : base(optionsMonitor)
+
+        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, IFirebaseAuth firebaseAuth, FirestoreManager firestoreManager, IModalService modalService,
+            ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService)
         {
             this._firebaseAuthGoogle = firebaseAuthGoogle;
+            this._firebaseAuth = firebaseAuth;
             this._firestoreManager = firestoreManager;
             this._modalService = modalService;
 
         }
 
-        private async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
+        protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
             {
@@ -55,19 +51,23 @@ namespace chd.Poomsae.Scoring.App.Services
                         break;
                     }
                 }
-                //var user = await CrossFirebaseAuth.Current.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
-                var user = await this._firebaseAuthGoogle.SignInWithGoogleAsync();
-                if (user != null)
-                {
-                    string name = user.DisplayName;
-                    string email = user.Email;
-                    var uid = user.Uid;
+                await this._firebaseAuth.SignOutAsync();
 
+                IFirebaseUser user = null;
+                try
+                {
+                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
+                }
+                catch { }
+                user ??= await this._firebaseAuthGoogle.SignInWithGoogleAsync();
+
+                if (user is not null)
+                {
                     return await this._firestoreManager.GetOrCreateUser(new PSUserDto()
                     {
-                        Username = name,
-                        Email = email,
-                        UID = uid,
+                        Username = user.DisplayName ?? string.Empty,
+                        Email = user.Email,
+                        UID = user.Uid,
                     });
                 }
             }
@@ -78,16 +78,6 @@ namespace chd.Poomsae.Scoring.App.Services
             return null;
         }
 
-        protected override async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
-        {
-            if (this._userDto is not null && this._lastLogin.HasValue && this._lastLogin.Value > DateTime.Now.AddHours(-1))
-            {
-                return this._userDto;
-            }
 
-            this._userDto = await this.SignIn(cancellationToken);
-            this._lastLogin = DateTime.Now;
-            return this._userDto;
-        }
     }
 }

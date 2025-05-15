@@ -8,5 +8,8 @@
 	<ItemGroup>
 		<PackageReference Include="chd.UI.Base.Contracts" Version="1.0.25130.114" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Settings\" />
+	</ItemGroup>
 
 </Project>

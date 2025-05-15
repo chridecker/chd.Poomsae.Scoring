@@ -1,4 +1,12 @@
-﻿using System;
+﻿using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.Contracts.Dtos;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.UI.Services;
+using chd.UI.Base.Components.Extensions;
+using chd.UI.Base.Contracts.Dtos.Authentication;
+using Plugin.Firebase.Auth;
+using Plugin.Firebase.Firestore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,18 +21,18 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
         private readonly AppleIdSignService _appleIdSignService;
 
         public AppleSignInManager(IFirebaseAuth firebaseAuth, AppleIdSignService signInService,
-            IModalService modalService,
-            IOptionsMonitor<LicenseSettings> optionsMonitor) : base(optionsMonitor)
+            IModalService modalService, ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService)
         {
             this._modalService = modalService;
             this._appleIdSignService = signInService;
             this._firebaseAuth = firebaseAuth;
         }
 
-        private async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
+        protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
             {
+                 await this._firebaseAuth.SignOutAsync();
                 IFirebaseUser user = null;
                 if (DeviceInfo.Platform == DevicePlatform.iOS && DeviceInfo.Version.Major >= 13)
                 {
@@ -39,15 +47,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
                 }
                 if (user is not null)
                 {
-                    string name = user.DisplayName;
-                    string email = user.Email;
-                    var uid = user.Uid;
-
                     return await this._firestoreManager.GetOrCreateUser(new PSUserDto()
                     {
-                        Username = name,
-                        Email = email,
-                        UID = uid,
+                        Username = user.DisplayName ?? string.Empty,
+                        Email = user.Email,
+                        UID = user.Uid,
                     });
                 }
             }
