@@ -31,7 +31,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddScoped<INavigationHistoryStateContainer, NavigationHistoryStateContainer>();
             services.AddScoped<INavigationHandler, NavigationHandler>();
 
-            services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton);
+            services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton));
 
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<IAppInfoService, AppInfoService>();
