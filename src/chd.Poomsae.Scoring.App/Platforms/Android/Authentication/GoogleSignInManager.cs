@@ -1,18 +1,17 @@
-﻿using Android.AdServices.OnDevicePersonalization;
-using Android.Gms.Auth.Api.SignIn;
-using AndroidX.Fragment.App;
-using Blazored.Modal.Services;
+﻿using Blazored.Modal.Services;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
+using chd.Poomsae.Scoring.Contracts.Settings;
 using chd.Poomsae.Scoring.Platforms.Android;
+using chd.Poomsae.Scoring.UI.Services;
 using chd.UI.Base.Client.Implementations.Authorization;
 using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Dtos.Authentication;
 using Firebase;
 using Firebase.Auth;
+using Microsoft.Extensions.Options;
 using Plugin.Firebase.Auth;
 using Plugin.Firebase.Auth.Google;
-using Plugin.Firebase.Auth.Google.Platforms.Android;
 using Plugin.Firebase.Firestore;
 using System;
 using System.Collections.Generic;
@@ -22,21 +21,23 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-    public class GoogleSignInManager : ProfileService<Guid, int>
+    public class GoogleSignInManager : LicenseTokenProfileService
     {
         private readonly IFirebaseAuthGoogle _firebaseAuthGoogle;
         private readonly FirestoreManager _firestoreManager;
-        private readonly IModalService modalService;
+        private readonly IModalService _modalService;
 
         private PSUserDto _userDto;
         private DateTime? _lastLogin;
 
-        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, FirestoreManager firestoreManager, IModalService modalService)
+        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, FirestoreManager firestoreManager, IModalService modalService,
+            IOptionsMonitor<LicenseSettings> optionsMonitor) : base(optionsMonitor)
         {
-            this._firebaseAuthGoogle = firebaseAuthGoogle;
+             this._firebaseAuthGoogle = firebaseAuthGoogle;
             this._firestoreManager = firestoreManager;
-            this.modalService = modalService;
+            this._modalService = modalService;
         }
+
         private async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
@@ -71,7 +72,7 @@ namespace chd.Poomsae.Scoring.App.Services
             }
             catch (Exception ex)
             {
-                await this.modalService.ShowDialog(ex.Message, chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
+                await this._modalService.ShowDialog(ex.Message, chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
             }
             return null;
         }

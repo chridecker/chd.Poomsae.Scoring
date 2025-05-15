@@ -28,7 +28,6 @@ namespace chd.Poomsae.Scoring.App.Services
 
             var snap = await userDocument.GetDocumentSnapshotAsync<FireStoreUserDto>(Plugin.Firebase.Firestore.Source.Server);
 
-
             if (snap?.Data is null || string.IsNullOrEmpty(snap.Data.UID))
             {
 
