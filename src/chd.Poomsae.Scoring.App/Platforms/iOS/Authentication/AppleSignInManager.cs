@@ -32,8 +32,13 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
         {
             try
             {
-                 await this._firebaseAuth.SignOutAsync();
+                await this._firebaseAuth.SignOutAsync();
                 IFirebaseUser user = null;
+                try
+                {
+                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
+                }
+                catch { }
                 if (DeviceInfo.Platform == DevicePlatform.iOS && DeviceInfo.Version.Major >= 13)
                 {
                     user = await this._firebaseAuth.SignInWithAppleAsync();

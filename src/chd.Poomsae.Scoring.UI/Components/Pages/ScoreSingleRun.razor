@@ -5,6 +5,7 @@
 @using chd.Poomsae.Scoring.Contracts.Enums
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Pages.Base
+@using chd.Poomsae.Scoring.UI.Components.Shared.Licensing
 @using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
@@ -38,7 +39,7 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        No
+        <NoLicenseComponent />
     </NotAuthorized>
 </ChdAuthorizeView>
 

@@ -1,4 +1,5 @@
-﻿using chd.UI.Base.Contracts.Interfaces.Authentication;
+﻿using chd.Poomsae.Scoring.Contracts.Dtos;
+using chd.UI.Base.Contracts.Interfaces.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 {
     public interface ILicenseTokenProfileService : IProfileService<Guid, int>
     {
+        Task<(PSUserDto, DateTime)> GetLicense(CancellationToken cancellationToken = default);
         Task RenewLicense(CancellationToken cancellationToken = default);
     }
 }
