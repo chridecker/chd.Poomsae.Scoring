@@ -11,6 +11,8 @@ using Plugin.Firebase.Firestore;
 using Firebase;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
+using chd.UI.Base.Contracts.Interfaces.Update;
+
 #if ANDROID
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Platforms.Android.Extensions;
@@ -64,11 +66,17 @@ namespace chd.Poomsae.Scoring.App
             builder.ConfigureLifecycleEvents(events =>
             {
 #if ANDROID
-                events.AddAndroid(android => android.OnCreate((activity, _) =>
+                events.AddAndroid(android => android.OnCreate(async (activity, _) =>
                 {
                     CrossFirebase.Initialize(activity);
                     FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
+#elif IOS
+               events.AddiOS(iOS=>iOS.FinishedLaunching((app, options) =>
+               {
+                    var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
+                    await updateSvc.UpdateAsync(0);
+               }));
 #endif
             });
             return builder;

@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using chd.Poomsae.Scoring.UI.Services;
 
 namespace chd.Poomsae.Scoring.App.Extensions
 {
@@ -26,16 +27,16 @@ namespace chd.Poomsae.Scoring.App.Extensions
     {
         public static IServiceCollection AddAppServices(this IServiceCollection services, IConfiguration configuration)
         {
-             services.AddSingleton<IFirebaseAuth>(_ => CrossFirebaseAuth.Current);
-             services.AddSingleton<IFirebaseFirestore>(_ => CrossFirebaseFirestore.Current);
+            services.AddSingleton<IFirebaseAuth>(_ => CrossFirebaseAuth.Current);
+            services.AddSingleton<IFirebaseFirestore>(_ => CrossFirebaseFirestore.Current);
             services.AddSingleton<FirestoreManager>();
 
 #if ANDROID
             services.AddAndroidServices();
-            services.AddUi<GoogleSignInManager, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
+            services.AddUi<GoogleSignInManager, UpdateService, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
 #elif IOS
             services.AddiOS();
-            services.AddUi<AppleSignInManager, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);   
+            services.AddUi<AppleSignInManager,InAppUpdateService, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);   
 #endif
             services.AddSingleton<IFirebaseAuth>(_ => CrossFirebaseAuth.Current);
             services.AddSingleton<IFirebaseAuthGoogle>(_ => CrossFirebaseAuthGoogle.Current);

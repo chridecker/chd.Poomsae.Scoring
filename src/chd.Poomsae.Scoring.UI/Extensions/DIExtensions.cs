@@ -18,15 +18,16 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TProfileService, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUi<TProfileService,TUpdateService,  TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
                  where TProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
                  where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
             where TBroadCastService : class, IBroadCastService
             where TBroadcastClient : class, IBroadcastClient
+            where TUpdateService : BaseUpdateService, IUpdateService
         {
             services.AddAuthorizationCore();
-            services.AddUtilities<TProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, UpdateService>(ServiceLifetime.Singleton);
+            services.AddUtilities<TProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, TUpdateService>(ServiceLifetime.Singleton);
             services.AddMauiModalHandler();
             services.AddScoped<INavigationHistoryStateContainer, NavigationHistoryStateContainer>();
             services.AddScoped<INavigationHandler, NavigationHandler>();
