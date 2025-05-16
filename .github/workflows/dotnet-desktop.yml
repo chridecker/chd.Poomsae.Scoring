@@ -38,7 +38,7 @@ jobs:
       run: dotnet restore
     - name: Publish
       run: |
-        $MAJOR=0
+        $MAJOR=2
         $MINOR=1
         $YEAR=& Get-Date -UFormat "%y%j"
         $HOUR=& Get-Date -format HHmm
