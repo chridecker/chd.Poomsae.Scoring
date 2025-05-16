@@ -37,12 +37,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             string message = notification.Request.Content.Body;
             int.TryParse(notification.Request.Identifier, out int id);
 
-            if (notification.Request.Content.Attachments.Any(a => a.Identifier == NotificationManagerService.DataKey) &&
-                notification.Request.Content.Attachments.Any(a => a.Identifier == NotificationManagerService.DataTypeKey))
-            {
-                var type = notification.Request.Content.Attachments.FirstOrDefault(x => x.Identifier == NotificationManagerService.DataTypeKey);
-                var data = notification.Request.Content.Attachments.FirstOrDefault(x => x.Identifier == NotificationManagerService.DataKey);
-            }
+            
 
             var service = IPlatformApplication.Current?.Services.GetService<INotificationManagerService>();
             service?.ReceiveNotification(new NotificationEventArgs(id, title, message,,));

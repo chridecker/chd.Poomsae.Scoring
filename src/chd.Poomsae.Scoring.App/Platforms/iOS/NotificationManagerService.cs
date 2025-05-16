@@ -54,18 +54,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
                 Body = message,
                 Badge = 1
             };
-            NSError error;
-            var attachmentType = UNNotificationAttachment.FromIdentifier(DataTypeKey, NSUrl.FromString(typeof(DataMisalignedException).FullName), new UNNotificationAttachmentOptions(), out error);
-            if (error is not null)
-            {
-                throw new Exception(error.ToString());
-            }
-            var attachmentData = UNNotificationAttachment.FromIdentifier(DataKey, NSUrl.FromString(JsonSerializer.Serialize(data)), new UNNotificationAttachmentOptions(), out error);
-            if (error is not null)
-            {
-                throw new Exception(error.ToString());
-            }
-            content.Attachments = [attachmentType, attachmentData];
+            content.UserInfo = NSDictionary.FromObjectsAndKeys(
+                [new NSString(typeof(TData).FullName), new NSString(JsonSerializer.Serialize(data))],
+                [new NSString(DataTypeKey), new NSString(DataKey)]);
             this.Show(content);
         }
 
