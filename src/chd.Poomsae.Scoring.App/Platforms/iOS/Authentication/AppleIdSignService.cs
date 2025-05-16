@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-chd.Poomsae.Scoring.UI.Services;
+using chd.Poomsae.Scoring.UI.Services;
 
 [assembly: Dependency(typeof(AppleSignInService))]
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
