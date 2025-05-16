@@ -1,0 +1,51 @@
+﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UserNotifications;
+
+namespace chd.Poomsae.Scoring.App.Platforms.iOS
+{
+    public class NotificationReceiver : UNUserNotificationCenterDelegate
+    {
+        // Called if app is in the foreground.
+        public override void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
+        {
+            ProcessNotification(notification);
+
+            var presentationOptions = (OperatingSystem.IsIOSVersionAtLeast(14))
+                ? UNNotificationPresentationOptions.Banner
+                : UNNotificationPresentationOptions.Alert;
+
+            completionHandler(presentationOptions);
+        }
+
+        // Called if app is in the background, or killed state.
+        public override void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
+        {
+            if (response.IsDefaultAction)
+                ProcessNotification(response.Notification);
+
+            completionHandler();
+        }
+
+        void ProcessNotification(UNNotification notification)
+        {
+            string title = notification.Request.Content.Title;
+            string message = notification.Request.Content.Body;
+            int.TryParse(notification.Request.Identifier, out int id);
+
+            if (notification.Request.Content.Attachments.Any(a => a.Identifier == NotificationManagerService.DataKey) &&
+                notification.Request.Content.Attachments.Any(a => a.Identifier == NotificationManagerService.DataTypeKey))
+            {
+                var type = notification.Request.Content.Attachments.FirstOrDefault(x => x.Identifier == NotificationManagerService.DataTypeKey);
+                var data = notification.Request.Content.Attachments.FirstOrDefault(x => x.Identifier == NotificationManagerService.DataKey);
+            }
+
+            var service = IPlatformApplication.Current?.Services.GetService<INotificationManagerService>();
+            service?.ReceiveNotification(new NotificationEventArgs(id, title, message,,));
+        }
+    }
+}
