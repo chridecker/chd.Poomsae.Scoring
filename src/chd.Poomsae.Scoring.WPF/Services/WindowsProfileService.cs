@@ -1,5 +1,5 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Dtos;
-using chd.Poomsae.Scoring.Contracts.Settings;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.UI.Services;
 using chd.UI.Base.Client.Implementations.Authorization;
 using chd.UI.Base.Contracts.Dtos.Authentication;
@@ -14,7 +14,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
 {
     public class WindowsProfileService : LicenseTokenProfileService
     {
-        public WindowsProfileService(IOptionsMonitor<LicenseSettings> optionsMonitor) : base(optionsMonitor)
+        public WindowsProfileService(ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService)
         {
         }
 
@@ -23,7 +23,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
             return Task.FromResult(new UserPermissionDto<int>());
         }
 
-        protected override async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
+        protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             return new PSUserDto
             {

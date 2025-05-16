@@ -27,7 +27,7 @@
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 
 	</PropertyGroup>
-	
+
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU'">
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
@@ -53,8 +53,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Remove="appsettings.json" />
-	  <Content Remove="Platforms\Android\google-services.json" />
+		<Content Remove="appsettings.json" />
+		<Content Remove="Platforms\Android\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -82,14 +82,18 @@
 
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <EmbeddedResource Include="appsettings.json" />
+		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
+		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
+		<PackageReference Include="Plugin.Firebase.Auth.Google" Version="3.1.1" />
+		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
+		<EmbeddedResource Include="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -98,13 +102,10 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.60" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
-		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 		<PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 		<PackageReference Include="Plugin.Firebase.Auth" Version="3.1.1" />
-		<PackageReference Include="Plugin.Firebase.Auth.Google" Version="3.1.1" />
 		<PackageReference Include="Plugin.Firebase.Firestore" Version="3.1.3" />
-		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
-		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
+
 	</ItemGroup>
 
 	<ItemGroup>

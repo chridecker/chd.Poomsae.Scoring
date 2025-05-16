@@ -28,12 +28,12 @@ namespace chd.Poomsae.Scoring.App.Extensions
         {
 #if ANDROID
             services.AddAndroidServices();
-            services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
+            services.AddUi<GoogleSignInManager, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
 #elif IOS
             services.AddiOS();
-            services.AddUi<SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);   
+            services.AddUi<AppleSignInManager, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);   
 #endif
-             services.AddSingleton<IFirebaseAuth>(_ => CrossFirebaseAuth.Current);
+            services.AddSingleton<IFirebaseAuth>(_ => CrossFirebaseAuth.Current);
             services.AddSingleton<IFirebaseAuthGoogle>(_ => CrossFirebaseAuthGoogle.Current);
             services.AddSingleton<IFirebaseFirestore>(_ => CrossFirebaseFirestore.Current);
             services.AddSingleton<FirestoreManager>();

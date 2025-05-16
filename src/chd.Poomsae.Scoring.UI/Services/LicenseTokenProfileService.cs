@@ -81,7 +81,7 @@ namespace chd.Poomsae.Scoring.UI.Services
 
         protected abstract Task<PSUserDto> SignIn(CancellationToken cancellationToken);
 
-        protected override async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
+        protected override sealed async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
         {
             var time = DateTime.Today;
             if (this._userDto is null)
