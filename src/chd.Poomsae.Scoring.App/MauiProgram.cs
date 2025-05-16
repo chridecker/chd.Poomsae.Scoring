@@ -12,13 +12,14 @@ using Firebase;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
-
+using Plugin.Firebase.Auth.Google;
 #if ANDROID
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Platforms.Android.Extensions;
-using Plugin.Firebase.Auth.Google;
 using Maui.Android.InAppUpdates;
 #elif IOS
+using Plugin.Firebase.Core.Platforms.iOS;
+using Plugin.Firebase.Auth.Platforms.iOS.Extensions;
 
 #endif
 
@@ -72,10 +73,12 @@ namespace chd.Poomsae.Scoring.App
                     FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
 #elif IOS
-               events.AddiOS(iOS=>iOS.FinishedLaunching((app, options) =>
+               events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                {
+                    CrossFirebase.Initialize();
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
-                    await updateSvc.UpdateAsync(0);
+                    updateSvc.UpdateAsync(0);
+                    return false;
                }));
 #endif
             });
