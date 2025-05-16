@@ -4,6 +4,7 @@ using Android.Graphics;
 using Android.OS;
 using AndroidX.Core.App;
 using chd.Poomsae.Scoring.App;
+using chd.Poomsae.Scoring.App.Services;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ using Resource = chd.Poomsae.Scoring.App.Resource;
 
 namespace chd.Poomsae.Scoring.Platforms.Android
 {
-    public class NotificationManagerService : INotificationManagerService
+    public class NotificationManagerService : BaseNotificationManager
     {
         const string channelId = "default";
         const string channelName = "Default";
@@ -25,16 +26,11 @@ namespace chd.Poomsae.Scoring.Platforms.Android
         public const string TitleKey = "title";
         public const string MessageKey = "message";
         public const string CancelKey = "cancel";
-        public const string DataKey = "data";
-        public const string DataTypeKey = "datatype";
 
         bool channelInitialized = false;
-        int messageId = 0;
         int pendingIntentId = 0;
 
         NotificationManagerCompat compatManager;
-
-        public event EventHandler<NotificationEventArgs> NotificationReceived;
 
         public static NotificationManagerService Instance { get; private set; }
 
@@ -48,7 +44,7 @@ namespace chd.Poomsae.Scoring.Platforms.Android
             }
         }
 
-        public void SendNotification(string title, string message, bool autoCloseOnLick = true)
+        public override void SendNotification(string title, string message, bool autoCloseOnLick = true)
         {
             if (!this.channelInitialized)
             {
@@ -57,7 +53,7 @@ namespace chd.Poomsae.Scoring.Platforms.Android
             this.Show(title, message, autoCloseOnLick);
         }
 
-        public void SendNotification<TData>(string title, string message, TData data, bool autoCloseOnLick = true)
+        public override void SendNotification<TData>(string title, string message, TData data, bool autoCloseOnLick = true)
         {
             if (!this.channelInitialized)
             {
@@ -66,25 +62,25 @@ namespace chd.Poomsae.Scoring.Platforms.Android
             this.Show(title, message, data, autoCloseOnLick);
         }
 
-        public void ReceiveNotification(NotificationEventArgs args)
+        public override void ReceiveNotification(NotificationEventArgs args)
         {
             if (args.Cancel)
             {
                 this.compatManager.Cancel(args.Id);
             }
-            NotificationReceived?.Invoke(this, args);
+            this.OnNotificationReceived(args);
         }
 
-        public void Show(string title, string message, bool autoCancel)
+        private void Show(string title, string message, bool autoCancel)
         {
-            var id = this.messageId++;
+            var id = this._messageId++;
             var intent = this.CreateIntent(id, title, message, autoCancel, typeof(MainActivity));
             this.SendIntent(id, intent, title, message, autoCancel);
         }
 
         private void Show<TData>(string title, string message, TData data, bool autoCancel)
         {
-            var id = this.messageId++;
+            var id = this._messageId++;
             var intent = this.CreateIntent(id, title, message, autoCancel, typeof(MainActivity));
             if (data is not null) { }
             intent.PutExtra(DataTypeKey, typeof(TData).FullName);

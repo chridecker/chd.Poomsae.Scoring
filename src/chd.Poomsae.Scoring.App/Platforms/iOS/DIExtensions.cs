@@ -14,6 +14,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
         {
             services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
             services.AddSingleton<BLEPeripheralManagerDelegate>();
+            services.AddSingleton<NotificationReceiver>();
+            services.AddSingleton<INotificationManagerService, NotificationManagerService>();
             return services;
         }
     }

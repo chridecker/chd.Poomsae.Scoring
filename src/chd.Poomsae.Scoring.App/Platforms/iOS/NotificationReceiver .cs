@@ -26,21 +26,33 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
         public override void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
         {
             if (response.IsDefaultAction)
+            {
                 ProcessNotification(response.Notification);
-
+            }
             completionHandler();
         }
 
         void ProcessNotification(UNNotification notification)
         {
-            string title = notification.Request.Content.Title;
-            string message = notification.Request.Content.Body;
-            int.TryParse(notification.Request.Identifier, out int id);
+            var request = notification.Request;
 
-            
+            string title = request.Content.Title;
+            string message = request.Content.Body;
+            int.TryParse(request.Identifier, out int id);
+            object requestData = null;
+
+            if (!string.IsNullOrEmpty(request.Content.UserInfo[NotificationManagerService.DataKey])
+                && !string.IsNullOrEmpty(request.Content.UserInfo[NotificationManagerService.DataTypeKey]))
+            {
+                string type = request.Content.UserInfo[NotificationManagerService.DataTypeKey];
+                string data = request.Content.UserInfo[NotificationManagerService.DataKey];
+
+                var t = Type.GetType(type);
+                requestData = JsonSerializer.Deserialize(data, t);
+            }
 
             var service = IPlatformApplication.Current?.Services.GetService<INotificationManagerService>();
-            service?.ReceiveNotification(new NotificationEventArgs(id, title, message,,));
+            service?.ReceiveNotification(new NotificationEventArgs(id, title, message, data, false));
         }
     }
 }

@@ -11,15 +11,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS
 {
-    public class NotificationManagerService : INotificationManagerService
+    public class NotificationManagerService : BaseNotificationManager
     {
-        private int messageId = 0;
         private bool hasNotificationsPermission;
 
-        public const string DataKey = "data";
-        public const string DataTypeKey = "datatype";
-
-        public event EventHandler<NotificationEventArgs> NotificationReceived;
 
         public NotificationManagerService(NotificationReceiver receiver)
         {
@@ -60,28 +55,30 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             this.Show(content);
         }
 
-        private void Show(UNMutableNotificationContent content)
+        private void Show(UNMutableNotificationContent content, DateTime? notifyTime = null)
         {
-            messageId++;
-            DateTime? notifyTime = null;
+            this._messageId++;
             UNNotificationTrigger trigger;
             if (notifyTime.HasValue)
-                // Create a calendar-based trigger.
+            {
                 trigger = UNCalendarNotificationTrigger.CreateTrigger(GetNSDateComponents(notifyTime.Value), false);
+            }
             else
-                // Create a time-based trigger, interval is in seconds and must be greater than 0.
+            {
                 trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(0.25, false);
+            }
 
             var request = UNNotificationRequest.FromIdentifier(messageId.ToString(), content, trigger);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
             {
                 if (err != null)
+                {
                     throw new Exception($"Failed to schedule notification: {err}");
+                }
             });
         }
 
-        public void ReceiveNotification(NotificationEventArgs args) => NotificationReceived?.Invoke(this, args);
-
+        public void ReceiveNotification(NotificationEventArgs args) => this.OnNotificationReceived(args);
 
         NSDateComponents GetNSDateComponents(DateTime dateTime)
         {
