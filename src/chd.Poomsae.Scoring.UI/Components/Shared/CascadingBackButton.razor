@@ -14,11 +14,13 @@
 
     private bool _showBackButton = true;
 
-#if DEBUG
-     private bool _needsBack = true;
-#else
-    private bool _needsBack = this.deviceHandler?.IsiOS() ?? true;
-#endif
+    private bool _needsBack = false;
+
+    protected override void OnInitialized()
+    {
+        this._needsBack = this.deviceHandler.IsiOS;
+        base.OnInitialized();
+    }
 
     public async Task SetBackButton(bool value)
     {
