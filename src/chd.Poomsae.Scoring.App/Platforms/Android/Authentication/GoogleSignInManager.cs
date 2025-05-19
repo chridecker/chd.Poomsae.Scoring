@@ -37,6 +37,13 @@ namespace chd.Poomsae.Scoring.App.Services
         protected override Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken) => this._firestoreManager.GetOrCreateDevice();
 
 
+
+        public override async Task RenewLicense(CancellationToken cancellationToken = default)
+        {
+            await this._firebaseAuthGoogle.SignOutAsync();
+            await base.RenewLicense(cancellationToken);
+        }
+
         protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try

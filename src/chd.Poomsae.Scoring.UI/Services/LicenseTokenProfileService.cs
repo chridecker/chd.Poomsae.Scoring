@@ -32,7 +32,7 @@ namespace chd.Poomsae.Scoring.UI.Services
             this._tokenService = tokenService;
         }
 
-        public async Task RenewLicense(CancellationToken cancellationToken = default)
+        public virtual async Task RenewLicense(CancellationToken cancellationToken = default)
         {
             await this._settingManager.SetToken(string.Empty);
             this._userDto = null;
