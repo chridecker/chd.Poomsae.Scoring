@@ -20,12 +20,12 @@ namespace chd.Poomsae.Scoring.App.Services
     {
         private readonly IFirebaseAuthGoogle _firebaseAuthGoogle;
         private readonly IFirebaseAuth _firebaseAuth;
-        private readonly FirestoreManager _firestoreManager;
+        private readonly IUserService _firestoreManager;
         private readonly IModalService _modalService;
 
 
 
-        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, IFirebaseAuth firebaseAuth, FirestoreManager firestoreManager, IModalService modalService,
+        public GoogleSignInManager(IFirebaseAuthGoogle firebaseAuthGoogle, IFirebaseAuth firebaseAuth, IUserService firestoreManager, IModalService modalService,
             ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService)
         {
             this._firebaseAuthGoogle = firebaseAuthGoogle;

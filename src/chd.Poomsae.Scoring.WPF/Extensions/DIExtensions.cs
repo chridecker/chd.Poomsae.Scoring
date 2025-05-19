@@ -21,7 +21,7 @@ namespace chd.Poomsae.Scoring.WPF.Extensions
         {
             services.Configure<SettingDto>(configuration.GetSection(nameof(SettingDto)));
 
-            services.AddUi<WindowsProfileService, UpdateService,SettingManager, VibrationHelper, TcpBroadcastClient, TcpServer>(configuration);
+            services.AddUi<WindowsProfileService, UserService, UpdateService, DeviceHandler, SettingManager, VibrationHelper, TcpBroadcastClient, TcpServer>(configuration);
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
             return services;

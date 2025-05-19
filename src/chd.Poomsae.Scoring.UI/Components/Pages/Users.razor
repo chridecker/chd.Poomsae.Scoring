@@ -1,0 +1,65 @@
+@implements IDisposable
+
+@page "/users"
+
+
+
+<div class="users-container">
+    <Table Items="this._userLst">
+        <HeaderContent>
+            <TableHead>Email</TableHead>
+            <TableHead>akt</TableHead>
+            <TableHead>Admin</TableHead>
+            <TableHead>Bis</TableHead>
+            <TableHead></TableHead>
+        </HeaderContent>
+        <RowTemplate>
+            <TableData>@context.Email</TableData>
+            <TableData><CustomIcon FAClass="@(context.HasLicense ? "check" : "xmark")" /></TableData>
+            <TableData><CustomIcon FAClass="@(context.IsAdmin ? "check" : "xmark")" /></TableData>
+            <TableData>@context.ValidTo.ToLocalTime().Date.ToString("dd.MM.yyyy")</TableData>
+            <TableData><IconButton FAClass="pencil" OnClick="async () => await this.OpenUserModal(context)" /></TableData>
+        </RowTemplate>
+    </Table>
+    </div>
+
+@* 
+    <div class="user-row header">
+    </div>
+        @foreach (var user in this._userLst.OrderBy(o => o.Email))
+        {
+            <div class="user-row">
+                <div class="user-data">@user.Email</div>
+                <div class="user-data"><CustomIcon FAClass="@(user.HasLicense ? "check" : "xmark")" /></div>
+                <div class="user-data"><CustomIcon FAClass="@(user.IsAdmin ? "check" : "xmark")" /></div>
+                <div class="user-data">@user.ValidTo.ToLocalTime().Date.ToString("dd.MM.yyyy")</div>
+                <div class="user-data action"></div>
+            </div>
+        }
+    </div>
+
+ *@
+@code {
+    [Inject] IUserService userService { get; set; }
+
+    private CancellationTokenSource _cts = new();
+
+
+    private IEnumerable<PSUserDto> _userLst = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._userLst = await this.userService.GetUsersAsync(this._cts.Token);
+        await base.OnInitializedAsync();
+    }
+    private async Task OpenUserModal(PSUserDto user)
+    {
+
+    }
+
+
+    public void Dispose()
+    {
+        this._cts.Cancel();
+    }
+}

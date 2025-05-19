@@ -1,6 +1,8 @@
-﻿using chd.Poomsae.Scoring.App.Extensions;
+﻿using Android.DeviceLock;
+using chd.Poomsae.Scoring.App.Extensions;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.UI.Components.Pages;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using chd.UI.Base.Extensions;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -17,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-    public class FirestoreManager
+    public class FirestoreManager : IUserService
     {
         private readonly IFirebaseFirestore _firebaseFirestore;
         private readonly IDeviceHandler _deviceHandler;
@@ -29,6 +31,14 @@ namespace chd.Poomsae.Scoring.App.Services
             this._deviceHandler = deviceHandler;
             this._updateService = updateService;
         }
+
+        public async Task<IEnumerable<PSDeviceDto>> GetDevicesAsync(CancellationToken cancellationToken = default)
+        {
+            var deviceCollection = this._firebaseFirestore.GetCollection("devices");
+            var devices = await deviceCollection.GetDocumentsAsync<FireStoreDeviceDto>(Plugin.Firebase.Firestore.Source.Server);
+            return devices.Documents.Select(s => s.Data.ToPSDevice());
+        }
+
         public async Task<PSDeviceDto> GetOrCreateDevice()
         {
             var deviceCollection = this._firebaseFirestore.GetCollection("devices");
@@ -99,6 +109,53 @@ namespace chd.Poomsae.Scoring.App.Services
             return userDeviceDocumentDatas.Data.ToPSUserDevice();
         }
 
+        public async Task<IEnumerable<PSUserDeviceDto>> GetUserDevicesToDeviceAsync(string deviceId, CancellationToken cancellationToken = default)
+        {
+            var userDeviceCollection = this._firebaseFirestore.GetCollection("user_devices");
+            var userDeviceDocuments = await userDeviceCollection.GetDocumentsAsync<FireStoreUserDeviceDto>(Plugin.Firebase.Firestore.Source.Server);
 
+            var userDeviceDocumentDatas = userDeviceDocuments.Documents.Where(x => x.Data is not null && x.Data.Device_UID == deviceId);
+            return userDeviceDocumentDatas.Select(s => s.Data.ToPSUserDevice());
+        }
+
+        public async Task<IEnumerable<PSUserDeviceDto>> GetUserDevicesToUserAsync(string userId, CancellationToken cancellationToken = default)
+        {
+            var userDeviceCollection = this._firebaseFirestore.GetCollection("user_devices");
+            var userDeviceDocuments = await userDeviceCollection.GetDocumentsAsync<FireStoreUserDeviceDto>(Plugin.Firebase.Firestore.Source.Server);
+
+            var userDeviceDocumentDatas = userDeviceDocuments.Documents.Where(x => x.Data is not null && x.Data.User_UID == userId);
+            return userDeviceDocumentDatas.Select(s => s.Data.ToPSUserDevice());
+        }
+
+        public async Task<IEnumerable<PSUserDto>> GetUsersAsync(CancellationToken cancellationToken = default)
+        {
+            var deviceCollection = this._firebaseFirestore.GetCollection("users");
+            var devices = await deviceCollection.GetDocumentsAsync<FireStoreUserDto>(Plugin.Firebase.Firestore.Source.Server);
+            return devices.Documents.Select(s => s.Data.ToPSUser());
+        }
+
+        public async Task RemoveUserDeviceAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var userCollection = this._firebaseFirestore.GetCollection("user_devices");
+            var userDocument = userCollection.GetDocument(id);
+            await userDocument.DeleteDocumentAsync();
+        }
+
+        public async Task UpdateDeviceAsync(PSDeviceDto device, CancellationToken cancellationToken = default)
+        {
+
+            var userCollection = this._firebaseFirestore.GetCollection("devices");
+            var userDocument = userCollection.GetDocument(device.UID);
+            var snap = await userDocument.GetDocumentSnapshotAsync<FireStoreDeviceDto>(Plugin.Firebase.Firestore.Source.Server);
+            await snap.Reference.SetDataAsync(device.ToFSDevice());
+        }
+
+        public async Task UpdateUserAsync(PSUserDto user, CancellationToken cancellationToken = default)
+        {
+            var userCollection = this._firebaseFirestore.GetCollection("users");
+            var userDocument = userCollection.GetDocument(user.UID);
+            var snap = await userDocument.GetDocumentSnapshotAsync<FireStoreUserDto>(Plugin.Firebase.Firestore.Source.Server);
+            await snap.Reference.SetDataAsync(user.ToFSUser());
+        }
     }
 }

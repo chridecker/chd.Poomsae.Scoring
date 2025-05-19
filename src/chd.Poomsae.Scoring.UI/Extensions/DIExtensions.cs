@@ -18,7 +18,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TProfileService, TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUi<TProfileService, TUserService, TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
                  where TProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
                  where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
@@ -26,6 +26,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             where TBroadcastClient : class, IBroadcastClient
             where TUpdateService : BaseUpdateService, IUpdateService
             where TDeviceHandler : class, IDeviceHandler
+            where TUserService : class, IUserService
         {
             services.AddAuthorizationCore();
             services.AddUtilities<TProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, TUpdateService>(ServiceLifetime.Singleton);
@@ -35,6 +36,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 
             services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton));
 
+            services.AddSingleton<IUserService, TUserService>();
             services.AddSingleton<IDeviceHandler, TDeviceHandler>();
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<IAppInfoService, AppInfoService>();
