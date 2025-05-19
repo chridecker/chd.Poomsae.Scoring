@@ -19,11 +19,12 @@ namespace chd.Poomsae.Scoring.UI.Services
 {
     public abstract class LicenseTokenProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
     {
-        private const int ValidDays = 7;
         private readonly ISettingManager _settingManager;
         private readonly ITokenService _tokenService;
         private PSUserDto _userDto;
-        private DateTime? _lastLogin;
+        private PSDeviceDto _deviceDto;
+
+        public PSDeviceDto Device => this._deviceDto;
 
         public LicenseTokenProfileService(ISettingManager settingManager, ITokenService tokenService)
         {
@@ -34,14 +35,9 @@ namespace chd.Poomsae.Scoring.UI.Services
         public async Task RenewLicense(CancellationToken cancellationToken = default)
         {
             await this._settingManager.SetToken(string.Empty);
+            this._userDto = null;
             await this.LogoutAsync(cancellationToken);
             await this.LoginAsync(new(), cancellationToken);
-        }
-
-        public async Task<(PSUserDto, DateTime)> GetLicense(CancellationToken cancellationToken = default)
-        {
-            var token = await this._settingManager.GetToken();
-            return this._tokenService.ValidateLicenseToken(token);
         }
 
         protected override async Task<UserPermissionDto<int>> GetPermissions(UserDto<Guid, int> dto, CancellationToken cancellationToken = default)
@@ -64,7 +60,7 @@ namespace chd.Poomsae.Scoring.UI.Services
                         Name = "Allowed"
                     });
                 }
-                else if (psUser.HasLicense || (psUser.ValidTo > DateTime.Now))
+                else if ((psUser.HasLicense || (psUser.ValidTo > DateTime.Now)) && psUser.UserDevice.IsAllowed)
                 {
                     lst.Add(new UserRightDto<int>()
                     {
@@ -80,14 +76,17 @@ namespace chd.Poomsae.Scoring.UI.Services
         }
 
         protected abstract Task<PSUserDto> SignIn(CancellationToken cancellationToken);
+        protected abstract Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken);
 
         protected override sealed async Task<UserDto<Guid, int>> GetUser(LoginDto<Guid> dto, CancellationToken cancellationToken = default)
         {
             var time = DateTime.Today;
+            this._deviceDto = await this.GetDevice(cancellationToken);
+
             if (this._userDto is null)
             {
-                var (user, validTo) = await this.GetUserFromToken();
-                if (user is not null && validTo > time)
+                var user = await this.GetUserFromToken();
+                if (user is not null && user.UserDevice is not null && user.ValidTo.Date > time)
                 {
                     this._userDto = user;
                 }
@@ -96,20 +95,18 @@ namespace chd.Poomsae.Scoring.UI.Services
                     user = await this.SignIn(cancellationToken);
                     if (user is not null)
                     {
-                        await this.GenerateToken(user, time.AddDays(ValidDays));
+                        await this.GenerateToken(user, user.ValidTo.Date);
                         this._userDto = user;
                     }
                 }
-                this._lastLogin = time;
-
             }
             return this._userDto;
         }
 
-        private async Task<(PSUserDto, DateTime)> GetUserFromToken()
+        private async Task<PSUserDto> GetUserFromToken()
         {
             var token = await this._settingManager.GetToken();
-            if (string.IsNullOrWhiteSpace(token)) { return (null, DateTime.MinValue); }
+            if (string.IsNullOrWhiteSpace(token)) { return null; }
             return this._tokenService.ValidateLicenseToken(token);
         }
 

@@ -33,5 +33,43 @@ namespace chd.Poomsae.Scoring.App.Extensions
                 ValidTo = dto.ValidTo,
                 Username = dto.Username ?? string.Empty
             };
+
+        public static PSUserDeviceDto ToPSUserDevice(this FireStoreUserDeviceDto dto)
+           => new PSUserDeviceDto()
+           {
+               Id = dto.Id,
+               Device_UID = dto.Device_UID,
+               IsAllowed = dto.IsAllowed,
+               User_UID = dto.User_UID
+           };
+        public static FireStoreUserDeviceDto ToFSUserDevice(this PSUserDeviceDto dto)
+           => new FireStoreUserDeviceDto()
+           {
+               Id = dto.Id,
+               Device_UID = dto.Device_UID,
+               IsAllowed = dto.IsAllowed,
+               User_UID = dto.User_UID
+           };
+
+        public static PSDeviceDto ToPSDevice(this FireStoreDeviceDto dto)
+           => new PSDeviceDto()
+           {
+               UID = dto.UID,
+               CurrentVersion = dto.CurrentVersion,
+               Manufacturer = dto.Manufacturer,
+               Model = dto.Model,
+               Name = dto.Name,
+               Platform = dto.Platform,
+           };
+        public static FireStoreDeviceDto ToFSDevice(this PSDeviceDto dto)
+           => new FireStoreDeviceDto()
+           {
+               UID = dto.UID,
+               CurrentVersion = dto.CurrentVersion,
+               Manufacturer = dto.Manufacturer,
+               Model = dto.Model,
+               Name = dto.Name,
+               Platform = dto.Platform,
+           };
     }
 }

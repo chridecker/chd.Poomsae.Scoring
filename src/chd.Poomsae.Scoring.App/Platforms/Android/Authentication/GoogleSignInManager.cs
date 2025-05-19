@@ -34,6 +34,9 @@ namespace chd.Poomsae.Scoring.App.Services
             this._modalService = modalService;
         }
 
+        protected override Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken) => this._firestoreManager.GetOrCreateDevice();
+
+
         protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
@@ -53,21 +56,27 @@ namespace chd.Poomsae.Scoring.App.Services
                 await this._firebaseAuth.SignOutAsync();
 
                 IFirebaseUser user = null;
+                var tetsLicense = false;
                 try
                 {
-                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
+                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
+                    tetsLicense = true;
                 }
                 catch { }
                 user ??= await this._firebaseAuthGoogle.SignInWithGoogleAsync();
 
                 if (user is not null)
                 {
-                    return await this._firestoreManager.GetOrCreateUser(new PSUserDto()
+                    var fsUser = await this._firestoreManager.GetOrCreateUser(new PSUserDto()
                     {
                         Username = user.DisplayName ?? string.Empty,
                         Email = user.Email,
                         UID = user.Uid,
+                        ValidTo = tetsLicense ? DateTimeOffset.Now.Date.AddDays(7) : DateTimeOffset.Now.Date,
                     });
+
+                    fsUser.UserDevice = await this._firestoreManager.GetOrCreateUserDevice(fsUser.UID, this.Device.UID, fsUser.IsAdmin || tetsLicense);
+                    return fsUser;
                 }
             }
             catch (Exception ex)

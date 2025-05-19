@@ -36,7 +36,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
 
 #if ANDROID
             services.AddAndroidServices();
-            services.AddUi<GoogleSignInManager, UpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
+            services.AddUi<GoogleSignInManager, MauiUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
 #elif IOS
             services.AddiOS();
             services.AddUi<AppleSignInManager, InAppUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
@@ -47,6 +47,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
             services.AddSingleton<FirestoreManager>();
 
             services.AddSingleton<IDeviceInfo>(_ => DeviceInfo.Current);
+            services.AddSingleton<IAppInfo>(_ => AppInfo.Current);
 
 
             return services;

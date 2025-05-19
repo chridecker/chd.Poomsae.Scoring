@@ -10,6 +10,6 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface ITokenService
     {
         string GenerateLicenseToken(PSUserDto user, DateTime expiryDate);
-        (PSUserDto User, DateTime valid) ValidateLicenseToken(string token);
+        PSUserDto ValidateLicenseToken(string token);
     }
 }

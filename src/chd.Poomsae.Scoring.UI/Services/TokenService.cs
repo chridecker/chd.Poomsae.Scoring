@@ -24,19 +24,18 @@ namespace chd.Poomsae.Scoring.UI.Services
             var claims = new[]
             {
             new Claim("user", JsonSerializer.Serialize(user)),
-            new Claim("license_end", expiryDate.ToString("yyyy-MM-dd"))
         };
 
             var token = new JwtSecurityToken(
                 issuer: "chdscoring",
                 audience: "chd.poomsae.scoring",
                 claims: claims,
-                expires: expiryDate,
+                expires: expiryDate > DateTime.Today.AddDays(7) ? DateTime.Today.AddDays(7) : expiryDate,
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public (PSUserDto User, DateTime valid) ValidateLicenseToken(string token)
+        public PSUserDto ValidateLicenseToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(KEY);
@@ -53,13 +52,12 @@ namespace chd.Poomsae.Scoring.UI.Services
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var licenseEnd = jwtToken.Claims.First(x => x.Type == "license_end").Value;
                 var user = jwtToken.Claims.First(x => x.Type == "user").Value;
-                return (JsonSerializer.Deserialize<PSUserDto>(user), DateTime.Parse(licenseEnd));
+                return JsonSerializer.Deserialize<PSUserDto>(user);
             }
             catch
             {
-                return (null, DateTime.MinValue);
+                return null;
             }
         }
     }

@@ -1,0 +1,36 @@
+﻿.license-container {
+    display: flex;
+    flex-direction: column;
+}
+
+    .license-container .license-infos {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+        .license-container .license-infos .license-info {
+            font-size: 0.8rem;
+            display: grid;
+            grid-template-columns: repeat(2,auto);
+        }
+
+            .license-container .license-infos .license-info .license-info-label {
+                font-size: 0.6rem;
+            }
+
+            .license-container .license-infos .license-info .license-info-value {
+                text-align: right;
+            }
+
+    .license-container .license-actions {
+        display: flex;
+        justify-content: center;
+    }
+
+        .license-container .license-actions .license-renew {
+            border: 1px solid;
+            padding: 0.5rem 0.8rem;
+            box-shadow: var(--chd-font-color) 1px 0 0.1rem;
+            border-radius: 50%;
+        }

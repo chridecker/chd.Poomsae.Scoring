@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.Update
 {
-    public class InAppUpdateService : BaseUpdateService
+    public class InAppUpdateService : MauiUpdateService
     {
 
 
-        public InAppUpdateService(ILogger<InAppUpdateService> logger) : base(logger)
+        public InAppUpdateService(ILogger<InAppUpdateService> logger, IAppInfo appInfo) : base(logger, appInfo)
         {
         }
 
@@ -21,7 +21,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Update
         public override async Task UpdateAsync(int timeout)
         {
             var storeVersion = await this.GetAppStoreVersion();
-            if (storeVersion > this._currentVersion)
+            var version = await this.CurrentVersion();
+            if (storeVersion > version)
             {
                 await Task.Delay(TimeSpan.FromSeconds(timeout));
                 await Shell.Current.DisplayAlert("Update verfügbar", "Es gibt eine neue Version im App Store.", "OK");

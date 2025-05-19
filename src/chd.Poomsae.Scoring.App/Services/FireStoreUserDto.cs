@@ -9,7 +9,7 @@ namespace chd.Poomsae.Scoring.App.Services
 {
     public class FireStoreUserDto : IFirestoreObject
     {
-        [FirestoreDocumentId]
+        [FirestoreProperty("UID")]
         public string UID { get; set; }
 
         [FirestoreProperty("Email")]

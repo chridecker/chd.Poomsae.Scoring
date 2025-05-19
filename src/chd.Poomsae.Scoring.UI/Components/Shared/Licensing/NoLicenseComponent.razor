@@ -12,7 +12,7 @@
         </div>
         <div class="license-buttons">
             <div class="go-back" @onclick="this.GoBack"><CustomIcon FAClass="backward" /></div>
-            <div class="info" @onclick="this.OpenLicenseModal"><CustomIcon FAClass="info" /></div>
+            <div class="info" @onclick="this.ManageLicense"><CustomIcon FAClass="info" /></div>
         </div>
     </div>
 </div>
@@ -20,19 +20,24 @@
 @code {
     [Inject] private ILicenseTokenProfileService _licenseTokenProfileService { get; set; }
     [Inject] private IModalService _modalService { get; set; }
-    [Inject] private NavigationManager _navigationManager{ get; set; }
+    [Inject] private NavigationManager _navigationManager { get; set; }
 
     PSUserDto userDto = null;
-    DateTime? valid = null;
+    DateTime? valid => this.userDto?.ValidTo.Date;
 
     protected override async Task OnInitializedAsync()
     {
-        (userDto, valid) = await this._licenseTokenProfileService.GetLicense();
+        userDto = this._licenseTokenProfileService.User as PSUserDto;
         await base.OnInitializedAsync();
     }
-    private async Task OpenLicenseModal()
+    private async Task ManageLicense()
     {
-        
+        _ = await this._modalService.Show<LicenseModal>(new ModalOptions
+        {
+            Size = ModalSize.ExtraLarge,
+            HideHeader = true
+        }).Result;
+
     }
 
     private void GoBack()

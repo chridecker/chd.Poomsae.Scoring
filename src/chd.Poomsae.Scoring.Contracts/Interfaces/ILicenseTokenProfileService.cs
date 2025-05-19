@@ -11,7 +11,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 {
     public interface ILicenseTokenProfileService : IProfileService<Guid, int>
     {
-        Task<(PSUserDto, DateTime)> GetLicense(CancellationToken cancellationToken = default);
         Task RenewLicense(CancellationToken cancellationToken = default);
+        PSDeviceDto Device {get; }
     }
 }

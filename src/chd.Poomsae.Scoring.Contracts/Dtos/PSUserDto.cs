@@ -15,5 +15,7 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
         public bool IsAdmin { get; set; }
         public bool HasLicense { get; set; }
         public DateTimeOffset ValidTo { get; set; }
+
+        public PSUserDeviceDto UserDevice { get; set; }
     }
 }
