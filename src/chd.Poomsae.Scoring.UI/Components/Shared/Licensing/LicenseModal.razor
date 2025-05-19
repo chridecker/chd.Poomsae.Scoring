@@ -20,7 +20,7 @@
                 }
                 <div class="license-info">
                     <div class="license-info-label">Lizenz gültig bis</div><div class="license-info-value">
-                        @this._user.ValidTo.Date.ToString("dd.MM.yyyy")
+                        @this._user.ValidTo.LocalDateTime.Date.ToString("dd.MM.yyyy")
                     </div>
                 </div>
             </div>
