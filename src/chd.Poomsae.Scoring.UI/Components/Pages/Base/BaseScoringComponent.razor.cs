@@ -17,12 +17,16 @@ using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.UI.Base.Contracts.Interfaces.Authentication;
 using chd.UI.Base.Components.Base;
+using chd.Poomsae.Scoring.UI.Components.Layout;
+using chd.Poomsae.Scoring.UI.Components.Shared;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
     public abstract class BaseScoringComponent<TRunDto> : PageComponentBase<Guid, int>, IDisposable
         where TRunDto : RunDto
     {
+        [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
+
         [Inject] private NavigationManager _navigationManager { get; set; }
         [Inject] protected IStartRunService _runService { get; set; }
         [Inject] protected IModalService _modal { get; set; }
@@ -36,6 +40,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected override async Task OnInitializedAsync()
         {
+           await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
             this.runDto = this.CreateDto();
             await base.OnInitializedAsync();

@@ -3,6 +3,7 @@
 @using Blazored.Modal.Services
 @using Blazored.Toast.Configuration
 @using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Components.Shared
 @using chd.UI.Base.Client.Implementations.Services
 @using chd.UI.Base.Contracts.Enum
 @inject IScrollInfoService scrollInfoService
@@ -10,18 +11,21 @@
 
 
 <div class="page">
-    <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
-        <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse": "")" @onmouseover="() => this._navCollapsed = false">
-        </div>
-    </SwipeArea>
+    <CascadingBackButton>
+        <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
+            <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse" : "")" @onmouseover="() => this._navCollapsed = false">
+            </div>
+        </SwipeArea>
 
-    <NavMenu Visible="!(this._navCollapsed)" />
+        <NavMenu Visible="!(this._navCollapsed)" />
 
-    <main class="@(this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
-        <article id="main-article" class="content px-4" @onscroll="scrollInfoService.Scrolled">
-            @Body
-        </article>
-    </main>
+        <main class="@(this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
+            <article id="main-article" class="content px-4" @onscroll="scrollInfoService.Scrolled">
+                @Body
+            </article>
+        </main>
+    </CascadingBackButton>
+
 </div>
 
 <BlazoredToasts Position="ToastPosition.BottomRight"
@@ -41,6 +45,7 @@
 
     private bool _navCollapsed = true;
 
+
     [Inject] IBroadCastService broadCastService { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -52,6 +57,7 @@
         await this.broadCastService.StartAsync(this._cts.Token);
         await base.OnInitializedAsync();
     }
+
 
     private async void UserChanged(object? sender, UserDto<Guid, int> user)
     {

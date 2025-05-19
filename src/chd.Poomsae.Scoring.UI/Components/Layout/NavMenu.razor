@@ -15,12 +15,5 @@
 </div>
 
 @code {
-    [Inject] private INavigationHandler _navigationHandler { get; set; }
-
     [Parameter] public bool Visible { get; set; } = true;
-
-    private void GoHome()
-    {
-        this._navigationHandler.NavigateToRoot();
-    }
 }

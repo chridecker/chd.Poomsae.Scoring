@@ -18,6 +18,16 @@ namespace chd.Poomsae.Scoring.WPF.Services
         {
         }
 
+        protected override async Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken)
+        {
+            return new PSDeviceDto
+            {
+                CurrentVersion = new Version().ToString(),
+                Name = Environment.MachineName,
+                UID = Guid.NewGuid().ToString(),    
+            };
+        }
+
         protected override Task<UserPermissionDto<int>> GetPermissions(UserDto<Guid, int> dto, CancellationToken cancellationToken = default)
         {
             return Task.FromResult(new UserPermissionDto<int>());

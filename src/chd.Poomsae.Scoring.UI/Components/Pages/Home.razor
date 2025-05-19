@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using chd.Poomsae.Scoring.UI.Components.Layout
+@using chd.Poomsae.Scoring.UI.Components.Shared
 @using chd.Poomsae.Scoring.UI.Components.Shared.Licensing
 @inherits PageComponentBase<Guid,int>
 
@@ -29,9 +31,12 @@
 
     [Inject] NavigationManager _navigationManager { get; set; }
     [Inject] IModalService _modalService { get; set; }
+    [CascadingParameter] CascadingBackButton _backButton { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await this._backButton.SetBackButton(false);
+
         await base.OnInitializedAsync();
     }
 
@@ -39,7 +44,7 @@
     {
         // if (this._profileService.HasUserRight([RightConstants.IS_ALLOWED]))
         {
-            this._navigationManager.NavigateTo(path, false);
+            this._navigationManager.NavigateTo(path);
         }
     }
     private async Task ManageLicense()

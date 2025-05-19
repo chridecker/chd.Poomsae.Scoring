@@ -1,0 +1,33 @@
+@if (this._needsBack)
+{
+    <div class="global-back-button @(this._showBackButton ? "" : " hide ")" @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
+}
+<CascadingValue IsFixed="true" Value="this">
+    @ChildContent
+</CascadingValue>
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    [Inject] IDeviceHandler deviceHandler { get; set; }
+    [Inject] NavigationManager navigationManager { get; set; }
+
+
+    private bool _showBackButton = true;
+
+#if DEBUG
+     private bool _needsBack = true;
+#else
+    private bool _needsBack = this.deviceHandler?.IsiOS() ?? true;
+#endif
+
+    public async Task SetBackButton(bool value)
+    {
+        this._showBackButton = value;
+    }
+
+    private async Task HandleBack()
+    {
+        this.navigationManager.NavigateTo("/");
+    }
+
+}
