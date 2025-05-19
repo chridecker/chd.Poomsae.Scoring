@@ -28,6 +28,7 @@ namespace chd.Poomsae.Scoring.App.Services
         public string Model => this._deviceInfo.Model;
 
         public string Name => this._deviceInfo.Name;
+        public bool IsiOS => this._nativeIsiOS;
 
         protected BaseDeviceHandler(IDeviceInfo deviceInfo)
         {
@@ -37,6 +38,7 @@ namespace chd.Poomsae.Scoring.App.Services
         public void CloseApp() => Application.Current.Quit();
 
         protected abstract string _nativeUID { get; }
+        protected abstract bool _nativeIsiOS{ get; }
         protected abstract int _nativePlatformVersion { get; }
 
 
