@@ -9,6 +9,7 @@
                 <TableHead><CustomIcon FAClass="badge-check" /></TableHead>
                 <TableHead><CustomIcon FAClass="user-crown" /></TableHead>
                 <TableHead>Bis</TableHead>
+                <TableHead><CustomIcon FAClass="mobile-screen" /></TableHead>
                 <TableHead></TableHead>
             </HeaderContent>
             <RowTemplate Context="user">
@@ -16,6 +17,7 @@
                 <TableData><CustomIcon FAClass="@(user.HasLicense ? "check" : "xmark")" /></TableData>
                 <TableData><CustomIcon FAClass="@(user.IsAdmin ? "check" : "xmark")" /></TableData>
                 <TableData>@user.ValidTo.ToLocalTime().Date.ToString("dd.MM.yyyy")</TableData>
+                <TableData><IconButton FAClass="folder-open" OnClick="async () => await this.OpenUserDeviceModal(user)" /></TableData>
                 <TableData><IconButton FAClass="pencil" OnClick="async () => await this.OpenUserModal(user)" /></TableData>
             </RowTemplate>
         </Table>
@@ -37,6 +39,11 @@
     private async Task OpenUserModal(PSUserDto user)
     {
 
+    }
+
+    private async Task OpenUserDeviceModal(PSUserDto user)
+    {
+        var userDevices = await this.userService.GetUserDevicesToUserAsync(user.UID, this._cts.Token);
     }
 
 
