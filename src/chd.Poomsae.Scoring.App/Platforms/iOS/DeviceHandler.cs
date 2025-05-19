@@ -10,8 +10,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
 {
     public class DeviceHandler : BaseDeviceHandler
     {
-        protected override string NativeUID=> UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
-
+        protected override string _nativeUID=> UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
+        protected override int _nativePlatformVersion => int.TryParse(UIDevice.CurrentDevice.SystemVersion, out var id) ? id : 0;
         public DeviceHandler(IDeviceInfo deviceInfo) : base(deviceInfo)
         {
             
