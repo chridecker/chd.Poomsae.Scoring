@@ -13,15 +13,16 @@
 
 
     private bool _showBackButton = true;
-#if DEBUG
-    private bool _needsBack = true;
-#else
+
     private bool _needsBack = false;
-    #endif
 
     protected override void OnInitialized()
     {
+#if DEBUG
+    this._needsBack = true;
+#else
         this._needsBack = this.deviceHandler.IsiOS;
+#endif
         base.OnInitialized();
     }
 

@@ -31,6 +31,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         [Inject] protected IStartRunService _runService { get; set; }
         [Inject] protected IModalService _modal { get; set; }
         [Inject] IBroadCastService broadCastService { get; set; }
+        [Inject] protected IDeviceHandler _deviceHandler { get; set; }
 
         protected TRunDto runDto;
 
@@ -40,7 +41,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected override async Task OnInitializedAsync()
         {
-           await this._backButton.SetBackButton(true);
+            await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
             this.runDto = this.CreateDto();
             await base.OnInitializedAsync();
