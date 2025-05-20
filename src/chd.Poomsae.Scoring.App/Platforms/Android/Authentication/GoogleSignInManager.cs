@@ -34,7 +34,14 @@ namespace chd.Poomsae.Scoring.App.Services
             this._modalService = modalService;
         }
 
-        protected override Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken) => this._firestoreManager.GetOrCreateDevice();
+        protected override async Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken)
+        {
+            if (this._firebaseAuth.CurrentUser is null)
+            {
+                _ = await this.GetUser();
+            }
+            return  await this._firestoreManager.GetOrCreateDevice();
+        }
 
 
 
@@ -48,30 +55,9 @@ namespace chd.Poomsae.Scoring.App.Services
         {
             try
             {
-                var perm = await Permissions.CheckStatusAsync<InternetPermission>();
-                while (perm is not PermissionStatus.Granted)
-                {
-                    _ = await Permissions.RequestAsync<InternetPermission>();
+                await this.WaitForPermissions(cancellationToken);
 
-                    perm = await Permissions.CheckStatusAsync<InternetPermission>();
-                    await Task.Delay(250, cancellationToken);
-                    if (cancellationToken.IsCancellationRequested || perm is PermissionStatus.Granted)
-                    {
-                        break;
-                    }
-                }
-                await this._firebaseAuth.SignOutAsync();
-
-                IFirebaseUser user = null;
-                var testLicense = false;
-                try
-                {
-                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
-                    testLicense = true;
-                }
-                catch { }
-                user ??= await this._firebaseAuthGoogle.SignInWithGoogleAsync();
-
+                var (user, testLicense) = await this.GetUser();
                 if (user is not null)
                 {
                     var fsUser = await this._firestoreManager.GetOrCreateUser(new PSUserDto()
@@ -93,6 +79,37 @@ namespace chd.Poomsae.Scoring.App.Services
             return null;
         }
 
+        private async Task WaitForPermissions(CancellationToken cancellationToken)
+        {
+            var perm = await Permissions.CheckStatusAsync<InternetPermission>();
+            while (perm is not PermissionStatus.Granted)
+            {
+                _ = await Permissions.RequestAsync<InternetPermission>();
+
+                perm = await Permissions.CheckStatusAsync<InternetPermission>();
+                await Task.Delay(250, cancellationToken);
+                if (cancellationToken.IsCancellationRequested || perm is PermissionStatus.Granted)
+                {
+                    break;
+                }
+            }
+        }
+
+        private async Task<(IFirebaseUser, bool)> GetUser()
+        {
+            await this._firebaseAuth.SignOutAsync();
+            IFirebaseUser user = null;
+            var testLicense = false;
+            try
+            {
+                user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
+                testLicense = true;
+            }
+            catch { }
+            user ??= await this._firebaseAuthGoogle.SignInWithGoogleAsync();
+
+            return (user, testLicense);
+        }
 
     }
 }

@@ -21,7 +21,7 @@ namespace chd.Poomsae.Scoring.UI.Services
     {
         private readonly ISettingManager _settingManager;
         private readonly ITokenService _tokenService;
-        private PSUserDto _userDto;
+        protected PSUserDto _userDto; 
         private PSDeviceDto _deviceDto;
 
         public PSDeviceDto Device => this._deviceDto;

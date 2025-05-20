@@ -63,13 +63,14 @@ namespace chd.Poomsae.Scoring.App.Services
                 await snap.Reference.SetDataAsync(deviceDto.ToFSDevice());
                 return deviceDto;
             }
-            else if (snap.Data.CurrentVersion != version.ToString())
+            else
             {
-                snap.Data.CurrentVersion = version.ToString();
-                snap.Data.LastStart = DateTimeOffset.Now;
-                await snap.Reference.SetDataAsync(snap.Data);
+                var device = snap.Data;
+                device.CurrentVersion = version.ToString();
+                device.LastStart = DateTimeOffset.Now;
+                await snap.Reference.SetDataAsync(device);
+                return device.ToPSDevice();
             }
-            return snap.Data.ToPSDevice();
         }
 
 
