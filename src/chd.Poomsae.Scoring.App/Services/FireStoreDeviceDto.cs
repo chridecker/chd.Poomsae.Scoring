@@ -11,15 +11,23 @@ namespace chd.Poomsae.Scoring.App.Services
     {
         [FirestoreDocumentId]
         public string UID { get; set; }
+
         [FirestoreProperty("Name")]
         public string Name { get; set; }
+
         [FirestoreProperty("Model")]
         public string Model { get; set; }
+
         [FirestoreProperty("Manufacturer")]
         public string Manufacturer { get; set; }
+
         [FirestoreProperty("Platform")]
         public string Platform { get; set; }
+
         [FirestoreProperty("CurrentVersion")]
         public string CurrentVersion { get; set; }
+
+        [FirestoreProperty("LastStart")]
+        public DateTimeOffset LastStart { get; set; }
     }
 }

@@ -40,7 +40,8 @@ namespace chd.Poomsae.Scoring.App.Extensions
                Id = dto.Id,
                Device_UID = dto.Device_UID,
                IsAllowed = dto.IsAllowed,
-               User_UID = dto.User_UID
+               User_UID = dto.User_UID,
+               Created = dto.Created
            };
         public static FireStoreUserDeviceDto ToFSUserDevice(this PSUserDeviceDto dto)
            => new FireStoreUserDeviceDto()
@@ -48,7 +49,8 @@ namespace chd.Poomsae.Scoring.App.Extensions
                Id = dto.Id,
                Device_UID = dto.Device_UID,
                IsAllowed = dto.IsAllowed,
-               User_UID = dto.User_UID
+               User_UID = dto.User_UID,
+               Created = dto.Created
            };
 
         public static PSDeviceDto ToPSDevice(this FireStoreDeviceDto dto)
@@ -60,6 +62,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
                Model = dto.Model,
                Name = dto.Name,
                Platform = dto.Platform,
+               LastStart = dto.LastStart
            };
         public static FireStoreDeviceDto ToFSDevice(this PSDeviceDto dto)
            => new FireStoreDeviceDto()
@@ -70,6 +73,7 @@ namespace chd.Poomsae.Scoring.App.Extensions
                Model = dto.Model,
                Name = dto.Name,
                Platform = dto.Platform,
+               LastStart = dto.LastStart
            };
     }
 }

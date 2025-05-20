@@ -58,6 +58,7 @@ namespace chd.Poomsae.Scoring.App.Services
                     Model = this._deviceHandler.Model,
                     Name = this._deviceHandler.Name,
                     Platform = this._deviceHandler.Platform,
+                    LastStart = DateTimeOffset.Now,
                 };
                 await snap.Reference.SetDataAsync(deviceDto.ToFSDevice());
                 return deviceDto;
@@ -65,6 +66,7 @@ namespace chd.Poomsae.Scoring.App.Services
             else if (snap.Data.CurrentVersion != version.ToString())
             {
                 snap.Data.CurrentVersion = version.ToString();
+                snap.Data.LastStart = DateTimeOffset.Now;
                 await snap.Reference.SetDataAsync(snap.Data);
             }
             return snap.Data.ToPSDevice();
@@ -101,6 +103,7 @@ namespace chd.Poomsae.Scoring.App.Services
                     Device_UID = this._deviceHandler.UID,
                     IsAllowed = isAdmin,
                     User_UID = userId,
+                    Created = DateTimeOffset.Now
                 };
                 var d = await userDeviceCollection.AddDocumentAsync(deviceDto.ToFSUserDevice());
                 deviceDto.Id = d.Id;
