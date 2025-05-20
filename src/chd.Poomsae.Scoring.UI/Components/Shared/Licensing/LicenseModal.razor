@@ -1,0 +1,46 @@
+<ChdAuthorizeView TUserId="Guid" TRightId="int">
+    <Authorized>
+        <div class="license-container">
+            <div class="license-infos">
+                <div class="license-info">
+                    <div class="license-info-label">Lizenziert für</div>
+                    <div class="license-info-value">@this._user.Username @this._user.Email</div>
+                </div>
+                <div class="license-info">
+                    <div class="license-info-label">Lizenziert auf</div><div class="license-info-value">
+                        @this._device?.ToString()
+                    </div>
+                </div>
+                @if (!this._user.UserDevice?.IsAllowed ?? true)
+                {
+                    <div class="license-info">
+                        <div class="license-info-label"></div>
+                        <div class="license-info-value">Gerät nicht aktiviert</div>
+                    </div>
+                }
+                <div class="license-info">
+                    <div class="license-info-label">Lizenz gültig bis</div><div class="license-info-value">
+                        @this._user.ValidTo.LocalDateTime.Date.ToString("dd.MM.yyyy")
+                    </div>
+                </div>
+            </div>
+            <div class="license-actions">
+                <div class="license-renew" @onclick="async () => await this.licenseTokenProfileService.RenewLicense()"><CustomIcon FAClass="repeat" /></div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>@TextConstants.NoUser</NotAuthorized>
+</ChdAuthorizeView>
+@code {
+    [Inject] ILicenseTokenProfileService licenseTokenProfileService { get; set; }
+
+    private PSUserDto _user;
+    private PSDeviceDto _device => this.licenseTokenProfileService.Device;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._user = licenseTokenProfileService.User as PSUserDto;
+        await base.OnInitializedAsync();
+    }
+
+}

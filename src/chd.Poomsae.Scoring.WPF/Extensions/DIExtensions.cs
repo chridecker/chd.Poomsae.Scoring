@@ -1,10 +1,12 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.UI.Extensions;
+using chd.Poomsae.Scoring.UI.Services;
 using chd.Poomsae.Scoring.WPF.Services;
 using chd.Poomsae.Scoring.WPF.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace chd.Poomsae.Scoring.WPF.Extensions
         {
             services.Configure<SettingDto>(configuration.GetSection(nameof(SettingDto)));
 
-            services.AddUi<SettingManager, VibrationHelper, TcpBroadcastClient, TcpServer>(configuration);
+            services.AddUi<WindowsProfileService, UserService, UpdateService, DeviceHandler, SettingManager, VibrationHelper, TcpBroadcastClient, TcpServer>(configuration);
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
             return services;

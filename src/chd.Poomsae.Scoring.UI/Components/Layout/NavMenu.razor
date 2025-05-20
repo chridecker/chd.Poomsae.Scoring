@@ -7,20 +7,15 @@
             <NavItem href="singlescore" Match="NavLinkMatch.All" IconFAClass="person" Title="" />
             <NavItem href="eliminationscore" Match="NavLinkMatch.All" IconFAClass="people" Title="" />
             <NavItem href="results" Match="NavLinkMatch.All" IconFAClass="ranking-star" Title="" />
+            <AuthorizedNavItem TUserId="Guid" TRightId="int" Rights="[RightConstants.IS_ADMIN]" href="users" IconFAClass="users" Title="" />
+            <AuthorizedNavItem TUserId="Guid" TRightId="int" Rights="[RightConstants.IS_ADMIN]" href="devices" IconFAClass="mobile-screen" Title="" />
         </MenuContent>
         <BottomContent>
-            @* <NavItem href="settings" Match="NavLinkMatch.All" IconFAClass="gears" Title="" /> *@
+            <AuthorizedNavItem TUserId="Guid" TRightId="int" Rights="[RightConstants.IS_ADMIN]" href="settings" Match="NavLinkMatch.All" IconFAClass="gears" Title="" />
         </BottomContent>
     </NavMenuBase>
 </div>
 
 @code {
-    [Inject] private INavigationHandler _navigationHandler { get; set; }
-
     [Parameter] public bool Visible { get; set; } = true;
-
-    private void GoHome()
-    {
-        this._navigationHandler.NavigateToRoot();
-    }
 }

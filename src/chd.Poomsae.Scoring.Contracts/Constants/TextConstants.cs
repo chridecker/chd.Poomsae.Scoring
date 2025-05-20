@@ -31,10 +31,15 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string Single= "Einzel";
         public const string Eliminiation = "Head to Head";
         public const string Results = "Ergebnisse";
+        public const string License = "Lizenz";
 
         public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
         public const string SearchDevices = "Erweiterte Gerätesuche";
         public const string RemoveDevices = "Geräte Löschen";
+
+        public const string NoLicense = "Es konnte keine gültige Lizenz ermittelt!";
+        public const string NoUser = "Es konnte kein Benutzer ermittelt werden!";
+
 
     }
 }

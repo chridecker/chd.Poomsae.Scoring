@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
-    public class SettingManager : BaseClientSettingManager<int, int>, ISettingManager
+    public class SettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
     {
         public SettingManager(ILogger<SettingManager> logger, IProtecedLocalStorageHandler protecedLocalStorageHandler,
             NavigationManager navigationManager) : base(logger, protecedLocalStorageHandler, navigationManager)
@@ -40,6 +40,12 @@ namespace chd.Poomsae.Scoring.App.Services
             var name = await this.GetNativSetting<string>(SettingConstants.OwnName);
             return string.IsNullOrWhiteSpace(name) ? DeviceInfo.Current.Name : name;
         }
+        public async Task<string> GetToken()
+        {
+            var name = await this.GetNativSetting<string>(SettingConstants.License);
+            return string.IsNullOrWhiteSpace(name) ? string.Empty : name;
+        }
         public async Task SetName(string name) => await this.SetNativSetting(SettingConstants.OwnName, name);
+        public async Task SetToken(string name) => await this.SetNativSetting(SettingConstants.License, name);
     }
 }

@@ -32,6 +32,7 @@ namespace chd.Poomsae.Scoring.App
             PermissionStatus notifiatioNpermission = await Permissions.RequestAsync<NotificationPermission>();
             PermissionStatus locationPermission = await Permissions.RequestAsync<LocationPermission>();
             PermissionStatus wifiPermission = await Permissions.RequestAsync<WifiPermission>();
+            PermissionStatus internetPermission = await Permissions.RequestAsync<InternetPermission>();
 #endif
         }
         private void BlazorWebViewInitialized(object? sender, BlazorWebViewInitializedEventArgs e)

@@ -1,17 +1,25 @@
 ﻿@page "/"
+@using chd.Poomsae.Scoring.UI.Components.Layout
+@using chd.Poomsae.Scoring.UI.Components.Shared
+@using chd.Poomsae.Scoring.UI.Components.Shared.Licensing
+@inherits PageComponentBase<Guid,int>
 
 <div class="home-container">
-    <div class="home-card" @onclick="()=>this.GoTo(SINGLE)">
+    <div class="home-card" @onclick="() => this.GoTo(SINGLE)">
         <div class="logo"><CustomIcon FAClass="person" /></div>
         <div class="text">@TextConstants.Single</div>
     </div>
-    <div class="home-card" @onclick="()=>this.GoTo(ELIM)">
+    <div class="home-card" @onclick="() => this.GoTo(ELIM)">
         <div class="logo"><CustomIcon FAClass="people" /></div>
         <div class="text">@TextConstants.Eliminiation</div>
     </div>
-    <div class="home-card" @onclick="()=>this.GoTo(RESULTS)">
+    <div class="home-card" @onclick="() => this.GoTo(RESULTS)">
         <div class="logo"><CustomIcon FAClass="ranking-star" /></div>
         <div class="text">@TextConstants.Results</div>
+    </div>
+    <div class="home-card" @onclick="async () => await this.ManageLicense()">
+        <div class="logo"><CustomIcon FAClass="badge-check" /></div>
+        <div class="text">@TextConstants.License</div>
     </div>
 </div>
 
@@ -22,15 +30,30 @@
     const string RESULTS = "results";
 
     [Inject] NavigationManager _navigationManager { get; set; }
+    [Inject] IModalService _modalService { get; set; }
+    [CascadingParameter] CascadingBackButton _backButton { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        await this._backButton.SetBackButton(false);
 
         await base.OnInitializedAsync();
     }
 
     private void GoTo(string path)
     {
-        this._navigationManager.NavigateTo(path, false);
+        // if (this._profileService.HasUserRight([RightConstants.IS_ALLOWED]))
+        {
+            this._navigationManager.NavigateTo(path);
+        }
+    }
+    private async Task ManageLicense()
+    {
+        _ = await this._modalService.Show<LicenseModal>(new ModalOptions
+        {
+            Size = ModalSize.ExtraLarge,
+            HideHeader = true
+        }).Result;
+
     }
 }

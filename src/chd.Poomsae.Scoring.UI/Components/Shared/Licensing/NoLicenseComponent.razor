@@ -1,0 +1,47 @@
+<div class="no-license-container">
+    <div class="no-license">
+        <div class="info-text">
+            @if (this._licenseTokenProfileService.User is null)
+            {
+                @TextConstants.NoUser
+            }
+            @if (this.userDto is not null && !this.userDto.Permission.UserRightLst.Any(a => a.Id == RightConstants.IS_ALLOWED))
+            {
+                @TextConstants.NoLicense
+            }
+        </div>
+        <div class="license-buttons">
+            <div class="go-back" @onclick="this.GoBack"><CustomIcon FAClass="backward" /></div>
+            <div class="info" @onclick="this.ManageLicense"><CustomIcon FAClass="info" /></div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject] private ILicenseTokenProfileService _licenseTokenProfileService { get; set; }
+    [Inject] private IModalService _modalService { get; set; }
+    [Inject] private NavigationManager _navigationManager { get; set; }
+
+    PSUserDto userDto = null;
+    DateTime? valid => this.userDto?.ValidTo.Date;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userDto = this._licenseTokenProfileService.User as PSUserDto;
+        await base.OnInitializedAsync();
+    }
+    private async Task ManageLicense()
+    {
+        _ = await this._modalService.Show<LicenseModal>(new ModalOptions
+        {
+            Size = ModalSize.ExtraLarge,
+            HideHeader = true
+        }).Result;
+
+    }
+
+    private void GoBack()
+    {
+        this._navigationManager.NavigateTo("/");
+    }
+}

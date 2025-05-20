@@ -15,12 +15,18 @@ using chd.UI.Base.Contracts.Enum;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using chd.Poomsae.Scoring.Contracts.Constants;
+using chd.UI.Base.Contracts.Interfaces.Authentication;
+using chd.UI.Base.Components.Base;
+using chd.Poomsae.Scoring.UI.Components.Layout;
+using chd.Poomsae.Scoring.UI.Components.Shared;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
-    public abstract class BaseScoringComponent<TRunDto> : ComponentBase, IDisposable
+    public abstract class BaseScoringComponent<TRunDto> : PageComponentBase<Guid, int>, IDisposable
         where TRunDto : RunDto
     {
+        [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
+
         [Inject] private NavigationManager _navigationManager { get; set; }
         [Inject] protected IStartRunService _runService { get; set; }
         [Inject] protected IModalService _modal { get; set; }
@@ -30,8 +36,11 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         private IDisposable _registerLocationChangeHandler;
 
+        protected bool _isLicensed = false;
+
         protected override async Task OnInitializedAsync()
         {
+           await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
             this.runDto = this.CreateDto();
             await base.OnInitializedAsync();
@@ -51,6 +60,8 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task HandleClick()
         {
+            if (!this._profileService.HasUserRight([RightConstants.IS_ALLOWED])) { return; }
+
             if (this.runDto.State is ERunState.Started)
             {
                 if (!await this.HandleStartedState()) { return; }

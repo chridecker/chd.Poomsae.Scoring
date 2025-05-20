@@ -8,6 +8,8 @@ using AndroidX.Core.View;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Contracts.Interfaces.Services;
+using Firebase;
+using Plugin.Firebase.Auth.Google;
 using System.Text.Json;
 
 namespace chd.Poomsae.Scoring.App
@@ -29,6 +31,8 @@ namespace chd.Poomsae.Scoring.App
         {
             base.OnCreate(savedInstanceState);
 
+            FirebaseApp.InitializeApp(this);
+
             this.OnBackPressedDispatcher.AddCallback(this, new BackPress(this._appInfoService));
 
             this.Window?.AddFlags(WindowManagerFlags.Fullscreen);
@@ -38,6 +42,12 @@ namespace chd.Poomsae.Scoring.App
             // Hide system bars
             windowInsetsController.Hide(WindowInsetsCompat.Type.SystemBars());
             windowInsetsController.SystemBarsBehavior = WindowInsetsControllerCompat.BehaviorShowTransientBarsBySwipe;
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            FirebaseAuthGoogleImplementation.HandleActivityResultAsync(requestCode, resultCode, data);
         }
 
         protected override void OnNewIntent(Intent? intent)

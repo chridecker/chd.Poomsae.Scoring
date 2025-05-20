@@ -1,0 +1,43 @@
+﻿.no-license-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .no-license-container .no-license {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+        .no-license-container .no-license .info-text {
+            border: 1px solid;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            background: var(--chd-p-red-semi-gradient-left);
+        }
+
+        .no-license-container .no-license .license-buttons {
+            display:flex;
+            justify-content:center;
+            gap:1.0rem;
+        }
+
+            .no-license-container .no-license .license-buttons .go-back {
+                border: 1px solid;
+                border-radius: 50%;
+                padding: 0.5rem 0.9rem 0.5rem 0.9rem;
+                background: var(--chd-p-red-semi-gradient-left);
+                box-shadow: var(--chd-font-color) 1px 0 0.1rem inset;
+            }
+
+            .no-license-container .no-license .license-buttons .info {
+                border: 1px solid;
+                border-radius: 50%;
+                padding: 0.5rem 0.9rem 0.5rem 0.9rem;
+                background: var(--chd-p-blue-semi-gradient);
+                box-shadow: var(--chd-font-color) 1px 0 0.1rem inset;
+            }

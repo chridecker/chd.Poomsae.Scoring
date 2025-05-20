@@ -1,0 +1,54 @@
+@implements IDisposable
+@page "/users"
+
+<ChdAuthorizeView Rights="[RightConstants.IS_ADMIN]" TUserId="Guid" TRightId="int">
+    <div class="users-container">
+        <Table Items="this._userLst">
+            <HeaderContent>
+                <TableHead>Email</TableHead>
+                <TableHead><CustomIcon FAClass="badge-check" /></TableHead>
+                <TableHead><CustomIcon FAClass="user-crown" /></TableHead>
+                <TableHead>Bis</TableHead>
+                <TableHead><CustomIcon FAClass="mobile-screen" /></TableHead>
+                <TableHead></TableHead>
+            </HeaderContent>
+            <RowTemplate Context="user">
+                <TableData>@user.Email</TableData>
+                <TableData><CustomIcon FAClass="@(user.HasLicense ? "check" : "xmark")" /></TableData>
+                <TableData><CustomIcon FAClass="@(user.IsAdmin ? "check" : "xmark")" /></TableData>
+                <TableData>@user.ValidTo.ToLocalTime().Date.ToString("dd.MM.yyyy")</TableData>
+                <TableData><IconButton FAClass="folder-open" OnClick="async () => await this.OpenUserDeviceModal(user)" /></TableData>
+                <TableData><IconButton FAClass="pencil" OnClick="async () => await this.OpenUserModal(user)" /></TableData>
+            </RowTemplate>
+        </Table>
+    </div>
+</ChdAuthorizeView>
+@code {
+    [Inject] IUserService userService { get; set; }
+
+    private CancellationTokenSource _cts = new();
+
+
+    private IEnumerable<PSUserDto> _userLst = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._userLst = await this.userService.GetUsersAsync(this._cts.Token);
+        await base.OnInitializedAsync();
+    }
+    private async Task OpenUserModal(PSUserDto user)
+    {
+
+    }
+
+    private async Task OpenUserDeviceModal(PSUserDto user)
+    {
+        var userDevices = await this.userService.GetUserDevicesToUserAsync(user.UID, this._cts.Token);
+    }
+
+
+    public void Dispose()
+    {
+        this._cts.Cancel();
+    }
+}

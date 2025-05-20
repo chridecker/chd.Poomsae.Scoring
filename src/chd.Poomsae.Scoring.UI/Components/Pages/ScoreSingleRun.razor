@@ -5,37 +5,43 @@
 @using chd.Poomsae.Scoring.Contracts.Enums
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Pages.Base
+@using chd.Poomsae.Scoring.UI.Components.Shared.Licensing
 @using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
 
-@if (this.runDto is null) { return; }
+<ChdAuthorizeView TRightId="int" TUserId="Guid" Rights="new int[]{RightConstants.IS_ALLOWED}">
+    <Authorized>
+        @if (this.runDto is null) { return; }
+        <div class="single-run-container">
+            <div class="fighter-container @(this.runDto.Color is EScoringButtonColor.Red ? "red" : this.runDto.Color is EScoringButtonColor.Blue ?  "blue" : "")">
+                <div class="change-button button-@(this.runDto.Color is EScoringButtonColor.Red ? "blue" : "red")" @onclick="this.ChangeColor">
+                    <CustomIcon FAClass="rotate" />
+                </div>
+                <FighterScore Score="@runDto.Score">
+                    <ButtonContent>
+                        <UserButton />
+                    </ButtonContent>
+                </FighterScore>
 
-<div class="single-run-container">
-    <div class="fighter-container @(this.runDto.Color is EScoringButtonColor.Red ? "red" : this.runDto.Color is EScoringButtonColor.Blue ?  "blue" : "")">
-        <div class="change-button button-@(this.runDto.Color is EScoringButtonColor.Red ? "blue" : "red")" @onclick="this.ChangeColor">
-            <CustomIcon FAClass="rotate" />
+            </div>
+            <div class="scoring-container">
+                <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
+                <ScoringSummaryComponent State="@this.runDto.State" OpenModal="this.OpenPresentationModal"
+                                         ChongScore="@(this.runDto.Color is EScoringButtonColor.Blue ?  runDto.Score : null)"
+                                         HongScore="@(this.runDto.Color is EScoringButtonColor.Red ?  runDto.Score : null)">
+                    <ButtonContent>
+                        <StateButton State="@runDto.State" HandleState="this.HandleClick" />
+                    </ButtonContent>
+                </ScoringSummaryComponent>
+                <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="this.runDto.Color" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
+            </div>
         </div>
-        <FighterScore Score="@runDto.Score">
-            <ButtonContent>
-                <UserButton />
-            </ButtonContent>
-        </FighterScore>
-
-    </div>
-    <div class="scoring-container">
-        <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="this.runDto.Color" ValueBig="0.3m" OnCalcClick="this.CalcScore" />
-            <ScoringSummaryComponent State="@this.runDto.State" OpenModal="this.OpenPresentationModal"
-                                     ChongScore="@(this.runDto.Color is EScoringButtonColor.Blue ?  runDto.Score : null)"
-                                     HongScore="@(this.runDto.Color is EScoringButtonColor.Red ?  runDto.Score : null)">
-                <ButtonContent>
-                    <StateButton State="@runDto.State" HandleState="this.HandleClick" />
-                </ButtonContent>
-            </ScoringSummaryComponent>
-        <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="this.runDto.Color" ValueBig="0.1m" OnCalcClick="this.CalcScore" />
-    </div>
-</div>
-
+    </Authorized>
+    <NotAuthorized>
+        <NoLicenseComponent />
+    </NotAuthorized>
+</ChdAuthorizeView>
 
 @code {
     protected override SingleRunDto CreateDto() => this._runService.StartSingleRun(this.runDto?.Color ?? EScoringButtonColor.Blue);

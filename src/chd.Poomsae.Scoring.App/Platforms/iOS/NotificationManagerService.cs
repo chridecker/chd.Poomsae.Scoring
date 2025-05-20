@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+﻿using chd.Poomsae.Scoring.App.Services;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using UserNotifications;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS
 {
@@ -27,7 +27,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
                 hasNotificationsPermission = approved;
             });
         }
-        public void SendNotification(string title, string message, bool autoCloseOnLick = true)
+        public override void SendNotification(string title, string message, bool autoCloseOnLick = true)
         {
             if (!hasNotificationsPermission) { return; }
             var content = new UNMutableNotificationContent()
@@ -40,7 +40,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             this.Show(content);
         }
 
-        public void SendNotification<TData>(string title, string message, TData data, bool autoCloseOnLick = true)
+        public override void SendNotification<TData>(string title, string message, TData data, bool autoCloseOnLick = true)
         {
             var content = new UNMutableNotificationContent()
             {
@@ -54,6 +54,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
                 [new NSString(DataTypeKey), new NSString(DataKey)]);
             this.Show(content);
         }
+        public override void ReceiveNotification(NotificationEventArgs args) => this.OnNotificationReceived(args);
+
 
         private void Show(UNMutableNotificationContent content, DateTime? notifyTime = null)
         {
@@ -68,7 +70,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
                 trigger = UNTimeIntervalNotificationTrigger.CreateTrigger(0.25, false);
             }
 
-            var request = UNNotificationRequest.FromIdentifier(messageId.ToString(), content, trigger);
+            var request = UNNotificationRequest.FromIdentifier(this._messageId.ToString(), content, trigger);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
             {
                 if (err != null)
@@ -78,7 +80,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             });
         }
 
-        public void ReceiveNotification(NotificationEventArgs args) => this.OnNotificationReceived(args);
 
         NSDateComponents GetNSDateComponents(DateTime dateTime)
         {

@@ -1,4 +1,5 @@
 ﻿using chd.Poomsae.Scoring.App.Platforms.iOS.BLE;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System;
 using System.Collections.Generic;
