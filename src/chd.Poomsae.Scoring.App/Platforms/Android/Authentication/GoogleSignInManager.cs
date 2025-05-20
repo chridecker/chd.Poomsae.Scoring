@@ -63,11 +63,11 @@ namespace chd.Poomsae.Scoring.App.Services
                 await this._firebaseAuth.SignOutAsync();
 
                 IFirebaseUser user = null;
-                var tetsLicense = false;
+                var testLicense = false;
                 try
                 {
                     user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
-                    tetsLicense = true;
+                    testLicense = true;
                 }
                 catch { }
                 user ??= await this._firebaseAuthGoogle.SignInWithGoogleAsync();
@@ -79,10 +79,10 @@ namespace chd.Poomsae.Scoring.App.Services
                         Username = user.DisplayName ?? string.Empty,
                         Email = user.Email,
                         UID = user.Uid,
-                        ValidTo = tetsLicense ? DateTimeOffset.Now.Date.AddDays(7) : DateTimeOffset.Now.Date,
+                        ValidTo = testLicense ? DateTimeOffset.Now.Date.AddDays(7) : DateTimeOffset.Now.Date,
                     });
 
-                    fsUser.UserDevice = await this._firestoreManager.GetOrCreateUserDevice(fsUser.UID, this.Device.UID, fsUser.IsAdmin || tetsLicense);
+                    fsUser.UserDevice = await this._firestoreManager.GetOrCreateUserDevice(fsUser.UID, this.Device.UID, fsUser.IsAdmin || testLicense);
                     return fsUser;
                 }
             }

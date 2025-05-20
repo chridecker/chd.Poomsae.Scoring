@@ -30,6 +30,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             this._firebaseAuth = firebaseAuth;
         }
 
+        protected override Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken) => this._firestoreManager.GetOrCreateDevice();
+
         protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
@@ -38,18 +40,23 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
                 IFirebaseUser user = null;
                 try
                 {
-                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("christoph.decker@gmx.at", "ch3510ri");
+                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
+                    testLicense = true;
                 }
                 catch { }
                 user = await this._firebaseAuth.SignInWithAppleAsync();
                 if (user is not null)
                 {
-                    return await this._firestoreManager.GetOrCreateUser(new PSUserDto()
+                    var fsUser = await this._firestoreManager.GetOrCreateUser(new PSUserDto()
                     {
                         Username = user.DisplayName ?? string.Empty,
                         Email = user.Email,
                         UID = user.Uid,
+                        ValidTo = testLicense ? DateTimeOffset.Now.Date.AddDays(7) : DateTimeOffset.Now.Date,
                     });
+
+                    fsUser.UserDevice = await this._firestoreManager.GetOrCreateUserDevice(fsUser.UID, this.Device.UID, fsUser.IsAdmin || testLicense);
+                    return fsUser;
                 }
             }
             catch (Exception ex)

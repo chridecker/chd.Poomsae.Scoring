@@ -68,6 +68,15 @@ namespace chd.Poomsae.Scoring.UI.Services
                         Name = "Allowed"
                     });
                 }
+
+                else
+                {
+                    lst.Add(new UserRightDto<int>()
+                    {
+                        Id = RightConstants.IS_ALLOWED,
+                        Name = "Allowed"
+                    });
+                }
             }
 
 

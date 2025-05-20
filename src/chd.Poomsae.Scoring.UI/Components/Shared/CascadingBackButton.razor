@@ -13,8 +13,11 @@
 
 
     private bool _showBackButton = true;
-
+#if DEBUG
+    private bool _needsBack = true;
+#else
     private bool _needsBack = false;
+    #endif
 
     protected override void OnInitialized()
     {
