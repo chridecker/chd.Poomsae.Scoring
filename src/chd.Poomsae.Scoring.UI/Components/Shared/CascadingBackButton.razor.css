@@ -1,3 +1,27 @@
-﻿body
-{
+﻿.global-back-button {
+    position: absolute;
+    z-index: 902;
+    aspect-ratio: 1/1;
+    padding: 0.2rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    left: 0.3rem;
+    top: 0.3rem;
+    align-content: center;
+    align-items: center;
+    display: flex;
+    background: var(--chd-p-blue-semi-transparent);
 }
+
+    .global-back-button.hide {
+        display: none;
+    }
+
+    .global-back-button:has(:hover) {
+        background: var(--chd-p-blue);
+    }
+
+
+    .global-back-button svg {
+        height: 1.5rem;
+    }
