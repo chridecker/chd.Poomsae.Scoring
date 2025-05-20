@@ -29,6 +29,7 @@
     public async Task SetBackButton(bool value)
     {
         this._showBackButton = value;
+        await this.InvokeAsync(this.StateHasChanged);
     }
 
     private async Task HandleBack()
