@@ -66,11 +66,11 @@ jobs:
       run: dotnet restore
       
     - name: Build MAUI iOS App (Release)
-      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj -f net9.0-ios -c Release -p:ArchiveOnBuild=true -p:EnableAssemblyILStripping=false
+      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore -f net9.0-ios -c ${{ env.BUILD_CONFIG }} -p:ArchiveOnBuild=true -p:EnableAssemblyILStripping=false
 
     - name: Upload artifact
       if: ${{ github.event.inputs.use_ipa == 'true' }}
       uses: actions/upload-artifact@v4
       with:
         name: ios-app
-        path: ./output/*.ipa
+        path: ./**/Release/**/publish/*.ipa
