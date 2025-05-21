@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
@@ -30,21 +31,19 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             this._firebaseAuth = firebaseAuth;
         }
 
-        protected override Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken) => this._firestoreManager.GetOrCreateDevice();
-
+        protected override async Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken)
+        {
+            if (this._firebaseAuth.CurrentUser is null)
+            {
+                _ = await this.GetUser();
+            }
+            return await this._firestoreManager.GetOrCreateDevice();
+        }
         protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
             {
-                await this._firebaseAuth.SignOutAsync();
-                IFirebaseUser user = null;
-                try
-                {
-                    user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
-                    testLicense = true;
-                }
-                catch { }
-                user = await this._firebaseAuth.SignInWithAppleAsync();
+                var (user, testLicense) = await this.GetUser();
                 if (user is not null)
                 {
                     var fsUser = await this._firestoreManager.GetOrCreateUser(new PSUserDto()
@@ -66,6 +65,20 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             return null;
         }
 
+        private async Task<(IFirebaseUser, bool)> GetUser()
+        {
+            await this._firebaseAuth.SignOutAsync();
+            IFirebaseUser user = null;
+            var testLicense = false;
+            try
+            {
+                user = await _firebaseAuth.SignInWithEmailAndPasswordAsync("chdscopoom@gmail.com", "ch3510ri");
+                testLicense = true;
+            }
+            catch { }
+            user ??= await this._firebaseAuth.SignInWithAppleAsync();
 
+            return (user, testLicense);
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using chd.UI.Base.Client.Implementations.Services.Base;
+﻿using chd.Poomsae.Scoring.App.Services;
+using chd.UI.Base.Client.Implementations.Services.Base;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.ApplicationModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

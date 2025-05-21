@@ -2,11 +2,31 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <IsFirstTimeProjectOpen>False</IsFirstTimeProjectOpen>
-    <ActiveDebugFramework>net9.0-android</ActiveDebugFramework>
-    <ActiveDebugProfile>Samsung SM-G525F (Android 14.0 - API 34)</ActiveDebugProfile>
-    <SelectedPlatformGroup>PhysicalDevice</SelectedPlatformGroup>
-    <DefaultDevice>pixel_7_-_api_35</DefaultDevice>
+    <ActiveDebugFramework>net9.0-ios</ActiveDebugFramework>
+    <ActiveDebugProfile>iPhone von Christoph</ActiveDebugProfile>
+    <SelectedPlatformGroup>LocalDevice</SelectedPlatformGroup>
+    <DefaultDevice>iPhone 16 iOS 18.4</DefaultDevice>
     <SelectedDevice>Android Emulator</SelectedDevice>
+    <TargetiOSDevice>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+	&lt;key&gt;device&lt;/key&gt;
+	&lt;dict&gt;
+		&lt;key&gt;architecture&lt;/key&gt;
+		&lt;string&gt;ARMv6, ARMv7, ARMv7s, ARM64&lt;/string&gt;
+		&lt;key&gt;model&lt;/key&gt;
+		&lt;string&gt;iPhone13,2&lt;/string&gt;
+		&lt;key&gt;os-version&lt;/key&gt;
+		&lt;string&gt;18.5&lt;/string&gt;
+		&lt;key&gt;os&lt;/key&gt;
+		&lt;string&gt;iOS&lt;/string&gt;
+	&lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</TargetiOSDevice>
+    <DeveloperId>FVN28583R5</DeveloperId>
+    <DevelopmentTeamId>FVN28583R5</DevelopmentTeamId>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetPlatformIdentifier)'=='iOS'">
     <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>

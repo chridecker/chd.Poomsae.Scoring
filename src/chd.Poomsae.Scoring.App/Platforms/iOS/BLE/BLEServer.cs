@@ -20,6 +20,7 @@ using Blazored.Modal.Services;
 using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Enum;
 using UIKit;
+using System.Threading;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 {
