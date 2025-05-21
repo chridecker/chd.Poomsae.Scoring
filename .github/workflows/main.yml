@@ -65,8 +65,8 @@ jobs:
           /p:ApplicationVersion=${{ github.run_number}} 
           /p:RuntimeIdentifier=ios-arm64 \
           /p:BuildIpa=true \
-          /p:CodesignKey="Apple Distribution" \
-          /p:CodesignProvision="Your Provisioning Profile Name"
+          /p:ArchiveOnBuild=true \
+          /p:EnableAssemblyILStripping=false
 
     - name: Upload artifact
       if: ${{ github.event.inputs.use_ipa == 'true' }}
