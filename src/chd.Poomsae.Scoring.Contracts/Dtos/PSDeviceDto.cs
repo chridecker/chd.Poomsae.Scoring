@@ -14,6 +14,7 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
         public string Manufacturer { get; set; }
         public string Platform { get; set; }
         public string CurrentVersion { get; set; }
+        public string Comment { get; set; }
         public DateTimeOffset LastStart { get; set; }
 
         public override string ToString() => $"{this.Name} ({this.Model} - {this.Manufacturer})";

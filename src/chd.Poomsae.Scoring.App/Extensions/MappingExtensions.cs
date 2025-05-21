@@ -62,7 +62,8 @@ namespace chd.Poomsae.Scoring.App.Extensions
                Model = dto.Model,
                Name = dto.Name,
                Platform = dto.Platform,
-               LastStart = dto.LastStart
+               LastStart = dto.LastStart,
+               Comment = dto.Comment
            };
         public static FireStoreDeviceDto ToFSDevice(this PSDeviceDto dto)
            => new FireStoreDeviceDto()
@@ -73,7 +74,8 @@ namespace chd.Poomsae.Scoring.App.Extensions
                Model = dto.Model,
                Name = dto.Name,
                Platform = dto.Platform,
-               LastStart = dto.LastStart
+               LastStart = dto.LastStart,
+               Comment = dto.Comment
            };
     }
 }

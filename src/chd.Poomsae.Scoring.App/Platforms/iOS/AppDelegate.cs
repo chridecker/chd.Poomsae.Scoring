@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using Firebase.Core;
 
 namespace chd.Poomsae.Scoring.App
 {
@@ -6,5 +7,11 @@ namespace chd.Poomsae.Scoring.App
     public class AppDelegate : MauiUIApplicationDelegate
     {
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+
+        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        {
+            FirebaseApp.Configure(); // <-- Wichtig!
+            return base.FinishedLaunching(app, options);
+        }
     }
 }

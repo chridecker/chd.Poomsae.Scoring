@@ -27,6 +27,9 @@ namespace chd.Poomsae.Scoring.App.Services
         [FirestoreProperty("CurrentVersion")]
         public string CurrentVersion { get; set; }
 
+        [FirestoreProperty("Comment")]
+        public string Comment { get; set; }
+
         [FirestoreProperty("LastStart")]
         public DateTimeOffset LastStart { get; set; }
     }
