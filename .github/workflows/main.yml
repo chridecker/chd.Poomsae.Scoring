@@ -72,6 +72,17 @@ jobs:
     - name: Build MAUI iOS App (Release)
       run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore -f net9.0-ios -c ${{ env.BUILD_CONFIG }} -p:ArchiveOnBuild=true -p:EnableAssemblyILStripping=false
 
+    - name: List build output
+      run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net8.0-ios/publish/
+      
+    - name: Upload app to TestFlight
+      uses: Apple-Actions/upload-testflight-build@v1
+      with:
+        app-path: 'src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/chd.Poomsae.Scoring.App.ipa'
+        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+        api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+        api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+              
     - name: Upload artifact
       if: ${{ github.event.inputs.use_ipa == 'true' }}
       uses: actions/upload-artifact@v4
