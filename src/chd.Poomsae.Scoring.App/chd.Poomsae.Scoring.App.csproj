@@ -56,11 +56,14 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<GoogleServicesJson Include="Platforms\Android\google-services.json">
 		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</GoogleServicesJson>
-		<EmbeddedResource Include="Resources\Config\appsettings.json" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+		<None Remove="Platforms\Android\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
