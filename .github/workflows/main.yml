@@ -60,13 +60,7 @@ jobs:
         $YEAR=& Get-Date -UFormat "%y%j"
         $HOUR=& Get-Date -format HHmm
         $VERSION="$MAJOR.$MINOR.$YEAR.$HOUR"
-        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-ios
-          /p:ApplicationDisplayVersion=$VERSION 
-          /p:ApplicationVersion=${{ github.run_number}} 
-          /p:RuntimeIdentifier=ios-arm64 \
-          /p:BuildIpa=true \
-          /p:ArchiveOnBuild=true \
-          /p:EnableAssemblyILStripping=false
+        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-ios -p:ApplicationDisplayVersion=$VERSION -p:ApplicationVersion=${{ github.run_number}} -p:RuntimeIdentifier=ios-arm64 -p:BuildIpa=true -p:ArchiveOnBuild=true -p:EnableAssemblyILStripping=false
 
     - name: Upload artifact
       if: ${{ github.event.inputs.use_ipa == 'true' }}
