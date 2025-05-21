@@ -55,6 +55,14 @@
 		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-android'">
+	  <Content Remove="Platforms\Android\google-services.json" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
@@ -69,12 +77,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="Platforms\Android\google-services.json">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </Content>
 	</ItemGroup>
 
 </Project>
