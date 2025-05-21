@@ -29,7 +29,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
         private static readonly byte[] DisableNotificationValue = new byte[] { 0, 0 };
         private static readonly byte[] EnableNotificationValue = new byte[] { 1, 0 };
 
-        private static string _restorationIdentifier;
 
         private CBPeripheralManager _cBPeripheralManager;
         private BLEPeripheralManagerDelegate _cBPeripheralManagerDelegate;
@@ -52,7 +51,12 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 {
                     return;
                 }
-                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+                var isSucceded = false;
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), (success) =>
+                {
+                    isSucceded = success;
+                });
+                if (!isSucceded) { return; }
             }
 
             if (this._cBPeripheralManager is not null) { return; }

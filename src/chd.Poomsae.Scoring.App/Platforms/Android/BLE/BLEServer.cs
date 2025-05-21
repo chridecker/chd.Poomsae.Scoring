@@ -32,11 +32,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
         private BluetoothAdapter _bluetoothAdapter;
         private BLEGattCallback _callback;
         private readonly BLEAdvertisingCallback _advertisingCallback;
-        private readonly ISettingManager _settingManager;
         private BluetoothGattServer _gattServer;
 
 
-        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager, IModalService modalService) 
+        public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager, IModalService modalService)
             : base(settingManager, modalService, BluetoothGattDescriptor.DisableNotificationValue)
         {
             this._callback = callback;
@@ -184,7 +183,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             }
         }
 
-        private async void ReadRequest(object sender, BleEventArgs e)
+        private async void ReadRequest(object? sender, BleEventArgs e)
         {
             if (e.Characteristic.InstanceId == this._characteristic.InstanceId)
             {
@@ -200,7 +199,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
                 if (!this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
                 {
                     this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
-                    this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), e.Device.Name, true);
+                    this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), e.Device?.Name ?? "", true);
                 }
             }
         }

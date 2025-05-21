@@ -67,7 +67,7 @@ namespace chd.Poomsae.Scoring.App
             builder.ConfigureLifecycleEvents(events =>
             {
 #if ANDROID
-                events.AddAndroid(android => android.OnCreate(async (activity, _) =>
+                events.AddAndroid(android => android.OnCreate((activity, _) =>
                 {
                     CrossFirebase.Initialize(activity);
                     FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace chd.Poomsae.Scoring.App.Services
+namespace chd.Poomsae.Scoring.App.Dtos.FireStore
 {
     public class FireStoreUserDto : IFirestoreObject
     {

@@ -1,4 +1,4 @@
-﻿using chd.Poomsae.Scoring.App.Services;
+﻿using chd.Poomsae.Scoring.App.Dtos.FireStore;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using System;
 using System.Collections.Generic;

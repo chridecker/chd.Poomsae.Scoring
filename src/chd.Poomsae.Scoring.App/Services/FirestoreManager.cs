@@ -1,4 +1,5 @@
 ﻿using chd.Poomsae.Scoring.App.Extensions;
+using chd.Poomsae.Scoring.App.Dtos.FireStore;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.UI.Components.Pages;
