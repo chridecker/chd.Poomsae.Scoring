@@ -52,7 +52,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                     return;
                 }
                 var isSucceded = false;
-                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), (success) =>
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString),new UIApplicationOpenUrlOptions(), (success) =>
                 {
                     isSucceded = success;
                 });
