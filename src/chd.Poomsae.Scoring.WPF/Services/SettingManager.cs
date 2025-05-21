@@ -8,19 +8,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.WPF.Services
 {
     public class SettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
     {
+        private readonly Dictionary<string, string> _settings = [];
         public SettingManager(ILogger<SettingManager> logger, IProtecedLocalStorageHandler protecedLocalStorageHandler, NavigationManager navigationManager)
             : base(logger, protecedLocalStorageHandler, navigationManager)
         {
         }
 
         public async Task<T?> GetNativSetting<T>(string key) where T : class
-        => await base.GetSettingLocal<T>(key);
+        {
+            if(this._settings.TryGetValue(key, out var val))
+            {
+                return JsonSerializer.Deserialize<T>(val);
+            }
+            return null;
+        }
 
         public async Task<string> GetName()
         {
@@ -37,7 +45,7 @@ namespace chd.Poomsae.Scoring.WPF.Services
 
         public async Task SetNativSetting<T>(string key, T value) where T : class
         {
-            await base.StoreSettingLocal<T>(key, value);
+            this._settings[key] = JsonSerializer.Serialize(value);
         }
     }
 }

@@ -39,6 +39,8 @@ namespace chd.Poomsae.Scoring.WPF.Services
             {
                 Email = "c.decker@metalldeutsch.com",
                 Username = "decker",
+                FirstName = "",
+                LastName = "",
             };
         }
     }
