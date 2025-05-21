@@ -1,16 +1,10 @@
-﻿using Android.DeviceLock;
-using chd.Poomsae.Scoring.App.Extensions;
+﻿using chd.Poomsae.Scoring.App.Extensions;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.UI.Components.Pages;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using chd.UI.Base.Extensions;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Firebase.Annotations;
-using Firebase.Firestore;
-using Firebase.Firestore.Auth;
 using Plugin.Firebase.Firestore;
-using Plugin.Firebase.Firestore.Platforms.Android;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +29,7 @@ namespace chd.Poomsae.Scoring.App.Services
         public async Task<IEnumerable<PSDeviceDto>> GetDevicesAsync(CancellationToken cancellationToken = default)
         {
             var deviceCollection = this._firebaseFirestore.GetCollection("devices");
-            var devices = await deviceCollection.GetDocumentsAsync<FireStoreDeviceDto>(Plugin.Firebase.Firestore.Source.Server);
+            var devices = await deviceCollection.GetDocumentsAsync<FireStoreDeviceDto>(Source.Server);
             return devices.Documents.Select(s => s.Data.ToPSDevice());
         }
 
@@ -44,7 +38,7 @@ namespace chd.Poomsae.Scoring.App.Services
             var deviceCollection = this._firebaseFirestore.GetCollection("devices");
             var deviceDocument = deviceCollection.GetDocument(this._deviceHandler.UID);
 
-            var snap = await deviceDocument.GetDocumentSnapshotAsync<FireStoreDeviceDto>(Plugin.Firebase.Firestore.Source.Server);
+            var snap = await deviceDocument.GetDocumentSnapshotAsync<FireStoreDeviceDto>(Source.Server);
 
             var version = await this._updateService.CurrentVersion();
 
