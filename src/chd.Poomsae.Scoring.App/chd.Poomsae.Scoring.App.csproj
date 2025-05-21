@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+		<TargetFrameworks>net9.0-android<!--;net9.0-ios-->
+		</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>chd.Poomsae.Scoring.App</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -36,8 +37,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
-	  <CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
-	  <CodesignProvision>vs: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
+		<CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
+		<CodesignProvision>vs: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -62,14 +63,11 @@
 		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
-		<EmbeddedResource Include="appsettings.json" />
+	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-ios'">
+		<GoogleServicesJson Include="Platforms\Android\Resources\google-services.json" />
 	</ItemGroup>
-	
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
-		<None Remove="Platforms\Android\google-services.json" />
-		<None Remove="appsettings.json" />
+	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-ios'">
+		<EmbeddedResource Include="Platforms\Android\Resources\appsettings.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,7 +83,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
+		<ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
 	</ItemGroup>
 
 </Project>

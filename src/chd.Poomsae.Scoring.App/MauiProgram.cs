@@ -87,12 +87,12 @@ namespace chd.Poomsae.Scoring.App
         private static IConfiguration GetAppSettingsConfig()
         {
             var fileName = "appsettings.json";
-            var appSettingsFileName = "chd.Poomsae.Scoring.App.appsettings.json";
             var assembly = Assembly.GetExecutingAssembly();
-            using var resStream = assembly.GetManifestResourceStream(appSettingsFileName);
+            var resources = assembly.GetManifestResourceNames();
+            using var resStream = assembly.GetManifestResourceStream(resources.FirstOrDefault(x => x.EndsWith(fileName)));
             if (resStream == null)
             {
-                throw new ApplicationException($"Unable to read file [{appSettingsFileName}]");
+                throw new ApplicationException($"Unable to read file [{fileName}]");
             }
             return new ConfigurationBuilder()
                     .AddJsonStream(resStream)
