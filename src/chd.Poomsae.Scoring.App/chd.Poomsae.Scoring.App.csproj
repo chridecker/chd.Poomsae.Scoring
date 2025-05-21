@@ -20,9 +20,8 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<PublishAot>False</PublishAot>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
-		<WindowsPackageType>None</WindowsPackageType>
 
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 
@@ -38,8 +37,7 @@
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
-	  <CodesignProvision>VS: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
-	  <ProvisioningType>automatic</ProvisioningType>
+	  <CodesignProvision>VS: WildCard Development</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -58,46 +56,15 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Content Remove="appsettings.json" />
-		<Content Remove="Platforms\Android\google-services.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<MauiImage Remove="Resources\Images\logo.svg" />
-	</ItemGroup>
-
-	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-		<Content Include="Resources\AppIcon\logo.png">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<MauiIcon Include="Resources\AppIcon\logo.svg">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</MauiIcon>
-		<Content Include="Resources\Images\logo.svg">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-		<Content Include="Resources\Splash\logo.svg">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
-
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="appsettings.json" />
+		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
+		<EmbeddedResource Include="appsettings.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -109,12 +76,11 @@
 		<PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 		<PackageReference Include="Plugin.Firebase.Firestore" Version="3.1.3" />
 		<PackageReference Include="Plugin.Firebase.Auth" Version="3.1.1" />
-		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
 		<PackageReference Include="Plugin.Firebase.Auth.Google" Version="3.1.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
+	  <ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
 	</ItemGroup>
 
 </Project>
