@@ -73,7 +73,7 @@ jobs:
       run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore -f net9.0-ios -c ${{ env.BUILD_CONFIG }} -p:ArchiveOnBuild=true -p:EnableAssemblyILStripping=false
 
     - name: List build output
-      run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net8.0-ios/publish/
+      run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/
       
     - name: Upload app to TestFlight
       uses: Apple-Actions/upload-testflight-build@v1
