@@ -31,7 +31,7 @@ namespace chd.Poomsae.Scoring.App
         {
             base.OnCreate(savedInstanceState);
 
-            FirebaseApp.InitializeApp(this);
+            //FirebaseApp.InitializeApp(this);
 
             this.OnBackPressedDispatcher.AddCallback(this, new BackPress(this._appInfoService));
 
