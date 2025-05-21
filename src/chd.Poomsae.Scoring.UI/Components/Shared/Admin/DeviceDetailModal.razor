@@ -1,0 +1,21 @@
+<div class="device-detail-container">
+    <div class="device-data-label">@nameof(PSDeviceDto.Name)</div>
+    <div class="device-data-value">@this.DeviceDto.Name</div>
+    <div class="device-data-label">@nameof(PSDeviceDto.Model)</div>
+    <div class="device-data-value">@this.DeviceDto.Model"</div>
+    <div class="device-data-label">@nameof(PSDeviceDto.Manufacturer)</div>
+    <div class="device-data-value">@this.DeviceDto.Manufacturer"</div>
+    <div class="device-data-label">@nameof(PSDeviceDto.Platform)</div>
+    <div class="device-data-value">@this.DeviceDto.Platform"</div>
+    <div class="device-data-label">@nameof(PSDeviceDto.CurrentVersion)</div>
+    <div class="device-data-value">@this.DeviceDto.CurrentVersion"</div>
+    <div class="device-data-label">@nameof(PSDeviceDto.LastStart)</div>
+    <div class="device-data-value">@this.DeviceDto.LastStart.ToString("dd.MM.yyyy HH:mm:ss")</div>
+    <div class="device-data-label">@nameof(PSDeviceDto.Comment)</div>
+    <div class="device-data-value"><input type="text" @bind-value="@this.DeviceDto.Comment" /></div>
+</div>
+
+
+@code {
+    [Parameter] public PSDeviceDto DeviceDto { get; set; }
+}

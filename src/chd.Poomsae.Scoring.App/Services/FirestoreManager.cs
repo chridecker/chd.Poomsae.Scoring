@@ -34,6 +34,22 @@ namespace chd.Poomsae.Scoring.App.Services
             return devices.Documents.Select(s => s.Data.ToPSDevice());
         }
 
+        public async Task<PSDeviceDto> GetDeviceAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var deviceCollection = this._firebaseFirestore.GetCollection("devices");
+            var deviceDocument = deviceCollection.GetDocument(id);
+            var snap = await deviceDocument.GetDocumentSnapshotAsync<FireStoreDeviceDto>(Source.Server);
+            return snap.Data?.ToPSDevice() ?? null;
+        }
+
+        public async Task<PSUserDto> GetUserAsync(string id, CancellationToken cancellationToken = default)
+        {
+            var userCollection = this._firebaseFirestore.GetCollection("users");
+            var userDocument = userCollection.GetDocument(id);
+            var snap = await userDocument.GetDocumentSnapshotAsync<FireStoreUserDto>(Source.Server);
+            return snap.Data?.ToPSUser() ?? null;
+        }
+
         public async Task<PSDeviceDto> GetOrCreateDevice()
         {
             var deviceCollection = this._firebaseFirestore.GetCollection("devices");

@@ -1,5 +1,6 @@
 @implements IDisposable
 @page "/users"
+@using chd.Poomsae.Scoring.UI.Components.Shared.Admin
 
 <ChdAuthorizeView Rights="[RightConstants.IS_ADMIN]" TUserId="Guid" TRightId="int">
     <div class="users-container">
@@ -25,6 +26,7 @@
 </ChdAuthorizeView>
 @code {
     [Inject] IUserService userService { get; set; }
+    [Inject] IModalService modalService { get; set; }
 
     private CancellationTokenSource _cts = new();
 
@@ -38,12 +40,27 @@
     }
     private async Task OpenUserModal(PSUserDto user)
     {
-
+        await this.modalService.Show<UserDetailModal>(new ModalParameters()
+        {
+            {nameof(UserDetailModal.UserDto),user}
+        }, new ModalOptions()
+        {
+            HideHeader = true,
+            Size = ModalSize.ExtraLarge
+        }).Result;        
     }
 
     private async Task OpenUserDeviceModal(PSUserDto user)
     {
         var userDevices = await this.userService.GetUserDevicesToUserAsync(user.UID, this._cts.Token);
+        await this.modalService.Show<UserDeviceModal>(new ModalParameters()
+        {
+            {nameof(UserDeviceModal.UserDeviceLst),userDevices}
+        }, new ModalOptions()
+        {
+            HideHeader = true,
+            Size = ModalSize.ExtraLarge
+        }).Result;
     }
 
 

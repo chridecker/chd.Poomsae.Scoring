@@ -21,5 +21,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         Task<PSDeviceDto> GetOrCreateDevice();
         Task<PSUserDto> GetOrCreateUser(PSUserDto user);
         Task<PSUserDeviceDto> GetOrCreateUserDevice(string userId, string deviceId, bool isAdmin);
+        Task<PSDeviceDto> GetDeviceAsync(string id,CancellationToken cancellationToken = default);
+        Task<PSUserDto> GetUserAsync(string id, CancellationToken cancellationToken = default);
     }
 }

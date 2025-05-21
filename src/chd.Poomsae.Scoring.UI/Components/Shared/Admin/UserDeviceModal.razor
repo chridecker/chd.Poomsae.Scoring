@@ -1,0 +1,44 @@
+<div class="user-device-container">
+    <Table Items="this.UserDeviceLst">
+        <HeaderContent>
+            <TableHead><CustomIcon FAClass="users" /></TableHead>
+            <TableHead><CustomIcon FAClass="mobile-screen" /></TableHead>
+            <TableHead><CustomIcon FAClass="calendar-days" /></TableHead>
+            <TableHead><CustomIcon FAClass="badge-check" /></TableHead>
+        </HeaderContent>
+        <RowTemplate Context="userDevice">
+            <TableData>@this._user(userDevice.User_UID)</TableData>
+            <TableData>@this._device(userDevice.Device_UID)</TableData>
+            <TableData>@(userDevice.Created.ToString("dd.MM.yyyy HH:mm:ss"))</TableData>
+            <TableData><CustomIcon FAClass="@(userDevice.IsAllowed ? "check" : "xmark")" /></TableData>
+        </RowTemplate>
+    </Table>
+</div>
+
+@code {
+    [Inject] IUserService userService { get; set; }
+
+    [Parameter] public IEnumerable<PSUserDeviceDto> UserDeviceLst { get; set; }
+
+    private Dictionary<string, PSUserDto> _userDict = [];
+    private Dictionary<string, PSDeviceDto> _deviceDict = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        foreach (var userDevice in this.UserDeviceLst)
+        {
+            if (!this._userDict.ContainsKey(userDevice.User_UID))
+            {
+                this._userDict[userDevice.User_UID] = await this.userService.GetUserAsync(userDevice.User_UID);
+            }
+
+            if (!this._deviceDict.ContainsKey(userDevice.Device_UID))
+            {
+                this._deviceDict[userDevice.Device_UID] = await this.userService.GetDeviceAsync(userDevice.Device_UID);
+            }
+        }
+        await base.OnInitializedAsync();
+    }
+    private string _user(string id) => this._userDict.TryGetValue(id, out var u) ? u.Email : string.Empty;
+    private string _device(string id) => this._deviceDict.TryGetValue(id, out var u) ? u.ToString() : string.Empty;
+}

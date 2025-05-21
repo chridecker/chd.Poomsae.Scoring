@@ -1,17 +1,16 @@
 @implements IDisposable
 @page "/devices"
+@using chd.Poomsae.Scoring.UI.Components.Shared.Admin
 
 <ChdAuthorizeView Rights="[RightConstants.IS_ADMIN]" TUserId="Guid" TRightId="int">
     <div class="users-container">
         <Table Items="this._deviceLst">
             <HeaderContent>
                 <TableHead>Gerät</TableHead>
-                <TableHead><CustomIcon FAClass="users" /></TableHead>
                 <TableHead></TableHead>
             </HeaderContent>
             <RowTemplate Context="device">
                 <TableData>@device.ToString()</TableData>
-                <TableData><IconButton FAClass="folder-open" OnClick="async () => await this.OpenUserDeviceModal(device)" /></TableData>
                 <TableData><IconButton FAClass="pencil" OnClick="async () => await this.OpenDeviceModal(device)" /></TableData>
             </RowTemplate>
         </Table>
@@ -19,6 +18,7 @@
 </ChdAuthorizeView>
 @code {
     [Inject] IUserService userService { get; set; }
+    [Inject] IModalService modalService { get; set; }
 
     private CancellationTokenSource _cts = new();
 
@@ -32,13 +32,16 @@
     }
     private async Task OpenDeviceModal(PSDeviceDto device)
     {
+        await this.modalService.Show<DeviceDetailModal>(new ModalParameters()
+        {
+            {nameof(DeviceDetailModal.DeviceDto),device}
+        }, new ModalOptions()
+        {
+            HideHeader = true,
+            Size = ModalSize.ExtraLarge
+        }).Result;
 
     }
-    private async Task OpenUserDeviceModal(PSDeviceDto device)
-    {
-        var userDevices = await this.userService.GetUserDevicesToDeviceAsync(device.UID, this._cts.Token);
-    }
-
 
     public void Dispose()
     {
