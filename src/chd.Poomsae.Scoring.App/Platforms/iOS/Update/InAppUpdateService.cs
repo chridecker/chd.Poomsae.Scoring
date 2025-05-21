@@ -22,39 +22,47 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Update
 
         public override async Task UpdateAsync(int timeout)
         {
-            var storeVersion = await this.GetAppStoreVersion();
-            var version = await this.CurrentVersion();
-            if (storeVersion > version)
+            try
             {
-                await Task.Delay(TimeSpan.FromSeconds(timeout));
-                await Shell.Current.DisplayAlert("Update verfügbar", "Es gibt eine neue Version im App Store.", "OK");
+                var storeVersion = await this.GetAppStoreVersion();
+                var version = await this.CurrentVersion();
+                if (storeVersion > version)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(timeout));
+                    await Shell.Current.DisplayAlert("Update verfügbar", "Es gibt eine neue Version im App Store.", "OK");
 
-                // Optional: Zum App Store weiterleiten
-                var appStoreUrl = "https://apps.apple.com/app/id<DEINE_APP_ID>"; // z. B. id1234567890
-                await Launcher.OpenAsync(appStoreUrl);
+                    // Optional: Zum App Store weiterleiten
+                    var appStoreUrl = "https://apps.apple.com/app/id6746179037"; // z. B. id1234567890
+                    await Launcher.OpenAsync(appStoreUrl);
+                }
             }
+            catch { }
         }
 
         private async Task<Version> GetAppStoreVersion()
         {
-            var url = $"https://itunes.apple.com/lookup?bundleId={AppInfo.PackageName}";
-
-            using var client = new HttpClient();
-            var json = await client.GetStringAsync(url);
-            var data = JsonDocument.Parse(json);
-            var root = data.RootElement;
-
-            if (root.GetProperty("resultCount").GetInt32() > 0)
+            try
             {
-                var appStoreVersion = root
-                    .GetProperty("results")[0]
-                    .GetProperty("version")
-                    .GetString();
-                if (Version.TryParse(appStoreVersion, out var store))
+                var url = $"https://itunes.apple.com/lookup?bundleId={AppInfo.PackageName}";
+
+                using var client = new HttpClient();
+                var json = await client.GetStringAsync(url);
+                var data = JsonDocument.Parse(json);
+                var root = data.RootElement;
+
+                if (root.GetProperty("resultCount").GetInt32() > 0)
                 {
-                    return store;
+                    var appStoreVersion = root
+                        .GetProperty("results")[0]
+                        .GetProperty("version")
+                        .GetString();
+                    if (Version.TryParse(appStoreVersion, out var store))
+                    {
+                        return store;
+                    }
                 }
             }
+            catch { }
             return new Version(1, 0, 0, 0);
         }
     }
