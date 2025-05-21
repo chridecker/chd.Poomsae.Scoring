@@ -7,6 +7,10 @@ on:
         description: 'How to build debug/release'
         required: true
         default: 'Release'
+      use_testflight:
+        description: 'Upload IPA to Testflight'
+        required: true
+        default: 'true'
       use_ipa:
         description: 'Create an IPA Artifact'
         required: true
@@ -76,6 +80,7 @@ jobs:
       run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/
       
     - name: Upload app to TestFlight
+      if: ${{github.event.inputs.use_testflight == 'true' }}
       uses: Apple-Actions/upload-testflight-build@v1
       with:
         app-path: 'src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/chd.Poomsae.Scoring.App.ipa'
