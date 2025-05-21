@@ -17,54 +17,56 @@ jobs:
     env:
       BUILD_CONFIG: ${{ github.event.inputs.build_config }}
       
-    runs-on: macos-13
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
-    
+    - name: Setup Xcode version
+      uses: maxim-lobanov/setup-xcode@v1.6.0
+      with:
+        xcode-version: 16.0
+        
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.x'
 
+    - name: Set Datetime
+      id: date
+      run: |
+        echo "year=$(date +%y%j)" >> $GITHUB_OUTPUT
+        echo "hour=$(date +%H%M)" >> $GITHUB_OUTPUT
+    - name: Define Date Var
+      run: echo "DATEVERSION=1.0.${{ steps.date.outputs.year }}.${{ steps.date.outputs.hour }}" >> $GITHUB_ENV
+    - name: Write Version
+      run: |
+        echo ${{env.DATEVERSION}}
+        echo "VERSION=${{env.DATEVERSION}}" >> $GITHUB_ENV
+        
     - name: Install MAUI workloads
       run: |
         dotnet workload install maui
         dotnet workload install maui-ios
 
-    - name: Decrypt signing certificate
-      run: |
-        mkdir -p ~/certs
-        echo "${{ secrets.IOS_P12_BASE64 }}" | base64 --decode > ~/certs/cert.p12
+    - name: Import Code-Signing Certificates
+      uses: Apple-Actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.IOS_P12_B64 }}
+        p12-password: ${{ secrets.P12_PASSWORD }}
+        
+    - name: Download Apple Provisioning Profiles
+      uses: Apple-Actions/download-provisioning-profiles@v1
+      with:
+        bundle-id: 'com.companyname.chd.poomsae.scoring.app'
+        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+        api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+        api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
-    - name: Install certificate
-      run: |
-        security create-keychain -p "pass" build.keychain
-        security default-keychain -s build.keychain
-        security unlock-keychain -p "pass" build.keychain
-        security import ~/certs/cert.p12 -k build.keychain -P "${{ secrets.P12_PASSWORD }}" -T /usr/bin/codesign
-
-    - name: Install provisioning profile
-      run: |
-        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        echo "${{ secrets.IOS_PROVISION_PROFILE }}" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
     - name: Restore dependencies
       run: dotnet restore
       
     - name: Build MAUI iOS App (Release)
-      run: |
-        $MAJOR=1
-        $MINOR=1
-        $YEAR=& Get-Date -UFormat "%y%j"
-        $HOUR=& Get-Date -format HHmm
-        $VERSION="$MAJOR.$MINOR.$YEAR.$HOUR"
-        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-ios
-          /p:ApplicationDisplayVersion=$VERSION 
-          /p:ApplicationVersion=${{ github.run_number}} 
-          /p:RuntimeIdentifier=ios-arm64 \
-          /p:BuildIpa=true \
-          /p:CodesignKey="Apple Distribution" \
-          /p:CodesignProvision="Your Provisioning Profile Name"
+      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj -f net9.0-ios -c Release -p:ArchiveOnBuild=true -p:EnableAssemblyILStripping=false
 
     - name: Upload artifact
       if: ${{ github.event.inputs.use_ipa == 'true' }}

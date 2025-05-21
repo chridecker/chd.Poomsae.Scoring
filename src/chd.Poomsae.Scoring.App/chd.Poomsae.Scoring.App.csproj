@@ -35,9 +35,9 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
-	  <CodesignProvision>VS: WildCard Development</CodesignProvision>
+	  <CodesignProvision>vs: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
 	</PropertyGroup>
 
 	<ItemGroup>
