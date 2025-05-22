@@ -91,7 +91,7 @@ jobs:
             /p:Version=${{ env.DATESVERSION }}
             /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }}
             /p:ApplicationBuild=${{ github.run_number }}
-            /p:ApplicationVersion=1.1.1 #${{ github.run_number }} 
+            /p:ApplicationVersion=${{ env.DATEIOSVERSION }} #${{ github.run_number }} 
             
 
     - name: List build output
