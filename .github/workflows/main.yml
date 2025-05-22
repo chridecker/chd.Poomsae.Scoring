@@ -38,7 +38,7 @@ jobs:
     - name: Define Date Var
       run: echo "DATEVERSION=1.1.${{ steps.date.outputs.year }}.${{ steps.date.outputs.hour }}" >> $GITHUB_ENV
     - name: Define Date Var iOS
-      run: echo "DATEIOSVERSION=1.1.${{ steps.date.outputs.year }}${{ github.run_number }}" >> $GITHUB_ENV
+      run: echo "DATEIOSVERSION=1.${{ steps.date.outputs.year }}.${{ github.run_number }}" >> $GITHUB_ENV
     - name: Write Version
       if: false
       run: |
