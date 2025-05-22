@@ -40,7 +40,7 @@ jobs:
     - name: Write Version
       run: |
         echo ${{env.DATEVERSION}}
-        echo "VERSION=1.1.${{ steps.date.outputs.year }}${{ steps.date.outputs.hour }}" >> $GITHUB_ENV
+        echo "VERSION=${{env.DATEVERSION}}" >> $GITHUB_ENV
 
     - name: Select Xcode version
       run: sudo xcode-select -s /Applications/Xcode_16.3.app
