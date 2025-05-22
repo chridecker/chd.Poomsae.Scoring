@@ -10,7 +10,7 @@ on:
       codesignkey:
         description: 'Apple CodeSignKey'
         required: true
-        default: 'Apple Distribution: Christoph Decker'
+        default: 'Apple Distribution: Christoph Decker (498HRCSRQQ)'
       use_testflight:
         description: 'Upload IPA to Testflight'
         required: true
