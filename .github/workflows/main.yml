@@ -36,7 +36,7 @@ jobs:
         echo "year=$(date +%y%j)" >> $GITHUB_OUTPUT
         echo "hour=$(date +%H%M)" >> $GITHUB_OUTPUT
     - name: Define Date Var
-      run: echo "DATEVERSION=1.1.${{ steps.date.outputs.year }}.${{ steps.date.outputs.hour }}" >> $GITHUB_ENV
+      run: echo "DATEVERSION=1.1.${{ steps.date.outputs.year }}${{ steps.date.outputs.hour }}" >> $GITHUB_ENV
     - name: Write Version
       run: |
         echo ${{env.DATEVERSION}}
