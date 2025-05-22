@@ -42,7 +42,7 @@ jobs:
     - name: Write Version
       run: |
         echo ${{env.DATEVERSION}}
-        echo "VERSION=${{env.DATEVERSION}}" >> $GITHUB_ENV
+        echo "VERSION=${{env.DATEIOSVERSION}}" >> $GITHUB_ENV
 
     - name: Select Xcode version
       run: sudo xcode-select -s /Applications/Xcode_16.3.app
@@ -88,8 +88,8 @@ jobs:
             /p:ArchiveOnBuild=true 
             /p:EnableAssemblyILStripping=false 
             /p:ApplicationBuild=${{ github.run_number }} 
-            /p:ApplicationVersion=${{env.DATEIOSVERSION}}
-            /p:ApplicationDisplayVersion=${{ env.DATEVERSION }}
+            /p:ApplicationVersion=${{ env.DATEVERSION }}
+            /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }}
 
     - name: List build output
       run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/
