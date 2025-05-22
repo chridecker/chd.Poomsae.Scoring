@@ -88,7 +88,7 @@ jobs:
             /p:CodesignProvision="Sco Poom AppStore Profile" 
             /p:ArchiveOnBuild=true 
             /p:EnableAssemblyILStripping=false 
-            /p:Version=${{ env.DATESVERSION }}
+            /p:Version=${{ env.DATEVERSION }}
             /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }}
             /p:ApplicationBuild=${{ github.run_number }}
             /p:ApplicationVersion=${{ env.DATEIOSVERSION }} #${{ github.run_number }} 
