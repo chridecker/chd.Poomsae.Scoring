@@ -37,6 +37,8 @@ jobs:
         echo "hour=$(date +%H%M)" >> $GITHUB_OUTPUT
     - name: Define Date Var
       run: echo "DATEVERSION=1.1.${{ steps.date.outputs.year }}.${{ steps.date.outputs.hour }}" >> $GITHUB_ENV
+    - name: Define Date Var iOS
+      run: echo "DATEIOSVERSION=1.1.${{ steps.date.outputs.year }}${{ github.run_number }}" >> $GITHUB_ENV
     - name: Write Version
       run: |
         echo ${{env.DATEVERSION}}
@@ -86,7 +88,7 @@ jobs:
             /p:ArchiveOnBuild=true 
             /p:EnableAssemblyILStripping=false 
             /p:ApplicationBuild=${{ github.run_number }} 
-            /p:ApplicationVersion=${{env.DATEVERSION}}
+            /p:ApplicationVersion=${{env.DATEIOSVERSION}}
             /p:ApplicationDisplayVersion=${{ env.DATEVERSION }}
 
     - name: List build output
