@@ -80,7 +80,14 @@ jobs:
       run: dotnet restore
       
     - name: Build MAUI iOS App (Release)
-      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore -f net9.0-ios -c ${{ env.BUILD_CONFIG }} /p:CodesignKey="${{ github.event.inputs.codesignkey }}" -p:CodesignProvision="Sco Poom AppStore Profile" /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false /p:ApplicationVersion=${{ github.run_number }} /p:ApplicationDisplayVersion=${{ env.DATEVERSION }}
+      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore -f net9.0-ios -c ${{ env.BUILD_CONFIG }} 
+            /p:CodesignKey="${{ github.event.inputs.codesignkey }}" 
+            /p:CodesignProvision="Sco Poom AppStore Profile" 
+            /p:ArchiveOnBuild=true 
+            /p:EnableAssemblyILStripping=false 
+            /p:ApplicationBuild=${{ github.run_number }} 
+            /p:ApplicationVersion=${{env.DATEVERSION}}
+            /p:ApplicationDisplayVersion=${{ env.DATEVERSION }}
 
     - name: List build output
       run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/
