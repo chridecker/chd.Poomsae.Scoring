@@ -40,6 +40,7 @@ jobs:
     - name: Define Date Var iOS
       run: echo "DATEIOSVERSION=1.1.${{ steps.date.outputs.year }}${{ github.run_number }}" >> $GITHUB_ENV
     - name: Write Version
+      if: false
       run: |
         echo ${{env.DATEVERSION}}
         echo "VERSION=${{env.DATEVERSION}}" >> $GITHUB_ENV
@@ -87,9 +88,9 @@ jobs:
             /p:CodesignProvision="Sco Poom AppStore Profile" 
             /p:ArchiveOnBuild=true 
             /p:EnableAssemblyILStripping=false 
-            /p:ApplicationVersion=${{ github.run_number }} 
             /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }}
-           # /p:ApplicationVersion=${{ env.DATEVERSION }}
+            /p:ApplicationBuild=${{ github.run_number }}
+            /p:ApplicationVersion=1.1.1 #${{ github.run_number }} 
             
 
     - name: List build output
