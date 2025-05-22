@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chd.Poomsae.Scoring.Contrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "chd.Poomsae.Scoring.WPF", "src\chd.Poomsae.Scoring.WPF\chd.Poomsae.Scoring.WPF.csproj", "{3226BABF-1DF5-480B-A4A1-BC1E1CA3C5D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "src\Test\Test.csproj", "{C0E629DC-5C87-4B1D-B0A4-466FB1C6D534}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -43,10 +41,6 @@ Global
 		{3226BABF-1DF5-480B-A4A1-BC1E1CA3C5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3226BABF-1DF5-480B-A4A1-BC1E1CA3C5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3226BABF-1DF5-480B-A4A1-BC1E1CA3C5D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0E629DC-5C87-4B1D-B0A4-466FB1C6D534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0E629DC-5C87-4B1D-B0A4-466FB1C6D534}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0E629DC-5C87-4B1D-B0A4-466FB1C6D534}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0E629DC-5C87-4B1D-B0A4-466FB1C6D534}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,7 +50,6 @@ Global
 		{ED66FC47-F6B1-4B86-B052-7D5E54BB4CA9} = {7481F42E-C0D3-4D09-8316-F8EFF31C1C7F}
 		{B0B32D85-8A86-44F1-B4B2-D2FF7436F318} = {7481F42E-C0D3-4D09-8316-F8EFF31C1C7F}
 		{3226BABF-1DF5-480B-A4A1-BC1E1CA3C5D9} = {7481F42E-C0D3-4D09-8316-F8EFF31C1C7F}
-		{C0E629DC-5C87-4B1D-B0A4-466FB1C6D534} = {7481F42E-C0D3-4D09-8316-F8EFF31C1C7F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6E6B848F-CA4D-4BCC-B86D-30F9A5521D4F}
