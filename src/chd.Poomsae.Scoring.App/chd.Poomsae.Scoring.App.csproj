@@ -49,6 +49,9 @@
 		<BundleResource Include="Platforms\iOS\GoogleService-Info.plist" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+		<PackageReference Include="AdamE.Firebase.iOS.Installations" Version="11.10.0" />
+	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
@@ -56,11 +59,11 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
+		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-android'">
-	  <Content Remove="Platforms\Android\google-services.json" />
+		<Content Remove="Platforms\Android\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup>

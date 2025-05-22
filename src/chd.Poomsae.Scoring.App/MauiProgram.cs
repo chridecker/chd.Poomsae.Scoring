@@ -76,6 +76,8 @@ namespace chd.Poomsae.Scoring.App
                events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                {
                     CrossFirebase.Initialize();
+                    FirebaseAuthGoogleImplementation.Initialize();
+
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
                     return false;
