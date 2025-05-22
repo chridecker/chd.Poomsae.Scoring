@@ -30,11 +30,6 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
-		<CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
-		<CodesignProvision>vs: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
 		<Entitlements>Platforms\iOS\Entitlements.development.plist</Entitlements>
 	</PropertyGroup>
