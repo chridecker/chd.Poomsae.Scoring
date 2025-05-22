@@ -87,9 +87,10 @@ jobs:
             /p:CodesignProvision="Sco Poom AppStore Profile" 
             /p:ArchiveOnBuild=true 
             /p:EnableAssemblyILStripping=false 
-            /p:ApplicationBuild=${{ github.run_number }} 
-            /p:ApplicationVersion=${{ env.DATEVERSION }}
+            /p:ApplicationVersion=${{ github.run_number }} 
             /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }}
+           # /p:ApplicationVersion=${{ env.DATEVERSION }}
+            
 
     - name: List build output
       run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/
