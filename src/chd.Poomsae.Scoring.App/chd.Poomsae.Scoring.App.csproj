@@ -24,7 +24,6 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 
 		<TargetAndroidVersion>34</TargetAndroidVersion>
-
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android34.0|AnyCPU'">
@@ -34,6 +33,14 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
 		<CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
 		<CodesignProvision>vs: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
+		<Entitlements>Platforms\iOS\Entitlements.development.plist</Entitlements>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+		<Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
 	</PropertyGroup>
 
 	<ItemGroup>
