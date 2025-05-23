@@ -9,8 +9,6 @@
 		<EnableDefaultCssItems>false</EnableDefaultCssItems>
 		<Nullable>enable</Nullable>
 		
-		<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
-		
 		<!-- Display name -->
 		<ApplicationTitle>ScoPoom</ApplicationTitle>
 
@@ -26,6 +24,12 @@
 
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 	</PropertyGroup>
+	
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+	</PropertyGroup>
+
+	
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android34.0|AnyCPU'">
 		<AndroidKeyStore>False</AndroidKeyStore>
