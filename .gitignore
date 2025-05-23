@@ -8,6 +8,7 @@
 *.suo
 *.user
 *.userosscache
+*.csproj.user
 *.sln.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -361,3 +362,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj.user
