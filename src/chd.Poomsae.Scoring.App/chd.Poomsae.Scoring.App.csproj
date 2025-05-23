@@ -24,7 +24,7 @@
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
 		<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
