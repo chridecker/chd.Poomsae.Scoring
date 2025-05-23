@@ -25,8 +25,8 @@
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 	</PropertyGroup>
 	
-	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
-		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
+		<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
 	
