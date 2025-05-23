@@ -23,16 +23,16 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 
 		<TargetAndroidVersion>34</TargetAndroidVersion>
+		<RuntimeIdentifiers>ios-arm64;android-arm;android-arm64</RuntimeIdentifiers>
 		
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
-		<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
+	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-android'">
 		<RuntimeIdentifiers>android-arm;android-arm64</RuntimeIdentifiers>
-	</PropertyGroup>
+	</PropertyGroup>-->
 	
 	
 	<PropertyGroup>
