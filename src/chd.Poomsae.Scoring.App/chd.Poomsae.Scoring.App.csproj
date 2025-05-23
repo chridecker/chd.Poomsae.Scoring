@@ -28,6 +28,8 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
 		<RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
+	
+
 
 	
 
