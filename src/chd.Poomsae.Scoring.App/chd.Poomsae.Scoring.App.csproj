@@ -7,7 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<EnableDefaultCssItems>false</EnableDefaultCssItems>
 		<Nullable>enable</Nullable>
-		
+
 		<!-- Display name -->
 		<ApplicationTitle>ScoPoom</ApplicationTitle>
 
@@ -21,24 +21,21 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 
+		<RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">ios-arm64</RuntimeIdentifiers>
+
 		<TargetAndroidVersion>34</TargetAndroidVersion>
 	</PropertyGroup>
-	
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
-	  <RuntimeIdentifiers>ios-arm64</RuntimeIdentifiers>
-	</PropertyGroup>
-
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android34.0|AnyCPU'">
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
-	  <Entitlements>Platforms\iOS\Entitlements.develoment.plist</Entitlements>
+		<Entitlements>Platforms\iOS\Entitlements.develoment.plist</Entitlements>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
-	  <Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
+		<Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -57,7 +54,7 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
 		<PackageReference Include="AdamE.Firebase.iOS.Installations" Version="11.10.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
