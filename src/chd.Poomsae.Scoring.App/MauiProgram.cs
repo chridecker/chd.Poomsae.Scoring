@@ -20,7 +20,6 @@ using Maui.Android.InAppUpdates;
 #elif IOS
 using Plugin.Firebase.Core.Platforms.iOS;
 using Plugin.Firebase.Auth.Platforms.iOS.Extensions;
-
 #endif
 
 
@@ -73,10 +72,11 @@ namespace chd.Poomsae.Scoring.App
                     FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
 #elif IOS
-               events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
+               events.AddiOS(iOS => iOS.WillFinishLaunching((_, _) =>
                {
-                    CrossFirebase.Initialize();
-                    FirebaseAuthGoogleImplementation.Initialize();
+                
+                    //CrossFirebase.Initialize(CreateCrossFirebaseSettings());
+                    //FirebaseAuthGoogleImplementation.Initialize();
 
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
@@ -86,6 +86,8 @@ namespace chd.Poomsae.Scoring.App
             });
             return builder;
         }
+
+       
         private static IConfiguration GetAppSettingsConfig()
         {
             var fileName = "appsettings.txt";
