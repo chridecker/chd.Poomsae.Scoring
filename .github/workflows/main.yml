@@ -83,19 +83,20 @@ jobs:
       run: dotnet restore
       
     - name: Build MAUI iOS App (Release)
-      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj -f net9.0-ios -c ${{ env.BUILD_CONFIG }} \
-            /p:RuntimeIdentifier=ios-arm64 \
-            /p:ArchiveOnBuild=true \
-            /p:CodesignKey="${{ github.event.inputs.codesignkey }}" \
-            /p:CodesignProvision="Sco Poom AppStore Profile" \
-            /p:EnableAssemblyILStripping=false \
-            /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }} \
-            /p:ApplicationBuild=${{ github.run_number }} \
+      run: dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore -f net9.0-ios -c ${{ env.BUILD_CONFIG }} 
+            /p:PublishDir=./src/chd.Poomsae.Scoring.App/artifacts/ios/ 
+            /p:RuntimeIdentifier=ios-arm64 
+            /p:ArchiveOnBuild=true 
+            /p:CodesignKey="${{ github.event.inputs.codesignkey }}" 
+            /p:CodesignProvision="Sco Poom AppStore Profile" 
+            /p:EnableAssemblyILStripping=false 
+            /p:ApplicationDisplayVersion=${{ env.DATEIOSVERSION }} 
+            /p:ApplicationBuild=${{ github.run_number }} 
             /p:ApplicationVersion=${{ env.DATEIOSVERSION }} 
             
 
     - name: List build output
-      run: ls -R src/chd.Poomsae.Scoring.App/bin/Release/net9.0-ios/ios-arm64/publish/
+      run: ls -R /src/chd.Poomsae.Scoring.App/artifacts/ios/
       
     - name: Upload app to TestFlight
       if: ${{github.event.inputs.use_testflight == 'true' }}
