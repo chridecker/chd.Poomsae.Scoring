@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Plugin.Firebase;
 using Microsoft.Maui.LifecycleEvents;
 using Plugin.Firebase.Auth;
+using Plugin.Firebase.Core;
 using Plugin.Firebase.Firestore;
 using Firebase;
 using chd.Poomsae.Scoring.App.Settings;
@@ -72,7 +73,7 @@ namespace chd.Poomsae.Scoring.App
                     FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
 #elif IOS
-               events.AddiOS(iOS => iOS.WillFinishLaunching((_, _) =>
+               events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                {
                 
                     //CrossFirebase.Initialize(CreateCrossFirebaseSettings());
