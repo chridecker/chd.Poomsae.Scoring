@@ -29,8 +29,12 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
+	  <Entitlements>Platforms\iOS\Entitlements.develoment.plist</Entitlements>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
+	  <Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -42,7 +46,7 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
 		<BundleResource Include="Platforms\iOS\GoogleService-Info.plist" />
 	</ItemGroup>
 

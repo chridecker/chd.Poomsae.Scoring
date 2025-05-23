@@ -10,7 +10,9 @@ using Plugin.Firebase.Auth;
 using Plugin.Firebase.Firestore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,9 +23,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
     {
         private readonly IFirebaseAuth _firebaseAuth;
         private readonly IModalService _modalService;
-        private readonly FirestoreManager _firestoreManager;
+        private readonly IUserService _firestoreManager;
 
-        public AppleSignInManager(IFirebaseAuth firebaseAuth, FirestoreManager firestoreManager,
+        public AppleSignInManager(IFirebaseAuth firebaseAuth, IUserService firestoreManager,
             IModalService modalService, ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService)
         {
             this._modalService = modalService;
@@ -33,6 +35,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 
         protected override async Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken)
         {
+            return new PSDeviceDto()
+            {
+                UID ="Test",
+            };
+
             if (this._firebaseAuth.CurrentUser is null)
             {
                 _ = await this.GetUser();
@@ -41,6 +48,22 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
         }
         protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
+            return new PSUserDto()
+            {
+                UID = "Test",
+                Email =  "Test@test.at",
+                FirstName="",
+                LastName="",
+                HasLicense = true,
+                UserDevice = new PSUserDeviceDto()
+                {
+                    Id ="Test",
+                    Device_UID ="Test",
+                    User_UID = "Test",
+                    IsAllowed = true
+                }
+            };
+
             try
             {
                 var (user, testLicense) = await this.GetUser();
