@@ -38,7 +38,7 @@
 		<key>NSLocationWhenInUseUsageDescription</key>
 		<string>Standort wird für die BLE Kommunikation benötigt</string>
 		<key>ITSAppUsesNonExemptEncryption</key>
-		<true/>
+		<false/>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>remote-notification</string>
