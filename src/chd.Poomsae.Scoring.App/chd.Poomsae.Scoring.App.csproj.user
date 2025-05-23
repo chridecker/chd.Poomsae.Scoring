@@ -28,7 +28,7 @@
     <DeveloperId>FVN28583R5</DeveloperId>
     <DevelopmentTeamId>FVN28583R5</DevelopmentTeamId>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetPlatformIdentifier)'=='iOS'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetPlatformIdentifier)'=='Debug|iOS'">
     <RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
     <PlatformTarget>arm64</PlatformTarget>
   </PropertyGroup>
