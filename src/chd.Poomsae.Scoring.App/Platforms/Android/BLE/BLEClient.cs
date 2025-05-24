@@ -12,7 +12,7 @@ using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using Plugin.BLE.Abstractions;
 
-namespace chd.Poomsae.Scoring.App.Services.BLE
+namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 {
     public class BLEClient : IBroadcastClient
     {

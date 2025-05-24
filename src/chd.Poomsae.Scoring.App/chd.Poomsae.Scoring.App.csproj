@@ -28,9 +28,7 @@
 		<RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">ios-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
-
-	<!--
-	<PropertyGroup Condition="'$(Configuration)' == 'Debug' AND '$(TargetFramework)' == 'net9.0-ios'">
+	<!--<PropertyGroup Condition="'$(Configuration)' == 'Debug' AND '$(TargetFramework)' == 'net9.0-ios'">
 		<RuntimeIdentifiers>iossimulator-arm64</RuntimeIdentifiers>
 	</PropertyGroup>-->
 
@@ -44,10 +42,6 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-		<Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\logo.svg" />
 		<MauiSplashScreen Include="Resources\Splash\logo.svg" BaseSize="168,208" />
@@ -57,26 +51,11 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
-		<BundleResource Include="Platforms\iOS\GoogleService-Info.plist" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
-		<PackageReference Include="AdamE.Firebase.iOS.Installations" Version="11.10.0" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
 		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.2.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-		<GoogleServicesJson Include="Platforms\Android\google-services.json" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' != 'net9.0-android'">
-		<Content Remove="Platforms\Android\google-services.json" />
+		<PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,10 +64,6 @@
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.60" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.60" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
-		<PackageReference Include="Plugin.BLE" Version="3.2.0-beta.1" />
-		<PackageReference Include="Plugin.Firebase.Firestore" Version="3.1.3" />
-		<PackageReference Include="Plugin.Firebase.Auth" Version="3.1.1" />
-		<PackageReference Include="Plugin.Firebase.Auth.Google" Version="3.1.1" />
 	</ItemGroup>
 
 	<ItemGroup>

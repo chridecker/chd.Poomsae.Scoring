@@ -1,4 +1,5 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             int.TryParse(request.Identifier, out int id);
             object requestData = null;
 
-            if (!string.IsNullOrEmpty(request.Content.UserInfo[NotificationManagerService.DataKey].ToString())
+            if (request.Content.UserInfo.ContainsKey(new NSString(NotificationManagerService.DataKey))
+                && request.Content.UserInfo.ContainsKey(new NSString(NotificationManagerService.DataTypeKey))
+                && !string.IsNullOrEmpty(request.Content.UserInfo[NotificationManagerService.DataKey].ToString())
                 && !string.IsNullOrEmpty(request.Content.UserInfo[NotificationManagerService.DataTypeKey].ToString()))
             {
                 var type = request.Content.UserInfo[NotificationManagerService.DataTypeKey].ToString();

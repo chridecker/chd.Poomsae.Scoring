@@ -4,23 +4,13 @@ using chd.Poomsae.Scoring.Contracts.Constants;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Plugin.Firebase;
 using Microsoft.Maui.LifecycleEvents;
-using Plugin.Firebase.Auth;
-using Plugin.Firebase.Firestore;
-using Firebase;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
-using Plugin.Firebase.Auth.Google;
 #if ANDROID
-using Plugin.Firebase.Core.Platforms.Android;
-using Plugin.Firebase.Auth.Platforms.Android.Extensions;
 using Maui.Android.InAppUpdates;
 #elif IOS
-using Plugin.Firebase.Core.Platforms.iOS;
-using Plugin.Firebase.Auth.Platforms.iOS.Extensions;
-
 #endif
 
 
@@ -69,14 +59,14 @@ namespace chd.Poomsae.Scoring.App
 #if ANDROID
                 events.AddAndroid(android => android.OnCreate((activity, _) =>
                 {
-                    CrossFirebase.Initialize(activity);
-                    FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
+                    //CrossFirebase.Initialize(activity);
+                    //FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
 #elif IOS
                events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                {
-                    CrossFirebase.Initialize();
-                    FirebaseAuthGoogleImplementation.Initialize();
+                    //CrossFirebase.Initialize();
+                    //FirebaseAuthGoogleImplementation.Initialize();
 
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);

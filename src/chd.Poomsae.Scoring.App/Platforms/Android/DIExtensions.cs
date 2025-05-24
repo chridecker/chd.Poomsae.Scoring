@@ -2,7 +2,6 @@
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using Microsoft.Extensions.Configuration;
-using Plugin.Firebase.Auth.Google;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +16,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
         {
             services.ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(HttpsClientHandlerService.GetPlatformMessageHandler));
 
-            services.AddSingleton<IFirebaseAuthGoogle>(_ => CrossFirebaseAuthGoogle.Current);
+            //services.AddSingleton<IFirebaseAuthGoogle>(_ => CrossFirebaseAuthGoogle.Current);
 
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
             services.AddSingleton<BLEGattCallback>();
