@@ -7,7 +7,7 @@
 		<string>$(AppIdentifierPrefix)com.companyname.chd.poomsae.scoring.app</string>
 	</array>
 	<key>aps-environment</key>
-	<string>production</string>
+	<string>development</string>
 	<key>com.apple.developer.applesignin</key>
 	<array>
 		<string>Default</string>

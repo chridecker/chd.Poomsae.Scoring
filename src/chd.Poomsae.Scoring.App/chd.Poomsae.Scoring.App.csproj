@@ -24,22 +24,27 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 
 		<TargetAndroidVersion>34</TargetAndroidVersion>
+
+		<RuntimeIdentifiers Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">ios-arm64</RuntimeIdentifiers>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-android34.0|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-android34.0|AnyCPU'">
+
+	<!--
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug' AND '$(TargetFramework)' == 'net9.0-ios'">
+		<RuntimeIdentifiers>iossimulator-arm64</RuntimeIdentifiers>
+	</PropertyGroup>-->
+
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
+		<PublishAot>False</PublishAot>
+		<RunAOTCompilation>false</RunAOTCompilation>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-android'">
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-ios'">
-		<CodesignKey>Apple Development: Created via API (FVN28583R5)</CodesignKey>
-		<CodesignProvision>vs: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0-ios|AnyCPU'">
-		<Entitlements>Platforms\iOS\Entitlements.development.plist</Entitlements>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
 		<Entitlements>Platforms\iOS\Entitlements.plist</Entitlements>
 	</PropertyGroup>
 
@@ -59,7 +64,7 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
 		<PackageReference Include="AdamE.Firebase.iOS.Installations" Version="11.10.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />
