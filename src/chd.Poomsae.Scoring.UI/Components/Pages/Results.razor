@@ -1,6 +1,7 @@
 @using Blazored.Modal.Services
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
+@using chd.Poomsae.Scoring.UI.Components.Shared
 @using chd.Poomsae.Scoring.UI.Components.Shared.Result
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
@@ -21,6 +22,8 @@
 
 
 @code {
+    [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
+
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
     [Inject] IModalService modalService { get; set; }
@@ -34,6 +37,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await this._backButton.SetBackButton(true);
+
         this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
 
         this.broadcastClient.ResultReceived += ResultReceived;
