@@ -11,6 +11,8 @@ using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using chd.Poomsae.Scoring.Contracts.Enums;
 using Blazored.Modal.Services;
+using chd.UI.Base.Components.Extensions;
+using chd.UI.Base.Contracts.Enum;
 
 namespace chd.Poomsae.Scoring.App.Services.Base
 {
@@ -42,7 +44,7 @@ namespace chd.Poomsae.Scoring.App.Services.Base
         protected abstract Task StartNativeAsync(CancellationToken cancellationToken);
 
 
-        protected BaseBLEServer(ISettingManager settingManager,IModalService modalService, IList<byte> disableNotificationValue)
+        protected BaseBLEServer(ISettingManager settingManager, IModalService modalService, IList<byte> disableNotificationValue)
         {
             this._settingManager = settingManager;
             this._modalService = modalService;
@@ -65,7 +67,14 @@ namespace chd.Poomsae.Scoring.App.Services.Base
                     break;
                 }
             }
-            await this.StartNativeAsync(token);
+            try
+            {
+                await this.StartNativeAsync(token);
+            }
+            catch (Exception ex)
+            {
+                await this._modalService.ShowDialog(ex.Message, EDialogButtons.OK);
+            }
         }
 
         public async Task BroadcastNameChange()

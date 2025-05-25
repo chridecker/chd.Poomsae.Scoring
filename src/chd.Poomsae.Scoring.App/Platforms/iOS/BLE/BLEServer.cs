@@ -38,19 +38,21 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
         {
             this._cBPeripheralManagerDelegate = bLEPeripheralManagerDelegate;
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
+            this._cBPeripheralManagerDelegate.StateUpdate += this._cb_StateUpdated;
         }
 
 
         protected override async Task StartNativeAsync(CancellationToken token)
         {
-            if (this._bluetoothLE.State is not BluetoothState.On or BluetoothState.TurningOn)
-            {
-                await this._bluetoothLE.TrySetStateAsync(true);
-            }
-
             if (this._cBPeripheralManager is not null) { return; }
 
             this._cBPeripheralManager = new CBPeripheralManager(this._cBPeripheralManagerDelegate, DispatchQueue.MainQueue);
+
+            if(this._cBPeripheralManager.State is CBManagerState.Unsupported)
+            {
+                await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
+                return;
+            }
 
             if (this._cBPeripheralManager.State is not CBManagerState.PoweredOn)
             {
@@ -64,7 +66,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 {
                     isSucceded = success;
                 });
-                if (!isSucceded) { await this._modalService.ShowDialog($"{isSucceded}",EDialogButtons.OK); }
+                if (!isSucceded) { await this._modalService.ShowDialog($"{isSucceded}", EDialogButtons.OK); }
             }
 
             this._cBPeripheralManager.CharacteristicSubscribed += this._cBPeripheralManager_CharacteristicSubscribed;
@@ -91,6 +93,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString())],
             });
 
+        }
+
+        private async void _cb_StateUpdated(object? sender, CBPeripheralManager peripheralManager)
+        {
+            await this._modalService.ShowDialog($"State BLE UPdate {peripheralManager.State}", EDialogButtons.OK);
         }
 
         private async void _cBPeripheralManagerDelegate_ReadRequest(object? sender, CBATTRequest request)
