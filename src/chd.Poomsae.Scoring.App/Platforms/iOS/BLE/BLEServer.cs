@@ -48,37 +48,24 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
             this._cBPeripheralManager = new CBPeripheralManager(this._cBPeripheralManagerDelegate, DispatchQueue.MainQueue);
 
-            if(this._cBPeripheralManager.State is CBManagerState.Unsupported)
+            if (this._cBPeripheralManager.State is CBManagerState.Unsupported)
             {
                 await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
                 return;
             }
 
-            if (this._cBPeripheralManager.State is not CBManagerState.PoweredOn)
-            {
-                var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
-                if (res is not EDialogResult.Yes)
-                {
-                    return;
-                }
-                var isSucceded = false;
-                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
-                {
-                    isSucceded = success;
-                });
-                if (!isSucceded) { await this._modalService.ShowDialog($"{isSucceded}", EDialogButtons.OK); }
-            }
+
 
             this._cBPeripheralManager.CharacteristicSubscribed += this._cBPeripheralManager_CharacteristicSubscribed;
             this._cBPeripheralManager.CharacteristicUnsubscribed += this._cBPeripheralManager_CharacteristicUnSubscribed;
 
             var name = await this.GetName();
 
-            this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, NSData.FromArray(name.Item2), CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+            this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
             this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToString()), NSData.FromArray(this._nameNotifyDescValue));
             this._characteristicName.Descriptors = [this._descNotifyNameChanged];
 
-            this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, NSData.FromString("Hello BLE!"), CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+            this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
             this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToString()), NSData.FromArray(this._resultCharacteristicValue));
             this._characteristic.Descriptors = [this._descNotifyResult];
 
@@ -97,7 +84,18 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
         private async void _cb_StateUpdated(object? sender, CBPeripheralManager peripheralManager)
         {
-            await this._modalService.ShowDialog($"State BLE UPdate {peripheralManager.State}", EDialogButtons.OK);
+            if (this._cBPeripheralManager.State is not CBManagerState.PoweredOn)
+            {
+                var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
+                if (res is not EDialogResult.Yes)
+                {
+                    return;
+                }
+                var isSucceded = false;
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
+                {
+                });
+            }
         }
 
         private async void _cBPeripheralManagerDelegate_ReadRequest(object? sender, CBATTRequest request)
