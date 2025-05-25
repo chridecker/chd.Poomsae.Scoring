@@ -45,6 +45,15 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
         {
             if (this._bluetoothLE.State is not BluetoothState.On or BluetoothState.TurningOn)
             {
+                await this._bluetoothLE.TrySetStateAsync(true);
+            }
+
+            if (this._cBPeripheralManager is not null) { return; }
+
+            this._cBPeripheralManager = new CBPeripheralManager(this._cBPeripheralManagerDelegate, DispatchQueue.MainQueue);
+
+            if (this._cBPeripheralManager.State is not CBManagerState.PoweredOn)
+            {
                 var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
                 if (res is not EDialogResult.Yes)
                 {
@@ -55,12 +64,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 {
                     isSucceded = success;
                 });
-                if (!isSucceded) { return; }
+                if (!isSucceded) { await this._modalService.ShowDialog($"{isSucceded}",EDialogButtons.OK); }
             }
 
-            if (this._cBPeripheralManager is not null) { return; }
-
-            this._cBPeripheralManager = new CBPeripheralManager(this._cBPeripheralManagerDelegate, DispatchQueue.MainQueue);
             this._cBPeripheralManager.CharacteristicSubscribed += this._cBPeripheralManager_CharacteristicSubscribed;
             this._cBPeripheralManager.CharacteristicUnsubscribed += this._cBPeripheralManager_CharacteristicUnSubscribed;
 
