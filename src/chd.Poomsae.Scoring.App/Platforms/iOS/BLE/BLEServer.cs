@@ -48,43 +48,15 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
             this._cBPeripheralManager = new CBPeripheralManager(this._cBPeripheralManagerDelegate, DispatchQueue.MainQueue);
 
-            if (this._cBPeripheralManager.State is CBManagerState.Unsupported)
-            {
-                await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
-                return;
-            }
-
-
-
-            this._cBPeripheralManager.CharacteristicSubscribed += this._cBPeripheralManager_CharacteristicSubscribed;
-            this._cBPeripheralManager.CharacteristicUnsubscribed += this._cBPeripheralManager_CharacteristicUnSubscribed;
-
-            var name = await this.GetName();
-
-            this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToString()), NSData.FromArray(this._nameNotifyDescValue));
-            this._characteristicName.Descriptors = [this._descNotifyNameChanged];
-
-            this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToString()), NSData.FromArray(this._resultCharacteristicValue));
-            this._characteristic.Descriptors = [this._descNotifyResult];
-
-            this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
-            this._service.Characteristics = [this._characteristic, this._characteristicName];
-
-            this._cBPeripheralManager.AddService(this._service);
-
-            this._cBPeripheralManager.StartAdvertising(new StartAdvertisingOptions()
-            {
-                LocalName = name.Item1,
-                ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString())],
-            });
-
         }
 
         private async void _cb_StateUpdated(object? sender, CBPeripheralManager peripheralManager)
         {
-            if (this._cBPeripheralManager.State is not CBManagerState.PoweredOn)
+            if (this._cBPeripheralManager.State is CBManagerState.Unsupported)
+            {
+                await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
+            }
+            else if (peripheralManager.State is not CBManagerState.PoweredOn)
             {
                 var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
                 if (res is not EDialogResult.Yes)
@@ -95,6 +67,36 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
                 {
                 });
+            }
+            else if (peripheralManager.State is CBManagerState.PoweredOn)
+            {
+#if DEBUG
+                await this._modalService.ShowDialog($"BLE Running", EDialogButtons.OK);
+#endif
+                this._cBPeripheralManager.CharacteristicSubscribed += this._cBPeripheralManager_CharacteristicSubscribed;
+                this._cBPeripheralManager.CharacteristicUnsubscribed += this._cBPeripheralManager_CharacteristicUnSubscribed;
+
+                var name = await this.GetName();
+
+                this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString("99A4"), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString("2902"), NSData.FromArray(this._nameNotifyDescValue));
+                this._characteristicName.Descriptors = [this._descNotifyNameChanged];
+
+                this._characteristic = new CBMutableCharacteristic(CBUUID.FromString("99A4"), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString("2902"), NSData.FromArray(this._resultCharacteristicValue));
+                this._characteristic.Descriptors = [this._descNotifyResult];
+
+                this._service = new CBMutableService(CBUUID.FromString("A8B9"), true);
+                this._service.Characteristics = [this._characteristic, this._characteristicName];
+
+                this._cBPeripheralManager.AddService(this._service);
+
+                this._cBPeripheralManager.StartAdvertising(new StartAdvertisingOptions()
+                {
+                    LocalName = name.Item1,
+                    ServicesUUID = [CBUUID.FromString("A8B9")],
+                });
+
             }
         }
 
