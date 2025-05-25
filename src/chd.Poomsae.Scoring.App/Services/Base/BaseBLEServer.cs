@@ -12,7 +12,7 @@ using chd.Poomsae.Scoring.Contracts.Dtos.Base;
 using chd.Poomsae.Scoring.Contracts.Enums;
 using Blazored.Modal.Services;
 
-namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE.Base
+namespace chd.Poomsae.Scoring.App.Services.Base
 {
     public abstract class BaseBLEServer<TDevice, TService, TCharacteristic, TDescriptor>
     {

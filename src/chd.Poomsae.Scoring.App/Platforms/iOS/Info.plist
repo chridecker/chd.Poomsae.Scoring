@@ -25,6 +25,33 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Diese App benötigt Bluetooth, um Geräte in der Nähe zu erkennen.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Bluetooth wird benötigt, um mit externen Geräten zu kommunizieren.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Standort wird für die BLE Kommunikation benötigt</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Standort wird für die BLE Kommunikation benötigt</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Standort wird für die BLE Kommunikation benötigt</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.companyname.chd.poomsae.scoring.app</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.companyname.chd.poomsae.scoring.app</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>UIStatusBarHidden</key>

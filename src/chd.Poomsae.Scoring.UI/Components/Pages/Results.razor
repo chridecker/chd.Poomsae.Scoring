@@ -51,9 +51,9 @@
     private async Task Discover()
     {
         var result = await this.modalService.Show<DiscoverDevices>(new ModalOptions()
-            {
-                Size = ModalSize.ExtraLarge
-            }).Result;
+        {
+            Size = ModalSize.ExtraLarge
+        }).Result;
         if (result.Confirmed && result.Data is List<DeviceDto> lst)
         {
             foreach (var d in lst)
@@ -67,7 +67,7 @@
     {
         this._loadingModal = this.modalService.ShowLoading();
         await this.Clear();
-        await this.broadcastClient.StartAutoConnectAsync(this._cts.Token);
+        await Task.WhenAny(this.broadcastClient.StartAutoConnectAsync(this._cts.Token), Task.Delay(TimeSpan.FromSeconds(2), this._cts.Token));
     }
 
     private async Task Clear()
@@ -116,10 +116,10 @@
     private async void ResultReceived(object? sender, ScoreReceivedEventArgs e)
     {
         this.resultService.SetRun(e.Device.Id, new()
-            {
-                ChongScore = e.Chong,
-                HongScore = e.Hong
-            });
+        {
+            ChongScore = e.Chong,
+            HongScore = e.Hong
+        });
         await this.InvokeAsync(this.StateHasChanged);
     }
 

@@ -6,7 +6,7 @@
     <div class="devices-container">
         @foreach (var device in this._discoveredDevices)
         {
-            <DiscoveredDeviceComponent Device="device" Selected="d => this._selectedDevices.Any(a => a.Id == d.Id )" OnCLick="this.AddToConnected" />
+            <DiscoveredDeviceComponent Device="device" Selected="d => this._selectedDevices.Any(a => a.Id == d.Id)" OnCLick="this.AddToConnected" />
         }
     </div>
     <div class="buttons">
@@ -27,7 +27,8 @@
     protected override async Task OnInitializedAsync()
     {
         this.broadcastClient.DeviceDiscovered += this.DeviceDiscovered;
-        await this.broadcastClient.StartDiscoverAsync(this._cts.Token);
+
+        await Task.WhenAny(this.broadcastClient.StartDiscoverAsync(this._cts.Token), Task.Delay(TimeSpan.FromSeconds(20), this._cts.Token));
         await base.OnInitializedAsync();
     }
 
