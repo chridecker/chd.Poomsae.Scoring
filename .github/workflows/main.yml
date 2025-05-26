@@ -18,7 +18,7 @@ on:
       use_ipa:
         description: 'Create an IPA Artifact'
         required: true
-        default: 'true'
+        default: 'false'
 
 jobs:
   build-ios:
