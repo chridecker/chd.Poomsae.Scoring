@@ -20,6 +20,7 @@ using Plugin.BLE.Abstractions.Contracts;
 using UIKit;
 using Foundation;
 using CoreFoundation;
+using chd.Poomsae.Scoring.App.Extensions;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 {
@@ -103,15 +104,15 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
             var name = await this.GetName();
 
-            this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor), NSData.FromArray(this._nameNotifyDescValue));
+            this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+            this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
             this._characteristicName.Descriptors = [this._descNotifyNameChanged];
 
-            //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor), NSData.FromArray(this._resultCharacteristicValue));
+            //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+            //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._resultCharacteristicValue));
             //this._characteristic.Descriptors = [this._descNotifyResult];
 
-            this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service), true);
+            this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToGuidString()), true);
             //this._service.Characteristics = [this._characteristic, this._characteristicName];
             this._service.Characteristics = [this._characteristicName];
 
@@ -120,7 +121,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._cBPeripheralManager.StartAdvertising(new StartAdvertisingOptions()
             {
                 LocalName = name.Item1,
-                ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service)],
+                ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToGuidString())],
             });
         }
 
