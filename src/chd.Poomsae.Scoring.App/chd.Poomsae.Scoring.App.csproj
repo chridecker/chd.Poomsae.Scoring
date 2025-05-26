@@ -42,6 +42,11 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
+	<!--<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+	  <CodesignKey>Apple Development: Created via API (V7L8L47P6Q)</CodesignKey>
+	  <CodesignProvision>VS: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
+	</PropertyGroup>-->
+
 
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\logo.svg" />

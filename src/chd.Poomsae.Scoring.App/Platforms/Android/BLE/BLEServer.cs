@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 using chd.Poomsae.Scoring.App.Services.Base;
 using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.App.Extensions;
 
 
 namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
@@ -78,7 +79,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             dataBuilder.SetIncludeDeviceName(true);
             if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
             {
-                var id = ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString());
+                var id = ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToGuidId().ToString());
                 dataBuilder.AddServiceUuid(id);
             }
             dataBuilder.SetIncludeTxPowerLevel(true);
@@ -114,10 +115,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 
         private async Task CreateService()
         {
-            this._service = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), GattServiceType.Primary);
+            this._service = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToGuidId().ToString()), GattServiceType.Primary);
 
-            this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
-            this._descNotifyNameChanged = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
+            this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToGuidId().ToString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
+            this._descNotifyNameChanged = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToGuidId().ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
             this._descNotifyNameChanged.SetValue(this._nameNotifyDescValue);
 
             this._characteristicName.AddDescriptor(this._descNotifyNameChanged);
@@ -126,8 +127,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             this._characteristicName.SetValue(name.Item1);
 
 
-            this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
-            this._descNotifyResult = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
+            this._characteristic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Result_Characteristic.ToGuidId().ToString()), GattProperty.Notify, GattPermission.Read | GattPermission.Write);
+            this._descNotifyResult = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToGuidId().ToString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);
             this._descNotifyResult.SetValue(this._resultCharacteristicValue);
 
             this._characteristic.AddDescriptor(this._descNotifyResult);

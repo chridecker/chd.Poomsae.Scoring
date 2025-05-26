@@ -11,6 +11,7 @@ using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using Plugin.BLE.Abstractions;
+using chd.Poomsae.Scoring.App.Extensions;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
@@ -114,7 +115,7 @@ namespace chd.Poomsae.Scoring.App.Services
                 this._adapter.DeviceDiscovered += this._adapter_DeviceDiscoveredAuto;
                 await this._adapter.StartScanningForDevicesAsync(new ScanFilterOptions()
                 {
-                    ServiceUuids = [BLEConstants.Result_Gatt_Service],
+                    ServiceUuids = [BLEConstants.Result_Gatt_Service.ToGuidId()],
                 }, d => !string.IsNullOrWhiteSpace(d.Name) && !this._adapter.ConnectedDevices.Any(a => a.Id == d.Id));
             }
             return this._adapter.IsScanning;
@@ -154,13 +155,13 @@ namespace chd.Poomsae.Scoring.App.Services
         private async void _adapter_DeviceConnected(object? sender, DeviceEventArgs e)
         {
             var device = e.Device;
-            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service.ToGuidId());
             if (service is null)
             {
                 await this.DisconnectDevice(device);
                 return;
             }
-            var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic);
+            var characteristic = await service.GetCharacteristicAsync(BLEConstants.Result_Characteristic.ToGuidId());
 
             if (characteristic is null || !characteristic.CanUpdate)
             {
@@ -174,7 +175,7 @@ namespace chd.Poomsae.Scoring.App.Services
                 Name = device.Name
             };
 
-            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic);
+            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic.ToGuidId());
             if (characteristicName.CanUpdate)
             {
                 characteristicName.ValueUpdated += (s, e) => this.Name_ValueUpdated(s, dto, e);
@@ -231,8 +232,8 @@ namespace chd.Poomsae.Scoring.App.Services
 
         private async Task<string> ReadNameAsync(IDevice device, CancellationToken cancellationToken)
         {
-            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service, cancellationToken);
-            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic, cancellationToken);
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service.ToGuidId(), cancellationToken);
+            var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic.ToGuidId(), cancellationToken);
             if (characteristicName is not null && characteristicName.CanRead)
             {
                 var (data, state) = await characteristicName.ReadAsync(cancellationToken);

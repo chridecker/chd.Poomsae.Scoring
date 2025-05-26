@@ -39,6 +39,7 @@
 	<false/>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>bluetooth-peripheral</string>
 		<string>remote-notification</string>
 	</array>
 	<key>CFBundleURLTypes</key>
