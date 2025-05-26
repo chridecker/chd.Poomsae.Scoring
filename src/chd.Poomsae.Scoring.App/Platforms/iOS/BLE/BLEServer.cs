@@ -181,18 +181,18 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             {
                 var sb = new StringBuilder();
                 sb.AppendLine("Fehler aufgetreten:");
-                sb.AppendLine($"Beschreibung     : {error.LocalizedDescription}");
-                sb.AppendLine($"Fehlercode       : {error.Code}");
-                sb.AppendLine($"Fehlerdomain     : {error.Domain}");
-                sb.AppendLine($"Fehlerursache    : {error.LocalizedFailureReason ?? "Keine Angabe"}");
-                sb.AppendLine($"Vorschlag        : {error.LocalizedRecoverySuggestion ?? "Keine Angabe"}");
+                sb.AppendLine($"Beschreibung     : {e.Error.LocalizedDescription}");
+                sb.AppendLine($"Fehlercode       : {e.Error.Code}");
+                sb.AppendLine($"Fehlerdomain     : {e.Error.Domain}");
+                sb.AppendLine($"Fehlerursache    : {e.Error.LocalizedFailureReason ?? "Keine Angabe"}");
+                sb.AppendLine($"Vorschlag        : {e.Error.LocalizedRecoverySuggestion ?? "Keine Angabe"}");
 
-                if (error.UserInfo is not null && error.UserInfo.Any())
+                if (e.Error.UserInfo is not null && e.Error.UserInfo.Any())
                 {
                     sb.AppendLine("Zusätzliche Informationen (UserInfo):");
-                    foreach (var key in error.UserInfo.Keys)
+                    foreach (var key in e.Error.UserInfo.Keys)
                     {
-                        var value = error.UserInfo.ObjectForKey(key);
+                        var value = e.Error.UserInfo.ObjectForKey(key);
                         sb.AppendLine($"  {key} = {value}");
                     }
                 }
