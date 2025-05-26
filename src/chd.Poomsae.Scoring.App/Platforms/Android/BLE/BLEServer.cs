@@ -165,7 +165,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             if (e.NewState == ProfileState.Disconnected
                 && this._connectedDevices.TryRemove(e.Device.ParseDeviceId(), out _))
             {
-                this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), e.Device.Name, false);
+                this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(),  false);
             }
         }
         private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
@@ -217,7 +217,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
                 if (!this._connectedDevices.ContainsKey(e.Device.ParseDeviceId()))
                 {
                     this._connectedDevices.TryAdd(e.Device.ParseDeviceId(), e.Device);
-                    this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), e.Device?.Name ?? "", true);
+                    this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), true);
                 }
             }
         }

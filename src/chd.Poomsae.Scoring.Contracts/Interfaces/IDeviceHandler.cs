@@ -18,6 +18,5 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         string Model { get; }
         string Name { get; }
         void CloseApp();
-        bool IsiOS {get;}
     }
 }

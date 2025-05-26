@@ -9,7 +9,6 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
     public  class DeviceConnectionChangedEventArgs : EventArgs
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
         public bool Connected { get; set; }
     }
 }

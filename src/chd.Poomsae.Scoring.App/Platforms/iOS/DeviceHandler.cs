@@ -13,7 +13,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
     {
         protected override string _nativeUID=> UIKit.UIDevice.CurrentDevice.IdentifierForVendor.ToString();
         protected override int _nativePlatformVersion => int.TryParse(UIDevice.CurrentDevice.SystemVersion, out var id) ? id : 0;
-        protected override bool _nativeIsiOS => true;
         public DeviceHandler(IDeviceInfo deviceInfo) : base(deviceInfo)
         {
             

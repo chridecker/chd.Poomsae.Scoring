@@ -16,8 +16,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
         protected override string _nativeUID => Secure.GetString(Context.ContentResolver, Secure.AndroidId);
         protected override int _nativePlatformVersion =>  (int)Build.VERSION.SdkInt;
 
-        protected override bool _nativeIsiOS => false;
-
         public DeviceHandler(IDeviceInfo deviceInfo) : base(deviceInfo)
         {
 

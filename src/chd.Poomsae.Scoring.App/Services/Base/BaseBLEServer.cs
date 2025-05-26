@@ -100,13 +100,12 @@ namespace chd.Poomsae.Scoring.App.Services.Base
             byte __dataConvert(decimal d) => (byte)(d * 10);
         }
 
-        protected void OnDeviceConnectionChanged(Guid id, string name, bool connected)
+        protected void OnDeviceConnectionChanged(Guid id,  bool connected)
         {
             this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
             {
                 Connected = connected,
                 Id = id,
-                Name = name
             });
         }
 

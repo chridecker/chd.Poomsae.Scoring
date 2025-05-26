@@ -36,7 +36,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._cBPeripheralManagerDelegate = bLEPeripheralManagerDelegate;
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
             this._cBPeripheralManagerDelegate.StateUpdate += this._cb_StateUpdated;
-            this._cBPeripheralManagerDelegate.CharacteristicSubscribe += this._cBPeripheralManagerDelegate_CharacteristicSubscribe;
             this._cBPeripheralManagerDelegate.CharacteristicUnsubscribe += this._cBPeripheralManagerDelegate_CharacteristicUnSubscribe;
             this._cBPeripheralManagerDelegate.ServiceAdd += this._cBPeripheralManagerDelegate_ServiceAdd;
         }
@@ -74,8 +73,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             }
         }
 
-
-
         private async Task StartGattServer()
         {
             try
@@ -86,12 +83,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 var name = await this.GetName();
 
                 this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-                //this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
-                //this._characteristicName.Descriptors = new[] { this._descNotifyNameChanged };
 
-                this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-                //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._resultCharacteristicValue));
-                //this._characteristic.Descriptors = [this._descNotifyResult];
+                this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
 
                 this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
                 this._service.Characteristics = new[] { this._characteristicName, this._characteristic };
@@ -120,7 +113,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             else if (peripheralManager.State is CBManagerState.PoweredOn)
             {
                 await this.StartGattServer();
-
             }
             else
             {
@@ -133,6 +125,15 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
                 {
                 });
+            }
+        }
+
+        private async void _cBPeripheralManagerDelegate_CharacteristicUnSubscribe(object? sender, BLEEventArgs e)
+        {
+            if (this._connectedDevices.ContainsKey(e.Central.ParseDeviceId())
+                && this._connectedDevices.TryRemove(e.Central.ParseDeviceId(), out _))
+            {
+                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), false);
             }
         }
 
@@ -152,7 +153,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                     if (!this._connectedDevices.ContainsKey(request.Central.ParseDeviceId()))
                     {
                         this._connectedDevices.TryAdd(request.Central.ParseDeviceId(), request.Central);
-                        this.OnDeviceConnectionChanged(request.Central.ParseDeviceId(), request.Central.Description, true);
+                        this.OnDeviceConnectionChanged(request.Central.ParseDeviceId(), true);
                     }
                 }
             }
@@ -162,23 +163,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             }
         }
 
-        private async void _cBPeripheralManagerDelegate_CharacteristicSubscribe(object? sender, BLEEventArgs e)
-        {
-            if (!this._connectedDevices.ContainsKey(e.Central.ParseDeviceId()))
-            {
-                this._connectedDevices.TryAdd(e.Central.ParseDeviceId(), e.Central);
-                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), e.Central.Description, true);
-            }
-        }
-
-        private async void _cBPeripheralManagerDelegate_CharacteristicUnSubscribe(object? sender, BLEEventArgs e)
-        {
-            if (this._connectedDevices.ContainsKey(e.Central.ParseDeviceId())
-                && this._connectedDevices.TryRemove(e.Central.ParseDeviceId(), out _))
-            {
-                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), e.Central.Description, false);
-            }
-        }
 
         private async void _cBPeripheralManagerDelegate_ServiceAdd(object? sender, BLEEventArgs e)
         {
