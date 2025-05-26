@@ -39,7 +39,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._cBPeripheralManagerDelegate.CharacteristicSubscribe += this._cBPeripheralManagerDelegate_CharacteristicSubscribe;
             this._cBPeripheralManagerDelegate.CharacteristicUnsubscribe += this._cBPeripheralManagerDelegate_CharacteristicUnSubscribe;
             this._cBPeripheralManagerDelegate.ServiceAdd += this._cBPeripheralManagerDelegate_ServiceAdd;
-            this._cBPeripheralManagerDelegate.AdvertisingStart += this._cBPeripheralManagerDelegate_AdvertisingStart;
         }
 
         protected override async Task CheckPermissions(CancellationToken cancellationToken)
@@ -81,26 +80,21 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
         {
             try
             {
-                await this._modalService.ShowDialog($"BLE Gatt Starting with State '{this._cBPeripheralManager.State}'", EDialogButtons.OK);
-
                 this._cBPeripheralManager.StopAdvertising();
                 this._cBPeripheralManager.RemoveAllServices();
 
                 var name = await this.GetName();
 
-                await this._modalService.ShowDialog($"BLE Gatt Name: '{name.Item1}'", EDialogButtons.OK);
-
                 this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
                 //this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
                 //this._characteristicName.Descriptors = new[] { this._descNotifyNameChanged };
 
-                //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
                 //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._resultCharacteristicValue));
                 //this._characteristic.Descriptors = [this._descNotifyResult];
 
                 this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
-                //this._service.Characteristics = [this._characteristic, this._characteristicName];
-                this._service.Characteristics = new[] { this._characteristicName };
+                this._service.Characteristics = new[] { this._characteristicName, this._characteristic };
 
                 this._cBPeripheralManager.AddService(this._service);
 
@@ -125,7 +119,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             }
             else if (peripheralManager.State is CBManagerState.PoweredOn)
             {
-                await this._modalService.ShowDialog($"BLE Running '{peripheralManager.State}'", EDialogButtons.OK);
                 await this.StartGattServer();
 
             }
@@ -145,20 +138,27 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
         private async void _cBPeripheralManagerDelegate_ReadRequest(object? sender, BLEEventArgs e)
         {
-            var request = e.Request;
-            if (request.Characteristic.UUID == this._characteristic.UUID)
+            try
             {
-            }
-            else if (request.Characteristic.UUID == this._characteristicName.UUID)
-            {
-                var name = await this.GetName();
-                request.Value = NSData.FromArray(name.Item2);
-                this._cBPeripheralManager.RespondToRequest(request, CBATTError.Success);
-                if (!this._connectedDevices.ContainsKey(request.Central.ParseDeviceId()))
+                var request = e.Request;
+                if (request.Characteristic.UUID == this._characteristic.UUID)
                 {
-                    this._connectedDevices.TryAdd(request.Central.ParseDeviceId(), request.Central);
-                    this.OnDeviceConnectionChanged(request.Central.ParseDeviceId(), request.Central.Description, true);
                 }
+                else if (request.Characteristic.UUID == this._characteristicName.UUID)
+                {
+                    var name = await this.GetName();
+                    request.Value = NSData.FromArray(name.Item2);
+                    this._cBPeripheralManager.RespondToRequest(request, CBATTError.Success);
+                    if (!this._connectedDevices.ContainsKey(request.Central.ParseDeviceId()))
+                    {
+                        this._connectedDevices.TryAdd(request.Central.ParseDeviceId(), request.Central);
+                        this.OnDeviceConnectionChanged(request.Central.ParseDeviceId(), request.Central.Description, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await this._modalService.ShowDialog($"Read BLE Request with Error '{ex.ToString()}'", EDialogButtons.OK);
             }
         }
 
@@ -203,14 +203,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                     }
                 }
                 errorMessgae = sb.ToString();
+                await this._modalService.ShowDialog($"BLE Service Add'{e.Service.UUID}', {errorMessgae}", EDialogButtons.OK);
+
             }
-
-
-            await this._modalService.ShowDialog($"BLE Service Add'{e.Service.UUID}', {errorMessgae}", EDialogButtons.OK);
-        }
-        private async void _cBPeripheralManagerDelegate_AdvertisingStart(object? sender, BLEEventArgs e)
-        {
-            await this._modalService.ShowDialog($"BLE Advertising started ({e.Error?.LocalizedDescription})", EDialogButtons.OK);
         }
     }
 }

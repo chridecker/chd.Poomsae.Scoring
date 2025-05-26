@@ -19,7 +19,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
         public override async void ReadRequestReceived(CBPeripheralManager peripheral, CBATTRequest request)
         {
-            base.ReadRequestReceived(peripheral, request);
             this.ReadRequest?.Invoke(this, new BLEEventArgs()
             {
                 Peripheral = peripheral,

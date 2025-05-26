@@ -12,13 +12,15 @@
 
 <div class="page">
     <CascadingBackButton>
-        <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
-            <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse" : "")" @onmouseover="() => this._navCollapsed = false">
+        @if (!this.deviceHandler.IsiOS)
+        {
+            <SwipeArea PixelToSwipe="10" OnSwipe="this.OnLabelSwiped">
+                <div class="sidebar-hover-toggle @(this._navCollapsed ? "auto-collapse" : "")" @onmouseover="() => this._navCollapsed = false">
             </div>
         </SwipeArea>
 
         <NavMenu Visible="!(this._navCollapsed)" />
-
+        }
         <main class="@(this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
             <article id="main-article" class="content px-4" @onscroll="scrollInfoService.Scrolled">
                 @Body
@@ -46,6 +48,7 @@
     private bool _navCollapsed = true;
 
 
+    [Inject] IDeviceHandler deviceHandler { get; set; }
     [Inject] IBroadCastService broadCastService { get; set; }
 
     protected override async Task OnInitializedAsync()
