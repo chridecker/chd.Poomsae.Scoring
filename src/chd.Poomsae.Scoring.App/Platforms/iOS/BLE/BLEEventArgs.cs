@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreBluetooth;
+using Foundation;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 {
