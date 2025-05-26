@@ -185,7 +185,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 sb.AppendLine($"Fehlercode       : {error.Code}");
                 sb.AppendLine($"Fehlerdomain     : {error.Domain}");
                 sb.AppendLine($"Fehlerursache    : {error.LocalizedFailureReason ?? "Keine Angabe"}");
-                sb.AppendLine$"Vorschlag        : {error.LocalizedRecoverySuggestion ?? "Keine Angabe"}");
+                sb.AppendLine($"Vorschlag        : {error.LocalizedRecoverySuggestion ?? "Keine Angabe"}");
 
                 if (error.UserInfo is not null && error.UserInfo.Any())
                 {
@@ -196,6 +196,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                         sb.AppendLine($"  {key} = {value}");
                     }
                 }
+                errorMessgae = sb.ToString();
             }
 
 
