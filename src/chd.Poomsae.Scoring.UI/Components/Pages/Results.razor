@@ -114,6 +114,10 @@
         if (this._connectedDevices.TryRemove(e.Id, out _))
         {
             this.resultService.Clear(e.Id);
+            if (!this.resultService.Result.Results.Any())
+            {
+                this.resultService.Clear();
+            }
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
