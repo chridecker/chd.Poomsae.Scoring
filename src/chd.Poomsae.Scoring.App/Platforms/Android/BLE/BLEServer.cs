@@ -79,7 +79,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             dataBuilder.SetIncludeDeviceName(true);
             if (Build.VERSION.SdkInt >= BuildVersionCodes.S)
             {
-                var id = ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToGuidString());
+                var id = ParcelUuid.FromString(BLEConstants.Result_Gatt_Service.ToString());
                 dataBuilder.AddServiceUuid(id);
             }
             dataBuilder.SetIncludeTxPowerLevel(true);
@@ -132,7 +132,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 
         private async Task CreateService()
         {
-            this._service = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToGuidString()), GattServiceType.Primary);
+            this._service = new BluetoothGattService(UUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), GattServiceType.Primary);
 
             this._characteristicName = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), GattProperty.Read | GattProperty.Notify, GattPermission.Read | GattPermission.Write);
             this._descNotifyNameChanged = new BluetoothGattDescriptor(UUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), GattDescriptorPermission.Read | GattDescriptorPermission.Write);

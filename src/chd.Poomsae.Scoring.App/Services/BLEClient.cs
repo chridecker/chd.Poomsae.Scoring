@@ -115,7 +115,7 @@ namespace chd.Poomsae.Scoring.App.Services
                 this._adapter.DeviceDiscovered += this._adapter_DeviceDiscoveredAuto;
                 await this._adapter.StartScanningForDevicesAsync(new ScanFilterOptions()
                 {
-                    ServiceUuids = [BLEConstants.Result_Gatt_Service.ToGuidId()],
+                    ServiceUuids = [BLEConstants.Result_Gatt_Service],
                 }, d => !string.IsNullOrWhiteSpace(d.Name) && !this._adapter.ConnectedDevices.Any(a => a.Id == d.Id));
             }
             return this._adapter.IsScanning;
@@ -155,7 +155,7 @@ namespace chd.Poomsae.Scoring.App.Services
         private async void _adapter_DeviceConnected(object? sender, DeviceEventArgs e)
         {
             var device = e.Device;
-            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service.ToGuidId());
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service);
             if (service is null)
             {
                 await this.DisconnectDevice(device);
@@ -232,7 +232,7 @@ namespace chd.Poomsae.Scoring.App.Services
 
         private async Task<string> ReadNameAsync(IDevice device, CancellationToken cancellationToken)
         {
-            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service.ToGuidId(), cancellationToken);
+            var service = await device.GetServiceAsync(BLEConstants.Result_Gatt_Service, cancellationToken);
             var characteristicName = await service.GetCharacteristicAsync(BLEConstants.Name_Characteristic.ToGuidId(), cancellationToken);
             if (characteristicName is not null && characteristicName.CanRead)
             {
