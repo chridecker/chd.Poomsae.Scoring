@@ -49,8 +49,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
         protected override async Task CheckPermissions(CancellationToken cancellationToken)
         {
             var perm = await Permissions.CheckStatusAsync<IosBluetoothPermission>();
-            await this._modalService.ShowDialog($"Permisssion BLE Status {perm}", EDialogButtons.OK);
-
             while (perm is not PermissionStatus.Granted)
             {
                 _ = await Permissions.RequestAsync<IosBluetoothPermission>();
@@ -78,31 +76,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             await this.StartGattServer();
         }
 
-        private async void _cb_StateUpdated(object? sender, CBPeripheralManager peripheralManager)
-        {
-            if (peripheralManager.State is CBManagerState.Unsupported)
-            {
-                await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
-            }
-            else if (peripheralManager.State is CBManagerState.PoweredOn)
-            {
-                await this._modalService.ShowDialog($"BLE Running '{peripheralManager.State}'", EDialogButtons.OK);
-                await this.StartGattServer();
 
-            }
-            else
-            {
-                var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
-                if (res is not EDialogResult.Yes)
-                {
-                    return;
-                }
-                var isSucceded = false;
-                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
-                {
-                });
-            }
-        }
 
         private async Task StartGattServer()
         {
@@ -134,8 +108,36 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             });
         }
 
-        private async void _cBPeripheralManagerDelegate_ReadRequest(object? sender, CBATTRequest request)
+        private async void _cb_StateUpdated(object? sender, BLEEventArgs e)
         {
+            var peripheralManager = e.Peripheral;
+            if (peripheralManager.State is CBManagerState.Unsupported)
+            {
+                await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
+            }
+            else if (peripheralManager.State is CBManagerState.PoweredOn)
+            {
+                await this._modalService.ShowDialog($"BLE Running '{peripheralManager.State}'", EDialogButtons.OK);
+                await this.StartGattServer();
+
+            }
+            else
+            {
+                var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
+                if (res is not EDialogResult.Yes)
+                {
+                    return;
+                }
+                var isSucceded = false;
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
+                {
+                });
+            }
+        }
+
+        private async void _cBPeripheralManagerDelegate_ReadRequest(object? sender, BLEEventArgs e)
+        {
+            var request = e.Request;
             if (request.Characteristic.UUID == this._characteristic.UUID)
             {
             }
@@ -152,31 +154,31 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             }
         }
 
-        private async void _cBPeripheralManagerDelegate_CharacteristicSubscribe(object? sender, (CBPeripheralManager peripheral, CBCentral central, CBCharacteristic characteristic))
+        private async void _cBPeripheralManagerDelegate_CharacteristicSubscribe(object? sender, BLEEventArgs e)
         {
-            if (!this._connectedDevices.ContainsKey(central.ParseDeviceId()))
+            if (!this._connectedDevices.ContainsKey(e.Central.ParseDeviceId()))
             {
-                this._connectedDevices.TryAdd(central.ParseDeviceId(), central);
-                this.OnDeviceConnectionChanged(central.ParseDeviceId(), central.Description, true);
+                this._connectedDevices.TryAdd(e.Central.ParseDeviceId(), e.Central);
+                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), e.Central.Description, true);
             }
         }
 
-        private async void _cBPeripheralManagerDelegate_CharacteristicUnSubscribe(object? sender, (CBPeripheralManager peripheral, CBCentral central, CBCharacteristic characteristic))
+        private async void _cBPeripheralManagerDelegate_CharacteristicUnSubscribe(object? sender, BLEEventArgs e)
         {
-            if (this._connectedDevices.ContainsKey(central.ParseDeviceId())
-                && this._connectedDevices.TryRemove(central.ParseDeviceId(), out _))
+            if (this._connectedDevices.ContainsKey(e.Central.ParseDeviceId())
+                && this._connectedDevices.TryRemove(e.Central.ParseDeviceId(), out _))
             {
-                this.OnDeviceConnectionChanged(central.ParseDeviceId(), central.Description, false);
+                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), e.Central.Description, false);
             }
         }
 
-        private async void _cBPeripheralManagerDelegate_ServiceAdd(object? sender, (CBPeripheralManager peripheral, CBService service, NSError error))
+        private async void _cBPeripheralManagerDelegate_ServiceAdd(object? sender, BLEEventArgs e)
         {
-             await this._modalService.ShowDialog($"BLE Service Add'{service.UUID}', {error?.LocalizedDescription}", EDialogButtons.OK);
+            await this._modalService.ShowDialog($"BLE Service Add'{e.Service.UUID}', {e.Error?.LocalizedDescription}", EDialogButtons.OK);
         }
-        private async void _cBPeripheralManagerDelegate_AdvertisingStart(object? sender, (CBPeripheralManager peripheral, NSError error))
+        private async void _cBPeripheralManagerDelegate_AdvertisingStart(object? sender, BLEEventArgs e)
         {
-             await this._modalService.ShowDialog($"BLE Advertising started ({error?.LocalizedDescription})", EDialogButtons.OK);
+            await this._modalService.ShowDialog($"BLE Advertising started ({e.Error?.LocalizedDescription})", EDialogButtons.OK);
         }
     }
 }

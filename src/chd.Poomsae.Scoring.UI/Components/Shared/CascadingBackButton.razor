@@ -18,11 +18,8 @@
 
     protected override void OnInitialized()
     {
-#if DEBUG
-    this._needsBack = true;
-#else
+
         this._needsBack = this.deviceHandler.IsiOS;
-#endif
         base.OnInitialized();
     }
 
