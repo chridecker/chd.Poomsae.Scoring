@@ -1,7 +1,4 @@
-@if (this._needsBack)
-{
     <div class="global-back-button @(this._showBackButton ? "" : " hide ")" @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
-}
 <CascadingValue IsFixed="true" Value="this">
     @ChildContent
 </CascadingValue>
@@ -13,8 +10,6 @@
 
 
     private bool _showBackButton = true;
-
-    private bool _needsBack = false;
 
     protected override void OnInitialized()
     {
