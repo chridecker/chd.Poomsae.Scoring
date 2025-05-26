@@ -40,6 +40,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._cBPeripheralManagerDelegate = bLEPeripheralManagerDelegate;
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
             this._cBPeripheralManagerDelegate.StateUpdate += this._cb_StateUpdated;
+            this._cBPeripheralManagerDelegate.CharacteristicSubscribe += this._cBPeripheralManagerDelegate_CharacteristicSubscribe;
+            this._cBPeripheralManagerDelegate.CharacteristicUnsubscribe += this._cBPeripheralManagerDelegate_CharacteristicUnSubscribe;
+            this._cBPeripheralManagerDelegate.ServiceAdd += this._cBPeripheralManagerDelegate_ServiceAdd;
+            this._cBPeripheralManagerDelegate.AdvertisingStart += this._cBPeripheralManagerDelegate_AdvertisingStart;
         }
 
         protected override async Task CheckPermissions(CancellationToken cancellationToken)
@@ -61,7 +65,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             }
         }
 
-
+        protected override void BroadCastToAllDevices(CBMutableCharacteristic characteristic, byte[] value)
+        {
+            this._cBPeripheralManager.UpdateValue(NSData.FromArray(value), characteristic, this._connectedDevices.Values.ToArray());
+        }
         protected override async Task StartNativeAsync(CancellationToken token)
         {
             if (this._cBPeripheralManager is not null) { return; }
@@ -99,8 +106,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
         private async Task StartGattServer()
         {
-            this._cBPeripheralManager.CharacteristicSubscribed += this._cBPeripheralManager_CharacteristicSubscribed;
-            this._cBPeripheralManager.CharacteristicUnsubscribed += this._cBPeripheralManager_CharacteristicUnSubscribed;
+            await this._modalService.ShowDialog($"BLE State '{this._cBPeripheralManager.State}'", EDialogButtons.OK);
+
+            this._cBPeripheralManager.StopAdvertising();
+            this._cBPeripheralManager.RemoveAllServices();
 
             var name = await this.GetName();
 
@@ -143,27 +152,31 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             }
         }
 
-        private void _cBPeripheralManager_CharacteristicSubscribed(object? sender, CBPeripheralManagerSubscriptionEventArgs e)
+        private async void _cBPeripheralManagerDelegate_CharacteristicSubscribe(object? sender, (CBPeripheralManager peripheral, CBCentral central, CBCharacteristic characteristic))
         {
-            if (!this._connectedDevices.ContainsKey(e.Central.ParseDeviceId()))
+            if (!this._connectedDevices.ContainsKey(central.ParseDeviceId()))
             {
-                this._connectedDevices.TryAdd(e.Central.ParseDeviceId(), e.Central);
-                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), e.Central.Description, true);
+                this._connectedDevices.TryAdd(central.ParseDeviceId(), central);
+                this.OnDeviceConnectionChanged(central.ParseDeviceId(), central.Description, true);
             }
         }
 
-        private void _cBPeripheralManager_CharacteristicUnSubscribed(object? sender, CBPeripheralManagerSubscriptionEventArgs e)
+        private async void _cBPeripheralManagerDelegate_CharacteristicUnSubscribe(object? sender, (CBPeripheralManager peripheral, CBCentral central, CBCharacteristic characteristic))
         {
-            if (this._connectedDevices.ContainsKey(e.Central.ParseDeviceId())
-                && this._connectedDevices.TryRemove(e.Central.ParseDeviceId(), out _))
+            if (this._connectedDevices.ContainsKey(central.ParseDeviceId())
+                && this._connectedDevices.TryRemove(central.ParseDeviceId(), out _))
             {
-                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), e.Central.Description, false);
+                this.OnDeviceConnectionChanged(central.ParseDeviceId(), central.Description, false);
             }
         }
 
-        protected override void BroadCastToAllDevices(CBMutableCharacteristic characteristic, byte[] value)
+        private async void _cBPeripheralManagerDelegate_ServiceAdd(object? sender, (CBPeripheralManager peripheral, CBService service, NSError error))
         {
-            this._cBPeripheralManager.UpdateValue(NSData.FromArray(value), characteristic, this._connectedDevices.Values.ToArray());
+             await this._modalService.ShowDialog($"BLE Service Add'{service.UUID}', {error?.LocalizedDescription}", EDialogButtons.OK);
+        }
+        private async void _cBPeripheralManagerDelegate_AdvertisingStart(object? sender, (CBPeripheralManager peripheral, NSError error))
+        {
+             await this._modalService.ShowDialog($"BLE Advertising started ({error?.LocalizedDescription})", EDialogButtons.OK);
         }
     }
 }
