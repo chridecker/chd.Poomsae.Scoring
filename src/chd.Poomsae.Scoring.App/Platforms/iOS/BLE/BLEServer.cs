@@ -79,39 +79,40 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
         private async Task StartGattServer()
         {
-            try{
-            await this._modalService.ShowDialog($"BLE Gatt Starting with State '{this._cBPeripheralManager.State}'", EDialogButtons.OK);
-
-            this._cBPeripheralManager.StopAdvertising();
-            this._cBPeripheralManager.RemoveAllServices();
-
-            var name = await this.GetName();
-
-            await this._modalService.ShowDialog($"BLE Gatt Name: '{name.Item1}'", EDialogButtons.OK);
-
-            this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            //this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
-            //this._characteristicName.Descriptors = new[] { this._descNotifyNameChanged };
-
-            //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._resultCharacteristicValue));
-            //this._characteristic.Descriptors = [this._descNotifyResult];
-
-            this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
-            //this._service.Characteristics = [this._characteristic, this._characteristicName];
-            this._service.Characteristics = new[] { this._characteristicName };
-
-            this._cBPeripheralManager.AddService(this._service);
-
-            this._cBPeripheralManager.StartAdvertising(new StartAdvertisingOptions()
+            try
             {
-                LocalName = name.Item1,
-                ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString())],
-            });
+                await this._modalService.ShowDialog($"BLE Gatt Starting with State '{this._cBPeripheralManager.State}'", EDialogButtons.OK);
+
+                this._cBPeripheralManager.StopAdvertising();
+                this._cBPeripheralManager.RemoveAllServices();
+
+                var name = await this.GetName();
+
+                await this._modalService.ShowDialog($"BLE Gatt Name: '{name.Item1}'", EDialogButtons.OK);
+
+                this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                //this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
+                //this._characteristicName.Descriptors = new[] { this._descNotifyNameChanged };
+
+                //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._resultCharacteristicValue));
+                //this._characteristic.Descriptors = [this._descNotifyResult];
+
+                this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
+                //this._service.Characteristics = [this._characteristic, this._characteristicName];
+                this._service.Characteristics = new[] { this._characteristicName };
+
+                this._cBPeripheralManager.AddService(this._service);
+
+                this._cBPeripheralManager.StartAdvertising(new StartAdvertisingOptions()
+                {
+                    LocalName = name.Item1,
+                    ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString())],
+                });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                await this._modalService.ShowDialog($"Start BLE Gatt with Error '{ex.ToString()}}'", EDialogButtons.OK);
+                await this._modalService.ShowDialog($"Start BLE Gatt with Error '{ex.ToString()}'", EDialogButtons.OK);
             }
         }
 
