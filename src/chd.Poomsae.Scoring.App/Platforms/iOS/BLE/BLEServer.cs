@@ -41,6 +41,25 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._cBPeripheralManagerDelegate.StateUpdate += this._cb_StateUpdated;
         }
 
+        protected override async Task CheckPermissions(CancellationToken cancellationToken)
+        {
+            var perm = await Permissions.CheckStatusAsync<IosBluetoothPermission>();
+            await this._modalService.ShowDialog($"Permisssion BLE Status {perm}", EDialogButtons.OK);
+
+            while (perm is not PermissionStatus.Granted)
+            {
+                _ = await Permissions.RequestAsync<IosBluetoothPermission>();
+                _ = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+                perm = await Permissions.CheckStatusAsync<IosBluetoothPermission>();
+                await Task.Delay(250, cancellationToken);
+                if (cancellationToken.IsCancellationRequested || perm is PermissionStatus.Granted)
+                {
+                    break;
+                }
+            }
+        }
+
 
         protected override async Task StartNativeAsync(CancellationToken token)
         {
@@ -53,11 +72,17 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
         private async void _cb_StateUpdated(object? sender, CBPeripheralManager peripheralManager)
         {
-            if (this._cBPeripheralManager.State is CBManagerState.Unsupported)
+            if (peripheralManager.State is CBManagerState.Unsupported)
             {
                 await this._modalService.ShowDialog($"BLE not supporter", EDialogButtons.OK);
             }
-            else if (peripheralManager.State is not CBManagerState.PoweredOn)
+            else if (peripheralManager.State is CBManagerState.PoweredOn)
+            {
+                await this._modalService.ShowDialog($"BLE Running '{peripheralManager.State}'", EDialogButtons.OK);
+                await this.StartGattServer();
+
+            }
+            else
             {
                 var res = await this._modalService.ShowDialog("Bluetooth ist nicht aktiviert! Um alle Funktionen nutzen zu können muss der Bluetooth-Dienst aktiviert sein! Jetzt aktivieren?", EDialogButtons.YesNo);
                 if (res is not EDialogResult.Yes)
@@ -68,14 +93,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
                 {
                 });
-            }
-            else if (peripheralManager.State is CBManagerState.PoweredOn)
-            {
-#if DEBUG
-                await this._modalService.ShowDialog($"BLE Running", EDialogButtons.OK);
-#endif
-                await this.StartGattServer();
-
             }
         }
 
@@ -90,12 +107,13 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor), NSData.FromArray(this._nameNotifyDescValue));
             this._characteristicName.Descriptors = [this._descNotifyNameChanged];
 
-            this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor), NSData.FromArray(this._resultCharacteristicValue));
-            this._characteristic.Descriptors = [this._descNotifyResult];
+            //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+            //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor), NSData.FromArray(this._resultCharacteristicValue));
+            //this._characteristic.Descriptors = [this._descNotifyResult];
 
             this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service), true);
-            this._service.Characteristics = [this._characteristic, this._characteristicName];
+            //this._service.Characteristics = [this._characteristic, this._characteristicName];
+            this._service.Characteristics = [this._characteristicName];
 
             this._cBPeripheralManager.AddService(this._service);
 

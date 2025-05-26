@@ -42,7 +42,7 @@ namespace chd.Poomsae.Scoring.App.Services.Base
 
         protected abstract void BroadCastToAllDevices(TCharacteristic characteristic, byte[] data);
         protected abstract Task StartNativeAsync(CancellationToken cancellationToken);
-
+        protected abstract Task CheckPermissions(CancellationToken cancellationToken);
 
         protected BaseBLEServer(ISettingManager settingManager, IModalService modalService, IList<byte> disableNotificationValue)
         {
@@ -54,19 +54,7 @@ namespace chd.Poomsae.Scoring.App.Services.Base
 
         public async Task StartAsync(CancellationToken token)
         {
-            var perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
-            while (perm is not PermissionStatus.Granted)
-            {
-                _ = await Permissions.RequestAsync<Permissions.Bluetooth>();
-                _ = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-
-                perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
-                await Task.Delay(250, token);
-                if (token.IsCancellationRequested || perm is PermissionStatus.Granted)
-                {
-                    break;
-                }
-            }
+            await this.CheckPermissions(token);
             try
             {
                 await this.StartNativeAsync(token);

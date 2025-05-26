@@ -101,6 +101,23 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             }
         }
 
+        protected override async Task CheckPermissions(CancellationToken cancellationToken)
+        {
+            var perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
+            while (perm is not PermissionStatus.Granted)
+            {
+                _ = await Permissions.RequestAsync<Permissions.Bluetooth>();
+                _ = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+                perm = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
+                await Task.Delay(250, cancellationToken);
+                if (cancellationToken.IsCancellationRequested || perm is PermissionStatus.Granted)
+                {
+                    break;
+                }
+            }
+        }
+
         private void NotifyCharacteristicChange(BluetoothDevice device, BluetoothGattCharacteristic characteristic, bool confirm, byte[] value)
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
