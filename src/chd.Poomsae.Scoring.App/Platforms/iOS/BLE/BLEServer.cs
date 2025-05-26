@@ -26,16 +26,12 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 {
     public class BLEServer : BaseBLEServer<CBCentral, CBMutableService, CBMutableCharacteristic, CBMutableDescriptor>, IBroadCastService
     {
-        private static readonly byte[] DisableNotificationValue = new byte[] { 0, 0 };
-        private static readonly byte[] EnableNotificationValue = new byte[] { 1, 0 };
-
-
         private CBPeripheralManager _cBPeripheralManager;
         private BLEPeripheralManagerDelegate _cBPeripheralManagerDelegate;
 
 
         public BLEServer(BLEPeripheralManagerDelegate bLEPeripheralManagerDelegate, ISettingManager settingManager, IModalService modalService)
-            : base(settingManager, modalService, DisableNotificationValue)
+            : base(settingManager, modalService, new List<byte>() { 0, 0 })
         {
             this._cBPeripheralManagerDelegate = bLEPeripheralManagerDelegate;
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
@@ -73,13 +69,17 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
             this._cBPeripheralManager = new CBPeripheralManager(this._cBPeripheralManagerDelegate, DispatchQueue.MainQueue);
 
-            await this.StartGattServer();
+            if (this._cBPeripheralManager.State is CBManagerState.PoweredOn)
+            {
+                await this.StartGattServer();
+            }
         }
 
 
 
         private async Task StartGattServer()
         {
+            try{
             await this._modalService.ShowDialog($"BLE Gatt Starting with State '{this._cBPeripheralManager.State}'", EDialogButtons.OK);
 
             this._cBPeripheralManager.StopAdvertising();
@@ -90,8 +90,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             await this._modalService.ShowDialog($"BLE Gatt Name: '{name.Item1}'", EDialogButtons.OK);
 
             this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
-            this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
-            this._characteristicName.Descriptors = [this._descNotifyNameChanged];
+            //this._descNotifyNameChanged = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._nameNotifyDescValue));
+            //this._characteristicName.Descriptors = new[] { this._descNotifyNameChanged };
 
             //this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
             //this._descNotifyResult = new CBMutableDescriptor(CBUUID.FromString(BLEConstants.Notify_Descriptor.ToGuidString()), NSData.FromArray(this._resultCharacteristicValue));
@@ -99,7 +99,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
             this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
             //this._service.Characteristics = [this._characteristic, this._characteristicName];
-            this._service.Characteristics = [this._characteristicName];
+            this._service.Characteristics = new[] { this._characteristicName };
 
             this._cBPeripheralManager.AddService(this._service);
 
@@ -108,6 +108,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 LocalName = name.Item1,
                 ServicesUUID = [CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString())],
             });
+            }
+            catch(Exception ex)
+            {
+                await this._modalService.ShowDialog($"Start BLE Gatt with Error '{ex.ToString()}}'", EDialogButtons.OK);
+            }
         }
 
         private async void _cb_StateUpdated(object? sender, BLEEventArgs e)
