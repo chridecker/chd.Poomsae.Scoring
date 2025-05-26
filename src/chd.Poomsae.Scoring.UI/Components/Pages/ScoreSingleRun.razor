@@ -15,7 +15,7 @@
         @if (this.runDto is null) { return; }
         <div class="single-run-container">
             <div class="fighter-container @(this.runDto.Color is EScoringButtonColor.Red ? "red" : this.runDto.Color is EScoringButtonColor.Blue ?  "blue" : "")">
-                <div class="change-button button-@(this.runDto.Color is EScoringButtonColor.Red ? "blue" : "red") @(this._deviceHandler.IsiOS ? " ios " : "")" @onclick="this.ChangeColor">
+                <div class="change-button button-@(this.runDto.Color is EScoringButtonColor.Red ? "blue" : "red")" @onclick="this.ChangeColor">
                     <CustomIcon FAClass="rotate" />
                 </div>
                 <FighterScore Score="@runDto.Score">

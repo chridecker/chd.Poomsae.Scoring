@@ -25,7 +25,7 @@
 
     .single-run-container .fighter-container .change-button {
         position: absolute;
-        left: 1.5rem;
+        left: 3.5rem;
         padding: 0.5rem 0.7rem 0.5rem 0.7rem;
         border: 1px solid;
         border-radius: 2rem;
@@ -35,10 +35,6 @@
         align-content: center;
         justify-items: center;
     }
-
-        .single-run-container .fighter-container .change-button.ios {
-            left: 3.5rem;
-        }
 
         .single-run-container .fighter-container .change-button.button-red {
             background: var(--chd-p-red-semi-transparent);
