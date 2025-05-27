@@ -37,6 +37,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
             this._cBPeripheralManagerDelegate.StateUpdate += this._cb_StateUpdated;
             this._cBPeripheralManagerDelegate.CharacteristicUnsubscribe += this._cBPeripheralManagerDelegate_CharacteristicUnSubscribe;
+            this._cBPeripheralManagerDelegate.CharacteristicSubscribe += this._cBPeripheralManagerDelegate_CharacteristicSubscribe;
             this._cBPeripheralManagerDelegate.ServiceAdd += this._cBPeripheralManagerDelegate_ServiceAdd;
         }
 
@@ -125,6 +126,15 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString), new UIApplicationOpenUrlOptions(), (success) =>
                 {
                 });
+            }
+        }
+
+        private async void _cBPeripheralManagerDelegate_CharacteristicSubscribe(object? sender, BLEEventArgs e)
+        {
+            if (!this._connectedDevices.ContainsKey(e.Central.ParseDeviceId()))
+            {
+                this._connectedDevices.TryAdd(e.Central.ParseDeviceId(), e.Central);
+                this.OnDeviceConnectionChanged(e.Central.ParseDeviceId(), true);
             }
         }
 
