@@ -56,6 +56,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                     break;
                 }
             }
+            if (perm is not  )
         }
 
         protected override void BroadCastToAllDevices(CBMutableCharacteristic characteristic, byte[] value)
@@ -85,7 +86,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
                 this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
 
-                this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
 
                 this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
                 this._service.Characteristics = new[] { this._characteristic, this._characteristicName };
@@ -154,6 +155,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 var request = e.Request;
                 if (request.Characteristic.UUID == this._characteristic.UUID)
                 {
+                    request.Value = NSData.FromArray(this._resultCharacteristicValue);
+                    this._cBPeripheralManager.RespondToRequest(request, CBATTError.Success);
                 }
                 else if (request.Characteristic.UUID == this._characteristicName.UUID)
                 {
