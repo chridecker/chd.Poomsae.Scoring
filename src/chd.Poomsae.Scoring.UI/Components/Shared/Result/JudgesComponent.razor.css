@@ -2,14 +2,16 @@
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    padding: 0.5rem 0.2rem 0.5rem 0.2rem;
+    padding: 1.5rem 0.2rem 0.2rem 0.2rem;
     overflow: scroll;
     justify-content: start;
 }
     .judges.chong {
         background: var(--chd-p-blue-transparent);
+        padding-right:1.5rem;
     }
 
     .judges.hong {
         background: var(--chd-p-red-transparent);
+        padding-left: 1.5rem;
     }

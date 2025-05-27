@@ -10,8 +10,11 @@
     align-content: center;
     align-items: center;
     display: flex;
-    background: var(--chd-p-blue-semi-transparent);
+    background: var(--chd-p-blue-transparent);
 }
+    .global-back-button:has(:hover) {
+        background: var(--chd-p-blue-semi-transparent);
+    }
 
     .global-back-button.hide {
         display: none;
