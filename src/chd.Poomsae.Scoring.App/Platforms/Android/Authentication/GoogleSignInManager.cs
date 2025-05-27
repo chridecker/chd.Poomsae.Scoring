@@ -18,42 +18,55 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.Authentication
 {
     public class GoogleSignInManager : LicenseTokenProfileService
     {
+        private readonly IDataService _dataService;
         private readonly IFirebaseAuthGoogle _firebaseAuthGoogle;
         private readonly IFirebaseAuth _firebaseAuth;
 
-        public GoogleSignInManager(
+        public GoogleSignInManager(IDataService dataService,
             IFirebaseAuthGoogle firebaseAuthGoogle, IFirebaseAuth firebaseAuth,
             IModalService modalService,
             ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService, modalService)
         {
+            this._dataService = dataService;
             this._firebaseAuthGoogle = firebaseAuthGoogle;
             this._firebaseAuth = firebaseAuth;
         }
 
         protected override async Task<PSDeviceDto> GetDevice(CancellationToken cancellationToken)
         {
-            return new PSDeviceDto()
+
+            if (this._firebaseAuth.CurrentUser is null)
             {
-                UID = "test"
-            };
+                _ = await this.GetUser();
+            }
+            return await this._dataService.GetOrCreateDevice();
         }
+
+        public override async Task RenewLicense(CancellationToken cancellationToken = default)
+        {
+            await this._firebaseAuthGoogle.SignOutAsync();
+            await base.RenewLicense(cancellationToken);
+        }
+
+
         protected override async Task<PSUserDto> SignIn(CancellationToken cancellationToken)
         {
             try
             {
                 await this.WaitForPermissions(cancellationToken);
                 var (user, testLicense) = await this.GetUser();
-                if(user is not null)
+                if (user is not null)
                 {
-                    return new PSUserDto()
+                    var fsUser = await this._dataService.GetOrCreateUser(new PSUserDto()
                     {
+                        Username = user.DisplayName ?? string.Empty,
                         Email = user.Email,
-                        Username = user.DisplayName,
-                        FirstName = " ",
-                        LastName = " ",
                         UID = user.Uid,
-                        HasLicense = testLicense,
-                    };
+                        ValidTo = testLicense ? DateTimeOffset.Now.Date.AddDays(7) : DateTimeOffset.Now.Date,
+                    });
+
+                    fsUser.UserDevice = await this._dataService.GetOrCreateUserDevice(fsUser.UID, this.Device.UID, fsUser.IsAdmin || testLicense);
+                    return fsUser;
                 }
             }
             catch (Exception ex)
