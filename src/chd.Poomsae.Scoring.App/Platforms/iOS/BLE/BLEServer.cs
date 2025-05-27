@@ -56,7 +56,6 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                     break;
                 }
             }
-            if (perm is not  )
         }
 
         protected override void BroadCastToAllDevices(CBMutableCharacteristic characteristic, byte[] value)
