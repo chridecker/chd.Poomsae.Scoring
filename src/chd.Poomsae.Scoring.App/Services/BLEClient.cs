@@ -184,8 +184,6 @@ namespace chd.Poomsae.Scoring.App.Services
                 await this.DisconnectDevice(device);
                 return;
             }
-            var x = await characteristic.ReadAsync(CancellationToken.None);
-            Encoding.ASCII.GetString(x.data);
 
             characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, dto, e);
             await characteristic.StartUpdatesAsync();
@@ -201,11 +199,6 @@ namespace chd.Poomsae.Scoring.App.Services
 
             var readName = await this.ReadNameAsync(device, CancellationToken.None);
             dto.Name = string.IsNullOrWhiteSpace(readName) ? device.Name : readName;
-
-
-
-
-
 
             this.DeviceFound?.Invoke(this, dto);
 
