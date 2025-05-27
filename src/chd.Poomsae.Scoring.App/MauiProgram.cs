@@ -8,12 +8,13 @@ using Microsoft.Maui.LifecycleEvents;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
-using Plugin.Firebase.Core.Platforms.Android;
-using Plugin.Firebase.Auth.Google;
+
 
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
+using Plugin.Firebase.Core.Platforms.Android;
+using Plugin.Firebase.Auth.Google;
 #elif IOS
 #endif
 
