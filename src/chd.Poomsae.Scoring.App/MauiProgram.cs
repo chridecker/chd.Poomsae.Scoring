@@ -9,8 +9,6 @@ using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
 
-
-
 #if ANDROID
 using Maui.Android.InAppUpdates;
 using Plugin.Firebase.Core.Platforms.Android;
