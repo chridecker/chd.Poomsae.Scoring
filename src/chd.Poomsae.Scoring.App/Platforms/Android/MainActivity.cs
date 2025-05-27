@@ -8,6 +8,7 @@ using AndroidX.Core.View;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Contracts.Interfaces.Services;
+using Plugin.Firebase.Auth.Google;
 using System.Text.Json;
 
 namespace chd.Poomsae.Scoring.App
@@ -43,7 +44,7 @@ namespace chd.Poomsae.Scoring.App
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
-            //FirebaseAuthGoogleImplementation.HandleActivityResultAsync(requestCode, resultCode, data);
+            FirebaseAuthGoogleImplementation.HandleActivityResultAsync(requestCode, resultCode, data);
         }
 
         protected override void OnNewIntent(Intent? intent)

@@ -16,7 +16,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 {
     public class AppleSignInManager : LicenseTokenProfileService
     {
-        public AppleSignInManager(IModalService modalService, ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService)
+        public AppleSignInManager(IModalService modalService, ISettingManager settingManager, ITokenService tokenService) : base(settingManager, tokenService, modalService)
         {
         }
 

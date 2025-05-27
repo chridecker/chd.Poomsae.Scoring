@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.Contracts.Constants;
+﻿using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.UI.Base.Client.Implementations.Authorization;
@@ -21,15 +22,17 @@ namespace chd.Poomsae.Scoring.UI.Services
     {
         private readonly ISettingManager _settingManager;
         private readonly ITokenService _tokenService;
+        protected readonly IModalService _modalService;
         protected PSUserDto _userDto; 
         private PSDeviceDto _deviceDto;
 
         public PSDeviceDto Device => this._deviceDto;
 
-        public LicenseTokenProfileService(ISettingManager settingManager, ITokenService tokenService)
+        public LicenseTokenProfileService(ISettingManager settingManager, ITokenService tokenService, IModalService modalService)
         {
             this._settingManager = settingManager;
             this._tokenService = tokenService;
+            this._modalService = modalService;
         }
 
         public virtual async Task RenewLicense(CancellationToken cancellationToken = default)

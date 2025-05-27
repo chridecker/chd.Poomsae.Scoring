@@ -184,6 +184,9 @@ namespace chd.Poomsae.Scoring.App.Services
                 await this.DisconnectDevice(device);
                 return;
             }
+            var x = await characteristic.ReadAsync(CancellationToken.None);
+            Encoding.ASCII.GetString(x.data);
+
             characteristic.ValueUpdated += (s, e) => this.Characteristic_ValueUpdated(s, dto, e);
             await characteristic.StartUpdatesAsync();
             this._deviceResultCharacteristics[device.Id] = characteristic;
