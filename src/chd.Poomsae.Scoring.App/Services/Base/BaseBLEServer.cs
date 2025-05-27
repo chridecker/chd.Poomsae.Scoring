@@ -22,6 +22,7 @@ namespace chd.Poomsae.Scoring.App.Services.Base
         protected readonly IModalService _modalService;
 
         protected IBluetoothLE _bluetoothLE => CrossBluetoothLE.Current;
+        protected IAdapter _adapter => this._bluetoothLE.Adapter;
 
         protected byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -46,6 +47,8 @@ namespace chd.Poomsae.Scoring.App.Services.Base
         {
             this._settingManager = settingManager;
             this._modalService = modalService;
+
+            _ = this._adapter.ConnectedDevices;
 
         }
 
