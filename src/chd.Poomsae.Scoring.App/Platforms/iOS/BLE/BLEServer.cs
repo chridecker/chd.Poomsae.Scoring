@@ -31,7 +31,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 
 
         public BLEServer(BLEPeripheralManagerDelegate bLEPeripheralManagerDelegate, ISettingManager settingManager, IModalService modalService)
-            : base(settingManager, modalService, new List<byte>() { 0, 0 })
+            : base(settingManager, modalService)
         {
             this._cBPeripheralManagerDelegate = bLEPeripheralManagerDelegate;
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
@@ -87,7 +87,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
 
                 this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
-                this._service.Characteristics = [this._characteristic, this._characteristicName];
+                this._service.Characteristics = new[] { this._characteristic, this._characteristicName };
 
                 this._cBPeripheralManager.AddService(this._service);
 

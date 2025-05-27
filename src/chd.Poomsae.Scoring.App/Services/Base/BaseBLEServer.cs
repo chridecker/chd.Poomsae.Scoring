@@ -23,8 +23,6 @@ namespace chd.Poomsae.Scoring.App.Services.Base
 
         protected IBluetoothLE _bluetoothLE => CrossBluetoothLE.Current;
 
-        protected byte[] _resultNotifyDescValue;
-        protected byte[] _nameNotifyDescValue;
         protected byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 
@@ -44,12 +42,11 @@ namespace chd.Poomsae.Scoring.App.Services.Base
         protected abstract Task StartNativeAsync(CancellationToken cancellationToken);
         protected abstract Task CheckPermissions(CancellationToken cancellationToken);
 
-        protected BaseBLEServer(ISettingManager settingManager, IModalService modalService, IList<byte> disableNotificationValue)
+        protected BaseBLEServer(ISettingManager settingManager, IModalService modalService)
         {
             this._settingManager = settingManager;
             this._modalService = modalService;
-            this._resultNotifyDescValue = disableNotificationValue.ToArray();
-            this._nameNotifyDescValue = disableNotificationValue.ToArray();
+
         }
 
         public async Task StartAsync(CancellationToken token)
@@ -100,7 +97,7 @@ namespace chd.Poomsae.Scoring.App.Services.Base
             byte __dataConvert(decimal d) => (byte)(d * 10);
         }
 
-        protected void OnDeviceConnectionChanged(Guid id,  bool connected)
+        protected void OnDeviceConnectionChanged(Guid id, bool connected)
         {
             this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
             {

@@ -35,9 +35,12 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
         private readonly BLEAdvertisingCallback _advertisingCallback;
         private BluetoothGattServer _gattServer;
 
+        private byte[] _resultNotifyDescValue;
+        private byte[] _nameNotifyDescValue;
+
 
         public BLEServer(BLEGattCallback callback, BLEAdvertisingCallback advertisingCallback, ISettingManager settingManager, IModalService modalService)
-            : base(settingManager, modalService, BluetoothGattDescriptor.DisableNotificationValue)
+            : base(settingManager, modalService)
         {
             this._callback = callback;
             this._advertisingCallback = advertisingCallback;
@@ -46,6 +49,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
             this._callback.DescriptorWriteRequest += this._callback_DescriptorWriteRequest;
             this._callback.DeviceConnectionStateChanged += this._callback_DeviceConnectionStateChanged;
+
+            this._resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
+            this._nameNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
         }
 
         protected override async Task StartNativeAsync(CancellationToken token)
@@ -165,7 +171,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             if (e.NewState == ProfileState.Disconnected
                 && this._connectedDevices.TryRemove(e.Device.ParseDeviceId(), out _))
             {
-                this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(),  false);
+                this.OnDeviceConnectionChanged(e.Device.ParseDeviceId(), false);
             }
         }
         private void _callback_DescriptorReadRequest(object? sender, BleEventArgs e)
