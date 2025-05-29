@@ -29,12 +29,7 @@
 	<string>Diese App benötigt Bluetooth, um Geräte in der Nähe zu erkennen.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Bluetooth wird benötigt, um mit externen Geräten zu kommunizieren.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Standort wird für die BLE Kommunikation benötigt</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Standort wird für die BLE Kommunikation benötigt</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Standort wird für die BLE Kommunikation benötigt</string>
+  
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIBackgroundModes</key>
