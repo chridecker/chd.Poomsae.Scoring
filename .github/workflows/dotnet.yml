@@ -18,6 +18,14 @@ on:
         description: 'Create an APK Artifact'
         required: true
         default: 'false'
+      package_name:
+        description: 'APP Package Name'
+        required: true
+        default: 'com.companyname.chd.poomsae.scoring.app'
+      platform:
+        description: 'APP Platform'
+        required: true
+        default: 'android'
 
 jobs:
   build:
@@ -45,6 +53,7 @@ jobs:
         $YEAR=& Get-Date -UFormat "%y%j"
         $HOUR=& Get-Date -format HHmm
         $VERSION="$MAJOR.$MINOR.$YEAR.$HOUR"
+        echo "DATEVERSION=$VERSION" >> $env:GITHUB_ENV
         dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net9.0-android /p:ApplicationDisplayVersion=$VERSION /p:ApplicationVersion=${{ github.run_number}} /p:AndroidSigningKeyPass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidSigningStorePass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=chdpoomsaescoring.keystore /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidVersionCode=${{github.run_number}} 
         
     - name: Upload APK Build Artifact
@@ -60,3 +69,35 @@ jobs:
       with:
         name: chdPoomsaeScoringAAB
         path: ./**/bin/Release/**/publish/*.app-Signed.aab
+
+    - name: Set up SSH
+      run: |
+         mkdir -p ~/.ssh
+         echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+         chmod 600 ~/.ssh/id_ed25519
+         ssh-keyscan github.com >> ~/.ssh/known_hosts
+         
+    - name: SSH-Key aus Secret speichern
+      shell: pwsh
+      run: |
+        $sshPath = "$env:USERPROFILE\.ssh"
+        if (-Not (Test-Path $sshPath)) {
+          New-Item -ItemType Directory -Path $sshPath | Out-Null
+        }
+        $privateKey = '${{ secrets.SSH_KEY }}' -replace "`r`n", "`n"
+        $privateKey | Out-File -FilePath "$sshPath\id_ed25519" -Encoding ascii
+        icacls "$sshPath\id_ed25519" /inheritance:r /grant:r "${env:USERNAME}:(R,W)"
+        # Known hosts hinzufügen, damit SSH-Verbindung klappt
+        ssh-keyscan github.com | Out-File -FilePath "$sshPath\known_hosts" -Encoding ascii
+    - name: Commit Version Update
+      run: |
+        git clone git@github.com:chridecker/chd.version.git
+        cd chd.version
+        New-Item -ItemType Directory -Path "${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}" -Force
+        Remove-Item -Path "${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}/Version.json" -ErrorAction SilentlyContinue
+        @{Version="${{ env.DATEVERSION }}" } | ConvertTo-Json -Compress > ${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}/Version.json
+        git add ${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}/Version.json
+        git config user.name "CHD Build Service"
+        git config user.email "chdscoring@gmail.com"
+        git commit -a -m "Version $env:DATEVERSION  "
+        git push -f     
