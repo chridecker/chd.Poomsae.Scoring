@@ -19,6 +19,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             services.AddSingleton<NotificationReceiver>();
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
 
+            services.AddSingleton<IDataService,FireStoreHandler>();
             services.AddSingleton(_ => AppleSignInAuthenticator.Default);
             services.AddSingleton<FirebaseAuthService>();
 
