@@ -69,7 +69,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             bool preparedWrite, bool responseNeeded, int offset, byte[] value)
         {
             base.OnCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
-            this.CharacteristicWriteRequest?.Invoke(this, new BleEventArgs() { Device = device, Characteristic = characteristic, Value = value, RequestId = requestId, Offset = offset });
+            this.CharacteristicWriteRequest?.Invoke(this, new BleEventArgs() { Device = device, Characteristic = characteristic, Value = value, RequestId = requestId, Offset = offset, ReponseNeeded = responseNeeded });
         }
 
         public override void OnNotificationSent(BluetoothDevice device, GattStatus status)

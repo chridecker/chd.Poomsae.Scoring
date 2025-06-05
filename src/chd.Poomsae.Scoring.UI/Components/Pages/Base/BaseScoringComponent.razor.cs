@@ -34,6 +34,8 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         [Inject] protected IDeviceHandler _deviceHandler { get; set; }
 
         protected TRunDto runDto;
+        protected string blueName = string.Empty;
+        protected string redName = string.Empty;
 
         private IDisposable _registerLocationChangeHandler;
 
@@ -43,8 +45,23 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+            this.broadCastService.BlueNameReceived += this.BroadCastService_BlueNameReceived;
+            this.broadCastService.RedNameReceived += this.BroadCastService_RedNameReceived;
+
             this.runDto = this.CreateDto();
             await base.OnInitializedAsync();
+        }
+
+        private async void BroadCastService_BlueNameReceived(object? sender, string e)
+        {
+            this.blueName = e;
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+
+        private async void BroadCastService_RedNameReceived(object? sender, string e)
+        {
+            this.redName = e;
+            await this.InvokeAsync(this.StateHasChanged);
         }
 
         protected abstract TRunDto CreateDto();
@@ -147,6 +164,9 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         public void Dispose()
         {
+            this.broadCastService.BlueNameReceived -= this.BroadCastService_BlueNameReceived;
+            this.broadCastService.RedNameReceived -= this.BroadCastService_RedNameReceived;
+
             if (this._registerLocationChangeHandler is not null)
             {
                 this._registerLocationChangeHandler.Dispose();

@@ -1,6 +1,7 @@
 ﻿.fighter {
     display: grid;
-    padding: 0.5rem;
+    grid-template-columns: 1fr;
+    padding: 0.5rem 0.5rem 0 0.5rem;
 }
 
     .fighter.fighter-hong {
@@ -16,8 +17,13 @@
         display: flex;
         width: max-content;
         height: 100%;
+        flex-direction:column;
     }
-
+    .fighter .fighter-name{
+        text-align:center;
+        font-size: 0.8rem;
+        overflow:hidden;
+    }
     .fighter .fighter-scores {
         display: grid;
     }

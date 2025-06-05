@@ -16,7 +16,7 @@ using chd.UI.Base.Contracts.Enum;
 
 namespace chd.Poomsae.Scoring.App.Services.Base
 {
-    public abstract class BaseBLEServer<TDevice, TService, TCharacteristic, TDescriptor>
+    public abstract class BaseBLEServer<TDevice, TService, TCharacteristic, TDescriptor> : IBroadCastService
     {
         protected readonly ISettingManager _settingManager;
         protected readonly IModalService _modalService;
@@ -26,10 +26,11 @@ namespace chd.Poomsae.Scoring.App.Services.Base
 
         protected byte[] _resultCharacteristicValue = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-
         protected TService _service;
         protected TCharacteristic _characteristic;
         protected TCharacteristic _characteristicName;
+        protected TCharacteristic _blueNameCharactersitic;
+        protected TCharacteristic _redNameCharactersitic;
 
         protected TDescriptor _descNotifyResult;
         protected TDescriptor _descNotifyNameChanged;
@@ -38,6 +39,8 @@ namespace chd.Poomsae.Scoring.App.Services.Base
 
         public int ConnectedDevices => this._connectedDevices.Count;
         public event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
+        public event EventHandler<string> RedNameReceived;
+        public event EventHandler<string> BlueNameReceived;
 
         protected abstract void BroadCastToAllDevices(TCharacteristic characteristic, byte[] data);
         protected abstract Task StartNativeAsync(CancellationToken cancellationToken);
@@ -108,6 +111,9 @@ namespace chd.Poomsae.Scoring.App.Services.Base
                 Id = id,
             });
         }
+
+        protected void OnBlueNameReceived(string name)=> this.BlueNameReceived?.Invoke(this, name);
+        protected void OnRedNameReceived(string name)=> this.RedNameReceived?.Invoke(this, name);
 
         protected async Task<(string, byte[])> GetName()
         {

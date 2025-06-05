@@ -10,8 +10,10 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 {
     public interface IBroadCastService
     {
+        event EventHandler<string> RedNameReceived;
+        event EventHandler<string> BlueNameReceived;
         event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
-        int ConnectedDevices {get;}
+        int ConnectedDevices { get; }
         Task StartAsync(CancellationToken cancellationToken);
         void ResetScore();
         void BroadcastResult(RunDto dto);

@@ -24,7 +24,7 @@ using chd.Poomsae.Scoring.App.Extensions;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
 {
-    public class BLEServer : BaseBLEServer<CBCentral, CBMutableService, CBMutableCharacteristic, CBMutableDescriptor>, IBroadCastService
+    public class BLEServer : BaseBLEServer<CBCentral, CBMutableService, CBMutableCharacteristic, CBMutableDescriptor>
     {
         private CBPeripheralManager _cBPeripheralManager;
         private BLEPeripheralManagerDelegate _cBPeripheralManagerDelegate;
@@ -34,12 +34,14 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
             : base(settingManager, modalService)
         {
             this._cBPeripheralManagerDelegate = bLEPeripheralManagerDelegate;
+            this._cBPeripheralManagerDelegate.WriteRequest += this._cBPeripheralManagerDelegate_WriteRequest;
             this._cBPeripheralManagerDelegate.ReadRequest += this._cBPeripheralManagerDelegate_ReadRequest;
             this._cBPeripheralManagerDelegate.StateUpdate += this._cb_StateUpdated;
             this._cBPeripheralManagerDelegate.CharacteristicUnsubscribe += this._cBPeripheralManagerDelegate_CharacteristicUnSubscribe;
             this._cBPeripheralManagerDelegate.CharacteristicSubscribe += this._cBPeripheralManagerDelegate_CharacteristicSubscribe;
             this._cBPeripheralManagerDelegate.ServiceAdd += this._cBPeripheralManagerDelegate_ServiceAdd;
         }
+
 
         protected override async Task CheckPermissions(CancellationToken cancellationToken)
         {
@@ -86,9 +88,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 this._characteristicName = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Name_Characteristic.ToGuidString()), CBCharacteristicProperties.Read | CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
 
                 this._characteristic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.Result_Characteristic.ToGuidString()), CBCharacteristicProperties.Notify, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                this._blueNameCharactersitic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.BlueName_Characteristic.ToGuidString()), CBCharacteristicProperties.Write, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
+                this._redNameCharactersitic = new CBMutableCharacteristic(CBUUID.FromString(BLEConstants.RedName_Characteristic.ToGuidString()), CBCharacteristicProperties.Write, null, CBAttributePermissions.Readable | CBAttributePermissions.Writeable);
 
-                this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true); 
-                this._service.Characteristics = new[] { this._characteristic, this._characteristicName };
+                this._service = new CBMutableService(CBUUID.FromString(BLEConstants.Result_Gatt_Service.ToString()), true);
+                this._service.Characteristics = new[] { this._characteristic, this._characteristicName, this._blueNameCharactersitic, this._redNameCharactersitic };
 
                 this._cBPeripheralManager.AddService(this._service);
 
@@ -174,6 +178,23 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 await this._modalService.ShowDialog($"Read BLE Request with Error '{ex.ToString()}'", EDialogButtons.OK);
             }
         }
+
+        private void _cBPeripheralManagerDelegate_WriteRequest(object? sender, BLEEventArgs e)
+        {
+            var request = e.Request;
+            var name = Encoding.ASCII.GetString(request.Value.ToArray());
+            if (e.Request.Characteristic.UUID == this._blueNameCharactersitic.UUID)
+            {
+                this.OnBlueNameReceived(name);
+            }
+            else if (e.Request.Characteristic.UUID == this._redNameCharactersitic.UUID)
+            {
+                this.OnRedNameReceived(name);
+            }
+
+            this._cBPeripheralManager.RespondToRequest(request, CBATTError.Success);
+        }
+
 
 
         private async void _cBPeripheralManagerDelegate_ServiceAdd(object? sender, BLEEventArgs e)

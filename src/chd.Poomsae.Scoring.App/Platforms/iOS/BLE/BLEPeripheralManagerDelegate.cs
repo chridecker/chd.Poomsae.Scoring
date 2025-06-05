@@ -11,6 +11,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
     public class BLEPeripheralManagerDelegate : CBPeripheralManagerDelegate
     {
         public event EventHandler<BLEEventArgs> ReadRequest;
+        public event EventHandler<BLEEventArgs> WriteRequest;
         public event EventHandler<BLEEventArgs> StateUpdate;
         public event EventHandler<BLEEventArgs> ServiceAdd;
         public event EventHandler<BLEEventArgs> AdvertisingStart;
@@ -24,6 +25,18 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.BLE
                 Peripheral = peripheral,
                 Request = request,
             });
+        }
+
+        public override void WriteRequestsReceived(CBPeripheralManager peripheral, CBATTRequest[] requests)
+        {
+            foreach (var request in requests)
+            {
+                this.WriteRequest?.Invoke(this, new BLEEventArgs()
+                {
+                    Peripheral = peripheral,
+                    Request = request
+                });
+            }
         }
         public override void StateUpdated(CBPeripheralManager peripheral)
         {

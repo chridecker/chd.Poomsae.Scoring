@@ -27,7 +27,7 @@ using chd.Poomsae.Scoring.App.Extensions;
 
 namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
 {
-    public class BLEServer : BaseBLEServer<BluetoothDevice, BluetoothGattService, BluetoothGattCharacteristic, BluetoothGattDescriptor>, IBroadCastService
+    public class BLEServer : BaseBLEServer<BluetoothDevice, BluetoothGattService, BluetoothGattCharacteristic, BluetoothGattDescriptor>
     {
         private BluetoothManager _bluetoothManager;
         private BluetoothAdapter _bluetoothAdapter;
@@ -45,6 +45,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             this._callback = callback;
             this._advertisingCallback = advertisingCallback;
 
+            this._callback.CharacteristicWriteRequest += this._callback_CharacteristicWriteRequest;
             this._callback.CharacteristicReadRequest += this.ReadRequest;
             this._callback.DescriptorReadRequest += this._callback_DescriptorReadRequest;
             this._callback.DescriptorWriteRequest += this._callback_DescriptorWriteRequest;
@@ -53,6 +54,8 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
             this._resultNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
             this._nameNotifyDescValue = BluetoothGattDescriptor.DisableNotificationValue.ToArray();
         }
+
+
 
         protected override async Task StartNativeAsync(CancellationToken token)
         {
@@ -160,6 +163,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
                 this._characteristic.SetValue(this._resultCharacteristicValue);
             }
 
+            this._blueNameCharactersitic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.BlueName_Characteristic.ToGuidString()), GattProperty.Write, GattPermission.Read | GattPermission.Write);
+            this._redNameCharactersitic = new BluetoothGattCharacteristic(UUID.FromString(BLEConstants.RedName_Characteristic.ToGuidString()), GattProperty.Write, GattPermission.Read | GattPermission.Write);
+
+            this._service.AddCharacteristic(this._blueNameCharactersitic);
+            this._service.AddCharacteristic(this._redNameCharactersitic);
             this._service.AddCharacteristic(this._characteristic);
             this._service.AddCharacteristic(this._characteristicName);
 
@@ -204,6 +212,24 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.BLE
                     this._descNotifyNameChanged.SetValue(this._nameNotifyDescValue);
                 }
                 this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, this._nameNotifyDescValue);
+            }
+        }
+
+        private void _callback_CharacteristicWriteRequest(object? sender, BleEventArgs e)
+        {
+            var name = Encoding.ASCII.GetString(e.Value);
+            if (e.Characteristic.Uuid == this._blueNameCharactersitic.Uuid)
+            {
+                this.OnBlueNameReceived(name);
+            }
+            else if (e.Characteristic.Uuid == this._redNameCharactersitic.Uuid)
+            {
+                this.OnRedNameReceived(name);
+            }
+
+            if (e.ReponseNeeded)
+            {
+                this._gattServer.SendResponse(e.Device, e.RequestId, GattStatus.Success, e.Offset, e.Value);
             }
         }
 

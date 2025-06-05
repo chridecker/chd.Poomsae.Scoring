@@ -8,13 +8,21 @@
         display: grid;
         grid-template-columns: repeat(2,1fr);
         border-bottom: 1px solid var(--chd-font-color);
-        height: 20vh;
+        height: 24vh;
     }
 
-.run-container .fighter-container ::deep .user-button {
-    position: absolute;
-    right: 1.5rem;
-}
+        .run-container .fighter-container ::deep .fighter.fighter-hong .fighter-name {
+            text-align: center;
+        }
+
+        .run-container .fighter-container ::deep .fighter.fighter-chong .fighter-name {
+            text-align: center;
+        }
+
+        .run-container .fighter-container ::deep .user-button {
+            position: absolute;
+            right: 1.5rem;
+        }
 
     .run-container .scoring-container {
         width: 100vw;

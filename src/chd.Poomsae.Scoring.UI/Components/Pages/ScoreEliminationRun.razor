@@ -17,8 +17,8 @@
         @if (runDto is null) { return; }
         <div class="run-container">
             <div class="fighter-container">
-                <FighterScore Score="@runDto.HongScore" Color="EScoringButtonColor.Red" />
-                <FighterScore Score="@runDto.ChongScore" Color="EScoringButtonColor.Blue">
+                <FighterScore FighterName="@redName" Score="@runDto.HongScore" Color="EScoringButtonColor.Red" />
+                <FighterScore FighterName="@blueName" Score="@runDto.ChongScore" Color="EScoringButtonColor.Blue">
                     <ButtonContent>
                         <UserButton />
                     </ButtonContent>
