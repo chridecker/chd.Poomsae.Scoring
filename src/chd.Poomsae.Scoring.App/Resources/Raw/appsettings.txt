@@ -1,5 +1,10 @@
 {
   "GoogleFirebaseSettings": {
     "ClientKey": "202887990694-pqlnces3r17n6q74i7vrgsbpr3at7njl.apps.googleusercontent.com"
+  },
+  "FirebaseAuthServiceSettings":{
+    "ApiKey":"AIzaSyCZI72ta-7lghoFh2O78RwLStVVfYiU3pE",
+    "EmailApiUrl":"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=",
+     "AppleApiUrl":"https://identitytoolkit.googleapis.com/v1/accounts:signInWithIdp?key="
   }
 }

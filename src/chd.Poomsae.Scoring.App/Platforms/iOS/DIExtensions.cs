@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.App.Platforms.iOS.BLE;
+﻿using chd.Poomsae.Scoring.App.Platforms.iOS.Authentication;
+using chd.Poomsae.Scoring.App.Platforms.iOS.BLE;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System;
@@ -17,6 +18,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
             services.AddSingleton<BLEPeripheralManagerDelegate>();
             services.AddSingleton<NotificationReceiver>();
             services.AddSingleton<INotificationManagerService, NotificationManagerService>();
+
+            services.AddSingleton(_ => AppleSignInAuthenticator.Default);
+            services.AddSingleton<FirebaseAuthService>();
+
             return services;
         }
     }

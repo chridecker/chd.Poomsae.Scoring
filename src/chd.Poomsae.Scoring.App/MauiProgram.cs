@@ -35,6 +35,7 @@ namespace chd.Poomsae.Scoring.App
             builder.Configuration.AddConfiguration(GetLocalSetting());
             builder.Configuration.AddConfiguration(GetAppSettingsConfig());
             builder.Services.Configure<GoogleFirebaseSettings>(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings)));
+            builder.Services.Configure<FirebaseAuthServiceSettings>(builder.Configuration.GetSection(nameof(FirebaseAuthServiceSettings)));
 
             builder.Services.AddMauiBlazorWebView();
             builder.AddServices();
@@ -68,9 +69,6 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
                events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                {
-                    //CrossFirebase.Initialize();
-                    //FirebaseAuthGoogleImplementation.Initialize();
-
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
                     return false;
