@@ -18,6 +18,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string ResetScoreQuestion = "Wertung zurücksetzen?";
 
         public const string LeaveSiteQuestion = "Wollen Sie die Seite wirklich verlassen?";
+        public const string RemoveFighterQuestion = "Wollen Sie den Teilnehmer wirklich löschen?";
         public const string EnterNameTitle = "Anzeigenamen ändern";
 
         public const string ScoresSend = "Wertung gesendet!";
@@ -31,7 +32,12 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string Single= "Einzel";
         public const string Eliminiation = "Head to Head";
         public const string Results = "Ergebnisse";
+        public const string Fighters = "Teilnehmer";
         public const string License = "Lizenz";
+
+        public const string AddFighter = "Teilnehmer hinzufügen";
+        public const string RemoveFighter = "Teilnehmer löschen";
+        public const string EditFighter = "Teilnehmer bearbeiten";
 
         public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
         public const string SearchDevices = "Erweiterte Gerätesuche";

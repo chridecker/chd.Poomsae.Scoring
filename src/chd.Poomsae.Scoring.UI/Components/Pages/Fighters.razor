@@ -1,0 +1,152 @@
+@using chd.Poomsae.Scoring.UI.Components.Pages.Base
+@using chd.Poomsae.Scoring.UI.Components.Shared.Fighters
+@inherits BaseClientComponent
+@page "/fighters"
+
+<div class="fighters-container">
+    @foreach (var fighter in this.fighterDataService.Fighters.OrderBy(o => o.Lastname).ThenBy(o => o.Firstname))
+    {
+        <div class="fighter-row @(this._currentFighter is not null && this._currentFighter.Id == fighter.Id ? " selected " : "")" @onclick="async () => await this.SetCurrent(fighter)">
+            <div class="fighter-firstname">@fighter.Firstname</div>
+            <div class="fighter-lastname">@fighter.Lastname</div>
+            <div class="fighter-buttons">
+                <div @onclick:stopPropagation class="send-button red @(this._redFighter?.Id == fighter.Id ? " active " : "")" @onclick="async () => await this.SetRed(fighter)">
+                    @if (this._redFighter?.Id == fighter.Id)
+                    {
+                        <CustomIcon FAClass="xmark" />
+                    }
+                    else
+                    {
+                        <CustomIcon FAClass="paper-plane-top" />
+                    }
+                </div>
+                <div @onclick:stopPropagation class="send-button blue @(this._blueFighter?.Id == fighter.Id ? " active " : "")" @onclick="async () => await this.SetBlue(fighter)">
+                    @if (this._blueFighter?.Id == fighter.Id)
+                    {
+                        <CustomIcon FAClass="xmark" />
+                    }
+                    else
+                    {
+                        <CustomIcon FAClass="paper-plane-top" />
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<FloatingActionNavigation FAIconActive="user-plus" TextActive="@TextConstants.AddFighter" OnClick="this.AddFighter">
+    <FloatingActionButton FAClass="magnifying-glass-plus" Title="@TextConstants.AddDeviceAuto" OnClick="this.Search" />
+    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
+    <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
+
+    @if (this._currentFighter is not null)
+    {
+        <FloatingActionButton FAClass="user-pen" Title="@TextConstants.EditFighter" OnClick="this.EditFighter" />
+        <FloatingActionButton FAClass="user-xmark" Title="@TextConstants.RemoveFighter" OnClick="this.RemoveFighter" />
+    }
+</FloatingActionNavigation>
+
+
+@code {
+
+    [Inject] IFighterDataService fighterDataService { get; set; }
+
+    private FighterDto _currentFighter = null;
+
+    private FighterDto _redFighter = null;
+    private FighterDto _blueFighter = null;
+
+
+    protected override Task Clear()
+    {
+        return base.Clear();
+    }
+
+    protected override async Task OnResultReceived(ScoreReceivedEventArgs e)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    protected override async Task OnDeviceDisconncted(DeviceDto e)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async Task SetBlue(FighterDto fighterDto)
+    {
+        if (this._redFighter?.Id == fighterDto.Id)
+        {
+            this._redFighter = null;
+        }
+        this._blueFighter = fighterDto;
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+    private async Task SetRed(FighterDto fighterDto)
+    {
+        if (this._blueFighter?.Id == fighterDto.Id)
+        {
+            this._blueFighter = null;
+        }
+        this._redFighter = fighterDto;
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+
+    private async Task SetCurrent(FighterDto fighter)
+    {
+        this._currentFighter = fighter;
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async Task AddFighter()
+    {
+        var fighter = new FighterDto();
+        var res = await this.modalService.Show<FighterModal>
+    (new ModalParameters() { { nameof(FighterModal.Fighter), fighter } }, new ModalOptions()
+    {
+        HideHeader = true,
+        Size = ModalSize.ExtraLarge
+    }).Result;
+        if (res.Confirmed && res.Data is FighterDto)
+        {
+            this.fighterDataService.AddFighter(fighter);
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+    private async Task RemoveFighter()
+    {
+        if (this._currentFighter is null) { return; }
+        var res = await this.modalService.ShowDialog(TextConstants.RemoveFighterQuestion, chd.UI.Base.Contracts.Enum.EDialogButtons.YesNo);
+
+        if (res is chd.UI.Base.Contracts.Enum.EDialogResult.Yes)
+        {
+            this.fighterDataService.RemoveFighter(this._currentFighter);
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+    private async Task EditFighter()
+    {
+        if (this._currentFighter is null) { return; }
+        var fighter = new FighterDto
+        {
+            Id = this._currentFighter.Id,
+            Firstname = this._currentFighter.Firstname,
+            Lastname = this._currentFighter.Lastname
+        };
+
+        var res = await this.modalService.Show<FighterModal>
+            (new ModalParameters() { { nameof(FighterModal.Fighter), fighter } }, new ModalOptions()
+            {
+                HideHeader = true,
+                Size = ModalSize.ExtraLarge
+            }).Result;
+        if (res.Confirmed && res.Data is FighterDto f)
+        {
+            this.fighterDataService.Fighters.FirstOrDefault(x => x.Id == this._currentFighter.Id).Firstname = f.Firstname;
+            this.fighterDataService.Fighters.FirstOrDefault(x => x.Id == this._currentFighter.Id).Lastname = f.Lastname;
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+}

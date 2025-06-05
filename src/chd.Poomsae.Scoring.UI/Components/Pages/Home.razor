@@ -17,6 +17,10 @@
         <div class="logo"><CustomIcon FAClass="ranking-star" /></div>
         <div class="text">@TextConstants.Results</div>
     </div>
+    <div class="home-card" @onclick="() => this.GoTo(FIGHTERS)">
+        <div class="logo"><CustomIcon FAClass="users" /></div>
+        <div class="text">@TextConstants.Fighters</div>
+    </div>
     @*  <div class="home-card" @onclick="async () => await this.ManageLicense()">
         <div class="logo"><CustomIcon FAClass="badge-check" /></div>
         <div class="text">@TextConstants.License</div>
@@ -28,6 +32,7 @@
     const string SINGLE = "singlescore";
     const string ELIM = "eliminationscore";
     const string RESULTS = "results";
+    const string FIGHTERS = "fighters";
 
     [Inject] NavigationManager _navigationManager { get; set; }
     [Inject] IModalService _modalService { get; set; }

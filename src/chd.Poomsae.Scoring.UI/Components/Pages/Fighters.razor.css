@@ -1,0 +1,69 @@
+﻿.fighters-container {
+    margin-top: 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.2rem;
+}
+
+
+    .fighters-container .fighter-row {
+        display: grid;
+        grid-template-columns: repeat(2,auto) max-content;
+        border: 1px solid;
+        border-radius: 0.5rem;
+        padding: 0.2rem;
+        gap: 0.2rem;
+    }
+
+        .fighters-container .fighter-row.selected {
+            border: 2px solid;
+            font-weight: bold;
+        }
+
+        .fighters-container .fighter-row:nth-child(even) {
+            background: var(--chd-sub-color-theme-semi-transparent);
+        }
+
+        .fighters-container .fighter-row .fighter-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+            .fighters-container .fighter-row .fighter-buttons .send-button {
+                width: max-content;
+                padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+                border: 1px solid;
+                border-radius: 2rem;
+                box-shadow: var(--chd-font-color) 1px 0 2px inset, var(--chd-bg) -2px 0 2px inset;
+                justify-content: center;
+                align-items: center;
+                align-content: center;
+                justify-items: center;
+                background: var(--chd-blue-transparent);
+            }
+
+                .fighters-container .fighter-row .fighter-buttons .send-button.red {
+                    background: var(--chd-p-red-semi-transparent);
+                }
+
+                .fighters-container .fighter-row .fighter-buttons .send-button.blue {
+                    background: var(--chd-p-blue-semi-transparent);
+                }
+
+                    .fighters-container .fighter-row .fighter-buttons .send-button.red.active {
+                        background: var(--chd-p-red);
+                    }
+
+                    .fighters-container .fighter-row .fighter-buttons .send-button.blue.active {
+                        background: var(--chd-p-blue);
+                    }
+
+                .fighters-container .fighter-row .fighter-buttons .send-button ::deep svg[fontawesome-icon=paper-plane] {
+                }
+
+                .fighters-container .fighter-row .fighter-buttons .send-button ::deep svg {
+                    fill: white;
+                    height: 1.2rem;
+                    margin-top: -0.1rem;
+                }

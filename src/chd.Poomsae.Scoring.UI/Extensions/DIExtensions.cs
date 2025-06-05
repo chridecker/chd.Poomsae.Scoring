@@ -40,6 +40,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddSingleton<IAppInfoService, AppInfoService>();
             services.AddSingleton<IResultService, ResultService>();
             services.AddSingleton<IStartRunService, StartRunService>();
+            services.AddSingleton<IFighterDataService, FighterDataService>();
             services.AddSingleton<IVibrationHelper, TVibrationHelper>();
             services.AddSingleton<IBroadCastService, TBroadCastService>();
             services.AddSingleton<IBroadcastClient, TBroadcastClient>();

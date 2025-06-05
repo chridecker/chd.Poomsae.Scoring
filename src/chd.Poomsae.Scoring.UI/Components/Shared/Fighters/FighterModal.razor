@@ -1,0 +1,12 @@
+<div class="fighter-modal-container">
+    <div class="label">Vorname</div><input type="text" @bind-value="this.Fighter.Firstname" />
+    <div class="label">Nachname</div><input type="text" @bind-value="this.Fighter.Lastname" />
+    <button class="btn btn-primary" @onclick="async () => await this.ModalInstance.CloseAsync(ModalResult.Ok(this.Fighter))">&Uuml;bernehmen</button>
+</div>
+
+@code {
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+
+    [Parameter] public FighterDto Fighter { get; set; }
+
+}
