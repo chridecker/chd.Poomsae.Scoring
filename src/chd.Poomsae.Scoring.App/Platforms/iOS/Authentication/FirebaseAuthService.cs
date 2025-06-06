@@ -7,10 +7,12 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using static UIKit.UIGestureRecognizer;
 
 namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 {
@@ -45,7 +47,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             });
 
             var url = this._optionsMonitor.CurrentValue.AppleApiUrl + this._optionsMonitor.CurrentValue.ApiKey;
-
+            var handler = new JwtSecurityTokenHandler();
+            var t = handler.ReadJwtToken(appleIdSignInToken.IdToken);
+            string name = t.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
             var payload = new
             {
                 postBody = $"id_token={appleIdSignInToken?.IdToken}&providerId=apple.com",
@@ -54,8 +58,10 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
                 returnSecureToken = true
             };
             var user = await this.HandleFirbaseCall(url, payload);
+            var appleName = appleIdSignInToken.Get("name");
+            name = string.IsNullOrWhiteSpace(appleName) ? name : appleName;
 
-            user.DisplayName = appleIdSignInToken.Get("user_id") +  " / " + appleIdSignInToken.Get("name");
+            user.DisplayName = appleIdSignInToken.Get("name");
 
             return user;
         }
