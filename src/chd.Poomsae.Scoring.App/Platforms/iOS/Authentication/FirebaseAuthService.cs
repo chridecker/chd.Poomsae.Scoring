@@ -55,7 +55,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             };
             var user = await this.HandleFirbaseCall(url, payload);
 
-            user.DisplayName = appleIdSignInToken.Properties.TryGetValue("name", out var name) && !string.IsNullOrWhiteSpace(name) ? name : user.DisplayName;
+            user.DisplayName = appleIdSignInToken.Get("user_id") +  " / " + appleIdSignInToken.Get("name");
 
             return user;
         }
