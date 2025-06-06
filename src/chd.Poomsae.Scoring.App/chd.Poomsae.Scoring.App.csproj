@@ -88,6 +88,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
+<ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.Persistence.csproj" />
 	</ItemGroup>
 
 </Project>
