@@ -23,7 +23,7 @@ namespace chd.Poomsae.Scoring.UI.Services
         private readonly ISettingManager _settingManager;
         private readonly ITokenService _tokenService;
         protected readonly IModalService _modalService;
-        protected PSUserDto _userDto; 
+        protected PSUserDto _userDto;
         private PSDeviceDto _deviceDto;
 
         public PSDeviceDto Device => this._deviceDto;
@@ -62,6 +62,12 @@ namespace chd.Poomsae.Scoring.UI.Services
                         Id = RightConstants.IS_ALLOWED,
                         Name = "Allowed"
                     });
+
+                    lst.Add(new UserRightDto<int>()
+                    {
+                        Id = RightConstants.HAS_FIGHTERS,
+                        Name = "Has Fighters"
+                    });
                 }
                 else if ((psUser.HasLicense || (psUser.ValidTo > DateTime.Now)) && psUser.UserDevice.IsAllowed)
                 {
@@ -70,8 +76,15 @@ namespace chd.Poomsae.Scoring.UI.Services
                         Id = RightConstants.IS_ALLOWED,
                         Name = "Allowed"
                     });
+                    if (psUser.UserDevice?.HasFighters ?? false)
+                    {
+                        lst.Add(new UserRightDto<int>()
+                        {
+                            Id = RightConstants.HAS_FIGHTERS,
+                            Name = "Has Fighters"
+                        });
+                    }
                 }
-
                 else
                 {
                     lst.Add(new UserRightDto<int>()
@@ -79,6 +92,14 @@ namespace chd.Poomsae.Scoring.UI.Services
                         Id = RightConstants.IS_ALLOWED,
                         Name = "Allowed"
                     });
+                    if (psUser.UserDevice?.HasFighters ?? false)
+                    {
+                        lst.Add(new UserRightDto<int>()
+                        {
+                            Id = RightConstants.HAS_FIGHTERS,
+                            Name = "Has Fighters"
+                        });
+                    }
                 }
             }
 

@@ -68,6 +68,26 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             }
         }
 
+        protected async Task RemoveDevices()
+        {
+             var result = await this.modalService.Show<SelectConnectedDevices>(new ModalOptions()
+            {
+                Size = ModalSize.ExtraLarge
+            }).Result;
+            if (result.Confirmed && result.Data is List<DeviceDto> lst)
+            {
+                foreach (var d in lst)
+                {
+                    await this.RemoveDevice(d);
+                }
+            }
+        }
+
+        protected async Task RemoveDevice(DeviceDto device)
+        {
+            await this.broadcastClient.DisconnectDeviceAsync(device.Id, this._cts.Token);
+        }
+
         protected async Task Search()
         {
             this._loadingModal = this.modalService.ShowLoading();
@@ -80,12 +100,23 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             this._connectedDevices.Clear();
             foreach (var device in await this.broadcastClient.CurrentConnectedDevices(this._cts.Token))
             {
-                await this.broadcastClient.DisconnectDeviceAsync(device.Id, this._cts.Token);
+                await this.RemoveDevice(device);
 
             }
             await this.InvokeAsync(this.StateHasChanged);
         }
-
+        protected virtual async Task OnDeviceFound(DeviceDto e)
+        {
+            if (this._connectedDevices.ContainsKey(e.Id))
+            {
+                this._connectedDevices[e.Id].Name = e.Name;
+            }
+            else
+            {
+                this._connectedDevices.TryAdd(e.Id, e);
+            }
+            await this.InvokeAsync(this.StateHasChanged);
+        }
 
         private async void DeviceDisconnect(object? sender, DeviceDto e)
         {
@@ -110,15 +141,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
         private async void DeviceFound(object? sender, DeviceDto e)
         {
-            if (this._connectedDevices.ContainsKey(e.Id))
-            {
-                this._connectedDevices[e.Id].Name = e.Name;
-            }
-            else
-            {
-                this._connectedDevices.TryAdd(e.Id, e);
-            }
-            await this.InvokeAsync(this.StateHasChanged);
+            await this.OnDeviceFound(e);
         }
 
 

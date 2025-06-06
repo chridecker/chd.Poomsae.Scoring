@@ -14,6 +14,9 @@ namespace chd.Poomsae.Scoring.UI.Services
 
         public List<FighterDto> Fighters => this._fighterLst;
 
+        public FighterDto CurrentBlue { get;set; }
+        public FighterDto CurrentRed{ get;set; }
+
         public FighterDataService()
         {
             this._fighterLst = new List<FighterDto>();

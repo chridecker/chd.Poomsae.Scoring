@@ -10,5 +10,6 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
     {
         public const int IS_ADMIN  = 1;
         public const int IS_ALLOWED  = 2;
+        public const int HAS_FIGHTERS  = 3;
     }
 }

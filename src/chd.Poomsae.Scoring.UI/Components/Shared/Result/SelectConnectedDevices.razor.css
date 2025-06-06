@@ -1,0 +1,11 @@
+﻿.connected-modal-container {
+    display: grid;
+}
+
+    .connected-modal-container .devices-container {
+        display: grid;
+        grid-template-columns: repeat(3,1fr);
+    }
+
+    .connected-modal-container .buttons {
+    }

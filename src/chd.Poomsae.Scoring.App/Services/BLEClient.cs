@@ -13,6 +13,7 @@ using chd.Poomsae.Scoring.Contracts.Dtos;
 using Plugin.BLE.Abstractions;
 using chd.Poomsae.Scoring.App.Extensions;
 using System.Collections.Concurrent;
+using chd.Poomsae.Scoring.Contracts.Enums;
 
 namespace chd.Poomsae.Scoring.App.Services
 {
@@ -77,6 +78,18 @@ namespace chd.Poomsae.Scoring.App.Services
             this.DeviceDisconnected?.Invoke(this, new() { Id = e.Device.Id, Name = e.Device.Name });
         }
 
+        public async Task SendFighter(FighterDto fighter, EScoringButtonColor color, DeviceDto device)
+        {
+            if (this._deviceServices.TryGetValue(device.Id, out var svc))
+            {
+                var characteristic = await svc.GetCharacteristicAsync(color is EScoringButtonColor.Blue ? BLEConstants.BlueName_Characteristic.ToGuidId() : BLEConstants.RedName_Characteristic.ToGuidId());
+                if (characteristic is not null)
+                {
+                    _ = await characteristic.WriteAsync(Encoding.ASCII.GetBytes(fighter?.DisplayName ?? ""));
+                }
+            }
+        }
+        
         public async Task<List<DeviceDto>> CurrentConnectedDevices(CancellationToken cancellationToken = default)
         {
             var lst = new List<DeviceDto>();

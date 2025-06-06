@@ -39,6 +39,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
            {
                Device_UID = dto.Device_UID,
                IsAllowed = dto.IsAllowed,
+               HasFighters = dto.HasFighters,
                User_UID = dto.User_UID,
                Created = dto.Created
            };
@@ -47,6 +48,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
            {
                Device_UID = dto.Device_UID,
                IsAllowed = dto.IsAllowed,
+               HasFighters = dto.HasFighters,
                User_UID = dto.User_UID,
                Created = dto.Created
            };

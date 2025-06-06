@@ -1,7 +1,7 @@
 @using chd.Poomsae.Scoring.Contracts.Dtos
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Extensions
-<div class="judge">
+<div class="judge" @onclick="this.OnClick">
     <div class="name">@this.Name</div>
     <div class="score accuracy">@(this.Score?.Accuracy.ToDisplayString() ?? "-")</div>
     <div class="score presentation">@(this.Score?.Presentation.ToDisplayString() ?? "-")</div>
@@ -11,4 +11,5 @@
     [Parameter] public string Name { get; set; }
     [Parameter] public ScoreDto Score { get; set; }
     [Parameter] public EScoringButtonColor Color { get; set; }
+    [Parameter] public Func<Task> OnClick { get; set; }
 }

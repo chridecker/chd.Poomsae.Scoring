@@ -11,14 +11,18 @@
 @page "/results"
 
 <div class="result-container">
-    <JudgesComponent Color="EScoringButtonColor.Red" Devices="this._connectedDevices.Values" />
+    <JudgesComponent DisconnectDevice="async (device) => await this.RemoveDevice(device)" Color="EScoringButtonColor.Red" Devices="this._connectedDevices.Values" />
     <TotalResult Color="EScoringButtonColor.Red" />
     <TotalResult Color="EScoringButtonColor.Blue" />
-    <JudgesComponent Color="EScoringButtonColor.Blue" Devices="this._connectedDevices.Values" />
+    <JudgesComponent DisconnectDevice="async (device) => await this.RemoveDevice(device)" Color="EScoringButtonColor.Blue" Devices="this._connectedDevices.Values" />
 </div>
 <FloatingActionNavigation FAIconActive="magnifying-glass-plus" TextActive="@TextConstants.AddDeviceAuto" OnClick="this.Search">
     <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
-    <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
+    @if (this._connectedDevices.Any())
+    {
+        <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
+        <FloatingActionButton FAClass="laptop-slash" Title="@TextConstants.RemoveDevice" OnClick="this.RemoveDevices" />
+    }
 </FloatingActionNavigation>
 
 

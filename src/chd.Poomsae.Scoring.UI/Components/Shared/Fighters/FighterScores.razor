@@ -1,0 +1,28 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="fighter-results">
+    <div class="fighter-score presentation">@_presentationValue.ToDisplayString("")</div>
+    <div class="fighter-score accuracy">@_accuracyValue.ToDisplayString("")</div>
+</div>
+
+@code {
+    [Parameter] public FighterDto Fighter { get; set; }
+
+
+    private decimal? _presentationValue
+    {
+        get
+        {
+            if (!this.Fighter.Scores.Any()) { return null; }
+            return this.Fighter.Scores.Values.Select(s => s.Presentation).Average();
+        }
+    }
+
+    private decimal? _accuracyValue
+    {
+        get
+        {
+            if (!this.Fighter.Scores.Any()) { return null; }
+            return this.Fighter.Scores.Values.Select(s => s.Accuracy).Average();
+        }
+    }
+}

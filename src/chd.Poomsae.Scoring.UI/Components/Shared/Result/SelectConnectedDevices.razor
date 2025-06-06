@@ -1,0 +1,49 @@
+@implements IDisposable
+<div class="connected-modal-container">
+    <div class="devices-container">
+        @foreach (var device in this._connectedDevices)
+        {
+            <DiscoveredDeviceComponent Device="device" Selected="d => this._selectedDevices.Any(a => a.Id == d.Id)" OnCLick="this.AddToSelected" />
+        }
+    </div>
+    <div class="buttons">
+        <button class="btn btn-primary" @onclick="this.Disconnect">Entfernen</button>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance Instance { get; set; }
+
+    [Inject] IBroadcastClient broadcastClient { get; set; }
+    private CancellationTokenSource _cts = new();
+
+    private List<DeviceDto> _connectedDevices = [];
+    private List<DeviceDto> _selectedDevices = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._connectedDevices = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
+        await base.OnInitializedAsync();
+    }
+
+    private async Task AddToSelected(DeviceDto dto)
+    {
+        if (this._selectedDevices.Any(a => a.Id == dto.Id))
+        {
+            this._selectedDevices.Remove(dto);
+        }
+        else
+        {
+            this._selectedDevices.Add(dto);
+        }
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+    private async Task Disconnect()
+    {
+        await this.Instance.CloseAsync(ModalResult.Ok(this._selectedDevices));
+    }
+    public void Dispose()
+    {
+        this._cts.Cancel();
+    }
+}

@@ -12,5 +12,8 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         List<FighterDto> Fighters { get; }
         void AddFighter(FighterDto fighter);
         void RemoveFighter(FighterDto fighter);
+
+        FighterDto CurrentBlue { get; set; }
+        FighterDto CurrentRed { get; set; }
     }
 }

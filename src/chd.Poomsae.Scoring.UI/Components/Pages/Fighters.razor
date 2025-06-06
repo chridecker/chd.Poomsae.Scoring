@@ -1,33 +1,37 @@
 @using chd.Poomsae.Scoring.UI.Components.Pages.Base
 @using chd.Poomsae.Scoring.UI.Components.Shared.Fighters
+@using chd.UI.Base.Contracts.Enum
 @inherits BaseClientComponent
 @page "/fighters"
 
 <div class="fighters-container">
     @foreach (var fighter in this.fighterDataService.Fighters.OrderBy(o => o.Lastname).ThenBy(o => o.Firstname))
     {
-        <div class="fighter-row @(this._currentFighter is not null && this._currentFighter.Id == fighter.Id ? " selected " : "")" @onclick="async () => await this.SetCurrent(fighter)">
+        <div class="fighter-row @_colorCss(fighter)">
             <div class="fighter-firstname">@fighter.Firstname</div>
             <div class="fighter-lastname">@fighter.Lastname</div>
+            <div class="fighter-scores"><FighterScores Fighter="@fighter" /></div>
             <div class="fighter-buttons">
-                <div @onclick:stopPropagation class="send-button red @(this._redFighter?.Id == fighter.Id ? " active " : "")" @onclick="async () => await this.SetRed(fighter)">
-                    @if (this._redFighter?.Id == fighter.Id)
+                <IconButton FAClass="user-pen" ButtonStyle="EButtonStyle.Secondary" OnClick="async () => await this.EditFighter(fighter)" />
+                <IconButton FAClass="user-xmark" ButtonStyle="EButtonStyle.Cancel" OnClick="async () => await this.RemoveFighter(fighter)" />
+                <div class="fighter-control-button red @(this.fighterDataService.CurrentRed?.Id == fighter.Id ? " active " : "")">
+                    @if (this.fighterDataService.CurrentRed?.Id == fighter.Id)
                     {
-                        <CustomIcon FAClass="xmark" />
+                        <IconButton FAClass="xmark" OnClick="async () => await this.SetRed(null)" />
                     }
                     else
                     {
-                        <CustomIcon FAClass="paper-plane-top" />
+                        <IconButton FAClass="paper-plane-top" OnClick="async () => await this.SetRed(fighter)" />
                     }
                 </div>
-                <div @onclick:stopPropagation class="send-button blue @(this._blueFighter?.Id == fighter.Id ? " active " : "")" @onclick="async () => await this.SetBlue(fighter)">
-                    @if (this._blueFighter?.Id == fighter.Id)
+                <div class="fighter-control-button blue @(this.fighterDataService.CurrentBlue?.Id == fighter.Id ? " active " : "")">
+                    @if (this.fighterDataService.CurrentBlue?.Id == fighter.Id)
                     {
-                        <CustomIcon FAClass="xmark" />
+                        <IconButton FAClass="xmark" OnClick="async () => await this.SetBlue(null)" />
                     }
                     else
                     {
-                        <CustomIcon FAClass="paper-plane-top" />
+                        <IconButton FAClass="paper-plane-top" OnClick="async () => await this.SetBlue(fighter)" />
                     }
                 </div>
             </div>
@@ -37,26 +41,18 @@
 
 <FloatingActionNavigation FAIconActive="user-plus" TextActive="@TextConstants.AddFighter" OnClick="this.AddFighter">
     <FloatingActionButton FAClass="magnifying-glass-plus" Title="@TextConstants.AddDeviceAuto" OnClick="this.Search" />
-    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
-    <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
-
-    @if (this._currentFighter is not null)
+    @if (this._connectedDevices.Any())
     {
-        <FloatingActionButton FAClass="user-pen" Title="@TextConstants.EditFighter" OnClick="this.EditFighter" />
-        <FloatingActionButton FAClass="user-xmark" Title="@TextConstants.RemoveFighter" OnClick="this.RemoveFighter" />
+        <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
+        <FloatingActionButton FAClass="laptop-slash" Title="@TextConstants.RemoveDevice" OnClick="this.RemoveDevices" />
     }
+    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
 </FloatingActionNavigation>
 
 
 @code {
 
     [Inject] IFighterDataService fighterDataService { get; set; }
-
-    private FighterDto _currentFighter = null;
-
-    private FighterDto _redFighter = null;
-    private FighterDto _blueFighter = null;
-
 
     protected override Task Clear()
     {
@@ -65,7 +61,31 @@
 
     protected override async Task OnResultReceived(ScoreReceivedEventArgs e)
     {
+        if (e.Hong is not null && this.fighterDataService.CurrentRed is not null)
+        {
+            if (this.fighterDataService.CurrentRed.Scores.Keys.Any(a => a.Id == e.Device.Id))
+            {
+                this.fighterDataService.CurrentRed.Scores.Remove(this.fighterDataService.CurrentRed.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
+            }
+            this.fighterDataService.CurrentRed.Scores[e.Device] = e.Hong;
+        }
+        if (e.Chong is not null && this.fighterDataService.CurrentBlue is not null)
+        {
+            if (this.fighterDataService.CurrentBlue.Scores.Keys.Any(a => a.Id == e.Device.Id))
+            {
+                this.fighterDataService.CurrentBlue.Scores.Remove(this.fighterDataService.CurrentBlue.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
+            }
+            this.fighterDataService.CurrentBlue.Scores[e.Device] = e.Chong;
+        }
+
         await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    protected override async Task OnDeviceFound(DeviceDto e)
+    {
+        await base.OnDeviceFound(e);
+        await this.Send(e);
+
     }
 
     protected override async Task OnDeviceDisconncted(DeviceDto e)
@@ -75,29 +95,37 @@
 
     private async Task SetBlue(FighterDto fighterDto)
     {
-        if (this._redFighter?.Id == fighterDto.Id)
+        if (this.fighterDataService.CurrentRed?.Id == fighterDto?.Id)
         {
-            this._redFighter = null;
+            this.fighterDataService.CurrentRed = null;
         }
-        this._blueFighter = fighterDto;
+        this.fighterDataService.CurrentBlue = fighterDto;
+        foreach (var dev in this._connectedDevices)
+        {
+            await this.Send(dev.Value);
+        }
         await this.InvokeAsync(this.StateHasChanged);
     }
     private async Task SetRed(FighterDto fighterDto)
     {
-        if (this._blueFighter?.Id == fighterDto.Id)
+        if (this.fighterDataService.CurrentBlue?.Id == fighterDto?.Id)
         {
-            this._blueFighter = null;
+            this.fighterDataService.CurrentBlue = null;
         }
-        this._redFighter = fighterDto;
+        this.fighterDataService.CurrentRed = fighterDto;
+        foreach (var dev in this._connectedDevices)
+        {
+            await this.Send(dev.Value);
+        }
         await this.InvokeAsync(this.StateHasChanged);
     }
 
-
-    private async Task SetCurrent(FighterDto fighter)
+    private async Task Send(DeviceDto device)
     {
-        this._currentFighter = fighter;
-        await this.InvokeAsync(this.StateHasChanged);
+        await this.broadcastClient.SendFighter(this.fighterDataService.CurrentBlue, EScoringButtonColor.Blue, device);
+        await this.broadcastClient.SendFighter(this.fighterDataService.CurrentRed, EScoringButtonColor.Red, device);
     }
+
 
     private async Task AddFighter()
     {
@@ -106,7 +134,8 @@
     (new ModalParameters() { { nameof(FighterModal.Fighter), fighter } }, new ModalOptions()
     {
         HideHeader = true,
-        Size = ModalSize.ExtraLarge
+        Size = ModalSize.ExtraLarge,
+        Position = ModalPosition.TopCenter,
     }).Result;
         if (res.Confirmed && res.Data is FighterDto)
         {
@@ -114,25 +143,23 @@
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
-    private async Task RemoveFighter()
+    private async Task RemoveFighter(FighterDto dto)
     {
-        if (this._currentFighter is null) { return; }
-        var res = await this.modalService.ShowDialog(TextConstants.RemoveFighterQuestion, chd.UI.Base.Contracts.Enum.EDialogButtons.YesNo);
+        var res = await this.modalService.ShowDialog(TextConstants.RemoveFighterQuestion, EDialogButtons.YesNo);
 
         if (res is chd.UI.Base.Contracts.Enum.EDialogResult.Yes)
         {
-            this.fighterDataService.RemoveFighter(this._currentFighter);
+            this.fighterDataService.RemoveFighter(dto);
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
-    private async Task EditFighter()
+    private async Task EditFighter(FighterDto dto)
     {
-        if (this._currentFighter is null) { return; }
         var fighter = new FighterDto
         {
-            Id = this._currentFighter.Id,
-            Firstname = this._currentFighter.Firstname,
-            Lastname = this._currentFighter.Lastname
+            Id = dto.Id,
+            Firstname = dto.Firstname,
+            Lastname = dto.Lastname
         };
 
         var res = await this.modalService.Show<FighterModal>
@@ -143,10 +170,23 @@
             }).Result;
         if (res.Confirmed && res.Data is FighterDto f)
         {
-            this.fighterDataService.Fighters.FirstOrDefault(x => x.Id == this._currentFighter.Id).Firstname = f.Firstname;
-            this.fighterDataService.Fighters.FirstOrDefault(x => x.Id == this._currentFighter.Id).Lastname = f.Lastname;
+            dto.Firstname = f.Firstname;
+            dto.Lastname = f.Lastname;
             await this.InvokeAsync(this.StateHasChanged);
         }
+    }
+
+    private string _colorCss(FighterDto dto)
+    {
+        if (this.fighterDataService.CurrentBlue?.Id == dto.Id)
+        {
+            return "blue";
+        }
+        else if (this.fighterDataService.CurrentRed?.Id == dto.Id)
+        {
+            return "red";
+        }
+        return string.Empty;
     }
 
 }

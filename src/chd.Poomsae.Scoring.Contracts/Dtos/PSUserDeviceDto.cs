@@ -12,6 +12,7 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
         public string Device_UID { get; set; }
         public string User_UID { get; set; }
         public bool IsAllowed { get; set; }
+        public bool HasFighters { get; set; } = false;
         public DateTimeOffset Created { get; set; }
     }
 }

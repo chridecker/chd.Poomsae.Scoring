@@ -40,6 +40,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
                Id = dto.Id,
                Device_UID = dto.Device_UID,
                IsAllowed = dto.IsAllowed,
+               HasFighters = dto.HasFighters,
                User_UID = dto.User_UID,
                Created = dto.Created
            };
@@ -49,6 +50,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
                Id = dto.Id,
                Device_UID = dto.Device_UID,
                IsAllowed = dto.IsAllowed,
+               HasFighters = dto.HasFighters,
                User_UID = dto.User_UID,
                Created = dto.Created
            };

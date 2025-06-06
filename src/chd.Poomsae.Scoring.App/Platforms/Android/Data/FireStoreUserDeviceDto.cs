@@ -20,6 +20,9 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android.Data
 
         [FirestoreProperty(nameof(IsAllowed))]
         public bool IsAllowed { get; set; }
+       
+        [FirestoreProperty(nameof(HasFighters))]
+        public bool HasFighters { get; set; }
         
         
         [FirestoreProperty(nameof(Created))]

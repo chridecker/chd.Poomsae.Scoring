@@ -6,7 +6,7 @@
 <div class="judges @_css">
     @foreach (var device in this.Devices)
     {
-        <JudgeResultComponent Name="@device.Name" Color="this.Color" Score="this.Result(device.Id)" />
+        <JudgeResultComponent OnClick="async () => await this.OnDisconnectDevice(device)" Name="@device.Name" Color="this.Color" Score="this.Result(device.Id)" />
     }
 </div>
 
@@ -14,11 +14,22 @@
 @code {
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
+    [Inject] IModalService modalService { get; set; }
 
     [Parameter] public EScoringButtonColor Color { get; set; }
     [Parameter] public IEnumerable<DeviceDto> Devices { get; set; } = [];
+    [Parameter] public Func<DeviceDto, Task> DisconnectDevice { get; set; }
 
     private ScoreDto Result(Guid id) => this.resultService.Result.Results.TryGetValue(id, out var res) ? (this.Color is EScoringButtonColor.Red ? res.HongScore : res.ChongScore) : null;
 
     private string _css => this.Color is EScoringButtonColor.Red ? "hong" : this.Color is EScoringButtonColor.Blue ? "chong" : "";
+
+    private async Task OnDisconnectDevice(DeviceDto device)
+    {
+        var res = await this.modalService.ShowDialog($"Gerät entfernen?", EDialogButtons.YesNo);
+        if (res is EDialogResult.Yes)
+        {
+            await this.DisconnectDevice?.Invoke(device);
+        }
+    }
 }

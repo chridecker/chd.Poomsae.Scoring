@@ -52,7 +52,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 
             var payload = new
             {
-                postBody = $"id_token={appleIdSignInToken.IdToken}&providerId=apple.com",
+                postBody = $"id_token={appleIdSignInToken?.IdToken}&providerId=apple.com",
                 requestUri = "http://localhost", // Muss gesetzt sein, kann Dummy sein
                 returnIdpCredential = true,
                 returnSecureToken = true
