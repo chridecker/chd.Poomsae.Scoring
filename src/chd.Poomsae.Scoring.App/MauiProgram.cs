@@ -24,6 +24,10 @@ namespace chd.Poomsae.Scoring.App
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
+            SQLitePCL.Batteries_V2.Init();
+
+
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
@@ -69,6 +73,7 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
                 events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                 {
+
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
                     return false;
@@ -92,11 +97,16 @@ namespace chd.Poomsae.Scoring.App
 
         private static IConfiguration GetLocalSetting()
         {
+            if (!Directory.Exists(FileSystem.AppDataDirectory))
+            {
+                Directory.CreateDirectory(FileSystem.AppDataDirectory); // redundant, aber sicher
+            }
+
             var path = Path.Combine(FileSystem.AppDataDirectory, "chdPoomsaeScoring.db");
 
             var dict = new Dictionary<string, string>();
 
-            dict.Add($"ConnectionStrings:ScoringContext", $"Data Source={path}");
+            dict.Add($"ConnectionStrings:ScoringContext", $"Filename={path}");
 
             return new ConfigurationBuilder().AddInMemoryCollection(dict).Build();
         }
