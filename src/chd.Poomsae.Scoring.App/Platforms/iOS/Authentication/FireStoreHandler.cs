@@ -132,15 +132,19 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             var content = await response.Content.ReadAsStringAsync();
 
             var lst = new List<T>();
-
-            var jsonArray = JsonNode.Parse(content)?.AsArray();
-            if (jsonArray != null)
+            try
             {
-                foreach (var item in jsonArray)
+                var jsonArray = JsonNode.Parse(content)?.AsArray();
+                if (jsonArray != null)
                 {
-                    lst.Add(this.FromFirestoreFormat<T>(item[0].ToString()));
+                    foreach (var item in jsonArray)
+                    {
+                        lst.Add(this.FromFirestoreFormat<T>(item[0].ToString()));
+                    }
                 }
             }
+            catch { }
+
 
             return lst;
         }

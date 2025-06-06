@@ -21,7 +21,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
         private readonly IDataService _dataService;
         private readonly FirebaseAuthService _firebaseAuthService;
 
-        public AppleSignInManager(IModalService modalService,IDataService dataService, ISettingManager settingManager, ITokenService tokenService, FirebaseAuthService firebaseAuthService) : base(settingManager, tokenService, modalService)
+        public AppleSignInManager(IModalService modalService, IDataService dataService, ISettingManager settingManager, ITokenService tokenService, FirebaseAuthService firebaseAuthService) : base(settingManager, tokenService, modalService)
         {
             this._dataService = dataService;
             this._firebaseAuthService = firebaseAuthService;

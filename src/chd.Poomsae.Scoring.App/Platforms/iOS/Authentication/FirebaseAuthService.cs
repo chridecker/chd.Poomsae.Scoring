@@ -1,5 +1,8 @@
-﻿using chd.Poomsae.Scoring.App.Platforms.iOS.Authentication.Dtos;
+﻿using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.App.Platforms.iOS.Authentication.Dtos;
 using chd.Poomsae.Scoring.App.Settings;
+using chd.UI.Base.Components.Extensions;
+using chd.UI.Base.Contracts.Enum;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.Extensions.Options;
 using System;
@@ -17,11 +20,13 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 
         private readonly IOptionsMonitor<FirebaseAuthServiceSettings> _optionsMonitor;
         private readonly IAppleSignInAuthenticator _appleSignInService;
+        private readonly IModalService _modalService;
 
-        public FirebaseAuthService(IOptionsMonitor<FirebaseAuthServiceSettings> optionsMonitor, IAppleSignInAuthenticator appleSignInService)
+        public FirebaseAuthService(IOptionsMonitor<FirebaseAuthServiceSettings> optionsMonitor, IAppleSignInAuthenticator appleSignInService, IModalService modalService)
         {
             this._optionsMonitor = optionsMonitor;
             this._appleSignInService = appleSignInService;
+            this._modalService = modalService;
         }
 
         public async Task<FirebaseAuthDto> SignInWithEmailAndPasswordAsync(string email, string password, bool createUserAutomatically = true)
@@ -32,7 +37,16 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 
         public async Task<FirebaseAuthDto> SignInWithAppleAsync()
         {
-            var appleIdSignInToken = await this._appleSignInService.AuthenticateAsync();
+            WebAuthenticatorResult appleIdSignInToken = null;
+            try
+            {
+                appleIdSignInToken = await this._appleSignInService.AuthenticateAsync();
+                await this._modalService.ShowDialog($"{appleIdSignInToken.IdToken}", EDialogButtons.OK);
+            }
+            catch (Exception ex)
+            {
+                await this._modalService.ShowDialog(ex.Message, EDialogButtons.OK);
+            }
 
             var url = this._optionsMonitor.CurrentValue.AppleApiUrl + this._optionsMonitor.CurrentValue.ApiKey;
 
@@ -45,8 +59,12 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             };
             return await this.HandleFirbaseCall(url, payload);
         }
+#if DEBUG
+        public async Task<string> CurrentUserToken() => Preferences.Get(USER, string.Empty);
+#else
         public Task<string> CurrentUserToken() => SecureStorage.GetAsync(USER);
-        public Task SignOutAsync() => SecureStorage.SetAsync(USER, string.Empty);
+#endif
+        public Task SignOutAsync() => this.SetToken(string.Empty);
 
         private async Task<FirebaseAuthDto> HandleFirbaseCall<TData>(string url, TData data)
         {
@@ -55,10 +73,15 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             if (res.IsSuccessStatusCode)
             {
                 var user = await res.Content.ReadFromJsonAsync<FirebaseAuthDto>();
-                await SecureStorage.SetAsync(USER, user.IdToken);
+                await this.SetToken(user.IdToken);
                 return user;
             }
             return null;
         }
+#if DEBUG
+        private async Task SetToken(string token) => Preferences.Set(USER, token);
+#else
+        private Task SetToken(string token) => SecureStorage.SetAsync(USER, token);
+#endif
     }
 }
