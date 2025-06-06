@@ -139,7 +139,7 @@
     }).Result;
         if (res.Confirmed && res.Data is FighterDto)
         {
-            this.fighterDataService.AddFighter(fighter);
+            await this.fighterDataService.AddFighter(fighter);
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
@@ -149,7 +149,7 @@
 
         if (res is chd.UI.Base.Contracts.Enum.EDialogResult.Yes)
         {
-            this.fighterDataService.RemoveFighter(dto);
+            await this.fighterDataService.RemoveFighter(dto);
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
@@ -172,6 +172,7 @@
         {
             dto.Firstname = f.Firstname;
             dto.Lastname = f.Lastname;
+            await this.fighterDataService.UpdateFighter(dto);
             await this.InvokeAsync(this.StateHasChanged);
         }
     }

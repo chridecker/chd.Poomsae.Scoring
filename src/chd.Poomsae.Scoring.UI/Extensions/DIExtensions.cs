@@ -1,5 +1,10 @@
-﻿using chd.UI.Base.Client.Implementations.Services.Base;
+﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.Persistence;
+using chd.Poomsae.Scoring.UI.Services;
+using chd.UI.Base.Client.Extensions;
+using chd.UI.Base.Client.Implementations.Authorization;
 using chd.UI.Base.Client.Implementations.Services;
+using chd.UI.Base.Client.Implementations.Services.Base;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using Microsoft.Extensions.Configuration;
@@ -9,10 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using chd.Poomsae.Scoring.Contracts.Interfaces;
-using chd.UI.Base.Client.Extensions;
-using chd.Poomsae.Scoring.UI.Services;
-using chd.UI.Base.Client.Implementations.Authorization;
 
 namespace chd.Poomsae.Scoring.UI.Extensions
 {
@@ -34,6 +35,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddScoped<INavigationHandler, NavigationHandler>();
 
             services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton));
+            services.AddDataAccess(configuration);
 
             services.AddSingleton<IDeviceHandler, TDeviceHandler>();
             services.AddSingleton<ITokenService, TokenService>();

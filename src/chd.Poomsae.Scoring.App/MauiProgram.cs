@@ -67,12 +67,12 @@ namespace chd.Poomsae.Scoring.App
                     FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
 #elif IOS
-               events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
-               {
+                events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
+                {
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
                     return false;
-               }));
+                }));
 #endif
             });
             return builder;
@@ -92,13 +92,13 @@ namespace chd.Poomsae.Scoring.App
 
         private static IConfiguration GetLocalSetting()
         {
-            if (Preferences.ContainsKey(SettingConstants.License))
-            {
-                //var pref = Preferences.Default.Get<string>(SettingConstants.LicenseKey, string.Empty);
-                var dict = new Dictionary<string, string>();
-                return new ConfigurationBuilder().AddInMemoryCollection(dict).Build();
-            }
-            return new ConfigurationBuilder().Build();
+            var path = Path.Combine(FileSystem.AppDataDirectory, "chdPoomsaeScoring.db");
+
+            var dict = new Dictionary<string, string>();
+
+            dict.Add($"ConnectionStrings:ScoringContext", $"Data Source={path}");
+
+            return new ConfigurationBuilder().AddInMemoryCollection(dict).Build();
         }
 
     }

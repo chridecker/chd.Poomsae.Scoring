@@ -1,5 +1,6 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,19 +11,32 @@ namespace chd.Poomsae.Scoring.UI.Services
 {
     public class FighterDataService : IFighterDataService
     {
-        private readonly List<FighterDto> _fighterLst;
+        private readonly ScoringContext _scoringContext;
 
-        public List<FighterDto> Fighters => this._fighterLst;
+        public List<FighterDto> Fighters => this._scoringContext.Fighters.ToList();
 
-        public FighterDto CurrentBlue { get;set; }
-        public FighterDto CurrentRed{ get;set; }
+        public FighterDto CurrentBlue { get; set; }
+        public FighterDto CurrentRed { get; set; }
 
-        public FighterDataService()
+        public FighterDataService(ScoringContext scoringContext)
         {
-            this._fighterLst = new List<FighterDto>();
+            this._scoringContext = scoringContext;
         }
 
-        public void AddFighter(FighterDto fighter) => this._fighterLst.Add(fighter);
-        public void RemoveFighter(FighterDto fighter) => this._fighterLst.Remove(fighter);
+        public async Task AddFighter(FighterDto fighter)
+        {
+            await this._scoringContext.Fighters.AddAsync(fighter);
+            await this._scoringContext.SaveChangesAsync();
+        }
+        public async Task RemoveFighter(FighterDto fighter)
+        {
+            this._scoringContext.Fighters.Remove(fighter);
+            await this._scoringContext.SaveChangesAsync();
+        }
+        public async Task UpdateFighter(FighterDto fighter)
+        {
+            this._scoringContext.Fighters.Update(fighter);
+            await this._scoringContext.SaveChangesAsync();
+        }
     }
 }

@@ -10,8 +10,10 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IFighterDataService
     {
         List<FighterDto> Fighters { get; }
-        void AddFighter(FighterDto fighter);
-        void RemoveFighter(FighterDto fighter);
+        Task AddFighter(FighterDto fighter);
+        Task RemoveFighter(FighterDto fighter);
+        Task UpdateFighter(FighterDto fighter);
+
 
         FighterDto CurrentBlue { get; set; }
         FighterDto CurrentRed { get; set; }
