@@ -40,7 +40,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
             WebAuthenticatorResult appleIdSignInToken = null;
             try
             {
-                appleIdSignInToken = await this._appleSignInService.AuthenticateAsync();
+                appleIdSignInToken = await this._appleSignInService.AuthenticateAsync(new AppleSignInAuthenticator.Options()
+                {
+                    IncludeEmailScope = true,
+                    IncludeFullNameScope = true,
+                });
                 await this._modalService.ShowDialog($"{appleIdSignInToken.IdToken}", EDialogButtons.OK);
             }
             catch (Exception ex)
