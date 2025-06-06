@@ -59,6 +59,10 @@
 		<Content Remove="Platforms\Android\google-services.json" />
 	</ItemGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+		<Entitlements>Platforms/iOS/Entitlements.plist</Entitlements>
+	</PropertyGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />

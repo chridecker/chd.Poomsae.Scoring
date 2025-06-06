@@ -34,6 +34,8 @@
 <string>Stsndort wird zu BLE Kommunikation verwendet.</string>
   <key>NSUserAuthenticationUsageDescription</key>
 <string>Wir verwenden deine Apple-ID zur Anmeldung und Validierung deiner Lizenz.</string>
+  <key>NSUserTrackingUsageDescription</key>
+<string>Wir verwenden deine Apple-ID zur Anmeldung und Validierung deiner Lizenz.</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>UIBackgroundModes</key>
