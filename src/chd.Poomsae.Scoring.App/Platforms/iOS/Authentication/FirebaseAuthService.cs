@@ -37,20 +37,12 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
 
         public async Task<FirebaseAuthDto> SignInWithAppleAsync()
         {
-            WebAuthenticatorResult appleIdSignInToken = null;
-            try
+
+            var appleIdSignInToken = await this._appleSignInService.AuthenticateAsync(new AppleSignInAuthenticator.Options()
             {
-                appleIdSignInToken = await this._appleSignInService.AuthenticateAsync(new AppleSignInAuthenticator.Options()
-                {
-                    IncludeEmailScope = true,
-                    IncludeFullNameScope = true,
-                });
-                await this._modalService.ShowDialog($"{appleIdSignInToken.IdToken}", EDialogButtons.OK);
-            }
-            catch (Exception ex)
-            {
-                await this._modalService.ShowDialog(ex.Message, EDialogButtons.OK);
-            }
+                IncludeEmailScope = true,
+                IncludeFullNameScope = true,
+            });
 
             var url = this._optionsMonitor.CurrentValue.AppleApiUrl + this._optionsMonitor.CurrentValue.ApiKey;
 
@@ -61,7 +53,11 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS.Authentication
                 returnIdpCredential = true,
                 returnSecureToken = true
             };
-            return await this.HandleFirbaseCall(url, payload);
+            var user = await this.HandleFirbaseCall(url, payload);
+
+            user.DisplayName = appleIdSignInToken.Properties.TryGetValue("name", out var name) && !string.IsNullOrWhiteSpace(name) ? name : user.DisplayName;
+
+            return user;
         }
 #if DEBUG
         public async Task<string> CurrentUserToken() => Preferences.Get(USER, string.Empty);
