@@ -3,7 +3,7 @@
 <CascadingToolTip>
     <CascadingDropList>
         <CascadingBlazoredModal Position="ModalPosition.Middle" AnimationType="ModalAnimationType.None" Size="ModalSize.Automatic" HideCloseButton="false">
-            <CustomErrorBoundary IsDeveloperMode="true">
+            <CustomErrorBoundary HandleError="this.ShowException" IsDeveloperMode="true">
                 <Router AppAssembly="@typeof(Home).Assembly">
                     <Found Context="routeData">
                         <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
@@ -14,3 +14,12 @@
         </CascadingBlazoredModal>
     </CascadingDropList>
 </CascadingToolTip>
+
+@code {
+    [Inject] IModalService modalService { get; set; }
+
+    private async Task ShowException(Exception ex)
+    {
+        await this.modalService.ShowException(ex, true);
+    }
+}
