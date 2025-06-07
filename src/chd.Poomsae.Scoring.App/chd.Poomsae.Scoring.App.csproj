@@ -42,6 +42,11 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+		<CodesignKey>Apple Development: Created via API (D8AH2Q9U5N)</CodesignKey>
+		<CodesignProvision>VS: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
+	</PropertyGroup>
+
 	<!--<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (D8AH2Q9U5N)</CodesignKey>
 	  <CodesignProvision>VS: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
@@ -65,9 +70,15 @@
 	</ItemGroup>
 
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
+	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-ios'">
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.11" />
-	</ItemGroup>
+	</ItemGroup>-->
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|iPhone'">
+		<MtouchLink>SdkOnly</MtouchLink>
+		<!-- oder: None -->
+	</PropertyGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.14" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.2" />

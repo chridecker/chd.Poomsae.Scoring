@@ -8,6 +8,7 @@ using Microsoft.Maui.LifecycleEvents;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
+using chd.Poomsae.Scoring.Persistence;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
@@ -24,9 +25,6 @@ namespace chd.Poomsae.Scoring.App
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
-
-            SQLitePCL.Batteries_V2.Init();
-
 
             builder
                 .UseMauiApp<App>()
@@ -73,7 +71,7 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
                 events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                 {
-
+                    _ = IPlatformApplication.Current.Services.GetService<ScoringContext>();
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
                     return false;
