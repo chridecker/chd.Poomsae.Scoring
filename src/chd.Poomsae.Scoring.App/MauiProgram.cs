@@ -74,7 +74,7 @@ namespace chd.Poomsae.Scoring.App
                 events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                 {
                     // Workaround für iOS-Linker
-                    _ = typeof(SqliteConnection);
+                    _ = typeof(Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal.SqliteDatabaseCreator);
                     _ = typeof(ScoringContext);
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
