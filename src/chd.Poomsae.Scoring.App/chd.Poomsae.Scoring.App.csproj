@@ -52,6 +52,11 @@
 	  <CodesignProvision>VS: com.companyname.chd.poomsae.scoring.app Development</CodesignProvision>
 	</PropertyGroup>-->
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|iPhone'">
+		<MtouchLink>None</MtouchLink>
+		<!-- Oder testweise 'None' -->
+	</PropertyGroup>
+
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\logo.svg" />
 		<MauiSplashScreen Include="Resources\Splash\logo.svg" BaseSize="168,208" />
