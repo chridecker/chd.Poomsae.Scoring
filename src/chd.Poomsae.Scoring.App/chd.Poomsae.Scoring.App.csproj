@@ -43,11 +43,11 @@
 	</PropertyGroup>
 
 	
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
+	<!--<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
 		<MtouchLink>None</MtouchLink>
 		<RunAOTCompilation>false</RunAOTCompilation>
-		<!-- Oder testweise 'None' -->
-	</PropertyGroup>
+		--><!-- Oder testweise 'None' --><!--
+	</PropertyGroup>-->
 
 	<!--<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
 	  <CodesignKey>Apple Development: Created via API (D8AH2Q9U5N)</CodesignKey>
@@ -89,6 +89,11 @@
 		<PackageReference Include="Plugin.Firebase.Firestore" Version="3.1.3" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <None Remove="Resources\Database\chdPoomsaeScoring.db" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.60" />
@@ -102,6 +107,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\chd.Poomsae.Scoring.Persistence\chd.Poomsae.Scoring.Persistence.csproj" />
 		<ProjectReference Include="..\chd.Poomsae.Scoring.UI\chd.Poomsae.Scoring.UI.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Include="Resources\Database\chdPoomsaeScoring.db" />
 	</ItemGroup>
 
 </Project>

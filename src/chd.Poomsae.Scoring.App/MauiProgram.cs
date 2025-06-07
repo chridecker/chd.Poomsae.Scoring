@@ -77,6 +77,7 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
                 events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                 {
+                    CreateDatabase();
                     // Workaround für iOS-Linker
                     _ = typeof(ScoringContext);
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
@@ -87,6 +88,23 @@ namespace chd.Poomsae.Scoring.App
             });
             return builder;
         }
+
+
+
+        private static void CreateDatabase()
+        {
+            string fileName = "chdPoomsaeScoring.db";
+            string targetPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+
+            if (!File.Exists(targetPath))
+            {
+                using var stream =  FileSystem.OpenAppPackageFileAsync(fileName).Result;
+                using var fileStream = File.Create(targetPath);
+                stream.CopyTo(fileStream);
+            }
+            
+        }
+        
         private static IConfiguration GetAppSettingsConfig()
         {
             var fileName = "appsettings.txt";

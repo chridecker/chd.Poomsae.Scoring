@@ -16,7 +16,7 @@ namespace chd.Poomsae.Scoring.Persistence
 
         public ScoringContext(DbContextOptions<ScoringContext> options) : base(options)
         {
-            Database.EnsureCreated(); 
+            //Database.EnsureCreated(); 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
