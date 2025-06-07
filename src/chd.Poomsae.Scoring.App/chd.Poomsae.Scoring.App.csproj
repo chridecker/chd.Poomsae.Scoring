@@ -10,6 +10,11 @@
 		<EnableDefaultCssItems>false</EnableDefaultCssItems>
 		<Nullable>enable</Nullable>
 
+		<PublishTrimmed>false</PublishTrimmed>
+		<TrimmerDefaultAction>CopyUsed</TrimmerDefaultAction>
+		<TrimMode>link</TrimMode>
+
+
 		<!-- Display name -->
 		<ApplicationTitle>ScoPoom</ApplicationTitle>
 
