@@ -9,12 +9,14 @@ using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using chd.Poomsae.Scoring.Persistence;
+using Microsoft.Data.Sqlite;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Google;
 #elif IOS
+using Microsoft.EntityFrameworkCore.Sqlite;
 #endif
 
 
@@ -71,7 +73,9 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
                 events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>
                 {
-                    _ = IPlatformApplication.Current.Services.GetService<ScoringContext>();
+                    // Workaround für iOS-Linker
+                    _ = typeof(SqliteConnection);
+                    _ = typeof(ScoringContext);
                     var updateSvc = IPlatformApplication.Current.Services.GetRequiredService<IUpdateService>();
                     updateSvc.UpdateAsync(0);
                     return false;
