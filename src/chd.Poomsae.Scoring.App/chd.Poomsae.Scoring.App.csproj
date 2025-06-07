@@ -45,6 +45,7 @@
 	
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-ios'">
 		<MtouchLink>None</MtouchLink>
+		<RunAOTCompilation>false</RunAOTCompilation>
 		<!-- Oder testweise 'None' -->
 	</PropertyGroup>
 
