@@ -35,7 +35,7 @@
 
 	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
 		<PublishAot>False</PublishAot>
-		<RunAOTCompilation>false</RunAOTCompilation>
+		<!--<RunAOTCompilation>false</RunAOTCompilation>-->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-android'">
