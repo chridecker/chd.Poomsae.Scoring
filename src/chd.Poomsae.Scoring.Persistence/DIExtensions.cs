@@ -16,9 +16,11 @@ namespace chd.Poomsae.Scoring.Persistence
         {
             services.AddDbContext<ScoringContext>(options =>
             {
-                options.UseModel(ScoringContextModel.Instance);
+                
                 options.UseSqlite(configuration.GetConnectionString(nameof(ScoringContext)));
             });
+
+options.UseModel(ScoringContextModel.Instance);
             return services;
         }
     }
