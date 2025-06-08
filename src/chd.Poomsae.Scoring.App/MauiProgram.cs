@@ -53,12 +53,12 @@ namespace chd.Poomsae.Scoring.App
             });
 #endif
 
-            var app = builder.Build();
-            using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
-                db.Database.EnsureCreated();
-            }
+            //var app = builder.Build();
+            //using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+            //    db.Database.EnsureCreated();
+            //}
             return app;
         }
         private static void AddServices(this MauiAppBuilder builder)
