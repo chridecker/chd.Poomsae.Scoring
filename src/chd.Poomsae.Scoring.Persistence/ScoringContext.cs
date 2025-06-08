@@ -13,10 +13,13 @@ namespace chd.Poomsae.Scoring.Persistence
         const string DB_FILE = "chdPoomsaeScoring.db";
 
         public DbSet<FighterDto> Fighters { get; set; }
+        public ScoringContext() : base()
+        {
 
+        }
         public ScoringContext(DbContextOptions<ScoringContext> options) : base(options)
         {
-            Database.EnsureCreated(); 
+            Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,13 +28,6 @@ namespace chd.Poomsae.Scoring.Persistence
                 optionsBuilder.UseSqlite($"Filename={DB_FILE}");
             }
             base.OnConfiguring(optionsBuilder);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<FighterDto>().Ignore(i => i.Scores);
-
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

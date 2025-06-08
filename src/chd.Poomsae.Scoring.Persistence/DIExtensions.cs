@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using chd.Poomsae.Scoring.Persistence.CompiledModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -15,6 +16,7 @@ namespace chd.Poomsae.Scoring.Persistence
         {
             services.AddDbContext<ScoringContext>(options =>
             {
+                options.UseModel(ScoringContextModel.Instance);
                 options.UseSqlite(configuration.GetConnectionString(nameof(ScoringContext)));
             });
             return services;

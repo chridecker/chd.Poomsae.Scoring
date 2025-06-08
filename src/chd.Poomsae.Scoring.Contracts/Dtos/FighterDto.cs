@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,8 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
 
         public string DisplayName => $"{(this.Firstname.Length == 0 ? "" : this.Firstname.Substring(0, 1))}. {(this.Lastname ?? "").ToUpper()}";
 
-        public Dictionary<DeviceDto, ScoreDto> Scores { get; set; } = [];
+        [NotMapped]
+        public virtual Dictionary<DeviceDto, ScoreDto> Scores { get; set; } = [];
 
 
         public FighterDto()

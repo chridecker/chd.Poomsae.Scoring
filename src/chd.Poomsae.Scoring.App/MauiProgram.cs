@@ -8,6 +8,8 @@ using Microsoft.Maui.LifecycleEvents;
 using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
+using SQLitePCL;
+
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
@@ -23,6 +25,8 @@ namespace chd.Poomsae.Scoring.App
     {
         public static MauiApp CreateMauiApp()
         {
+            Batteries.Init();
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
