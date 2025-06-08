@@ -53,7 +53,7 @@ namespace chd.Poomsae.Scoring.App
             });
 #endif
 
-            //var app = builder.Build();
+            var app = builder.Build();
             //using (var scope = builder.Services.BuildServiceProvider().CreateScope())
             //{
             //    var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
