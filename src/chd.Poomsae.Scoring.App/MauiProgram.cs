@@ -9,6 +9,8 @@ using chd.Poomsae.Scoring.App.Settings;
 using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using SQLitePCL;
+using chd.Poomsae.Scoring.Persistence;
+
 
 
 #if ANDROID
@@ -51,7 +53,13 @@ namespace chd.Poomsae.Scoring.App
             });
 #endif
 
-            return builder.Build();
+            var app = builder.Build();
+            using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+                db.Database.EnsureCreated();
+            }
+            return app;
         }
         private static void AddServices(this MauiAppBuilder builder)
         {
