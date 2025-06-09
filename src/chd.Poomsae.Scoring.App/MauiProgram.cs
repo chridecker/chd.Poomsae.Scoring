@@ -10,8 +10,7 @@ using System.Reflection;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using SQLitePCL;
 using chd.Poomsae.Scoring.Persistence;
-
-
+using Microsoft.EntityFrameworkCore;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
@@ -54,13 +53,39 @@ namespace chd.Poomsae.Scoring.App
 #endif
 
             var app = builder.Build();
-            //using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-            //{
-            //    var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
-            //    db.Database.EnsureCreated();
-            //}
+            builder.InitDatabase();
             return app;
         }
+
+        private static void InitDatabase(this MauiAppBuilder builder)
+        {
+#if ANDROID
+            using var scope = builder.Services.BuildServiceProvider().CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+            try
+            {
+                db.Database.Migrate();
+            }
+            catch
+            {
+                db.Database.EnsureDeleted();
+                db.Database.Migrate();
+            }
+#elif IOS
+            var targetPath = Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE);
+
+            if (!File.Exists(targetPath) && FileSystem.AppPackageFileExistsAsync(ScoringContext.DB_FILE).Result)
+            {
+                using var sourceStream = FileSystem.OpenAppPackageFileAsync(ScoringContext.DB_FILE).Result;
+                using var destinationStream = File.Create(targetPath);
+                sourceStream.CopyToAsync(destinationStream).Wait(TimeSpan.FromSeconds(5));
+            }
+            using var scope = builder.Services.BuildServiceProvider().CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+            db.Database.Migrate();
+#endif
+        }
+
         private static void AddServices(this MauiAppBuilder builder)
         {
             builder.Services.AddMauiBlazorWebView();

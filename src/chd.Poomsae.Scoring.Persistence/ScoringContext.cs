@@ -10,18 +10,18 @@ namespace chd.Poomsae.Scoring.Persistence
 {
     public class ScoringContext : DbContext
     {
-        const string DB_FILE = "chdPoomsaeScoring.db";
+        public const string DB_FILE = "chdPoomsaeScoring.db";
 
         public DbSet<FighterDto> Fighters { get; set; }
 
-        //public ScoringContext() : base()
-        //{
+        public ScoringContext() : base()
+        {
 
-        //}
+        }
 
         public ScoringContext(DbContextOptions<ScoringContext> options) : base(options)
         {
-            Database.Migrate();
+            //Database.Migrate();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
