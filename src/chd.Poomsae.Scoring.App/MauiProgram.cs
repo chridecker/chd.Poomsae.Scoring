@@ -11,13 +11,14 @@ using chd.UI.Base.Contracts.Interfaces.Update;
 using SQLitePCL;
 using chd.Poomsae.Scoring.Persistence;
 using Microsoft.EntityFrameworkCore;
-using UIKit;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Google;
 #elif IOS
+using UIKit;
+
 #endif
 
 
