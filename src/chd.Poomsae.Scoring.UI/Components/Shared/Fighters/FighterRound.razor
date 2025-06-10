@@ -1,5 +1,6 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="fighter-round" @onclick="this.OpenRound">
+    <div class="fighter-score total">@_totalValue.ToDisplayString("")</div>
     <div class="fighter-score presentation">@_presentationValue.ToDisplayString("")</div>
     <div class="fighter-score accuracy">@_accuracyValue.ToDisplayString("")</div>
 </div>
@@ -24,6 +25,8 @@
             await this.InvokeAsync(this.StateHasChanged);
         }
     }
+
+    private decimal? _totalValue => this._presentationValue.HasValue && this._accuracyValue.HasValue ? this._presentationValue + this._accuracyValue : null;
 
     private decimal? _presentationValue
     {

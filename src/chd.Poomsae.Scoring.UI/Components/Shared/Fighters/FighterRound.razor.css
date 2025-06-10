@@ -1,18 +1,27 @@
-﻿.fighter-round  {
+﻿.fighter-round {
     border: 1px solid;
     border-radius: 0.5rem;
     display: flex;
     gap: 0.5rem;
     padding: 0.2rem;
 }
-.fighter-round .fighter-score {
-  
-}
 
-    .fighter-round .fighter-score.presentation {
-        color: var(--chd-p-presentation);
+    .fighter-round .fighter-score {
     }
 
-    .fighter-round .fighter-score.accuracy {
-        color: var(--chd-p-accuracy);
-    }
+        .fighter-round .fighter-score.total {
+            order: 1;
+            color: var(--chd-p-total);
+        }
+
+        .fighter-round .fighter-score.presentation {
+            order: 3;
+            color: var(--chd-p-presentation);
+            display: none;
+        }
+
+        .fighter-round .fighter-score.accuracy {
+            order: 2;
+            color: var(--chd-p-accuracy);
+            display: none;
+        }
