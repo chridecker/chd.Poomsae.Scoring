@@ -69,9 +69,9 @@ namespace chd.Poomsae.Scoring.App
             try
             {
                 ShowNativeMessageBox("Test", "TEst");
-                using var scope = builder.Services.BuildServiceProvider().CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
-                db.Database.EnsureCreated();
+                //using var scope = builder.Services.BuildServiceProvider().CreateScope();
+                //var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+                //db.Database.EnsureCreated();
             }
             catch (Exception ex)
             {
