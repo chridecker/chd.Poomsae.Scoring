@@ -68,17 +68,37 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
             try
             {
+                ShowNativeMessageBox("Test", "TEst");
                 using var scope = builder.Services.BuildServiceProvider().CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
                 db.Database.EnsureCreated();
             }
             catch (Exception ex)
             {
-                Shell.Current.DisplayAlert("Error", ex.Message, "OK");
-                UIAlertController.Create("Error", ex.Message, UIAlertControllerStyle.Alert);
+                ShowNativeMessageBox("Error", ex.Message);
             }
 #endif
         }
+
+
+        private static void ShowNativeMessageBox(string title, string message)
+        {
+#if IOS
+            var alertController = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
+            alertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
+
+            // Top-most ViewController finden
+            var window = UIApplication.SharedApplication.KeyWindow;
+            var vc = window.RootViewController;
+            while (vc.PresentedViewController != null)
+            {
+                vc = vc.PresentedViewController;
+            }
+
+            vc.PresentViewController(alertController, true, null);
+#endif
+        }
+
 
         private static void AddServices(this MauiAppBuilder builder)
         {
