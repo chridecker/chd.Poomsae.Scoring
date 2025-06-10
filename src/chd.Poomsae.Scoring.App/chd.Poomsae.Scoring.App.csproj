@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>chd.Poomsae.Scoring.App</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -21,6 +21,7 @@
 
 		<PublishAot>False</PublishAot>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
 
 		<TargetAndroidVersion>34</TargetAndroidVersion>
@@ -40,6 +41,10 @@
 
 	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-android'">
 		<AndroidKeyStore>False</AndroidKeyStore>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
+		<UseInterpreter>True</UseInterpreter>
 	</PropertyGroup>
 
 	<ItemGroup>
