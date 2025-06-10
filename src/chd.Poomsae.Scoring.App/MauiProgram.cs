@@ -11,6 +11,7 @@ using chd.UI.Base.Contracts.Interfaces.Update;
 using SQLitePCL;
 using chd.Poomsae.Scoring.Persistence;
 using Microsoft.EntityFrameworkCore;
+using UIKit;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
@@ -62,27 +63,18 @@ namespace chd.Poomsae.Scoring.App
 #if ANDROID
             using var scope = builder.Services.BuildServiceProvider().CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+            db.Database.EnsureCreated();
+#elif IOS
             try
             {
-                db.Database.Migrate();
+                using var scope = builder.Services.BuildServiceProvider().CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+                db.Database.EnsureCreated();
             }
-            catch
+            catch (Exception ex)
             {
-                db.Database.EnsureDeleted();
-                db.Database.Migrate();
+                UIAlertController.Create("Error",ex.Message,UIAlertControllerStyle.Alert);
             }
-#elif IOS
-            var targetPath = Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE);
-
-            if (!File.Exists(targetPath) && FileSystem.AppPackageFileExistsAsync(ScoringContext.DB_FILE).Result)
-            {
-                using var sourceStream = FileSystem.OpenAppPackageFileAsync(ScoringContext.DB_FILE).Result;
-                using var destinationStream = File.Create(targetPath);
-                sourceStream.CopyToAsync(destinationStream).Wait(TimeSpan.FromSeconds(5));
-            }
-            using var scope = builder.Services.BuildServiceProvider().CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
-            db.Database.Migrate();
 #endif
         }
 
