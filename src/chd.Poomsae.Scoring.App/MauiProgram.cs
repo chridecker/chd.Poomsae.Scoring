@@ -68,13 +68,13 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
             try
             {
-                UIAlertController.Create("Test", $"Is DB here {File.Exists(Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE))} ", UIAlertControllerStyle.Alert);
                 using var scope = builder.Services.BuildServiceProvider().CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
                 db.Database.EnsureCreated();
             }
             catch (Exception ex)
             {
+                Shell.Current.DisplayAlert("Error", ex.Message, "OK");
                 UIAlertController.Create("Error", ex.Message, UIAlertControllerStyle.Alert);
             }
 #endif
