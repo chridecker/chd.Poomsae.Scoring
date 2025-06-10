@@ -1,0 +1,32 @@
+﻿.score-container {
+    display: grid;
+    grid-template-columns: repeat(5,auto) max-content;
+    align-items: center;
+    gap: 0.3rem 0.1rem;
+}
+
+    .score-container .judge {
+        font-size: 0.8rem;
+    }
+
+    .score-container .score {
+    }
+
+    .score-container .action {
+    }
+
+        .score-container .action ::deep button.btn {
+            padding: 0.2rem 0.4rem;
+        }
+
+            .score-container .action ::deep button.btn svg {
+                height: 0.8rem;
+            }
+
+    .score-container .score.accuracy {
+        color: var(--chd-p-accuracy);
+    }
+
+    .score-container .score.presentation {
+        color: var(--chd-p-presentation);
+    }

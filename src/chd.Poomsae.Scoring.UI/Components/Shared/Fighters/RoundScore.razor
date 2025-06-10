@@ -1,0 +1,25 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<div class="score-container">
+    <div class="judge">@Score.JudgeName</div>
+    <div class="score accuracy">@Score.Accuracy.ToDisplayString()</div>
+    <div class="score presentation">@Score.SpeedAndPower.ToDisplayString() </div>
+    <div class="score presentation">@Score.RhythmAndTempo.ToDisplayString()</div>
+    <div class="score presentation">@Score.ExpressionAndEnergy.ToDisplayString()</div>
+    <div class="action"><IconButton FAClass="circle-xmark" ButtonStyle="EButtonStyle.Secondary" OnClick="this.Delete" /> </div>
+</div>
+@code {
+    [Inject] IModalService modalService { get; set; }
+    [Inject] IFighterDataService fighterDataService { get; set; }
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+    [Parameter] public SavedScoreDto Score { get; set; }
+    private async Task Delete()
+    {
+        var res = await this.modalService.ShowDialog($"Wertung löschen?", EDialogButtons.YesNo);
+        if (res is EDialogResult.Yes)
+        {
+            await this.fighterDataService.RemoveScore(this.Score);
+            await this.ModalInstance.CloseAsync(ModalResult.Ok());
+        }
+    }
+} 

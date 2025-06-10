@@ -1,0 +1,66 @@
+﻿.round-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+    .round-container .round-header {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .round-container .round-header .actions {
+            display:flex;
+            gap: 0.2rem;
+            justify-content:end;
+        }
+        .round-container .round-header .fighter-name {
+            display: none;
+        }
+
+        .round-container .round-header .round-total-scores {
+            display: flex;
+        }
+
+            .round-container .round-header .round-total-scores .round-total {
+                display: none;
+            }
+
+                .round-container .round-header .round-total-scores .round-total.presentation {
+                    color: var(--chd-p-presentation);
+                }
+
+                .round-container .round-header .round-total-scores .round-total.accuracy {
+                    color: var(--chd-p-accuracy);
+                }
+
+                .round-container .round-header .round-total-scores .round-total.total {
+                    color: var(--chd-p-total);
+                }
+
+        .round-container .round-header .round-column-headers {
+            display: flex;
+            font-size: 0.8rem;
+            gap: 0.2rem;
+            justify-content: space-between;
+            text-align: center;
+            display: none;
+        }
+
+            .round-container .round-header .round-column-headers .column-header {
+                padding: 0.2rem;
+                border: 1px solid;
+                border-radius: 0.5rem;
+            }
+
+                .round-container .round-header .round-column-headers .column-header.empty {
+                    border: none;
+                }
+
+
+
+    .round-container .round-scores {
+        display: flex;
+        flex-direction: column;
+        gap:0.2rem;
+    }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using chd.Poomsae.Scoring.Contracts.Dtos;
@@ -20,7 +21,8 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
                 "chd.Poomsae.Scoring.Contracts.Dtos.SavedScoreDto",
                 typeof(SavedScoreDto),
                 baseEntityType,
-                propertyCount: 9,
+                propertyCount: 8,
+                navigationCount: 1,
                 foreignKeyCount: 1,
                 unnamedIndexCount: 1,
                 keyCount: 1);
@@ -69,11 +71,6 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
                 fieldInfo: typeof(SavedScoreDto).GetField("<RhythmAndTempo>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 nullable: true);
 
-            var roundDtoId = runtimeEntityType.AddProperty(
-                "RoundDtoId",
-                typeof(Guid?),
-                nullable: true);
-
             var roundId = runtimeEntityType.AddProperty(
                 "RoundId",
                 typeof(Guid),
@@ -93,16 +90,25 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
             runtimeEntityType.SetPrimaryKey(key);
 
             var index = runtimeEntityType.AddIndex(
-                new[] { roundDtoId });
+                new[] { roundId });
 
             return runtimeEntityType;
         }
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RoundDtoId") },
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("RoundId") },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
+
+            var round = declaringEntityType.AddNavigation("Round",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(RoundDto),
+                propertyInfo: typeof(SavedScoreDto).GetProperty("Round", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(SavedScoreDto).GetField("<Round>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var scores = principalEntityType.AddNavigation("Scores",
                 runtimeForeignKey,

@@ -1,1 +1,18 @@
-﻿
+﻿.fighter-round  {
+    border: 1px solid;
+    border-radius: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.2rem;
+}
+.fighter-round .fighter-score {
+  
+}
+
+    .fighter-round .fighter-score.presentation {
+        color: var(--chd-p-presentation);
+    }
+
+    .fighter-round .fighter-score.accuracy {
+        color: var(--chd-p-accuracy);
+    }

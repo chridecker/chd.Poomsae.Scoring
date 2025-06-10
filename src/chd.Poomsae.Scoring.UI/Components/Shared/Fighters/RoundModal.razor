@@ -1,0 +1,65 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<div class="round-container">
+    <div class="round-header">
+        <div class="actions">
+            <IconButton FAClass="print" />
+            <IconButton FAClass="trash-xmark" OnClick="this.DeleteRound" />
+        </div>
+        <div class="fighter-name">@this.Round.Fighter.DisplayName</div>
+        <div class="round-total-scores">
+            <div class="round-total presentation">@this._presentationValue.ToDisplayString("")</div>
+            <div class="round-total total">@_totalValue.ToDisplayString("")</div>
+            <div class="round-total accuracy">@this._accuracyValue.ToDisplayString("")</div>
+        </div>
+        <div class="round-column-headers">
+            <div class="column-header empty"></div>
+            <div class="column-header">@TextConstants.Accuracy</div>
+            <div class="column-header">@TextConstants.SpeedAndPower</div>
+            <div class="column-header">@TextConstants.RhythmAndTempo</div>
+            <div class="column-header">@TextConstants.ExpressionAndEnergy</div>
+        </div>
+    </div>
+    <div class="round-scores">
+        @foreach (var score in this.Round.Scores)
+        {
+            <RoundScore Score="@score" />
+        }
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+
+    [Inject] IFighterDataService fighterDataService { get; set; }
+    [Inject] IModalService modalService { get; set; }
+    [Parameter] public RoundDto Round { get; set; }
+
+    private async Task DeleteRound()
+    {
+        var res = await this.modalService.ShowDialog($"Runde löschen?", EDialogButtons.YesNo);
+        if (res is EDialogResult.Yes)
+        {
+            await this.fighterDataService.RemoveRound(this.Round);
+            await this.ModalInstance.CloseAsync(ModalResult.Ok());
+        }
+    }
+
+    private decimal? _totalValue => this._accuracyValue.HasValue && this._presentationValue.HasValue ? this._accuracyValue + this._presentationValue : null;
+
+    private decimal? _presentationValue
+    {
+        get
+        {
+            return this.Round.Scores.Any(a => a.Presentation.HasValue) ? this.Round.Scores.Select(s => s.Presentation ?? 0).Average() : null;
+        }
+    }
+
+    private decimal? _accuracyValue
+    {
+        get
+        {
+            return this.Round.Scores.Any() ? this.Round.Scores.Select(s => s.Accuracy).Average() : null;
+        }
+    }
+}

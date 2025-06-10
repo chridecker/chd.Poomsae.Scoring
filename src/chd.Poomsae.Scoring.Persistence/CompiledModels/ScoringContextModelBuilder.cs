@@ -11,7 +11,7 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
     public partial class ScoringContextModel
     {
         private ScoringContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("92933b5a-0f89-465d-a900-33f4a13bc0df"), entityTypeCount: 3)
+            : base(skipDetectChanges: false, modelId: new Guid("b324f416-3a23-4f4c-be0b-d9ece20f86bf"), entityTypeCount: 3)
         {
         }
 

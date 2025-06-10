@@ -1,13 +1,29 @@
 @using chd.Poomsae.Scoring.UI.Extensions
-<div class="fighter-round">
+<div class="fighter-round" @onclick="this.OpenRound">
     <div class="fighter-score presentation">@_presentationValue.ToDisplayString("")</div>
     <div class="fighter-score accuracy">@_accuracyValue.ToDisplayString("")</div>
 </div>
 
 @code {
+    [Inject] IModalService modalService { get; set; }
+
     [Parameter] public RoundDto Round { get; set; }
 
-
+    private async Task OpenRound()
+    {
+        var res = await this.modalService.Show<RoundModal>(this.Round.Fighter.DisplayName, new ModalParameters()
+        {
+            {nameof(RoundModal.Round),this.Round}
+        }, new ModalOptions()
+        {
+            Position = ModalPosition.TopCenter,
+            Size = ModalSize.ExtraLarge,
+        }).Result;
+        if (res.Confirmed)
+        {
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
 
     private decimal? _presentationValue
     {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using chd.Poomsae.Scoring.Contracts.Dtos;
@@ -21,7 +22,7 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
                 typeof(RoundDto),
                 baseEntityType,
                 propertyCount: 5,
-                navigationCount: 1,
+                navigationCount: 2,
                 foreignKeyCount: 1,
                 unnamedIndexCount: 1,
                 keyCount: 1);
@@ -42,17 +43,19 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
                 fieldInfo: typeof(RoundDto).GetField("<Created>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
-            var fighterDtoId = runtimeEntityType.AddProperty(
-                "FighterDtoId",
-                typeof(Guid?),
-                nullable: true);
-
             var fighterId = runtimeEntityType.AddProperty(
                 "FighterId",
                 typeof(Guid),
                 propertyInfo: typeof(RoundDto).GetProperty("FighterId", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 fieldInfo: typeof(RoundDto).GetField("<FighterId>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
                 sentinel: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            var finished = runtimeEntityType.AddProperty(
+                "Finished",
+                typeof(DateTime?),
+                propertyInfo: typeof(RoundDto).GetProperty("Finished", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(RoundDto).GetField("<Finished>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
 
             var name = runtimeEntityType.AddProperty(
                 "Name",
@@ -66,16 +69,25 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
             runtimeEntityType.SetPrimaryKey(key);
 
             var index = runtimeEntityType.AddIndex(
-                new[] { fighterDtoId });
+                new[] { fighterId });
 
             return runtimeEntityType;
         }
 
         public static RuntimeForeignKey CreateForeignKey1(RuntimeEntityType declaringEntityType, RuntimeEntityType principalEntityType)
         {
-            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("FighterDtoId") },
+            var runtimeForeignKey = declaringEntityType.AddForeignKey(new[] { declaringEntityType.FindProperty("FighterId") },
                 principalEntityType.FindKey(new[] { principalEntityType.FindProperty("Id") }),
-                principalEntityType);
+                principalEntityType,
+                deleteBehavior: DeleteBehavior.Cascade,
+                required: true);
+
+            var fighter = declaringEntityType.AddNavigation("Fighter",
+                runtimeForeignKey,
+                onDependent: true,
+                typeof(FighterDto),
+                propertyInfo: typeof(RoundDto).GetProperty("Fighter", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                fieldInfo: typeof(RoundDto).GetField("<Fighter>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
 
             var rounds = principalEntityType.AddNavigation("Rounds",
                 runtimeForeignKey,

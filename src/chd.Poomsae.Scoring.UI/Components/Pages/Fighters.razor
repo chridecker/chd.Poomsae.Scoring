@@ -61,22 +61,7 @@
 
     protected override async Task OnResultReceived(ScoreReceivedEventArgs e)
     {
-        if (e.Hong is not null && this.fighterDataService.CurrentRed is not null)
-        {
-            // if (this.fighterDataService.CurrentRed.Scores.Keys.Any(a => a.Id == e.Device.Id))
-            // {
-            //     this.fighterDataService.CurrentRed.Scores.Remove(this.fighterDataService.CurrentRed.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
-            // }
-            // this.fighterDataService.CurrentRed.Scores[e.Device] = e.Hong;
-        }
-        if (e.Chong is not null && this.fighterDataService.CurrentBlue is not null)
-        {
-            // if (this.fighterDataService.CurrentBlue.Scores.Keys.Any(a => a.Id == e.Device.Id))
-            // {
-            //     this.fighterDataService.CurrentBlue.Scores.Remove(this.fighterDataService.CurrentBlue.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
-            // }
-            // this.fighterDataService.CurrentBlue.Scores[e.Device] = e.Chong;
-        }
+        await this.fighterDataService.HandleResult(e);
 
         await this.InvokeAsync(this.StateHasChanged);
     }
@@ -95,11 +80,22 @@
 
     private async Task SetBlue(FighterDto fighterDto)
     {
+        if (fighterDto is null && this.fighterDataService.CurrentBlue is not null)
+        {
+            await this.fighterDataService.CloseRound(this.fighterDataService.CurrentBlue);
+        }
+
         if (this.fighterDataService.CurrentRed?.Id == fighterDto?.Id)
         {
             this.fighterDataService.CurrentRed = null;
         }
         this.fighterDataService.CurrentBlue = fighterDto;
+
+        if (fighterDto is not null)
+        {
+            await this.fighterDataService.CreateRound(fighterDto);
+        }
+
         foreach (var dev in this._connectedDevices)
         {
             await this.Send(dev.Value);
@@ -108,11 +104,22 @@
     }
     private async Task SetRed(FighterDto fighterDto)
     {
+        if (fighterDto is null && this.fighterDataService.CurrentRed is not null)
+        {
+            await this.fighterDataService.CloseRound(this.fighterDataService.CurrentRed);
+        }
+
         if (this.fighterDataService.CurrentBlue?.Id == fighterDto?.Id)
         {
             this.fighterDataService.CurrentBlue = null;
         }
         this.fighterDataService.CurrentRed = fighterDto;
+
+        if (fighterDto is not null)
+        {
+            await this.fighterDataService.CreateRound(fighterDto);
+        }
+
         foreach (var dev in this._connectedDevices)
         {
             await this.Send(dev.Value);
