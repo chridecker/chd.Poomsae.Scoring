@@ -1,0 +1,27 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="fighter-round">
+    <div class="fighter-score presentation">@_presentationValue.ToDisplayString("")</div>
+    <div class="fighter-score accuracy">@_accuracyValue.ToDisplayString("")</div>
+</div>
+
+@code {
+    [Parameter] public RoundDto Round { get; set; }
+
+
+
+    private decimal? _presentationValue
+    {
+        get
+        {
+            return this.Round.Scores.Any(a => a.Presentation.HasValue) ? this.Round.Scores.Select(s => s.Presentation ?? 0).Average() : null;
+        }
+    }
+
+    private decimal? _accuracyValue
+    {
+        get
+        {
+            return this.Round.Scores.Any() ? this.Round.Scores.Select(s => s.Accuracy).Average() : null;
+        }
+    }
+}

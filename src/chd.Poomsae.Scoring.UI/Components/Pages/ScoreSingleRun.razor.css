@@ -59,7 +59,7 @@
 
 .single-run-container .scoring-container {
     width: 100vw;
-    height: 80vh;
+    height: 76vh;
     display: grid;
     grid-template-columns: auto 35% auto;
 }

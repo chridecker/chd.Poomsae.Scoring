@@ -1,26 +1,11 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="fighter-results">
-    <div class="fighter-score presentation">@_presentationValue.ToDisplayString("")</div>
-    <div class="fighter-score accuracy">@_accuracyValue.ToDisplayString("")</div>
+    @foreach(var round in this.Fighter.Rounds.OrderBy(o => o.Created))
+    {
+        <FighterRound Round="round" />
+    }
 </div>
 
 @code {
     [Parameter] public FighterDto Fighter { get; set; }
-
-
-    private decimal? _presentationValue
-    {
-        get
-        {
-            return null;
-        }
-    }
-
-    private decimal? _accuracyValue
-    {
-        get
-        {
-            return null;
-        }
-    }
 }
