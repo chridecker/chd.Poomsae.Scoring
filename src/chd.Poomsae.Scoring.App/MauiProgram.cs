@@ -68,13 +68,14 @@ namespace chd.Poomsae.Scoring.App
 #elif IOS
             try
             {
+                UIAlertController.Create("Test", $"Is DB here {File.Exists(Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE))} ", UIAlertControllerStyle.Alert);
                 using var scope = builder.Services.BuildServiceProvider().CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
                 db.Database.EnsureCreated();
             }
             catch (Exception ex)
             {
-                UIAlertController.Create("Error",ex.Message,UIAlertControllerStyle.Alert);
+                UIAlertController.Create("Error", ex.Message, UIAlertControllerStyle.Alert);
             }
 #endif
         }
@@ -122,7 +123,7 @@ namespace chd.Poomsae.Scoring.App
 
         private static IConfiguration GetLocalSetting()
         {
-            var path = Path.Combine(FileSystem.AppDataDirectory, "chdPoomsaeScoring.db");
+            var path = Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE);
 
             var dict = new Dictionary<string, string>();
 
