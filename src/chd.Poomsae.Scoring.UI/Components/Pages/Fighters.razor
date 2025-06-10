@@ -63,19 +63,19 @@
     {
         if (e.Hong is not null && this.fighterDataService.CurrentRed is not null)
         {
-            if (this.fighterDataService.CurrentRed.Scores.Keys.Any(a => a.Id == e.Device.Id))
-            {
-                this.fighterDataService.CurrentRed.Scores.Remove(this.fighterDataService.CurrentRed.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
-            }
-            this.fighterDataService.CurrentRed.Scores[e.Device] = e.Hong;
+            // if (this.fighterDataService.CurrentRed.Scores.Keys.Any(a => a.Id == e.Device.Id))
+            // {
+            //     this.fighterDataService.CurrentRed.Scores.Remove(this.fighterDataService.CurrentRed.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
+            // }
+            // this.fighterDataService.CurrentRed.Scores[e.Device] = e.Hong;
         }
         if (e.Chong is not null && this.fighterDataService.CurrentBlue is not null)
         {
-            if (this.fighterDataService.CurrentBlue.Scores.Keys.Any(a => a.Id == e.Device.Id))
-            {
-                this.fighterDataService.CurrentBlue.Scores.Remove(this.fighterDataService.CurrentBlue.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
-            }
-            this.fighterDataService.CurrentBlue.Scores[e.Device] = e.Chong;
+            // if (this.fighterDataService.CurrentBlue.Scores.Keys.Any(a => a.Id == e.Device.Id))
+            // {
+            //     this.fighterDataService.CurrentBlue.Scores.Remove(this.fighterDataService.CurrentBlue.Scores.Keys.FirstOrDefault(a => a.Id == e.Device.Id));
+            // }
+            // this.fighterDataService.CurrentBlue.Scores[e.Device] = e.Chong;
         }
 
         await this.InvokeAsync(this.StateHasChanged);

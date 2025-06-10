@@ -12,8 +12,7 @@
     {
         get
         {
-            if (!this.Fighter.Scores.Any()) { return null; }
-            return this.Fighter.Scores.Values.Select(s => s.Presentation).Average();
+            return null;
         }
     }
 
@@ -21,8 +20,7 @@
     {
         get
         {
-            if (!this.Fighter.Scores.Any()) { return null; }
-            return this.Fighter.Scores.Values.Select(s => s.Accuracy).Average();
+            return null;
         }
     }
 }

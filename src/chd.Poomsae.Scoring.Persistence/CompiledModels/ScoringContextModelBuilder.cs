@@ -11,15 +11,22 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
     public partial class ScoringContextModel
     {
         private ScoringContextModel()
-            : base(skipDetectChanges: false, modelId: new Guid("f539e278-c183-45a0-be52-f99c431355f4"), entityTypeCount: 1)
+            : base(skipDetectChanges: false, modelId: new Guid("92933b5a-0f89-465d-a900-33f4a13bc0df"), entityTypeCount: 3)
         {
         }
 
         partial void Initialize()
         {
             var fighterDto = FighterDtoEntityType.Create(this);
+            var roundDto = RoundDtoEntityType.Create(this);
+            var savedScoreDto = SavedScoreDtoEntityType.Create(this);
+
+            RoundDtoEntityType.CreateForeignKey1(roundDto, fighterDto);
+            SavedScoreDtoEntityType.CreateForeignKey1(savedScoreDto, roundDto);
 
             FighterDtoEntityType.CreateAnnotations(fighterDto);
+            RoundDtoEntityType.CreateAnnotations(roundDto);
+            SavedScoreDtoEntityType.CreateAnnotations(savedScoreDto);
 
             AddAnnotation("ProductVersion", "9.0.5");
         }

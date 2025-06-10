@@ -15,6 +15,9 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         Task UpdateFighter(FighterDto fighter);
 
 
+
+
+
         FighterDto CurrentBlue { get; set; }
         FighterDto CurrentRed { get; set; }
     }

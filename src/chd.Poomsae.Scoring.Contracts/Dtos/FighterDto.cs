@@ -15,8 +15,7 @@ namespace chd.Poomsae.Scoring.Contracts.Dtos
 
         public string DisplayName => $"{(this.Firstname.Length == 0 ? "" : this.Firstname.Substring(0, 1))}. {(this.Lastname ?? "").ToUpper()}";
 
-        [NotMapped]
-        public virtual Dictionary<DeviceDto, ScoreDto> Scores { get; set; } = [];
+        public virtual ICollection<RoundDto> Rounds{ get; set; } = [];
 
 
         public FighterDto()

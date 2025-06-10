@@ -45,6 +45,10 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+
+            this.blueName = this.broadCastService.BlueName;
+            this.redName = this.broadCastService.RedName;
+
             this.broadCastService.BlueNameReceived += this.BroadCastService_BlueNameReceived;
             this.broadCastService.RedNameReceived += this.BroadCastService_RedNameReceived;
 
