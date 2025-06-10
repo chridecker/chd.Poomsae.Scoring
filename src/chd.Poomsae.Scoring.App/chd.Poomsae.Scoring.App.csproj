@@ -42,8 +42,8 @@
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
-		<UseInterpreter>true</UseInterpreter>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+		<MtouchInterpreter>-all</MtouchInterpreter>
 	</PropertyGroup>
 
 	<ItemGroup>
