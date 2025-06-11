@@ -6,8 +6,10 @@ using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.UI.Components.Shared;
 using chd.Poomsae.Scoring.UI.Components.Shared.Result;
 using chd.Poomsae.Scoring.UI.Extensions;
+using chd.UI.Base.Client.Implementations.Services;
 using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Enum;
+using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using System;
@@ -24,7 +26,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
 
         [Inject] protected IBroadcastClient broadcastClient { get; set; }
-        [Inject] protected IModalService modalService { get; set; }
+        [Inject] protected IModalHandler modalService { get; set; }
         [Inject] protected IDeviceHandler _deviceHandler { get; set; }
         [Inject] NavigationManager _navigationManager { get; set; }
         private IDisposable _registerLocationChangeHandler;

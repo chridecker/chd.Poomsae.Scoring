@@ -1,25 +1,26 @@
-﻿using chd.Poomsae.Scoring.Contracts.Dtos;
+﻿using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.Contracts.Constants;
+using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Dtos.Base;
+using chd.Poomsae.Scoring.Contracts.Enums;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
+using chd.Poomsae.Scoring.UI.Components.Layout;
+using chd.Poomsae.Scoring.UI.Components.Shared;
+using chd.Poomsae.Scoring.UI.Extensions;
+using chd.UI.Base.Client.Implementations.Services;
+using chd.UI.Base.Components.Base;
+using chd.UI.Base.Components.Extensions;
+using chd.UI.Base.Contracts.Enum;
+using chd.UI.Base.Contracts.Interfaces.Authentication;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
-using Blazored.Modal.Services;
-using chd.Poomsae.Scoring.Contracts.Enums;
-using chd.UI.Base.Components.Extensions;
-using chd.UI.Base.Contracts.Enum;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
-using chd.Poomsae.Scoring.Contracts.Constants;
-using chd.UI.Base.Contracts.Interfaces.Authentication;
-using chd.UI.Base.Components.Base;
-using chd.Poomsae.Scoring.UI.Components.Layout;
-using chd.Poomsae.Scoring.UI.Components.Shared;
-using chd.Poomsae.Scoring.UI.Extensions;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
@@ -30,7 +31,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         [Inject] private NavigationManager _navigationManager { get; set; }
         [Inject] protected IStartRunService _runService { get; set; }
-        [Inject] protected IModalService _modal { get; set; }
+        [Inject] protected IModalHandler _modal { get; set; }
         [Inject] IBroadCastService broadCastService { get; set; }
         [Inject] protected IDeviceHandler _deviceHandler { get; set; }
 

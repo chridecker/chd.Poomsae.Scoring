@@ -97,7 +97,7 @@ namespace chd.Poomsae.Scoring.App
                 else
                 {
 
-                    this._appInfoService.BackButtonPressed?.Invoke(this, EventArgs.Empty);
+                    this._appInfoService.BackButtonPressed?.Invoke(this, false);
                 }
             }
         }

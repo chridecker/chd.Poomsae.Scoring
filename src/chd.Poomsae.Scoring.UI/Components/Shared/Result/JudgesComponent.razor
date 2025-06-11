@@ -14,7 +14,7 @@
 @code {
     [Inject] IResultService resultService { get; set; }
     [Inject] IBroadcastClient broadcastClient { get; set; }
-    [Inject] IModalService modalService { get; set; }
+    [Inject] IModalHandler modalService { get; set; }
 
     [Parameter] public EScoringButtonColor Color { get; set; }
     [Parameter] public IEnumerable<DeviceDto> Devices { get; set; } = [];

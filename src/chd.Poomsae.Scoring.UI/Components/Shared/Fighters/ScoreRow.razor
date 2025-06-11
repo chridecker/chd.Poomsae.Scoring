@@ -9,7 +9,7 @@
     <div class="action"><IconButton FAClass="trash" ButtonStyle="EButtonStyle.Secondary" OnClick="this.Delete" /></div>
 </div>
 @code {
-    [Inject] IModalService modalService { get; set; }
+    [Inject] IModalHandler modalService { get; set; }
     [Inject] IFighterDataService fighterDataService { get; set; }
 
     [Parameter] public SavedScoreDto Score { get; set; }

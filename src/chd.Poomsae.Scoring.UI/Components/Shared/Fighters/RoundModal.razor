@@ -39,7 +39,7 @@
     [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
 
     [Inject] IFighterDataService fighterDataService { get; set; }
-    [Inject] IModalService modalService { get; set; }
+    [Inject] IModalHandler modalService { get; set; }
     [Parameter] public RoundDto Round { get; set; }
 
     private string _roundName;

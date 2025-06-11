@@ -11,7 +11,7 @@
 @code {
     [Inject] private ISettingManager settingManager { get; set; }
     [Inject] private IBroadCastService broadCastService { get; set; }
-    [Inject] private IModalService modalService { get; set; }
+    [Inject] private IModalHandler modalService { get; set; }
 
     private string _deviceName = string.Empty;
 

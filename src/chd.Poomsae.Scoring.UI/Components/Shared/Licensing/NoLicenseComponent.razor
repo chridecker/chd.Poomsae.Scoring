@@ -19,7 +19,7 @@
 
 @code {
     [Inject] private ILicenseTokenProfileService _licenseTokenProfileService { get; set; }
-    [Inject] private IModalService _modalService { get; set; }
+    [Inject] private IModalHandler _modalService { get; set; }
     [Inject] private NavigationManager _navigationManager { get; set; }
 
     PSUserDto userDto = null;

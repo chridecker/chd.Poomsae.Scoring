@@ -6,7 +6,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25130.114" />
+		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25162.116" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.9.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.9.0" />
 	</ItemGroup>

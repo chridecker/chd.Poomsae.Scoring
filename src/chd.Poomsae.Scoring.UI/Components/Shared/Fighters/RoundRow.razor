@@ -21,7 +21,7 @@
 
 @code {
     [Inject] IFighterDataService fighterDataService { get; set; }
-    [Inject] IModalService modalService { get; set; }
+    [Inject] IModalHandler modalService { get; set; }
 
     [Parameter] public RoundDto Round { get; set; }
     [Parameter] public EventCallback Reload { get; set; }
