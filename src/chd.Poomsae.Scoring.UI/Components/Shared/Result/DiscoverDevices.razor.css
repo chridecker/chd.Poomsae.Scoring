@@ -1,10 +1,23 @@
 ﻿.discover-modal-container {
-    display:grid;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
     .discover-modal-container .devices-container {
-        display: grid;
-        grid-template-columns: repeat(3,1fr);
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.2rem;
+        background: var(--chd-bg-lighter);
+        border-radius: 0.8rem;
     }
 
-.discover-modal-container .buttons{}
+       
+
+    .discover-modal-container .buttons {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: auto;
+    }

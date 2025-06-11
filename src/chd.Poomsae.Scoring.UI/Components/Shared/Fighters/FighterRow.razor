@@ -25,6 +25,7 @@
         var modal = await this.modalService.Show<FighterModal>("Teilnehmer", new ModalParameters()
         {
             {nameof(FighterModal.Fighter),fighter},
+            {nameof(FighterModal.Rounds),this.Fighter.Rounds},
             {nameof(FighterModal.IsNew),false}
         }, new ModalOptions
         {
@@ -32,7 +33,7 @@
         }).Result;
         if (modal.Confirmed
             && modal.Data is not null
-            && modal.Data is FighterModalResultDto dto)
+            && modal.Data is ModalResultDto<FighterDto> dto)
         {
             if (dto.Action is EDataAction.Delete)
             {
@@ -41,8 +42,8 @@
             }
             else if (dto.Action is EDataAction.Update)
             {
-                this.Fighter.Firstname = dto.Fighter.Firstname;
-                this.Fighter.Lastname = dto.Fighter.Lastname;
+                this.Fighter.Firstname = dto.Data.Firstname;
+                this.Fighter.Lastname = dto.Data.Lastname;
                 await this.fighterDataService.UpdateFighter(this.Fighter);
             }
             await this.InvokeAsync(this.StateHasChanged);

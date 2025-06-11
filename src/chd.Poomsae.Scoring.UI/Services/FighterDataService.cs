@@ -41,6 +41,11 @@ namespace chd.Poomsae.Scoring.UI.Services
             this._scoringContext.Fighters.Update(fighter);
             await this._scoringContext.SaveChangesAsync();
         }
+        public async Task UpdateRound(RoundDto round)
+        {
+            this._scoringContext.Rounds.Update(round);
+            await this._scoringContext.SaveChangesAsync();
+        }
 
         public async Task CreateRound(FighterDto fighter)
         {

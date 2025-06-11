@@ -15,6 +15,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         Task RemoveRound(RoundDto round);
         Task RemoveScore(SavedScoreDto score);
         Task UpdateFighter(FighterDto fighter);
+        Task UpdateRound(RoundDto round);
         Task HandleResult(ScoreReceivedEventArgs e);
         Task CreateRound(FighterDto fighter);
         Task CloseRound(FighterDto fighter);

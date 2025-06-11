@@ -43,7 +43,6 @@
     protected override async Task OnResultReceived(ScoreReceivedEventArgs e)
     {
         await this.fighterDataService.HandleResult(e);
-
         await this.InvokeAsync(this.StateHasChanged);
     }
 
@@ -67,14 +66,12 @@
         {nameof(FighterModal.IsNew),true}
     }, new ModalOptions()
     {
-        HideHeader = true,
         Size = ModalSize.ExtraLarge,
-        Position = ModalPosition.TopCenter,
     }).Result;
-        if (res.Confirmed && res.Data is FighterModalResultDto dto
+        if (res.Confirmed && res.Data is ModalResultDto<FighterDto> dto
         && dto.Action is EDataAction.Add)
         {
-            await this.fighterDataService.AddFighter(dto.Fighter);
+            await this.fighterDataService.AddFighter(dto.Data);
             await this.InvokeAsync(this.StateHasChanged);
         }
     }

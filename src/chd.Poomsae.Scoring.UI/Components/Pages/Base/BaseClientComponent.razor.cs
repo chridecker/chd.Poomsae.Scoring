@@ -57,7 +57,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task Discover()
         {
-            var result = await this.modalService.Show<DiscoverDevices>(new ModalOptions()
+            var result = await this.modalService.Show<DiscoverDevices>("Geräte Suchen", new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
@@ -72,7 +72,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task RemoveDevices()
         {
-            var result = await this.modalService.Show<SelectConnectedDevices>(new ModalOptions()
+            var result = await this.modalService.Show<SelectConnectedDevices>("Geräte Entfernen", new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;

@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.Contracts.Dtos
 {
-    public class FighterModalResultDto
+    public class ModalResultDto<TDataType>
+        where TDataType : class
     {
-        public FighterDto Fighter { get; set; }
+        public TDataType Entity { get; set; }
+        public TDataType Data { get; }
         public EDataAction Action { get; set; }
-        public FighterModalResultDto(FighterDto fighter, EDataAction action)
+        public ModalResultDto(TDataType data, EDataAction action)
         {
-            this.Fighter = fighter;
+            this.Data = data;
             this.Action = action;
         }
     }

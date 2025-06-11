@@ -6,16 +6,20 @@
         <div class="label"></div>
         <input type="text" @bind-value="this.Fighter.Lastname" placeholder="Nachname" />
     </div>
-    @if (this.Fighter.Rounds.Any())
+    @if (this.Rounds.Any(a => a.Scores.Any()))
     {
         <div class="fighter-section rounds">
+            @foreach (var round in this.Rounds.OrderBy(o => o.Created))
+            {
+                <RoundRow Reload="async()=>await this.InvokeAsync(this.StateHasChanged)" Round="@round" />
+            }
         </div>
     }
     <div class="fighter-section buttons">
         @if (this.IsNew)
         {
             <button class="btn btn-secondary" @onclick="this.Cancel">Abbrechen</button>
-            <button class="btn btn-primary" @onclick="async () => await this.ModalInstance.CloseAsync(ModalResult.Ok(new FighterModalResultDto(this.Fighter, EDataAction.Add)))">Speichern</button>
+            <button class="btn btn-primary" @onclick="async () => await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Add)))">Speichern</button>
         }
         else
         {
@@ -33,6 +37,7 @@
     [Inject] IModalService modalService { get; set; }
 
     [Parameter] public FighterDto Fighter { get; set; }
+    [Parameter] public ICollection<RoundDto> Rounds { get; set; } = [];
     [Parameter] public bool IsNew { get; set; }
 
     private async Task Cancel()
@@ -50,12 +55,12 @@
         var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveFighterQuestion);
         if (res is chd.UI.Base.Contracts.Enum.EDialogResult.Yes)
         {
-            await this.ModalInstance.CloseAsync(ModalResult.Ok(new FighterModalResultDto(this.Fighter, EDataAction.Delete)));
+            await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Delete)));
         }
     }
     private async Task SaveFighter()
     {
-        await this.ModalInstance.CloseAsync(ModalResult.Ok(new FighterModalResultDto(this.Fighter, EDataAction.Update)));
+        await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Update)));
     }
 
 }
