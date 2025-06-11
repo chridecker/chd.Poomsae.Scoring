@@ -4,6 +4,7 @@
 @using Blazored.Toast.Configuration
 @using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Shared
+@using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Client.Implementations.Services
 @using chd.UI.Base.Contracts.Enum
 @inject IScrollInfoService scrollInfoService
@@ -56,7 +57,7 @@
         if (user is PSUserDto dto)
         {
 #if DEBUG
-            await this.modalService.ShowDialog($"user:{dto.Email}", EDialogButtons.OK);
+            await this.modalService.ShowSmallDialog($"user:{dto.Email}", EDialogButtons.OK);
 #endif
         }
     }

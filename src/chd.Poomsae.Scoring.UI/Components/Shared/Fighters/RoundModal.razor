@@ -37,7 +37,7 @@
 
     private async Task DeleteRound()
     {
-        var res = await this.modalService.ShowDialog($"Runde löschen?", EDialogButtons.YesNo);
+        var res = await this.modalService.ShowYesNoDialog($"Runde löschen");
         if (res is EDialogResult.Yes)
         {
             await this.fighterDataService.RemoveRound(this.Round);

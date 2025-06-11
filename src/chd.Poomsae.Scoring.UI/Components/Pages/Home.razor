@@ -38,10 +38,12 @@
 
     [Inject] NavigationManager _navigationManager { get; set; }
     [Inject] IModalService _modalService { get; set; }
+    [Inject] IDeviceHandler _deviceHandler { get; set; }
     [CascadingParameter] CascadingBackButton _backButton { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        this._deviceHandler.ResetOrientation();
         await this._backButton.SetBackButton(false);
 
         await base.OnInitializedAsync();

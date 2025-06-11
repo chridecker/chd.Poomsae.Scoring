@@ -1,0 +1,68 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<div class="fighter-row @_colorCss" @onclick="this.OpenFighter">
+    <div class="fighter-name">@Fighter.FulName</div>
+    <FighterButtons Fighter="@Fighter" SetBlue="SetBlue" SetRed="SetRed" />
+</div>
+@code {
+    [Inject] IFighterDataService fighterDataService { get; set; }
+    [Inject] IModalService modalService { get; set; }
+
+    [Parameter] public FighterDto Fighter { get; set; }
+    [Parameter] public EventCallback Reload { get; set; }
+    [Parameter] public Func<FighterDto, Task> SetBlue { get; set; }
+    [Parameter] public Func<FighterDto, Task> SetRed { get; set; }
+
+    private async Task OpenFighter()
+    {
+        var fighter = new FighterDto
+        {
+            Id = this.Fighter.Id,
+            Firstname = this.Fighter.Firstname,
+            Lastname = this.Fighter.Lastname
+        };
+
+        var modal = await this.modalService.Show<FighterModal>("Teilnehmer", new ModalParameters()
+        {
+            {nameof(FighterModal.Fighter),fighter},
+            {nameof(FighterModal.IsNew),false}
+        }, new ModalOptions
+        {
+            Size = ModalSize.ExtraLarge
+        }).Result;
+        if (modal.Confirmed
+            && modal.Data is not null
+            && modal.Data is FighterModalResultDto dto)
+        {
+            if (dto.Action is EDataAction.Delete)
+            {
+                await this.fighterDataService.RemoveFighter(this.Fighter);
+                await this.InvokeAsync(this.StateHasChanged);
+            }
+            else if (dto.Action is EDataAction.Update)
+            {
+                this.Fighter.Firstname = dto.Fighter.Firstname;
+                this.Fighter.Lastname = dto.Fighter.Lastname;
+                await this.fighterDataService.UpdateFighter(this.Fighter);
+            }
+            await this.InvokeAsync(this.StateHasChanged);
+            await this.Reload.InvokeAsync();
+        }
+    }
+
+    private string _colorCss
+    {
+        get
+        {
+            if (this.fighterDataService.CurrentBlue?.Id == this.Fighter.Id)
+            {
+                return "blue";
+            }
+            else if (this.fighterDataService.CurrentRed?.Id == this.Fighter.Id)
+            {
+                return "red";
+            }
+            return string.Empty;
+        }
+    }
+}

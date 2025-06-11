@@ -1,12 +1,61 @@
+@using chd.Poomsae.Scoring.UI.Extensions
 <div class="fighter-modal-container">
-    <div class="label">Vorname</div><input type="text" @bind-value="this.Fighter.Firstname" />
-    <div class="label">Nachname</div><input type="text" @bind-value="this.Fighter.Lastname" />
-    <button class="btn btn-primary" @onclick="async () => await this.ModalInstance.CloseAsync(ModalResult.Ok(this.Fighter))">&Uuml;bernehmen</button>
+    <div class="fighter-section data">
+        <div class="label"><CustomIcon FAClass="user" Style="chd.UI.Base.Contracts.Enum.EIconStyle.Regular" /></div>
+        <input type="text" @bind-value="this.Fighter.Firstname" placeholder="Vorname" />
+        <div class="label"></div>
+        <input type="text" @bind-value="this.Fighter.Lastname" placeholder="Nachname" />
+    </div>
+    @if (this.Fighter.Rounds.Any())
+    {
+        <div class="fighter-section rounds">
+        </div>
+    }
+    <div class="fighter-section buttons">
+        @if (this.IsNew)
+        {
+            <button class="btn btn-secondary" @onclick="this.Cancel">Abbrechen</button>
+            <button class="btn btn-primary" @onclick="async () => await this.ModalInstance.CloseAsync(ModalResult.Ok(new FighterModalResultDto(this.Fighter, EDataAction.Add)))">Speichern</button>
+        }
+        else
+        {
+            <IconButton FAClass="floppy-disk" OnClick="this.SaveFighter" />
+            <IconButton FAClass="print" OnClick="this.Print" />
+            <IconButton FAClass="trash" OnClick="this.RemoveFighter" />
+            <IconButton FAClass="arrow-turn-left" OnClick="this.Cancel" />
+        }
+    </div>
 </div>
 
 @code {
     [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
 
+    [Inject] IModalService modalService { get; set; }
+
     [Parameter] public FighterDto Fighter { get; set; }
+    [Parameter] public bool IsNew { get; set; }
+
+    private async Task Cancel()
+    {
+        await this.ModalInstance.CancelAsync();
+    }
+
+    private async Task Print()
+    {
+        await this.modalService.ShowDialog("Noch nicht umgesetzt", chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
+    }
+
+    private async Task RemoveFighter()
+    {
+        var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveFighterQuestion);
+        if (res is chd.UI.Base.Contracts.Enum.EDialogResult.Yes)
+        {
+            await this.ModalInstance.CloseAsync(ModalResult.Ok(new FighterModalResultDto(this.Fighter, EDataAction.Delete)));
+        }
+    }
+    private async Task SaveFighter()
+    {
+        await this.ModalInstance.CloseAsync(ModalResult.Ok(new FighterModalResultDto(this.Fighter, EDataAction.Update)));
+    }
 
 }

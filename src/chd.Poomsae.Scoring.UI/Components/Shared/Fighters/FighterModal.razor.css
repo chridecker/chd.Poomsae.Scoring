@@ -1,9 +1,61 @@
 ﻿.fighter-modal-container {
-    display: grid;
-    grid-template-columns: repeat(2,auto);
+    display: flex;
+    flex-direction: column;
     gap: 0.2rem;
+    height: 100%;
 }
 
-    .fighter-modal-container button {
-        grid-column: 2;
+    .fighter-modal-container .fighter-section {
+        padding: 0.2rem;
+        background: var(--chd-bg-lighter);
+        border-radius: 0.8rem;
     }
+
+        .fighter-modal-container .fighter-section.data {
+            display: grid;
+            grid-template-columns: max-content auto;
+            gap: 0.2rem 0.2rem;
+        }
+
+            .fighter-modal-container .fighter-section.data .label {
+                padding: 0.2rem 0.2rem;
+            }
+
+                .fighter-modal-container .fighter-section.data .label ::deep svg {
+                    height: 1rem;
+                }
+
+            .fighter-modal-container .fighter-section.data input[type=text] {
+                border: none;
+                background: none;
+                width: 100%;
+                color: var(--chd-font-color);
+                border-bottom: 1px solid var(--chd-grey);
+            }
+
+            .fighter-modal-container .fighter-section.data input[type=text]:last-child {
+                border-bottom:none;
+            }
+
+                .fighter-modal-container .fighter-section.data input[type=text]:focus, .fighter-modal-container .fighter-section.data input[type=text]:active {
+                    outline: none;
+                }
+
+        .fighter-modal-container .fighter-section.rounds {
+        }
+
+        .fighter-modal-container .fighter-section.buttons {
+            background: var(--chd-bg);
+            border-radius: 0;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: auto;
+        }
+
+            .fighter-modal-container .fighter-section.buttons ::deep button.icon-button {
+                background: none;
+            }
+
+                .fighter-modal-container .fighter-section.buttons ::deep button.icon-button svg {
+                }

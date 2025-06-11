@@ -19,6 +19,7 @@ using chd.UI.Base.Contracts.Interfaces.Authentication;
 using chd.UI.Base.Components.Base;
 using chd.Poomsae.Scoring.UI.Components.Layout;
 using chd.Poomsae.Scoring.UI.Components.Shared;
+using chd.Poomsae.Scoring.UI.Extensions;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
@@ -43,8 +44,11 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected override async Task OnInitializedAsync()
         {
+            this._deviceHandler.RequestLandscape();
+
             await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+
 
             this.blueName = this.broadCastService.BlueName;
             this.redName = this.broadCastService.RedName;
@@ -120,7 +124,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
         private async Task ResetResults()
         {
-            var res = await this._modal.ShowDialog(TextConstants.ResetScoreQuestion, EDialogButtons.YesNo);
+            var res = await this._modal.ShowYesNoDialog(TextConstants.ResetScoreQuestion);
             if (res is EDialogResult.Yes)
             {
                 this.broadCastService.ResetScore();
@@ -131,7 +135,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         private async Task SendResults()
         {
             this.broadCastService.BroadcastResult(this.runDto);
-            _ = await this._modal.ShowDialog(TextConstants.ScoresSend, EDialogButtons.OK);
+            _ = await this._modal.ShowSmallDialog(TextConstants.ScoresSend, EDialogButtons.OK);
         }
         private void CalculateAccuracyScore(ScoreDto dto, decimal value)
         {
@@ -154,7 +158,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             if (this.runDto.State is ERunState.Started)
             {
-                var res = await this._modal.ShowDialog(TextConstants.LeaveSiteQuestion, EDialogButtons.YesNo);
+                var res = await this._modal.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
                 if (res != EDialogResult.Yes)
                 {
                     context.PreventNavigation();

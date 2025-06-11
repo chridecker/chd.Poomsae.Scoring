@@ -36,6 +36,10 @@ namespace chd.Poomsae.Scoring.App.Services
 
         public void CloseApp() => Application.Current.Quit();
 
+
+        public abstract void RequestLandscape();
+        public abstract void ResetOrientation();
+
         protected abstract string _nativeUID { get; }
         protected abstract int _nativePlatformVersion { get; }
 

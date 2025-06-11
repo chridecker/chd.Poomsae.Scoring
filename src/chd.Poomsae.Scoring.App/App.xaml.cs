@@ -8,7 +8,6 @@ namespace chd.Poomsae.Scoring.App
         public App(IAppInfoService appInfoService)
         {
             InitializeComponent();
-            //MainPage = new MainPage();
             this._appInfoService = appInfoService;
         }
 

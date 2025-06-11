@@ -15,7 +15,7 @@
     [Parameter] public SavedScoreDto Score { get; set; }
     private async Task Delete()
     {
-        var res = await this.modalService.ShowDialog($"Wertung löschen?", EDialogButtons.YesNo);
+        var res = await this.modalService.ShowYesNoDialog($"Wertung löschen?");
         if (res is EDialogResult.Yes)
         {
             await this.fighterDataService.RemoveScore(this.Score);

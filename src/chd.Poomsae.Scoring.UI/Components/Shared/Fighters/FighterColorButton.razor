@@ -1,0 +1,26 @@
+<div class="fighter-control-button @_cssColor  @_cssActive">
+    @if(_isCurrent)
+    {
+    <IconButton FAClass="xmark" OnClick="async () => await this.SetFighter(this.Color, null)" />
+    }
+    else
+    {
+    <IconButton FAClass="paper-plane-top" OnClick="async () => await this.SetFighter(this.Color, this.Fighter)" />
+    }
+</div>
+
+@code {
+    [Inject] IFighterDataService fighterDataService { get; set; }
+
+    [Parameter] public FighterDto Fighter { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
+    [Parameter] public Func<EScoringButtonColor, FighterDto, Task> SetFighter { get; set; }
+
+
+
+
+    private bool _isCurrent => this.Color is EScoringButtonColor.Red ? this.fighterDataService.CurrentRed?.Id == this.Fighter?.Id : this.fighterDataService.CurrentBlue?.Id == this.Fighter?.Id;
+
+    private string _cssColor => this.Color is EScoringButtonColor.Red ? "red" : this.Color is EScoringButtonColor.Blue ? "blue" : "";
+    private string _cssActive => _isCurrent ? " active " : "";
+}
