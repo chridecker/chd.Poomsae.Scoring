@@ -29,10 +29,10 @@ namespace chd.Poomsae.Scoring.App.Extensions
         {
 #if ANDROID
             services.AddAndroidServices();
-            services.AddUi<GoogleSignInManager, MauiUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
+            services.AddUi<GoogleSignInManager, MauiUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient, PrintService>(configuration);
 #elif IOS
             services.AddiOS();
-            services.AddUi<AppleSignInManager, InAppUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient>(configuration);
+            services.AddUi<AppleSignInManager, InAppUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient,PrintService>(configuration);
 #endif
 
             services.AddSingleton<IDeviceInfo>(_ => DeviceInfo.Current);

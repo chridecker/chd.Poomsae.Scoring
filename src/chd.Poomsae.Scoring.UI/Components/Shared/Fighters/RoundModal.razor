@@ -5,7 +5,7 @@
     <div class="round-header">
         <div class="round-header-data fighter-name">
             <CustomIcon FAClass="user" Style="EIconStyle.Regular" />
-            @this.Round.Fighter.FulName
+            @this.Round.Fighter.FullName
         </div>
         <div class="round-header-data round-name">
             <CustomIcon FAClass="input-text" Style="EIconStyle.Regular" />
@@ -39,6 +39,7 @@
 @code {
     [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
 
+    [Inject] IPrintService printService { get; set; }
     [Inject] IFighterDataService fighterDataService { get; set; }
     [Inject] IModalHandler modalService { get; set; }
     [Parameter] public RoundDto Round { get; set; }
@@ -57,16 +58,7 @@
     }
     private async Task Print()
     {
-        await this.modalService.Show<FighterRoundPrint>(new ModalParameters
-        {
-            {nameof(FighterRoundPrint.Round),this.Round}
-        },
-        new ModalOptions
-        {
-            HideHeader = true,
-            Size = ModalSize.ExtraLarge,
-        }).Result;
-        // await this.modalService.ShowDialog("Noch nicht umgesetzt", chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
+        await this.printService.PrintComponentAsync<FighterRoundPrint>(new Dictionary<string, object?>() { { nameof(FighterRoundPrint.Round), this.Round } });
     }
     private async Task DeleteRound()
     {

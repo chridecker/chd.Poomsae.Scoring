@@ -36,6 +36,7 @@
     [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
 
     [Inject] IModalHandler modalService { get; set; }
+    
 
     [Parameter] public FighterDto Fighter { get; set; }
     [Parameter] public ICollection<RoundDto> Rounds { get; set; } = [];

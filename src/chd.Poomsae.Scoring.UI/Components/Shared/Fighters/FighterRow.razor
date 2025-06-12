@@ -1,7 +1,7 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
 <div class="fighter-row @_colorCss" @onclick="this.OpenFighter">
-    <div class="fighter-name">@Fighter.FulName</div>
+    <div class="fighter-name">@Fighter.FullName</div>
     <FighterButtons Fighter="@Fighter" SetBlue="SetBlue" SetRed="SetRed" />
 </div>
 @code {

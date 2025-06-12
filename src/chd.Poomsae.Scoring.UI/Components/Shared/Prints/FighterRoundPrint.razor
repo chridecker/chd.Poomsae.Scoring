@@ -1,49 +1,143 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
-<div class="round-print-container">
-    <div class="round-header">
-        <div class="label"><CustomIcon FAClass="user" Style="EIconStyle.Regular" /></div>
-        <div class="fighter-name">@Round.Fighter.FulName</div>
-        <div class="label"><CustomIcon FAClass="uniform-martial-arts" Style="EIconStyle.Regular" /></div>
-        <div class="round-name">@Round.Name</div>
-        <div class="label"><CustomIcon FAClass="calendar" Style="EIconStyle.Regular" /></div>
-        <div class="round-date">@Round.Created.ToString("dd.MM.yyyy HH:mm")</div>
-        <div class="round-total-result">
-            <div class="round-result total">
-                <div class="round-result-label">@TextConstants.Total</div>
-                <div class="round-result-value">@_roundTotal.ToDisplayString()</div>
-            </div>
-            <div class="round-result accuracy">
-                <div class="round-result-label">@TextConstants.Accuracy</div>
-                <div class="round-result-value">@this._roundAccuracy.ToDisplayString()</div>
-            </div>
-            <div class="round-result presentation">
-                <div class="round-result-label">@TextConstants.Presentation</div>
-                <div class="round-result-value">@this._roundAccuracy.ToDisplayString()</div>
-            </div>
-        </div>
-    </div>
-    <div class="round-body">
-        <div class="score-row header">
-            <div class=""></div>
-            <div class="accuracy">@TextConstants.Accuracy</div>
-            <div class="presentation">SP</div>
-            <div class="presentation">RT</div>
-            <div class="presentation">EE</div>
-        </div>
-        @foreach (var score in this.Round.Scores.OrderBy(o => o.JudgeName))
-        {
-            <div class="score-row">
-                <div class="judge-name">@score.JudgeName</div>
-                <div class="accuracy">@score.Accuracy</div>
-                <div class="presentation">@score.SpeedAndPower</div>
-                <div class="presentation">@score.RhythmAndTempo</div>
-                <div class="presentation">@score.ExpressionAndEnergy</div>
-            </div>
+<html>
+<head>
+    <style type="text/css">
+        .round-print-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
-    </div>
-</div>
 
+            .round-print-container .round-header {
+                display: grid;
+                grid-template-columns: max-content auto;
+                align-items: center;
+                gap: 0.2rem 0.4rem;
+            }
+
+                .round-print-container .round-header .label {
+                }
+
+                    .round-print-container .round-header .label svg {
+                    }
+
+                .round-print-container .round-header .fighter-name {
+                    font-weight: bold;
+                }
+
+                .round-print-container .round-header .round-name {
+                    font-weight: bold;
+                }
+
+                .round-print-container .round-header .round-date {
+                    font-weight: bold;
+                }
+
+                .round-print-container .round-header .round-total-result {
+                    grid-column: 1/3;
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                    .round-print-container .round-header .round-total-result .round-result {
+                        display: grid;
+                        justify-items: center;
+                    }
+
+                        .round-print-container .round-header .round-total-result .round-result.total {
+                        }
+
+                        .round-print-container .round-header .round-total-result .round-result.accuracy {
+                        }
+
+                        .round-print-container .round-header .round-total-result .round-result.presentation {
+                        }
+
+                        .round-print-container .round-header .round-total-result .round-result .round-result-label {
+                            font-size: 0.7rem;
+                        }
+
+                        .round-print-container .round-header .round-total-result .round-result .round-result-value {
+                            font-weight: bold;
+                        }
+
+            .round-print-container .round-body {
+                display: grid;
+            }
+
+                .round-print-container .round-body .score-row {
+                    display: grid;
+                    grid-template-columns: 3fr repeat(4,1fr);
+                }
+
+                    .round-print-container .round-body .score-row.header {
+                        font-size: 0.5rem;
+                    }
+
+                        .round-print-container .round-body .score-row.header .accuracy {
+                        }
+
+                        .round-print-container .round-body .score-row.header .presentation {
+                        }
+
+                    .round-print-container .round-body .score-row .judge-name {
+                    }
+
+                    .round-print-container .round-body .score-row .accuracy {
+                    }
+
+                    .round-print-container .round-body .score-row .presentation {
+                    }
+
+    </style>
+</head>
+<body>
+    <div class="round-print-container">
+        <div class="round-header">
+            <div class="label">Teilnehmer</div>
+            <div class="fighter-name">@Round.Fighter.FullName</div>
+            <div class="label">Lauf</div>
+            <div class="round-name">@Round.Name</div>
+            <div class="label">Datum/Zeit</div>
+            <div class="round-date">@Round.Created.ToString("dd.MM.yyyy HH:mm")</div>
+            <div class="round-total-result">
+                <div class="round-result total">
+                    <div class="round-result-label">@TextConstants.Total</div>
+                    <div class="round-result-value">@_roundTotal.ToDisplayString()</div>
+                </div>
+                <div class="round-result accuracy">
+                    <div class="round-result-label">@TextConstants.Accuracy</div>
+                    <div class="round-result-value">@this._roundAccuracy.ToDisplayString()</div>
+                </div>
+                <div class="round-result presentation">
+                    <div class="round-result-label">@TextConstants.Presentation</div>
+                    <div class="round-result-value">@this._roundAccuracy.ToDisplayString()</div>
+                </div>
+            </div>
+        </div>
+        <div class="round-body">
+            <div class="score-row header">
+                <div class=""></div>
+                <div class="accuracy">@TextConstants.Accuracy</div>
+                <div class="presentation">SP</div>
+                <div class="presentation">RT</div>
+                <div class="presentation">EE</div>
+            </div>
+            @foreach (var score in this.Round.Scores.OrderBy(o => o.JudgeName))
+            {
+                <div class="score-row">
+                    <div class="judge-name">@score.JudgeName</div>
+                    <div class="accuracy">@score.Accuracy</div>
+                    <div class="presentation">@score.SpeedAndPower</div>
+                    <div class="presentation">@score.RhythmAndTempo</div>
+                    <div class="presentation">@score.ExpressionAndEnergy</div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
 
 @code {
     [Parameter] public RoundDto Round { get; set; }

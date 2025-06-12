@@ -8,6 +8,7 @@ using chd.UI.Base.Client.Implementations.Services;
 using chd.UI.Base.Client.Implementations.Services.Base;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using chd.UI.Base.Contracts.Interfaces.Update;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -21,7 +22,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TProfileService, TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUi<TProfileService, TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient, TPrintService>(this IServiceCollection services, IConfiguration configuration)
                  where TProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
                  where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
@@ -29,6 +30,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             where TBroadcastClient : class, IBroadcastClient
             where TUpdateService : BaseUpdateService, IUpdateService
             where TDeviceHandler : class, IDeviceHandler
+            where TPrintService : class, IPrintService
         {
             services.AddAuthorizationCore();
             services.AddUtilities<TProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, TUpdateService>(ServiceLifetime.Singleton);
@@ -39,6 +41,8 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton));
             services.AddDataAccess(configuration);
 
+            services.AddTransient<HtmlRenderer>();
+            services.AddSingleton<IPrintService, TPrintService>();
             services.AddSingleton<IDeviceHandler, TDeviceHandler>();
             services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<IAppInfoService, AppInfoService>();

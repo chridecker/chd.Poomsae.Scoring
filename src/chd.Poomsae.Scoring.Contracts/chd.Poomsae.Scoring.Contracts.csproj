@@ -12,8 +12,8 @@
     <None Remove="Settings\**" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25163.117" />
-		<PackageReference Include="chd.UI.Base.Contracts" Version="1.0.25163.117" />
+		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25163.118" />
+		<PackageReference Include="chd.UI.Base.Contracts" Version="1.0.25163.118" />
 	</ItemGroup>
 
 </Project>
