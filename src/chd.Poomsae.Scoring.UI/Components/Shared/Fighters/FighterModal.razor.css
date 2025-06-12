@@ -57,7 +57,7 @@
         }
 
         .fighter-modal-container .fighter-section.buttons {
-            padding: 0 0.5rem;
+            padding: 0 0.8rem;
             background: var(--chd-bg);
             border-radius: 0;
             display: flex;
