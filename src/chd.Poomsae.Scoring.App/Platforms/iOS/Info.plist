@@ -58,9 +58,5 @@
 	<string>com.companyname.chd.poomsae.scoring.app</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
-	<key>UIStatusBarHidden</key>
-	<true/>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 </dict>
 </plist>
