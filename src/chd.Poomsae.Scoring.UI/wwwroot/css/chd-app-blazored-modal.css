@@ -13,6 +13,16 @@
     background-color: var(--chd-bg);
 }
 
+    .chd-app-modal.ios {
+    }
+
+    .chd-app-modal.ios .bm-header {
+        padding-top:2rem !important;
+    }
+        .chd-app-modal.ios .bm-content {
+            padding-bottom: 1rem !important;
+        }
+
 .chd-app-modal-small {
     display: flex;
     flex-direction: column;

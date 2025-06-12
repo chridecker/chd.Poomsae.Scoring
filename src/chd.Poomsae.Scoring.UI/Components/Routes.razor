@@ -2,10 +2,10 @@
 
 <CascadingToolTip>
     <CascadingDropList>
-        <CascadingBlazoredModal Class="chd-app-modal"
-            Position="ModalPosition.Custom"
-            PositionCustomClass="chd-app-modal-position"
-        AnimationType="ModalAnimationType.None" Size="ModalSize.Automatic" HideCloseButton="false">
+        <CascadingBlazoredModal Class="@($"chd-app-modal {(this.deviceHandler.IsiOS ? "ios" : "")}")"
+                                Position="ModalPosition.Custom"
+                                PositionCustomClass="chd-app-modal-position"
+                                AnimationType="ModalAnimationType.None" Size="ModalSize.Automatic" HideCloseButton="false">
             <CustomErrorBoundary IsDeveloperMode="true">
                 <Router AppAssembly="@typeof(Home).Assembly">
                     <Found Context="routeData">
@@ -17,3 +17,6 @@
         </CascadingBlazoredModal>
     </CascadingDropList>
 </CascadingToolTip>
+@code {
+    [Inject] IDeviceHandler deviceHandler { get; set; }
+}

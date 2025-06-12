@@ -26,8 +26,9 @@ article {
     }
 
 .page.ios {
+    --main-article-height: calc(100vh - calc(var(--top-header-height) - 2rem)) !important;
 }
 
     .page.ios main {
-        padding: 1.5rem 0;
+        padding: 2rem 0 1.5rem 0;
     }
