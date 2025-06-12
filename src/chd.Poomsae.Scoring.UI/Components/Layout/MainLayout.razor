@@ -39,6 +39,8 @@
 
     private bool _navCollapsed = true;
 
+    [Inject] IJSRuntime jSRuntime { get; set; }
+    [Inject] IAppInfoService appInfoService { get; set; }
     [Inject] IDeviceHandler deviceHandler { get; set; }
     [Inject] IBroadCastService broadCastService { get; set; }
 
@@ -52,6 +54,20 @@
         await base.OnInitializedAsync();
     }
 
+
+    [JSInvokable]
+    public void OnNavigateBack() => appInfoService.BackButtonPressed?.Invoke(this, false);
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await jSRuntime.InvokeVoidAsync("window.startBackListener", dotNetReference);
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
 
     private async void UserChanged(object? sender, UserDto<Guid, int> user)
     {

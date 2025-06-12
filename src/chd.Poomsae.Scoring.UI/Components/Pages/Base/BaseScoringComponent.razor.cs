@@ -12,6 +12,7 @@ using chd.UI.Base.Components.Base;
 using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Enum;
 using chd.UI.Base.Contracts.Interfaces.Authentication;
+using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.DataProtection.XmlEncryption;
@@ -29,7 +30,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
     {
         [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
 
-        [Inject] private NavigationManager _navigationManager { get; set; }
+        [Inject] private INavigationHandler _navigationManager { get; set; }
         [Inject] protected IStartRunService _runService { get; set; }
         [Inject] protected IModalHandler _modal { get; set; }
         [Inject] IBroadCastService broadCastService { get; set; }
@@ -48,7 +49,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             this._deviceHandler.RequestLandscape();
 
             await this._backButton.SetBackButton(true);
-            this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
+            this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging, ChangeLocation);
 
 
             this.blueName = this.broadCastService.BlueName;
@@ -155,17 +156,22 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             }
         }
 
-        private async ValueTask OnLocationChanging(LocationChangingContext context)
+        private async ValueTask<bool> OnLocationChanging()
         {
             if (this.runDto.State is ERunState.Started)
             {
                 var res = await this._modal.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
-                if (res != EDialogResult.Yes)
+                if (res is not EDialogResult.Yes)
                 {
-                    context.PreventNavigation();
+                    return false;
                 }
             }
-            else
+            return true;
+        }
+
+        private async ValueTask ChangeLocation()
+        {
+            if (this.runDto.State is not ERunState.Started)
             {
                 this.broadCastService.ResetScore();
             }

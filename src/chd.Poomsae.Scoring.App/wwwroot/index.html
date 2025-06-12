@@ -33,6 +33,17 @@
     <script src="_content/chd.UI.Base.Components/js/qrcode.js"></script>
 
     <script src="_framework/blazor.webview.js" autostart="false"></script>
+    <script>
+
+
+        window.startBackListener = function (mainDotNetRef) {
+            window.addEventListener('popstate', function (e) {
+                mainDotNetRef.invokeMethodAsync('OnNavigateBack');
+                history.pushState(null, '', location.href);
+            });
+        };
+
+    </script>
 
 </body>
 </html>

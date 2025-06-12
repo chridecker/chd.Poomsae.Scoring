@@ -10,6 +10,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
     {
         public const string Accuracy = "Technik";
         public const string Presentation = "Präsentation";
+        public const string Total = "Gesamt";
         public const string SpeedAndPower = "Geschwindigkeit und Kraft";
         public const string RhythmAndTempo = "Rhythmus und Tempo";
         public const string ExpressionAndEnergy = "Ausdruck von Energie";

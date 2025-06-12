@@ -142,18 +142,19 @@
     {
         await this.InvokeAsync(this.StateHasChanged);
     }
-    protected override async ValueTask OnLocationChanging(LocationChangingContext context)
+    protected override async ValueTask<bool> OnLocationChanging()
     {
-        base.OnLocationChanging(context);
+        if (!await base.OnLocationChanging()) { return false; }
         if (!string.IsNullOrWhiteSpace(this._roundName)
         || this.fighterDataService.CurrentBlue is not null
         || this.fighterDataService.CurrentRed is not null)
         {
             var res = await this.modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
-            if (res == EDialogResult.No)
+            if (res is not EDialogResult.Yes)
             {
-                context.PreventNavigation();
+                return false;
             }
         }
+        return true;
     }
 }

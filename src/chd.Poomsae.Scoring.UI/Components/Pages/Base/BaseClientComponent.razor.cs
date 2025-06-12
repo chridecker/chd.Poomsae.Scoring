@@ -29,7 +29,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         [Inject] protected IBroadcastClient broadcastClient { get; set; }
         [Inject] protected IModalHandler modalService { get; set; }
         [Inject] protected IDeviceHandler _deviceHandler { get; set; }
-        [Inject] NavigationManager _navigationManager { get; set; }
+        [Inject] INavigationHandler _navigationManager { get; set; }
         private IDisposable _registerLocationChangeHandler;
 
         private CancellationTokenSource _cts = new();
@@ -140,7 +140,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
                 ChongScore = e.Chong,
                 HongScore = e.Hong
             });
-            
+
             await this.OnResultReceived(e);
         }
 
@@ -158,16 +158,17 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
 
 
-        protected virtual async ValueTask OnLocationChanging(LocationChangingContext context)
+        protected virtual async ValueTask<bool> OnLocationChanging()
         {
             if (this._connectedDevices.Any())
             {
                 var res = await this.modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
                 if (res == EDialogResult.No)
                 {
-                    context.PreventNavigation();
+                    return false;
                 }
             }
+            return true;
         }
 
         public void Dispose()

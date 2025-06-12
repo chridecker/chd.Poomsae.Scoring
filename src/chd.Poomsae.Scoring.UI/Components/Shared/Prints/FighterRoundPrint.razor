@@ -1,0 +1,74 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<div class="round-print-container">
+    <div class="round-header">
+        <div class="label"><CustomIcon FAClass="user" Style="EIconStyle.Regular" /></div>
+        <div class="fighter-name">@Round.Fighter.FulName</div>
+        <div class="label"><CustomIcon FAClass="uniform-martial-arts" Style="EIconStyle.Regular" /></div>
+        <div class="round-name">@Round.Name</div>
+        <div class="label"><CustomIcon FAClass="calendar" Style="EIconStyle.Regular" /></div>
+        <div class="round-date">@Round.Created.ToString("dd.MM.yyyy HH:mm")</div>
+        <div class="round-total-result">
+            <div class="round-result total">
+                <div class="round-result-label">@TextConstants.Total</div>
+                <div class="round-result-value">@_roundTotal.ToDisplayString()</div>
+            </div>
+            <div class="round-result accuracy">
+                <div class="round-result-label">@TextConstants.Accuracy</div>
+                <div class="round-result-value">@this._roundAccuracy.ToDisplayString()</div>
+            </div>
+            <div class="round-result presentation">
+                <div class="round-result-label">@TextConstants.Presentation</div>
+                <div class="round-result-value">@this._roundAccuracy.ToDisplayString()</div>
+            </div>
+        </div>
+    </div>
+    <div class="round-body">
+        <div class="score-row header">
+            <div class=""></div>
+            <div class="accuracy">@TextConstants.Accuracy</div>
+            <div class="presentation">SP</div>
+            <div class="presentation">RT</div>
+            <div class="presentation">EE</div>
+        </div>
+        @foreach (var score in this.Round.Scores.OrderBy(o => o.JudgeName))
+        {
+            <div class="score-row">
+                <div class="judge-name">@score.JudgeName</div>
+                <div class="accuracy">@score.Accuracy</div>
+                <div class="presentation">@score.SpeedAndPower</div>
+                <div class="presentation">@score.RhythmAndTempo</div>
+                <div class="presentation">@score.ExpressionAndEnergy</div>
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public RoundDto Round { get; set; }
+
+    private decimal _roundTotal => this._roundAccuracy + this._roundPresentation;
+    private decimal _roundAccuracy
+    {
+        get
+        {
+            if (this.Round.Scores.Count <= 3)
+            {
+                return this.Round.Scores.Select(s => s.Accuracy).Average();
+            }
+            return (this.Round.Scores.Sum(s => s.Accuracy) - this.Round.Scores.Min(m => m.Accuracy) - this.Round.Scores.Max(m => m.Accuracy)) / (this.Round.Scores.Count - 2);
+        }
+    }
+    private decimal _roundPresentation
+    {
+        get
+        {
+            if (this.Round.Scores.Count <= 3)
+            {
+                return this.Round.Scores.Select(s => s.Presentation.Value).Average();
+            }
+            return (this.Round.Scores.Sum(s => s.Presentation.Value) - this.Round.Scores.Min(m => m.Presentation.Value) - this.Round.Scores.Max(m => m.Presentation.Value)) / (this.Round.Scores.Count - 2);
+        }
+    }
+}
