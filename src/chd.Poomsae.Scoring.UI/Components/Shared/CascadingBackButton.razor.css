@@ -38,6 +38,6 @@
         top: 0.5rem;
     }
         .global-back-button.ios {
-            top: 1.5rem;
+            top: 2rem !important;
         }
 }

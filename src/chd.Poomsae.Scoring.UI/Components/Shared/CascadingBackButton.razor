@@ -1,6 +1,6 @@
-<div class="global-back-button @(this._showBackButton ? "" : " hide ") @(deviceHandler.IsiOS? "ios": "") " @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
+<div class="global-back-button @(this._showBackButton ? "" : " hide ") @(deviceHandler.IsiOS ? "ios" : "") " @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
 <CascadingValue IsFixed="true" Value="this">
-@ChildContent
+    @ChildContent
 </CascadingValue>
 @code {
     [Parameter] public RenderFragment ChildContent { get; set; }
