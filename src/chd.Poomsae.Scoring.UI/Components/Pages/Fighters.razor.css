@@ -1,57 +1,8 @@
 ﻿.fighters-container {
-    margin-top: 3.5rem;
+    margin: 3.5rem 0.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    padding: 0.2rem;
+    padding: 0.2rem 0.4rem;
+    background:var(--chd-bg-lighter);
+    border-radius: 1rem;
 }
-
-
-    .fighters-container .fighter-row {
-        display: grid;
-        grid-template-columns: repeat(3,max-content) auto;
-        border: 1px solid;
-        border-radius: 0.5rem;
-        padding: 0.2rem;
-        gap: 0.2rem;
-        align-items:center;
-    }
-        .fighters-container .fighter-row.red {
-            background: var(--chd-p-red-semi-gradient-left);
-        }
-        .fighters-container .fighter-row.blue {
-            background: var(--chd-p-blue-semi-gradient-left);
-        }
-
-        
-
-        .fighters-container .fighter-row .fighter-buttons {
-            justify-content:end;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-            .fighters-container .fighter-row .fighter-buttons .fighter-control-button {
-            }
-
-                .fighters-container .fighter-row .fighter-buttons .fighter-control-button.red {
-                }
-
-                    .fighters-container .fighter-row .fighter-buttons .fighter-control-button.red ::deep button.btn.btn-primary {
-                        background: var(--chd-p-red-semi-transparent);
-                    }
-
-                    .fighters-container .fighter-row .fighter-buttons .fighter-control-button.red.active ::deep button.btn.btn-primary {
-                        background: var(--chd-p-red);
-                    }
-
-                .fighters-container .fighter-row .fighter-buttons .fighter-control-button.blue {
-                }
-
-                    .fighters-container .fighter-row .fighter-buttons .fighter-control-button.blue ::deep button.btn.btn-primary {
-                        background: var(--chd-p-blue-semi-transparent);
-                    }
-
-                    .fighters-container .fighter-row .fighter-buttons .fighter-control-button.blue.active ::deep button.btn.btn-primary {
-                        background: var(--chd-p-blue);
-                    }

@@ -20,6 +20,7 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
                 typeof(FighterDto),
                 baseEntityType,
                 propertyCount: 3,
+                navigationCount: 1,
                 keyCount: 1);
 
             var id = runtimeEntityType.AddProperty(
@@ -35,13 +36,15 @@ namespace chd.Poomsae.Scoring.Persistence.CompiledModels
                 "Firstname",
                 typeof(string),
                 propertyInfo: typeof(FighterDto).GetProperty("Firstname", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(FighterDto).GetField("<Firstname>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(FighterDto).GetField("<Firstname>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
 
             var lastname = runtimeEntityType.AddProperty(
                 "Lastname",
                 typeof(string),
                 propertyInfo: typeof(FighterDto).GetProperty("Lastname", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly),
-                fieldInfo: typeof(FighterDto).GetField("<Lastname>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly));
+                fieldInfo: typeof(FighterDto).GetField("<Lastname>k__BackingField", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly),
+                nullable: true);
 
             var key = runtimeEntityType.AddKey(
                 new[] { id });

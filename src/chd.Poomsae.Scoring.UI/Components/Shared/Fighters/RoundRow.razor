@@ -1,0 +1,71 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="fighter-round" @onclick="this.OpenRound">
+    <div class="round-icon">
+        <CustomIcon FAClass="chess-bishop" Style="chd.UI.Base.Contracts.Enum.EIconStyle.Regular" />
+    </div>
+    @if (!string.IsNullOrWhiteSpace(this.Round.Name))
+    {
+        <div class="fighter-score full">
+            <div class="round-name">@this.Round.Name</div>
+            <div class="round-date">@this.Round.Created.ToString("dd.MM.yy HH:mm")</div>
+        </div>
+    }
+    else
+    {
+        <div class="fighter-score">@this.Round.Created.ToString("dd.MM.yy HH:mm")</div>
+    }
+    <div class="fighter-score total">@_totalValue.ToDisplayString("")</div>
+    <div class="fighter-score accuracy">@_accuracyValue.ToDisplayString("")</div>
+    <div class="fighter-score presentation">@_presentationValue.ToDisplayString("")</div>
+</div>
+
+@code {
+    [Inject] IFighterDataService fighterDataService { get; set; }
+    [Inject] IModalHandler modalService { get; set; }
+
+    [Parameter] public RoundDto Round { get; set; }
+    [Parameter] public EventCallback Reload { get; set; }
+
+    private async Task OpenRound()
+    {
+        var res = await this.modalService.Show<RoundModal>("Runde", new ModalParameters()
+    {
+    {nameof(RoundModal.Round),this.Round}
+    }, new ModalOptions()
+    {
+        Size = ModalSize.ExtraLarge,
+    }).Result;
+        if (res.Confirmed
+         && res.Data is not null && res.Data is ModalResultDto<RoundDto> dto)
+        {
+            if (dto.Action is EDataAction.Delete)
+            {
+                await this.fighterDataService.RemoveRound(this.Round);
+            }
+            else if (dto.Action is EDataAction.Update)
+            {
+                await this.fighterDataService.UpdateRound(this.Round);
+            }
+            await this.InvokeAsync(this.StateHasChanged);
+            await this.Reload.InvokeAsync();
+        }
+    }
+
+    private decimal? _totalValue => this._presentationValue.HasValue && this._accuracyValue.HasValue ? this._presentationValue + this._accuracyValue : null;
+
+    private decimal? _presentationValue
+    {
+        get
+        {
+            return this.Round.Scores.Any(a => a.Presentation.HasValue) ? this.Round.Scores.Select(s => s.Presentation ?? 0).Average() : null;
+        }
+    }
+
+    private decimal? _accuracyValue
+    {
+        get
+        {
+            return this.Round.Scores.Any() ? this.Round.Scores.Select(s => s.Accuracy).Average() : null;
+        }
+    }
+}

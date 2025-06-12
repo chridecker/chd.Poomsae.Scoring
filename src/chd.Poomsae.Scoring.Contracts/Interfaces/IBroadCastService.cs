@@ -14,6 +14,9 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         event EventHandler<string> BlueNameReceived;
         event EventHandler<DeviceConnectionChangedEventArgs> DeviceConnectionChanged;
         int ConnectedDevices { get; }
+        string BlueName { get; set; }
+        string RedName { get; set; }
+
         Task StartAsync(CancellationToken cancellationToken);
         void ResetScore();
         void BroadcastResult(RunDto dto);

@@ -1,6 +1,6 @@
 ﻿.global-back-button {
     position: absolute;
-    z-index: 902;
+    z-index: 99;
     aspect-ratio: 1/1;
     padding: 0.2rem;
     border: 1px solid;
@@ -12,6 +12,7 @@
     display: flex;
     background: var(--chd-p-blue-transparent);
 }
+
     .global-back-button:has(:hover) {
         background: var(--chd-p-blue-semi-transparent);
     }
@@ -28,3 +29,10 @@
     .global-back-button ::deep svg {
         height: 1.5rem;
     }
+
+@media only screen and (orientation: portrait) {
+    .global-back-button {
+        left: 0.5rem;
+        top: 0.5rem;
+    }
+}

@@ -2,7 +2,10 @@
 
 <CascadingToolTip>
     <CascadingDropList>
-        <CascadingBlazoredModal Position="ModalPosition.Middle" AnimationType="ModalAnimationType.None" Size="ModalSize.Automatic" HideCloseButton="false">
+        <CascadingBlazoredModal Class="chd-app-modal"
+            Position="ModalPosition.Custom"
+            PositionCustomClass="chd-app-modal-position"
+        AnimationType="ModalAnimationType.None" Size="ModalSize.Automatic" HideCloseButton="false">
             <CustomErrorBoundary IsDeveloperMode="true">
                 <Router AppAssembly="@typeof(Home).Assembly">
                     <Found Context="routeData">

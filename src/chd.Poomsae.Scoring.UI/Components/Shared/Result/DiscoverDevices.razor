@@ -10,6 +10,7 @@
         }
     </div>
     <div class="buttons">
+        <button class="btn btn-secondary" @onclick="this.Cancel">Abbrechen</button>
         <button class="btn btn-primary" @onclick="this.Connect">Verbinden</button>
     </div>
 </div>
@@ -31,7 +32,10 @@
         await Task.WhenAny(this.broadcastClient.StartDiscoverAsync(this._cts.Token), Task.Delay(TimeSpan.FromSeconds(20), this._cts.Token));
         await base.OnInitializedAsync();
     }
-
+    private async Task Cancel()
+    {
+        await this.Instance.CancelAsync();
+    }
     private async Task AddToConnected(DeviceDto dto)
     {
         if (this._selectedDevices.Any(a => a.Id == dto.Id))

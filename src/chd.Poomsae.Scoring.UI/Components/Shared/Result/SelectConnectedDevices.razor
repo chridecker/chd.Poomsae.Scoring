@@ -7,6 +7,7 @@
         }
     </div>
     <div class="buttons">
+        <button class="btn btn-secondary" @onclick="this.Cancel">Abbrechen</button>
         <button class="btn btn-primary" @onclick="this.Disconnect">Entfernen</button>
     </div>
 </div>
@@ -25,7 +26,10 @@
         this._connectedDevices = await this.broadcastClient.CurrentConnectedDevices(this._cts.Token);
         await base.OnInitializedAsync();
     }
-
+    private async Task Cancel()
+    {
+        await this.Instance.CancelAsync();
+    }
     private async Task AddToSelected(DeviceDto dto)
     {
         if (this._selectedDevices.Any(a => a.Id == dto.Id))

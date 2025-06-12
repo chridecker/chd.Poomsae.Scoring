@@ -5,8 +5,11 @@ using chd.Poomsae.Scoring.Contracts.Dtos;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.UI.Components.Shared;
 using chd.Poomsae.Scoring.UI.Components.Shared.Result;
+using chd.Poomsae.Scoring.UI.Extensions;
+using chd.UI.Base.Client.Implementations.Services;
 using chd.UI.Base.Components.Extensions;
 using chd.UI.Base.Contracts.Enum;
+using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using System;
@@ -23,7 +26,8 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
 
         [Inject] protected IBroadcastClient broadcastClient { get; set; }
-        [Inject] protected IModalService modalService { get; set; }
+        [Inject] protected IModalHandler modalService { get; set; }
+        [Inject] protected IDeviceHandler _deviceHandler { get; set; }
         [Inject] NavigationManager _navigationManager { get; set; }
         private IDisposable _registerLocationChangeHandler;
 
@@ -55,7 +59,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task Discover()
         {
-            var result = await this.modalService.Show<DiscoverDevices>(new ModalOptions()
+            var result = await this.modalService.Show<DiscoverDevices>("Geräte Suchen", new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
@@ -70,7 +74,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task RemoveDevices()
         {
-             var result = await this.modalService.Show<SelectConnectedDevices>(new ModalOptions()
+            var result = await this.modalService.Show<SelectConnectedDevices>("Geräte Entfernen", new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
@@ -90,7 +94,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task Search()
         {
-            this._loadingModal = this.modalService.ShowLoading();
+            this._loadingModal = this.modalService.ShowLoading("");
             await this.Clear();
             await Task.WhenAny(this.broadcastClient.StartAutoConnectAsync(this._cts.Token), Task.Delay(TimeSpan.FromSeconds(2), this._cts.Token));
         }
@@ -149,7 +153,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             if (this._connectedDevices.Any())
             {
-                var res = await this.modalService.ShowDialog(TextConstants.LeaveSiteQuestion, EDialogButtons.YesNo);
+                var res = await this.modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
                 if (res == EDialogResult.No)
                 {
                     context.PreventNavigation();

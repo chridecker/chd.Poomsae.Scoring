@@ -47,6 +47,10 @@
 		<UseInterpreter>True</UseInterpreter>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Release'">
+		<MtouchInterpreter>-all</MtouchInterpreter>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\logo.svg" />
 		<MauiSplashScreen Include="Resources\Splash\logo.svg" BaseSize="168,208" />

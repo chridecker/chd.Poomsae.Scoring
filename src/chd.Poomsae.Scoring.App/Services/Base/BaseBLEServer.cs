@@ -42,6 +42,9 @@ namespace chd.Poomsae.Scoring.App.Services.Base
         public event EventHandler<string> RedNameReceived;
         public event EventHandler<string> BlueNameReceived;
 
+        public string BlueName { get; set; }
+        public string RedName { get; set; }
+
         protected abstract void BroadCastToAllDevices(TCharacteristic characteristic, byte[] data);
         protected abstract Task StartNativeAsync(CancellationToken cancellationToken);
         protected abstract Task CheckPermissions(CancellationToken cancellationToken);
@@ -105,6 +108,12 @@ namespace chd.Poomsae.Scoring.App.Services.Base
 
         protected void OnDeviceConnectionChanged(Guid id, bool connected)
         {
+            if (!connected)
+            {
+                this.OnBlueNameReceived(string.Empty);
+                this.OnRedNameReceived(string.Empty);
+            }
+
             this.DeviceConnectionChanged?.Invoke(this, new DeviceConnectionChangedEventArgs
             {
                 Connected = connected,
@@ -112,8 +121,16 @@ namespace chd.Poomsae.Scoring.App.Services.Base
             });
         }
 
-        protected void OnBlueNameReceived(string name)=> this.BlueNameReceived?.Invoke(this, name);
-        protected void OnRedNameReceived(string name)=> this.RedNameReceived?.Invoke(this, name);
+        protected void OnBlueNameReceived(string name)
+        {
+            this.BlueName = name;
+            this.BlueNameReceived?.Invoke(this, name);
+        }
+        protected void OnRedNameReceived(string name)
+        {
+            this.RedName = name;
+            this.RedNameReceived?.Invoke(this, name);
+        }
 
         protected async Task<(string, byte[])> GetName()
         {

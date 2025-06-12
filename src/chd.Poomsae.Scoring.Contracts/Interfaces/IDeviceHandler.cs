@@ -18,5 +18,8 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         string Model { get; }
         string Name { get; }
         void CloseApp();
+
+        void RequestLandscape();
+        void ResetOrientation();
     }
 }

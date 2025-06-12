@@ -1,0 +1,22 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<div class="fighter-buttons" @onclick:stopPropagation>
+    <FighterColorButton Color="EScoringButtonColor.Red" Fighter="@this.Fighter" SetFighter="this.OnAssignColorClick" />
+    <FighterColorButton Color="EScoringButtonColor.Blue" Fighter="@this.Fighter" SetFighter="this.OnAssignColorClick" />
+</div>
+
+@code {
+    [Parameter] public FighterDto Fighter { get; set; }
+    [Parameter] public Func<FighterDto, Task> SetBlue { get; set; }
+    [Parameter] public Func<FighterDto, Task> SetRed { get; set; }
+
+   
+
+    private Task OnAssignColorClick(EScoringButtonColor color, FighterDto fighter) => color switch
+    {
+        EScoringButtonColor.Blue => this.SetBlue(fighter),
+        EScoringButtonColor.Red => this.SetRed(fighter),
+        _ => Task.CompletedTask
+    };
+
+}

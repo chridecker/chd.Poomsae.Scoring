@@ -1,0 +1,28 @@
+﻿.fighter-control-button {
+}
+
+    .fighter-control-button ::deep button.icon-button {
+        padding: 0.2rem 0.4rem;
+    }
+
+        .fighter-control-button ::deep button.icon-button svg {
+            height: 0.8rem;
+        }
+
+    .fighter-control-button.active ::deep button.btn.btn-primary {
+        background: var(--chd-sub-color-theme);
+    }
+
+    .fighter-control-button.red {
+    }
+
+        .fighter-control-button.red:not(.active) ::deep button.btn.btn-primary {
+            background: var(--chd-p-red-semi-transparent);
+        }
+
+    .fighter-control-button.blue {
+    }
+
+        .fighter-control-button.blue:not(.active) ::deep button.btn.btn-primary {
+            background: var(--chd-p-blue-semi-transparent);
+        }

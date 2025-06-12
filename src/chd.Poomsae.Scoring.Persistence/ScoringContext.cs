@@ -12,6 +12,8 @@ namespace chd.Poomsae.Scoring.Persistence
     {
         public const string DB_FILE = "chdPoomsaeScoring.db";
 
+        public DbSet<SavedScoreDto> Scores { get; set; }
+        public DbSet<RoundDto> Rounds { get; set; }
         public DbSet<FighterDto> Fighters { get; set; }
 
         public ScoringContext() : base()

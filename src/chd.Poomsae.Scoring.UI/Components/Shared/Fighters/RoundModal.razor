@@ -1,0 +1,92 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<div class="round-container">
+    <div class="round-header">
+        <div class="round-header-data fighter-name">
+            <CustomIcon FAClass="user" Style="EIconStyle.Regular" />
+            @this.Round.Fighter.FulName
+        </div>
+        <div class="round-header-data round-name">
+            <CustomIcon FAClass="input-text" Style="EIconStyle.Regular" />
+            <input type="text" @bind-value="this._roundName" />
+        </div>
+        <div class="round-header-data round-date">
+            <CustomIcon FAClass="calendar" Style="EIconStyle.Regular" />
+            @this.Round.Created.ToString("dd.MM.yy HH:mm")
+        </div>
+        <div class="round-header-data round-total-scores">
+            <CustomIcon FAClass="trophy" Style="EIconStyle.Regular" />
+            <div class="round-total total">@_totalValue.ToDisplayString("")</div>
+            <div class="round-total accuracy">@this._accuracyValue.ToDisplayString("")</div>
+            <div class="round-total presentation">@this._presentationValue.ToDisplayString("")</div>
+        </div>
+    </div>
+    <div class="round-scores">
+        @foreach (var score in this.Round.Scores)
+        {
+            <ScoreRow Reload="async () => await this.InvokeAsync(this.StateHasChanged)" Score="@score" />
+        }
+    </div>
+    <div class="round-buttons">
+        <IconButton FAClass="floppy-disk" OnClick="this.Save" />
+        <IconButton FAClass="print" OnClick="this.Print" />
+        <IconButton FAClass="trash" OnClick="this.DeleteRound" />
+        <IconButton FAClass="arrow-turn-left" OnClick="this.Cancel" />
+    </div>
+</div>
+
+@code {
+    [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
+
+    [Inject] IFighterDataService fighterDataService { get; set; }
+    [Inject] IModalHandler modalService { get; set; }
+    [Parameter] public RoundDto Round { get; set; }
+
+    private string _roundName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this._roundName = this.Round.Name;
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Cancel()
+    {
+        await this.ModalInstance.CancelAsync();
+    }
+    private async Task Print()
+    {
+        await this.modalService.ShowDialog("Noch nicht umgesetzt", chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
+    }
+    private async Task DeleteRound()
+    {
+        var res = await this.modalService.ShowYesNoDialog($"Runde löschen");
+        if (res is EDialogResult.Yes)
+        {
+            await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<RoundDto>(this.Round, EDataAction.Delete)));
+        }
+    }
+    private async Task Save()
+    {
+        this.Round.Name = this._roundName;
+        await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<RoundDto>(this.Round, EDataAction.Update)));
+    }
+
+    private decimal? _totalValue => this._accuracyValue.HasValue && this._presentationValue.HasValue ? this._accuracyValue + this._presentationValue : null;
+
+    private decimal? _presentationValue
+    {
+        get
+        {
+            return this.Round.Scores.Any(a => a.Presentation.HasValue) ? this.Round.Scores.Select(s => s.Presentation ?? 0).Average() : null;
+        }
+    }
+
+    private decimal? _accuracyValue
+    {
+        get
+        {
+            return this.Round.Scores.Any() ? this.Round.Scores.Select(s => s.Accuracy).Average() : null;
+        }
+    }
+}

@@ -1,4 +1,5 @@
-﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+﻿using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Persistence;
 using chd.Poomsae.Scoring.UI.Services;
 using chd.UI.Base.Client.Extensions;
@@ -9,6 +10,7 @@ using chd.UI.Base.Contracts.Interfaces.Services;
 using chd.UI.Base.Contracts.Interfaces.Update;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TProfileService,  TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddUi<TProfileService, TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient>(this IServiceCollection services, IConfiguration configuration)
                  where TProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
                  where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
@@ -46,6 +48,14 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             services.AddSingleton<IVibrationHelper, TVibrationHelper>();
             services.AddSingleton<IBroadCastService, TBroadCastService>();
             services.AddSingleton<IBroadcastClient, TBroadcastClient>();
+
+            services.RemoveAll<IModalService>();
+            services.AddSingleton<ModalHandler>();
+            services.AddSingleton<IModalService>(sp => sp.GetRequiredService<ModalHandler>());
+            services.AddSingleton<IModalHandler>(sp => sp.GetRequiredService<ModalHandler>());
+            services.AddSingleton<INavigationHistoryStateContainer, NavigationHistoryStateContainer>();
+            services.AddScoped<INavigationHandler, NavigationHandler>();
+
             return services;
         }
     }

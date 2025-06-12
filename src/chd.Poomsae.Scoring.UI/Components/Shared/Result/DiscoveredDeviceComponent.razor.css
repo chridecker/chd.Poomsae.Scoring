@@ -1,17 +1,22 @@
 ﻿.discovered-device {
-    border: 1px solid;
-    border-radius: 0.5rem;
+    border-bottom: 1px solid var(--chd-grey);
+    border-radius: 0;
     padding: 0.5rem;
     display: flex;
-    justify-content: center;
-    justify-items: center;
-    align-content: center;
     align-items: center;
     gap: 0.3rem;
 }
 
+    .discovered-device:first-child {
+        border-radius: 0.5rem 0.5rem 0 0;
+    }
+    .discovered-device:last-child {
+        border-bottom: none;
+        border-radius: 0 0 0.5rem 0.5rem;
+    }
+
     .discovered-device.selected {
-        border-color: var(--chd-main-color-theme);
+        background: var(--chd-grey-semi-transparent);
     }
 
     .discovered-device ::deep svg {

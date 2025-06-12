@@ -1,0 +1,17 @@
+@if (this.Show)
+{
+    <div class="loading">
+        <LoadingPrompt Visible="true" Centered="true" />
+        <div class="loading-message">@this.Message</div>
+    </div>
+}
+else
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public string Message { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

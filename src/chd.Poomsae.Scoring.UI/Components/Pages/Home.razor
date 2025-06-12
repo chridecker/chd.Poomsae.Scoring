@@ -36,12 +36,14 @@
     const string RESULTS = "results";
     const string FIGHTERS = "fighters";
 
-    [Inject] NavigationManager _navigationManager { get; set; }
-    [Inject] IModalService _modalService { get; set; }
+    [Inject] INavigationHandler _navigationHandler { get; set; }
+    [Inject] IModalHandler _modalService { get; set; }
+    [Inject] IDeviceHandler _deviceHandler { get; set; }
     [CascadingParameter] CascadingBackButton _backButton { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        this._deviceHandler.ResetOrientation();
         await this._backButton.SetBackButton(false);
 
         await base.OnInitializedAsync();
@@ -49,7 +51,7 @@
 
     private void GoTo(string path)
     {
-        this._navigationManager.NavigateTo(path);
+        this._navigationHandler.NavigateTo(path, false);
     }
 
     private async Task ManageLicense()

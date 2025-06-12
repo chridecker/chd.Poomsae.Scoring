@@ -17,6 +17,8 @@ using Maui.Android.InAppUpdates;
 using Plugin.Firebase.Core.Platforms.Android;
 using Plugin.Firebase.Auth.Google;
 #elif IOS
+using UIKit;
+
 #endif
 
 
@@ -62,27 +64,17 @@ namespace chd.Poomsae.Scoring.App
 #if ANDROID
             using var scope = builder.Services.BuildServiceProvider().CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+            db.Database.EnsureCreated();
+#elif IOS
             try
             {
-                db.Database.Migrate();
+                using var scope = builder.Services.BuildServiceProvider().CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
+                db.Database.EnsureCreated();
             }
-            catch
+            catch (Exception ex)
             {
-                db.Database.EnsureDeleted();
-                db.Database.Migrate();
             }
-#elif IOS
-            var targetPath = Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE);
-
-            if (!File.Exists(targetPath) && FileSystem.AppPackageFileExistsAsync(ScoringContext.DB_FILE).Result)
-            {
-                using var sourceStream = FileSystem.OpenAppPackageFileAsync(ScoringContext.DB_FILE).Result;
-                using var destinationStream = File.Create(targetPath);
-                sourceStream.CopyToAsync(destinationStream).Wait(TimeSpan.FromSeconds(5));
-            }
-            using var scope = builder.Services.BuildServiceProvider().CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<ScoringContext>();
-            db.Database.Migrate();
 #endif
         }
 
@@ -129,7 +121,7 @@ namespace chd.Poomsae.Scoring.App
 
         private static IConfiguration GetLocalSetting()
         {
-            var path = Path.Combine(FileSystem.AppDataDirectory, "chdPoomsaeScoring.db");
+            var path = Path.Combine(FileSystem.AppDataDirectory, ScoringContext.DB_FILE);
 
             var dict = new Dictionary<string, string>();
 

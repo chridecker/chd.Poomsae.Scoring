@@ -1,4 +1,4 @@
-    <div class="global-back-button @(this._showBackButton ? "" : " hide ")" @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
+<div class="global-back-button @(this._showBackButton ? "" : " hide ")" @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
 <CascadingValue IsFixed="true" Value="this">
     @ChildContent
 </CascadingValue>
@@ -6,7 +6,7 @@
     [Parameter] public RenderFragment ChildContent { get; set; }
 
     [Inject] IDeviceHandler deviceHandler { get; set; }
-    [Inject] NavigationManager navigationManager { get; set; }
+    [Inject] INavigationHandler navigationHandler { get; set; }
 
 
     private bool _showBackButton = true;
@@ -22,9 +22,7 @@
         await this.InvokeAsync(this.StateHasChanged);
     }
 
-    private async Task HandleBack()
-    {
-        this.navigationManager.NavigateTo("/");
-    }
+    private void HandleBack() => this.navigationHandler.NavigateBack(false);
+
 
 }

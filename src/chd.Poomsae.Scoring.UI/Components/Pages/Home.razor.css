@@ -59,7 +59,14 @@
         .home-container .home-card .text {
         }
 
-@media only screen and (min-height: 600px) {
+@media only screen and (orientation:portrait) {
+    .home-container .home-card {
+        min-width: 12rem;
+        font-size: 1.5rem;
+    }
+}
+
+@media only screen and (min-height: 600px) and (orientation: landscape) {
     .home-container .home-card {
         min-width: 17rem;
         font-size: 2.5rem;

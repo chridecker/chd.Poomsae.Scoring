@@ -19,7 +19,7 @@ namespace chd.Poomsae.Scoring.App
             base.OnAppearing();
             await this.CheckPermissions();
 #if ANDROID
-            Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.SensorLandscape;
+            //Platform.CurrentActivity.RequestedOrientation = Android.Content.PM.ScreenOrientation.SensorLandscape;
 #endif
             DeviceDisplay.KeepScreenOn = true;
         }

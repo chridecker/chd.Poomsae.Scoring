@@ -29,6 +29,13 @@
 @code {
     [Inject] IResultService resultService { get; set; }
 
+    protected override async Task OnInitializedAsync()
+    {
+        this._deviceHandler.RequestLandscape();
+
+        await base.OnInitializedAsync();
+    }
+
     protected override Task Clear()
     {
         this.resultService.Clear();
