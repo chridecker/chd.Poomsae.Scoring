@@ -1,0 +1,26 @@
+﻿.judge-result {
+    padding: 0.2rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius:1rem;
+}
+
+    .judge-result.red {
+        background:var(--chd-p-red-semi-gradient-left);
+    }
+
+    .judge-result.blue {
+        background: var(--chd-p-blue-semi-gradient);
+    }
+
+    .judge-result .judge-score {
+    }
+
+        .judge-result .judge-score.accuracy {
+            color: var(--chd-p-accuracy);
+        }
+
+        .judge-result .judge-score.presentation {
+            color: var(--chd-p-presentation);
+        }

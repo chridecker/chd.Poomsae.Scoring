@@ -9,9 +9,10 @@
     @if (this.Rounds.Any(a => a.Scores.Any()))
     {
         <div class="fighter-section rounds">
+            <div class="section-title">Läufe</div>
             @foreach (var round in this.Rounds.OrderBy(o => o.Created))
             {
-                <RoundRow Reload="async()=>await this.InvokeAsync(this.StateHasChanged)" Round="@round" />
+                <RoundRow Reload="async () => await this.InvokeAsync(this.StateHasChanged)" Round="@round" />
             }
         </div>
     }
@@ -47,7 +48,7 @@
 
     private async Task Print()
     {
-        await this.modalService.ShowDialog("Noch nicht umgesetzt", chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
+        await this.modalService.ShowDialog("Drucken noch nicht umgesetzt", chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
     }
 
     private async Task RemoveFighter()

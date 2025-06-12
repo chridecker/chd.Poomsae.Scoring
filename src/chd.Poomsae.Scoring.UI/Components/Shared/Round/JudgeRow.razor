@@ -1,0 +1,11 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="judge-row">
+    <JudgeScore Judge="@this.Judge" Color="EScoringButtonColor.Red" />
+    <div class="judge-name">@Judge.Name</div>
+    <JudgeScore Judge="@this.Judge" Color="EScoringButtonColor.Blue" />
+</div>
+
+
+@code {
+    [Parameter] public DeviceDto Judge { get; set; }
+}

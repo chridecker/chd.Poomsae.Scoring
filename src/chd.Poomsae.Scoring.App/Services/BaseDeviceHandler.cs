@@ -29,6 +29,8 @@ namespace chd.Poomsae.Scoring.App.Services
 
         public string Name => this._deviceInfo.Name;
 
+        public bool IsiOS => this._isiOS;
+
         protected BaseDeviceHandler(IDeviceInfo deviceInfo)
         {
             this._deviceInfo = deviceInfo;
@@ -40,6 +42,7 @@ namespace chd.Poomsae.Scoring.App.Services
         public abstract void RequestLandscape();
         public abstract void ResetOrientation();
 
+        protected abstract bool _isiOS { get; }
         protected abstract string _nativeUID { get; }
         protected abstract int _nativePlatformVersion { get; }
 

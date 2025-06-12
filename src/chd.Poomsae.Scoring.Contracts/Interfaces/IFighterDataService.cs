@@ -16,11 +16,14 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         Task RemoveScore(SavedScoreDto score);
         Task UpdateFighter(FighterDto fighter);
         Task UpdateRound(RoundDto round);
-        Task HandleResult(ScoreReceivedEventArgs e);
+        Task HandleResult(ScoreDto score, DeviceDto device, FighterDto fighterDto);
         Task CreateRound(FighterDto fighter);
         Task CloseRound(FighterDto fighter);
 
-        FighterDto CurrentBlue { get; set; }
-        FighterDto CurrentRed { get; set; }
+        Task SetBlue(FighterDto fighterDto);
+        Task SetRed(FighterDto fighterDto);
+
+        FighterDto CurrentBlue { get; }
+        FighterDto CurrentRed { get; }
     }
 }

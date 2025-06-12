@@ -8,6 +8,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
 {
     public interface IDeviceHandler
     {
+        bool IsiOS{get; }
         string UID { get; }
         string CurrentAppName { get; }
         string CurrentAppPackageName { get; }

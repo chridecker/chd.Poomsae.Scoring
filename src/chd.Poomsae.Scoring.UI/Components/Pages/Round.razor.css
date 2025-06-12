@@ -1,0 +1,66 @@
+﻿.round-container {
+    margin: 3.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.2rem 0.4rem;
+    gap: 0.8rem;
+}
+
+    .round-container .round-header {
+        display: flex;
+        flex-direction: column;
+        border-radius: 0.5rem;
+        gap: 0.2rem;
+    }
+
+        .round-container .round-header .round-name {
+            display:grid;
+            grid-template-columns: max-content auto;
+        }
+        .round-container .round-header .round-name ::deep .btn.icon-button {
+            padding: 0.2rem 0.4rem;
+            background:none;
+        }
+
+            .round-container .round-header .round-name input[type=text] {
+                padding: 0 0.2rem;
+                border: none;
+                background: none;
+                width: 100%;
+                color: var(--chd-font-color);
+            }
+
+                .round-container .round-header .round-name input[type=text]:focus,
+                .round-container .round-header .round-name input[type=text]:active {
+                    outline: none;
+                    color: white;
+                }
+
+        .round-container .round-header .round-competitors {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+        }
+
+            .round-container .round-header .round-competitors .round-competitor {
+                border-radius: 0.5rem 0 0 0.5rem;
+                padding: 0 0.5rem;
+            }
+
+                .round-container .round-header .round-competitors .round-competitor.red {
+                    background: var(--chd-p-red-semi-gradient-left);
+                    text-align: left;
+                }
+
+                .round-container .round-header .round-competitors .round-competitor.blue {
+                    background: var(--chd-p-blue-semi-gradient);
+                    text-align: right;
+                    border-radius: 0 0.5rem 0.5rem 0;
+                }
+
+
+    .round-container .round-body {
+        display: flex;
+        flex-direction: column;
+        border-radius: 1rem;
+        gap: 0.5rem;
+    }

@@ -1,0 +1,159 @@
+@using chd.Poomsae.Scoring.UI.Components.Pages.Base
+@using chd.Poomsae.Scoring.UI.Components.Shared
+@using chd.Poomsae.Scoring.UI.Components.Shared.Round
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Components.General.Search
+@using chd.UI.Base.Contracts.Enum
+@inherits BaseClientComponent
+@page "/round"
+
+<div class="round-container">
+    <div class="round-header">
+        <div class="round-name">
+            <IconButton FAClass="input-text" Style="EIconStyle.Regular" OnClick="this.ChooseRoundTitle" />
+            <input type="text" @bind-value="this._roundName" placeholder="Lauftitel" />
+        </div>
+        <div class="round-competitors">
+            <div class="round-competitor red">@this.fighterDataService.CurrentRed?.DisplayName</div>
+            <div class="round-competitor blue">@this.fighterDataService.CurrentBlue?.DisplayName</div>
+        </div>
+    </div>
+    <div class="round-body">
+        @foreach (var device in this._connectedDevices)
+        {
+            <JudgeRow Judge="device.Value" />
+        }
+    </div>
+</div>
+
+
+<FloatingActionNavigation FAIconActive="floppy-disk" TextActive="@TextConstants.SaveRound" OnClick="this.SaveRound">
+    <FloatingActionButton FAClass="magnifying-glass-plus" Title="@TextConstants.AddDeviceAuto" OnClick="this.Search" />
+    @if (this._connectedDevices.Any())
+    {
+        <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
+        <FloatingActionButton FAClass="laptop-slash" Title="@TextConstants.RemoveDevice" OnClick="this.RemoveDevices" />
+    }
+    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
+    <FloatingActionButton CssClass="fab-comp-red" FAClass="forward" Title="Blauer Teilnehmer" OnClick="this.SetBlue" />
+    <FloatingActionButton CssClass="fab-comp-blue" FAClass="forward" Title="Roter Teilnehmer" OnClick="this.SetRed" />
+</FloatingActionNavigation>
+
+@code {
+    [Inject] IFighterDataService fighterDataService { get; set; }
+
+    private string _roundName;
+
+    private async Task SetBlue()
+    {
+        var fighter = await this.ShowFighterSearchModal();
+        if (fighter != null)
+        {
+            await this.fighterDataService.SetBlue(fighter);
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+    private async Task SetRed()
+    {
+        var fighter = await this.ShowFighterSearchModal();
+        if (fighter != null)
+        {
+            await this.fighterDataService.SetRed(fighter);
+            await this.InvokeAsync(this.StateHasChanged);
+        }
+    }
+
+    private async Task ChooseRoundTitle()
+    {
+        this._roundName = await this.ShowRoundTitleSearchModal();
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+
+
+    private async Task<string> ShowRoundTitleSearchModal()
+    {
+        var parameters = new ModalParameters
+            {
+                { nameof(SearchModalComponent<string, string>.Items),new string[]{"Tageuk 1","Taeguk 2", "Koryo","Kumgang","Taebek" } },
+                { nameof(SearchModalComponent<string, string>.DisableOrder), true },
+            };
+        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>("Lauf Suche", parameters);
+
+        var result = await modalInstance.Result;
+        if (result.Confirmed && result.Data is string runTitle)
+        {
+            return runTitle;
+        }
+        return string.Empty;
+    }
+
+    private async Task<FighterDto> ShowFighterSearchModal()
+    {
+        var parameters = new ModalParameters
+            {
+                { nameof(SearchModalComponent<FighterDto, Guid>.Items), this.fighterDataService.Fighters},
+                { nameof(SearchModalComponent<FighterDto, Guid>.FavoriteKey), "FighterFavorit" },
+                { nameof(SearchModalComponent<FighterDto, Guid>.FavoriteObject), (FighterDto dto) => dto.Id },
+                { nameof(SearchModalComponent<FighterDto, Guid>.RenderType),typeof(FighterSearchItem) },
+                { nameof(SearchModalComponent<FighterDto, Guid>.RenderParameterDict),(FighterDto dto)=> SearchModalComponent<FighterDto,Guid>.CreateRenderParameterDict(dto,((x)=> nameof(FighterSearchItem.Fighter),(x)=>x))},
+                { nameof(SearchModalComponent<FighterDto, Guid>.DisableOrder), false },
+            };
+        var modalInstance = this.modalService.Show<SearchModalComponent<FighterDto, Guid>>("Teilnehmer Suche", parameters);
+
+        var result = await modalInstance.Result;
+        if (result.Confirmed && result.Data is FighterDto fighter)
+        {
+            return fighter;
+        }
+        return null;
+    }
+
+    private async Task SaveRound()
+    {
+        if (this.fighterDataService.CurrentBlue is not null)
+        {
+            var round = this.fighterDataService.CreateRound(this.fighterDataService.CurrentBlue);
+            foreach (var result in this.resultService.Result.Results)
+            {
+                if (!this._connectedDevices.TryGetValue(result.Key, out var device) || result.Value.ChongScore is null) { continue; }
+
+                await this.fighterDataService.HandleResult(result.Value.ChongScore, device, this.fighterDataService.CurrentBlue);
+            }
+
+        }
+        if (this.fighterDataService.CurrentRed is not null)
+        {
+            var round = this.fighterDataService.CreateRound(this.fighterDataService.CurrentRed);
+            foreach (var result in this.resultService.Result.Results)
+            {
+                if (!this._connectedDevices.TryGetValue(result.Key, out var device) || result.Value.HongScore is null) { continue; }
+
+                await this.fighterDataService.HandleResult(result.Value.HongScore, device, this.fighterDataService.CurrentRed);
+            }
+
+        }
+    }
+
+    protected override async Task OnDeviceDisconncted(DeviceDto dto)
+    {
+
+    }
+    protected override async Task OnResultReceived(ScoreReceivedEventArgs dto)
+    {
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+    protected override async ValueTask OnLocationChanging(LocationChangingContext context)
+    {
+        base.OnLocationChanging(context);
+        if (!string.IsNullOrWhiteSpace(this._roundName)
+        || this.fighterDataService.CurrentBlue is not null
+        || this.fighterDataService.CurrentRed is not null)
+        {
+            var res = await this.modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+            if (res == EDialogResult.No)
+            {
+                context.PreventNavigation();
+            }
+        }
+    }
+}

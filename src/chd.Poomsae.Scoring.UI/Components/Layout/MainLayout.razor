@@ -11,7 +11,7 @@
 @inject IModalService modalService
 
 
-<div class="page">
+<div class="page @(this.deviceHandler.IsiOS ? "ios" : "") ">
     <CascadingBackButton>
         <main class="@(this._navCollapsed ? "collapsed-nav" : "")" @onmouseover="() => this._navCollapsed = true">
             <article id="main-article" class="content px-4" @onscroll="scrollInfoService.Scrolled">
@@ -39,6 +39,7 @@
 
     private bool _navCollapsed = true;
 
+    [Inject] IDeviceHandler deviceHandler { get; set; }
     [Inject] IBroadCastService broadCastService { get; set; }
 
     protected override async Task OnInitializedAsync()

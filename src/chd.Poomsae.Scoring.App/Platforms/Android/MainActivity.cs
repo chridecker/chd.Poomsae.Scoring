@@ -31,14 +31,9 @@ namespace chd.Poomsae.Scoring.App
             base.OnCreate(savedInstanceState);
 
             this.OnBackPressedDispatcher.AddCallback(this, new BackPress(this._appInfoService));
-
-            this.Window?.AddFlags(WindowManagerFlags.Fullscreen);
-
-            WindowCompat.SetDecorFitsSystemWindows(this.Window, false);
-            WindowInsetsControllerCompat windowInsetsController = new WindowInsetsControllerCompat(this.Window, this.Window.DecorView);
-            // Hide system bars
-            windowInsetsController.Hide(WindowInsetsCompat.Type.SystemBars());
-            windowInsetsController.SystemBarsBehavior = WindowInsetsControllerCompat.BehaviorShowTransientBarsBySwipe;
+            this.Window.ClearFlags(WindowManagerFlags.TranslucentStatus);
+            this.Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
+            this.Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)

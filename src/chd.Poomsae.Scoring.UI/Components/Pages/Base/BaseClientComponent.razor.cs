@@ -25,6 +25,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
     {
         [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
 
+        [Inject] protected IResultService resultService { get; set; }
         [Inject] protected IBroadcastClient broadcastClient { get; set; }
         [Inject] protected IModalHandler modalService { get; set; }
         [Inject] protected IDeviceHandler _deviceHandler { get; set; }
@@ -101,6 +102,8 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected virtual async Task Clear()
         {
+            this.resultService.Clear();
+
             this._connectedDevices.Clear();
             foreach (var device in await this.broadcastClient.CurrentConnectedDevices(this._cts.Token))
             {
@@ -132,6 +135,12 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         private async void ResultReceived(object? sender, ScoreReceivedEventArgs e)
         {
+            this.resultService.SetRun(e.Device.Id, new()
+            {
+                ChongScore = e.Chong,
+                HongScore = e.Hong
+            });
+            
             await this.OnResultReceived(e);
         }
 
@@ -149,7 +158,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
 
 
-        private async ValueTask OnLocationChanging(LocationChangingContext context)
+        protected virtual async ValueTask OnLocationChanging(LocationChangingContext context)
         {
             if (this._connectedDevices.Any())
             {

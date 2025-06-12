@@ -1,0 +1,40 @@
+@using chd.Poomsae.Scoring.UI.Extensions
+<div class="judge-result @(this.Color is EScoringButtonColor.Red ? "red" : "blue")">
+
+    @if (this.TryGetScore(this.Color, out var score))
+    {
+        <div class="judge-score accuracy">@score.Accuracy.ToDisplayString()</div>
+        <div class="judge-score presentation">@score.SpeedAndPower.ToDisplayString()</div>
+        <div class="judge-score presentation">@score.RhythmAndTempo.ToDisplayString()</div>
+        <div class="judge-score presentation">@score.ExpressionAndEnergy.ToDisplayString()</div>
+    }
+</div>
+@code {
+    [Inject] IResultService resultService { get; set; }
+    [Inject] IFighterDataService fighterDataService { get; set; }
+
+    [Parameter] public DeviceDto Judge { get; set; }
+    [Parameter] public EScoringButtonColor Color { get; set; }
+
+
+    private bool TryGetScore(EScoringButtonColor color, out ScoreDto score)
+    {
+        score = null;
+        if (this.resultService.Result.Results.TryGetValue(this.Judge.Id, out var run))
+        {
+            if (color is EScoringButtonColor.Red && run.HongScore is not null
+             && this.fighterDataService.CurrentRed is not null)
+            {
+                score = run.HongScore;
+                return true;
+            }
+            if (color is EScoringButtonColor.Blue && run.ChongScore is not null
+             && this.fighterDataService.CurrentBlue is not null)
+            {
+                score = run.ChongScore;
+                return true;
+            }
+        }
+        return false;
+    }
+}

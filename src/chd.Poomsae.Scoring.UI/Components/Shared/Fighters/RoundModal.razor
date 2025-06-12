@@ -60,7 +60,7 @@
     }
     private async Task DeleteRound()
     {
-        var res = await this.modalService.ShowYesNoDialog($"Runde löschen");
+        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie den Lauf wirklich löschen?");
         if (res is EDialogResult.Yes)
         {
             await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<RoundDto>(this.Round, EDataAction.Delete)));

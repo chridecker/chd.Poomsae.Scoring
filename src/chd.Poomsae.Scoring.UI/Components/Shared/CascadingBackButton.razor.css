@@ -13,6 +13,8 @@
     background: var(--chd-p-blue-transparent);
 }
 
+   
+
     .global-back-button:has(:hover) {
         background: var(--chd-p-blue-semi-transparent);
     }
@@ -35,4 +37,7 @@
         left: 0.5rem;
         top: 0.5rem;
     }
+        .global-back-button.ios {
+            top: 1.5rem;
+        }
 }

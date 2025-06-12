@@ -27,28 +27,16 @@
 
 
 @code {
-    [Inject] IResultService resultService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         this._deviceHandler.RequestLandscape();
-
         await base.OnInitializedAsync();
     }
 
-    protected override Task Clear()
-    {
-        this.resultService.Clear();
-        return base.Clear();
-    }
 
     protected override async Task OnResultReceived(ScoreReceivedEventArgs e)
     {
-        this.resultService.SetRun(e.Device.Id, new()
-        {
-            ChongScore = e.Chong,
-            HongScore = e.Hong
-        });
         await this.InvokeAsync(this.StateHasChanged);
     }
 

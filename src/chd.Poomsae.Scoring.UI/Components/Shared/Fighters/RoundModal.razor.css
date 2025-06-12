@@ -40,11 +40,15 @@
                 .round-container .round-header .round-header-data.round-name input[type=text] {
                     width: 100%;
                     border: none;
+                    padding: 0 0.2rem;
+                    background:none;
+                    color: var(--chd-font-color);
                 }
 
                     .round-container .round-header .round-header-data.round-name input[type=text]:active,
                     .round-container .round-header .round-header-data.round-name input[type=text]:focus {
                         outline: none;
+                        color: white;
                     }
 
             .round-container .round-header .round-header-data.round-date {
@@ -55,7 +59,7 @@
             }
 
         .round-container .round-header .round-total-scores .round-total {
-            text-align:center;
+            text-align: center;
         }
 
             .round-container .round-header .round-total-scores .round-total.presentation {
@@ -81,6 +85,7 @@
     }
 
     .round-container .round-buttons {
+        padding: 0 0.5rem;
         background: var(--chd-bg);
         border-radius: 0;
         display: flex;
@@ -88,6 +93,12 @@
         width: 100%;
         margin-top: auto;
     }
+
         .round-container .round-buttons ::deep button.icon-button {
             background: none;
+            padding: 0.2rem 0.4rem;
         }
+
+            .round-container .round-buttons ::deep button.icon-button svg {
+                height: 1.4rem;
+            }

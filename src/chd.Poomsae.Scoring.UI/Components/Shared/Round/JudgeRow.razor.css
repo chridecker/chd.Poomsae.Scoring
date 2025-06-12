@@ -1,0 +1,9 @@
+﻿.judge-row {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+    .judge-row .judge-name {
+        text-align: center;
+        align-self:center;
+    }

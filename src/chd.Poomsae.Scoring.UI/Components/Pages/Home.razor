@@ -23,6 +23,12 @@
             <div class="text">@TextConstants.Fighters</div>
         </div>
     </ChdAuthorizeView>
+    <ChdAuthorizeView TRightId="int" TUserId="Guid" Rights="[RightConstants.HAS_FIGHTERS]">
+        <div class="home-card" @onclick="() => this.GoTo(ROUND)">
+            <div class="logo"><CustomIcon FAClass="trophy" /></div>
+            <div class="text">@TextConstants.Scores</div>
+        </div>
+    </ChdAuthorizeView>
     @*  <div class="home-card" @onclick="async () => await this.ManageLicense()">
         <div class="logo"><CustomIcon FAClass="badge-check" /></div>
         <div class="text">@TextConstants.License</div>
@@ -35,6 +41,7 @@
     const string ELIM = "eliminationscore";
     const string RESULTS = "results";
     const string FIGHTERS = "fighters";
+    const string ROUND = "round";
 
     [Inject] INavigationHandler _navigationHandler { get; set; }
     [Inject] IModalHandler _modalService { get; set; }

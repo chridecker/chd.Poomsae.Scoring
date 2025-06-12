@@ -33,12 +33,14 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string Eliminiation = "Head to Head";
         public const string Results = "Ergebnisse";
         public const string Fighters = "Teilnehmer";
+        public const string Scores = "Wertung";
         public const string License = "Lizenz";
 
         public const string AddFighter = "Teilnehmer hinzufügen";
         public const string RemoveFighter = "Teilnehmer löschen";
         public const string EditFighter = "Teilnehmer bearbeiten";
 
+        public const string SaveRound = "Speichern";
         public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
         public const string SearchDevices = "Erweiterte Gerätesuche";
         public const string RemoveDevices = "Geräte Löschen";

@@ -1,8 +1,5 @@
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="fighter-round" @onclick="this.OpenRound">
-    <div class="round-icon">
-        <CustomIcon FAClass="chess-bishop" Style="chd.UI.Base.Contracts.Enum.EIconStyle.Regular" />
-    </div>
     @if (!string.IsNullOrWhiteSpace(this.Round.Name))
     {
         <div class="fighter-score full">
@@ -28,7 +25,7 @@
 
     private async Task OpenRound()
     {
-        var res = await this.modalService.Show<RoundModal>("Runde", new ModalParameters()
+        var res = await this.modalService.Show<RoundModal>("Lauf", new ModalParameters()
     {
     {nameof(RoundModal.Round),this.Round}
     }, new ModalOptions()
