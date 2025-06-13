@@ -62,10 +62,10 @@
     {
         var parameters = new ModalParameters
             {
-                { nameof(SearchModalComponent<string, string>.Items),new string[]{"Tageuk 1","Taeguk 2", "Koryo","Kumgang","Taebek" } },
+                { nameof(SearchModalComponent<string, string>.Items),TextConstants.PoomsaeRuns },
                 { nameof(SearchModalComponent<string, string>.DisableOrder), true },
             };
-        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>("Lauf Suche", parameters);
+        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>("Form Auswahl", parameters);
 
         var result = await modalInstance.Result;
         if (result.Confirmed && result.Data is string runTitle)
@@ -81,7 +81,7 @@
     }
     private async Task Print()
     {
-        await this.printService.PrintComponentAsync<FighterRoundPrint>(new Dictionary<string, object?>() { { nameof(FighterRoundPrint.Round), this.Round } });
+        await this.printService.PrintComponentAsync<FighterRoundPrint>(new Dictionary<string, object?>() { { nameof(FighterRoundPrint.Round), this.Round } }, this.Round.Name);
     }
     private async Task DeleteRound()
     {

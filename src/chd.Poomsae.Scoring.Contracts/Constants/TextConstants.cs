@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.Contracts.Constants
 {
-    public  class TextConstants
+    public class TextConstants
     {
         public const string Accuracy = "Technik";
         public const string Presentation = "Präsentation";
@@ -30,7 +30,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string Send = "Senden";
         public const string Restart = "Neustart";
 
-        public const string Single= "Einzel";
+        public const string Single = "Einzel";
         public const string Eliminiation = "Head to Head";
         public const string Results = "Ergebnisse";
         public const string Fighters = "Teilnehmer";
@@ -49,6 +49,12 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
 
         public const string NoLicense = "Es konnte keine gültige Lizenz ermittelt!";
         public const string NoUser = "Es konnte kein Benutzer ermittelt werden!";
+
+        private static IEnumerable<string> Taegeuks => Enumerable.Range(1, 8).Select(s => $"Taegeuk {s}");
+        private static IEnumerable<string> Dans => ["Koryo", "Keumgang", "Taeback", "Pyongwon", "Shipjin", "Jitae", "Chonkwon", "Hansu", "Ilyo"];
+
+        public static IEnumerable<string> PoomsaeRuns => Taegeuks.Union(Dans);
+
 
 
     }

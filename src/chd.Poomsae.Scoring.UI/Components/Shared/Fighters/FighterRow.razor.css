@@ -21,6 +21,11 @@
         border-radius: 0 0 0.5rem 0.5rem;
     }
 
+        .fighter-row:last-child:first-child {
+            border-bottom: none;
+            border-radius: 0.5rem;
+        }
+
     .fighter-row.red {
         background: var(--chd-p-red-semi-gradient-left);
     }
