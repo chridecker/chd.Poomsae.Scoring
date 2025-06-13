@@ -27,10 +27,6 @@
                 border-bottom: none;
             }
 
-            .round-container .round-header .round-header-data ::deep .icon-button svg {
-                padding: 0.2rem 0.4rem;
-                background: none;
-            }
 
             .round-container .round-header .round-header-data ::deep svg {
                 align-self: center;
@@ -41,6 +37,11 @@
 
             .round-container .round-header .round-header-data.round-name {
             }
+
+                .round-container .round-header .round-header-data.round-name ::deep button.icon-button {
+                    padding: 0;
+                    background: none;
+                }
 
                 .round-container .round-header .round-header-data.round-name input[type=text] {
                     width: 100%;

@@ -1,5 +1,8 @@
-﻿.round-container {
-    margin: 3.5rem 0.5rem;
+﻿.page:not(.ios) .round-container {
+    margin-top: 2.8rem;
+}
+.round-container {
+    margin: 0.5rem 0.5rem;
     display: flex;
     flex-direction: column;
     padding: 0.2rem 0.4rem;
