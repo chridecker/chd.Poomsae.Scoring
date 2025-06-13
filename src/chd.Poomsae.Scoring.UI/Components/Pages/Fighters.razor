@@ -30,7 +30,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this._deviceHandler.ResetOrientation();
+        await this._deviceHandler.ResetOrientation();
 
         await base.OnInitializedAsync();
     }

@@ -46,7 +46,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected override async Task OnInitializedAsync()
         {
-            this._deviceHandler.RequestLandscape();
+            await this._deviceHandler.RequestLandscape();
 
             await this._backButton.SetBackButton(true);
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging, ChangeLocation);

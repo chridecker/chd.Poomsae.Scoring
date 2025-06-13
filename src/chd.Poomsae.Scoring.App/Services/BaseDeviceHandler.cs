@@ -39,8 +39,8 @@ namespace chd.Poomsae.Scoring.App.Services
         public void CloseApp() => Application.Current.Quit();
 
 
-        public abstract void RequestLandscape();
-        public abstract void ResetOrientation();
+        public abstract Task RequestLandscape();
+        public abstract Task ResetOrientation();
 
         protected abstract bool _isiOS { get; }
         protected abstract string _nativeUID { get; }

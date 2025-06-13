@@ -22,17 +22,52 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
 
         }
 
-        public override void RequestLandscape()
+        public override async Task RequestLandscape()
         {
-            //UIDevice.CurrentDevice.SetValueForKey(new NSNumber((int)UIInterfaceOrientation.LandscapeRight), new NSString("orientation"));
-            UIDevice.CurrentDevice.SetValueForKey(NSNumber.FromInt32((int)UIInterfaceOrientation.LandscapeLeft), new NSString("orientation"));
+            await this.SetDeviceOrientation(UIInterfaceOrientation.LandscapeLeft);
             UIViewController.AttemptRotationToDeviceOrientation();
         }
 
-        public override void ResetOrientation()
+        public override async Task ResetOrientation()
         {
-            UIDevice.CurrentDevice.SetValueForKey(NSNumber.FromInt32((int)UIInterfaceOrientation.Portrait), new NSString("orientation"));
+            await this.SetDeviceOrientation(UIInterfaceOrientation.Portrait);
             UIViewController.AttemptRotationToDeviceOrientation();
+        }
+        private async Task SetDeviceOrientation(UIInterfaceOrientation iosOrientation)
+        {
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(16, 0))
+            {
+                var scene = (UIApplication.SharedApplication.ConnectedScenes.ToArray()[0] as UIWindowScene);
+                if (scene != null)
+                {
+                    var uiAppplication = UIApplication.SharedApplication;
+                    var test = UIApplication.SharedApplication.KeyWindow?.RootViewController;
+                    if (test != null)
+                    {
+                        UIInterfaceOrientationMask NewOrientation;
+                        if (iosOrientation == UIInterfaceOrientation.Portrait)
+                        {
+                            NewOrientation = UIInterfaceOrientationMask.Portrait;
+                        }
+                        else
+                        {
+                            NewOrientation = UIInterfaceOrientationMask.LandscapeLeft;
+                        }
+                        scene.Title = "PerformOrientation";
+                        scene.RequestGeometryUpdate(
+                            new UIWindowSceneGeometryPreferencesIOS(NewOrientation), error => { System.Diagnostics.Debug.WriteLine(error.ToString()); });
+                        test.SetNeedsUpdateOfSupportedInterfaceOrientations();
+                        test.NavigationController?.SetNeedsUpdateOfSupportedInterfaceOrientations();
+                        await Task.Delay(500); //Gives the time to apply the view rotation
+                        scene.Title = "";
+                    }
+                }
+            }
+            else
+            {
+                UIDevice.CurrentDevice.SetValueForKey(new NSNumber((int)iosOrientation), new NSString("orientation"));
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         string Name { get; }
         void CloseApp();
 
-        void RequestLandscape();
-        void ResetOrientation();
+        Task RequestLandscape();
+        Task ResetOrientation();
     }
 }

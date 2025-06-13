@@ -25,7 +25,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
 
         }
 
-        public override void RequestLandscape()
+        public override async Task RequestLandscape()
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
 
@@ -39,7 +39,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.Android
 
             activity.RequestedOrientation = ScreenOrientation.SensorLandscape;
         }
-        public override void ResetOrientation()
+        public override async Task ResetOrientation()
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
 

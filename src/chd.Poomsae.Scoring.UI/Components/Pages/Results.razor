@@ -30,7 +30,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this._deviceHandler.RequestLandscape();
+        await this._deviceHandler.RequestLandscape();
         await base.OnInitializedAsync();
     }
 
