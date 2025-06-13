@@ -60,7 +60,7 @@
 
     private async Task ChangeColor()
     {
-        var res = await this._modal.ShowYesNoDialog(TextConstants.ChangeColorQuestion);
+        var res = await this._modalService.ShowYesNoDialog(TextConstants.ChangeColorQuestion);
         if (res is not EDialogResult.Yes) { return; }
         this.runDto = this._runService.StartSingleRun(__colorChange());
 
@@ -77,7 +77,7 @@
     private async Task OpenPresentationModal(EScoringButtonColor color)
     {
         if (this.runDto.State is not ERunState.Started) { return; }
-        var modalResultBlue = await this._modal.Show<ScorePresentationModal>(TextConstants.Presentation, new ModalParameters(){
+        var modalResultBlue = await this._modalService.Show<ScorePresentationModal>(TextConstants.Presentation, new ModalParameters(){
                 {nameof(ScorePresentationModal.Color),color},
                 {nameof(ScorePresentationModal.Dto), this.runDto.Score},
         }, new ModalOptions()

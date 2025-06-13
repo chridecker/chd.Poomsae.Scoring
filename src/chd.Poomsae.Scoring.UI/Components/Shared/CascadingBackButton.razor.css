@@ -13,9 +13,8 @@
     background: var(--chd-p-blue-transparent);
 }
 
-   
 
-    .global-back-button:has(:hover) {
+    .global-back-button:has(:hover):not(.ios) {
         background: var(--chd-p-blue-semi-transparent);
     }
 
@@ -32,12 +31,69 @@
         height: 1.5rem;
     }
 
+    .global-back-button.ios {
+        top: var(--chd-ios-navbar-statusheight) !important;
+        left: 0;
+        width: 100%;
+        height: var(--chd-ios-navbar-available-height);
+        aspect-ratio: initial;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: none;
+        color: var(--chd-ios-blue);
+        justify-content: space-between;
+    }
+
+        .global-back-button.ios .ios-nav-arrow {
+            margin: 0 5px;
+        }
+
+            .global-back-button.ios .ios-nav-arrow ::deep svg {
+                fill: var(--chd-ios-blue);
+            }
+
+        .global-back-button.ios .ios-nav-title {
+        }
+
+        .global-back-button.ios .ios-nav-right {
+            margin: 0 5px;
+        }
+
+            .global-back-button.ios .ios-nav-right ::deep button.btn.icon-button {
+                background: var(--chd-bg);
+                border: none;
+                padding: 0.2rem 0.4rem;
+            }
+
+                .global-back-button.ios .ios-nav-right ::deep button.btn.icon-button svg {
+                    fill: var(--chd-ios-blue);
+                    height: 17pt;
+                }
+
+
 @media only screen and (orientation: portrait) {
     .global-back-button {
         left: 0.5rem;
         top: 0.5rem;
     }
+
         .global-back-button.ios {
-            top: 2rem !important;
+            background: var(--chd-bg);
         }
+
+            .global-back-button.ios .ios-nav-arrow {
+                margin: 0 5px;
+            }
+
+                .global-back-button.ios .ios-nav-arrow ::deep svg {
+                    fill: var(--chd-ios-blue);
+                }
+
+            .global-back-button.ios .ios-nav-title {
+            }
+
+            .global-back-button.ios .ios-nav-right {
+                right: 0;
+            }
 }

@@ -41,7 +41,7 @@
 
 @code {
     [Inject] IFighterDataService fighterDataService { get; set; }
-
+    protected override string _navigationTitle => "Wertung";
     private string _roundName;
 
     private async Task SetBlue()
@@ -77,7 +77,7 @@
                 { nameof(SearchModalComponent<string, string>.Items),new string[]{"Tageuk 1","Taeguk 2", "Koryo","Kumgang","Taebek" } },
                 { nameof(SearchModalComponent<string, string>.DisableOrder), true },
             };
-        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>("Lauf Suche", parameters);
+        var modalInstance = this._modalService.Show<SearchModalComponent<string, string>>("Lauf Suche", parameters);
 
         var result = await modalInstance.Result;
         if (result.Confirmed && result.Data is string runTitle)
@@ -98,7 +98,7 @@
                 { nameof(SearchModalComponent<FighterDto, Guid>.RenderParameterDict),(FighterDto dto)=> SearchModalComponent<FighterDto,Guid>.CreateRenderParameterDict(dto,((x)=> nameof(FighterSearchItem.Fighter),(x)=>x))},
                 { nameof(SearchModalComponent<FighterDto, Guid>.DisableOrder), false },
             };
-        var modalInstance = this.modalService.Show<SearchModalComponent<FighterDto, Guid>>("Teilnehmer Suche", parameters);
+        var modalInstance = this._modalService.Show<SearchModalComponent<FighterDto, Guid>>("Teilnehmer Suche", parameters);
 
         var result = await modalInstance.Result;
         if (result.Confirmed && result.Data is FighterDto fighter)
@@ -149,7 +149,7 @@
         || this.fighterDataService.CurrentBlue is not null
         || this.fighterDataService.CurrentRed is not null)
         {
-            var res = await this.modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+            var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
             if (res is not EDialogResult.Yes)
             {
                 return false;

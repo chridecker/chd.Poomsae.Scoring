@@ -21,28 +21,22 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
-    public abstract class BaseClientComponent : ComponentBase, IDisposable
+    public abstract class BaseClientComponent : BaseNavigationComponent
     {
-        [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
 
         [Inject] protected IResultService resultService { get; set; }
         [Inject] protected IBroadcastClient broadcastClient { get; set; }
-        [Inject] protected IModalHandler modalService { get; set; }
-        [Inject] protected IDeviceHandler _deviceHandler { get; set; }
-        [Inject] INavigationHandler _navigationManager { get; set; }
-        private IDisposable _registerLocationChangeHandler;
 
-        private CancellationTokenSource _cts = new();
         protected ConcurrentDictionary<Guid, DeviceDto> _connectedDevices = [];
 
         protected IModalReference _loadingModal;
 
+        protected override bool _showBackButton => true;
+        protected override string _navigationBackTitle => "Home";
+
+
         protected override async Task OnInitializedAsync()
         {
-            await this._backButton.SetBackButton(true);
-
-            this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging);
-
             this.broadcastClient.ResultReceived += ResultReceived;
             this.broadcastClient.DeviceFound += DeviceFound;
             this.broadcastClient.DeviceDisconnected += DeviceDisconnect;
@@ -60,7 +54,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task Discover()
         {
-            var result = await this.modalService.Show<DiscoverDevices>("Geräte Suchen", new ModalOptions()
+            var result = await this._modalService.Show<DiscoverDevices>("Geräte Suchen", new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
@@ -75,7 +69,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task RemoveDevices()
         {
-            var result = await this.modalService.Show<SelectConnectedDevices>("Geräte Entfernen", new ModalOptions()
+            var result = await this._modalService.Show<SelectConnectedDevices>("Geräte Entfernen", new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
@@ -95,7 +89,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task Search()
         {
-            this._loadingModal = this.modalService.ShowLoading("");
+            this._loadingModal = this._modalService.ShowLoading("");
             await this.Clear();
             await Task.WhenAny(this.broadcastClient.StartAutoConnectAsync(this._cts.Token), Task.Delay(TimeSpan.FromSeconds(2), this._cts.Token));
         }
@@ -158,11 +152,11 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
 
 
-        protected virtual async ValueTask<bool> OnLocationChanging()
+        protected override async ValueTask<bool> OnLocationChanging()
         {
             if (this._connectedDevices.Any())
             {
-                var res = await this.modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+                var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
                 if (res == EDialogResult.No)
                 {
                     return false;
@@ -171,21 +165,16 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             return true;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this._cts.Cancel();
+
             this.broadcastClient.ResultReceived -= ResultReceived;
             this.broadcastClient.DeviceFound -= DeviceFound;
             this.broadcastClient.DeviceNameChanged -= DeviceFound;
             this.broadcastClient.DeviceDisconnected -= DeviceDisconnect;
             this.broadcastClient.ScanTimeout -= this.ScanFinished;
 
-            if (this._registerLocationChangeHandler is not null)
-            {
-                this._registerLocationChangeHandler.Dispose();
-            }
-
-            this._cts.Dispose();
+            base.Dispose();
         }
     }
 }

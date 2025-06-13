@@ -27,9 +27,14 @@
 
     [Inject] IFighterDataService fighterDataService { get; set; }
 
+    protected override string _navigationTitle => "Teilnehmer";
 
     protected override async Task OnInitializedAsync()
     {
+        this._backButton.IconRight="plus";
+        this._backButton.RightClick = this.AddFighter;
+
+
         await this._deviceHandler.ResetOrientation();
 
         await base.OnInitializedAsync();
@@ -60,7 +65,7 @@
     private async Task AddFighter()
     {
         var fighter = new FighterDto();
-        var res = await this.modalService.Show<FighterModal>("Teilnehmer", new ModalParameters() {
+        var res = await this._modalService.Show<FighterModal>("Teilnehmer", new ModalParameters() {
         { nameof(FighterModal.Fighter), fighter },
         {nameof(FighterModal.IsNew),true}
     }, new ModalOptions()
@@ -90,6 +95,11 @@
     {
         await this.broadcastClient.SendFighter(this.fighterDataService.CurrentBlue, EScoringButtonColor.Blue, device);
         await this.broadcastClient.SendFighter(this.fighterDataService.CurrentRed, EScoringButtonColor.Red, device);
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
     }
 
 }

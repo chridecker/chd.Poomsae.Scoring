@@ -25,32 +25,25 @@ using System.Threading.Tasks;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {
-    public abstract class BaseScoringComponent<TRunDto> : PageComponentBase<Guid, int>, IDisposable
+    public abstract class BaseScoringComponent<TRunDto> : BaseNavigationComponent
         where TRunDto : RunDto
     {
-        [CascadingParameter] protected CascadingBackButton _backButton { get; set; }
-
-        [Inject] private INavigationHandler _navigationManager { get; set; }
         [Inject] protected IStartRunService _runService { get; set; }
-        [Inject] protected IModalHandler _modal { get; set; }
         [Inject] IBroadCastService broadCastService { get; set; }
-        [Inject] protected IDeviceHandler _deviceHandler { get; set; }
 
         protected TRunDto runDto;
         protected string blueName = string.Empty;
         protected string redName = string.Empty;
 
-        private IDisposable _registerLocationChangeHandler;
-
         protected bool _isLicensed = false;
+
+        protected override bool _showBackButton => true;
+        protected override string _navigationBackTitle => "";
+         protected override string _navigationTitle => "";
 
         protected override async Task OnInitializedAsync()
         {
             await this._deviceHandler.RequestLandscape();
-
-            await this._backButton.SetBackButton(true);
-            this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging, ChangeLocation);
-
 
             this.blueName = this.broadCastService.BlueName;
             this.redName = this.broadCastService.RedName;
@@ -126,7 +119,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
         private async Task ResetResults()
         {
-            var res = await this._modal.ShowYesNoDialog(TextConstants.ResetScoreQuestion);
+            var res = await this._modalService.ShowYesNoDialog(TextConstants.ResetScoreQuestion);
             if (res is EDialogResult.Yes)
             {
                 this.broadCastService.ResetScore();
@@ -137,7 +130,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         private async Task SendResults()
         {
             this.broadCastService.BroadcastResult(this.runDto);
-            _ = await this._modal.ShowSmallDialog(TextConstants.ScoresSend, EDialogButtons.OK);
+            _ = await this._modalService.ShowSmallDialog(TextConstants.ScoresSend, EDialogButtons.OK);
         }
         private void CalculateAccuracyScore(ScoreDto dto, decimal value)
         {
@@ -156,11 +149,11 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             }
         }
 
-        private async ValueTask<bool> OnLocationChanging()
+        protected override async ValueTask<bool> OnLocationChanging()
         {
             if (this.runDto.State is ERunState.Started)
             {
-                var res = await this._modal.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+                var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
                 if (res is not EDialogResult.Yes)
                 {
                     return false;
@@ -169,23 +162,21 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
             return true;
         }
 
-        private async ValueTask ChangeLocation()
+        protected override async ValueTask ChangeLocation()
         {
             if (this.runDto.State is not ERunState.Started)
             {
                 this.broadCastService.ResetScore();
             }
+            await base.ChangeLocation();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             this.broadCastService.BlueNameReceived -= this.BroadCastService_BlueNameReceived;
             this.broadCastService.RedNameReceived -= this.BroadCastService_RedNameReceived;
 
-            if (this._registerLocationChangeHandler is not null)
-            {
-                this._registerLocationChangeHandler.Dispose();
-            }
+            base.Dispose();
         }
     }
 }

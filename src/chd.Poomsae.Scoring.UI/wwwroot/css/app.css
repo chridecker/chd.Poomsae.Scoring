@@ -54,6 +54,11 @@
     --chd-main-color-theme: var(--chd-p-blue) !important;
     --chd-main-color-theme-transparent: var(--chd-p-blue-transparent) !important;
     --chd-main-color-theme-semi-transparent: var(--chd-p-blue-semi-transparent) !important;
+    --chd-ios-blue: rgb(0,122,255);
+    /*ios*/
+    --chd-ios-navbar-height: 66px;
+    --chd-ios-navbar-statusheight: 22px;
+    --chd-ios-navbar-available-height: calc(var(--chd-ios-navbar-height) - var(--chd-ios-navbar-statusheight));
 }
 
 body #app #startup-logo {

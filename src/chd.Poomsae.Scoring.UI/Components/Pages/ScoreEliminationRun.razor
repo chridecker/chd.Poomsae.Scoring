@@ -64,7 +64,7 @@
 
         if (color is EScoringButtonColor.Blue)
         {
-            var modalResultBlue = await this._modal.Show<ScorePresentationModal>
+            var modalResultBlue = await this._modalService.Show<ScorePresentationModal>
                 (TextConstants.Blue, new ModalParameters()
                                                                                     {
                     {nameof(ScorePresentationModal.Color),color},
@@ -77,7 +77,7 @@
         }
         else
         {
-            var modalResultRed = await this._modal.Show<ScorePresentationModal>
+            var modalResultRed = await this._modalService.Show<ScorePresentationModal>
                 (TextConstants.Red, new ModalParameters(){
             {nameof(ScorePresentationModal.Color),color },
             {nameof(ScorePresentationModal.Dto),this.runDto.HongScore}

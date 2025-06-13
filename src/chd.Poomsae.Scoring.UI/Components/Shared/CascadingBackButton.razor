@@ -1,13 +1,41 @@
-<div class="global-back-button @(this._showBackButton ? "" : " hide ") @(deviceHandler.IsiOS ? "ios" : "") " @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
-<CascadingValue IsFixed="true" Value="this">
-    @ChildContent
-</CascadingValue>
+@using chd.UI.Base.Contracts.Enum
+@if (this.deviceHandler.IsiOS)
+{
+    <div class="global-back-button ios @(this._showBackButton ? "" : " hide ") ">
+        <div class="ios-nav-arrow" @onclick="this.HandleBack">
+            <CustomIcon FAClass="chevron-left" Style="EIconStyle.Regular" />@BackTitle
+        </div>
+        <div class="ios-nav-title">@Title</div>
+        <div class="ios-nav-right" @onclick:stopPropagation>
+            @if (this.RightClick is not null)
+            {
+                <IconButton FAClass="@this.IconRight" Style="EIconStyle.Regular" OnClick="this.RightClick" />
+            }
+        </div>
+    </div>
+    <CascadingValue IsFixed="true" Value="this">
+        @ChildContent
+    </CascadingValue>
+}
+else
+{
+    <div class="global-back-button @(this._showBackButton ? "" : " hide ")" @onclick="this.HandleBack"><CustomIcon FAClass="arrow-left" /></div>
+    <CascadingValue IsFixed="true" Value="this">
+        @ChildContent
+    </CascadingValue>
+}
 @code {
     [Parameter] public RenderFragment ChildContent { get; set; }
 
     [Inject] IDeviceHandler deviceHandler { get; set; }
     [Inject] INavigationHandler navigationHandler { get; set; }
 
+
+    public string IconRight { get; set; } = "ellipsis";
+
+    public string BackTitle { get; set; }
+    public string Title { get; set; }
+    public Func<Task> RightClick { get; set; }
 
     private bool _showBackButton = true;
 

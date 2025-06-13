@@ -27,7 +27,7 @@
 
 
 @code {
-
+    protected override string _navigationTitle => "";
     protected override async Task OnInitializedAsync()
     {
         await this._deviceHandler.RequestLandscape();
