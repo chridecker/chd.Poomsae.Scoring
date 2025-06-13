@@ -50,6 +50,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this._backButton.BackTitle = string.Empty;
+        this._backButton.Title = string.Empty;
+        this._backButton.RightClick = null;
+
+        if (this._deviceHandler.IsiOS)
+        {
+            await this._backButton.SetBackButton(true);
+        }
+
         await this._deviceHandler.ResetOrientation();
         await this._backButton.SetBackButton(false);
 

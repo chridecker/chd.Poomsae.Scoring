@@ -59,7 +59,6 @@
     --chd-ios-navbar-height: calc(var(--chd-ios-navbar-available-height) + var(--chd-ios-navbar-statusheight));
     --chd-ios-navbar-statusheight: 33px;
     --chd-ios-navbar-available-height: 44px;
-    ;
 }
 
 body #app #startup-logo {
@@ -141,7 +140,6 @@ body #app #startup-logo {
     }
 
     main {
-        margin-top: 0 !important;
     }
 
     .sidebar {

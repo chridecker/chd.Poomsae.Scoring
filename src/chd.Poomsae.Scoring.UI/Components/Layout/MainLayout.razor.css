@@ -30,7 +30,9 @@ article {
 }
 
     .page.ios main {
-        padding: var(--chd-ios-navbar-height) 0 1.5rem 0;
+        padding: 0;
+        margin-top: var(--chd-ios-navbar-statusheight);
+        height: calc(var(--main-article-available-height) - var(--chd-ios-navbar-statusheight) - 0.5rem);
     }
 
 @media only screen and (orientation: landscape) {
