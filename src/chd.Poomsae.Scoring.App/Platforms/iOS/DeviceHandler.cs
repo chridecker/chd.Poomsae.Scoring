@@ -24,7 +24,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
 
         public override async Task RequestLandscape()
         {
-            await this.SetDeviceOrientation(UIInterfaceOrientation.LandscapeLeft);
+            await this.SetDeviceOrientation(UIInterfaceOrientation.LandscapeRight);
             UIViewController.AttemptRotationToDeviceOrientation();
         }
 
