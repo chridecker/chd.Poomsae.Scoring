@@ -1,15 +1,16 @@
 @using chd.Poomsae.Scoring.UI.Components.Shared.Prints
 @using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Components.General.Search
 @using chd.UI.Base.Contracts.Enum
 <div class="round-container">
     <div class="round-header">
         <div class="round-header-data fighter-name">
-            <CustomIcon FAClass="user" Style="EIconStyle.Regular" />
+            <IconButton FAClass="user" Style="EIconStyle.Regular" OnClick="this.ChooseRoundTitle" />
             @this.Round.Fighter.FullName
         </div>
         <div class="round-header-data round-name">
-            <CustomIcon FAClass="input-text" Style="EIconStyle.Regular" />
-            <input type="text" @bind-value="this._roundName" />
+            <CustomIcon FAClass="input-text" Style="EIconStyle.Regular" On />
+            <input type="text" @bind-value="this._roundName" placeholder="Form eingeben ..." />
         </div>
         <div class="round-header-data round-date">
             <CustomIcon FAClass="calendar" Style="EIconStyle.Regular" />
@@ -50,6 +51,28 @@
     {
         this._roundName = this.Round.Name;
         await base.OnInitializedAsync();
+    }
+
+    private async Task ChooseRoundTitle()
+    {
+        this._roundName = await this.ShowRoundTitleSearchModal();
+        await this.InvokeAsync(this.StateHasChanged);
+    }
+    private async Task<string> ShowRoundTitleSearchModal()
+    {
+        var parameters = new ModalParameters
+            {
+                { nameof(SearchModalComponent<string, string>.Items),new string[]{"Tageuk 1","Taeguk 2", "Koryo","Kumgang","Taebek" } },
+                { nameof(SearchModalComponent<string, string>.DisableOrder), true },
+            };
+        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>("Lauf Suche", parameters);
+
+        var result = await modalInstance.Result;
+        if (result.Confirmed && result.Data is string runTitle)
+        {
+            return runTitle;
+        }
+        return string.Empty;
     }
 
     private async Task Cancel()

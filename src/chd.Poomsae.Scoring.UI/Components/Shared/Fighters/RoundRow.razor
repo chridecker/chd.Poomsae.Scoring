@@ -25,7 +25,7 @@
 
     private async Task OpenRound()
     {
-        var res = await this.modalService.Show<RoundModal>("Lauf", new ModalParameters()
+        var res = await this.modalService.Show<RoundModal>("Form", new ModalParameters()
     {
     {nameof(RoundModal.Round),this.Round}
     }, new ModalOptions()

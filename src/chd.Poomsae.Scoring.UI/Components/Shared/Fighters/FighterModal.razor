@@ -9,7 +9,7 @@
     @if (this.Rounds.Any(a => a.Scores.Any()))
     {
         <div class="fighter-section rounds">
-            <div class="section-title">Läufe</div>
+            <div class="section-title">Formen</div>
             @foreach (var round in this.Rounds.OrderBy(o => o.Created))
             {
                 <RoundRow Reload="async () => await this.InvokeAsync(this.StateHasChanged)" Round="@round" />

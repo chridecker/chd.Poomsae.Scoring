@@ -27,6 +27,11 @@
                 border-bottom: none;
             }
 
+            .round-container .round-header .round-header-data ::deep .icon-button svg {
+                padding: 0.2rem 0.4rem;
+                background: none;
+            }
+
             .round-container .round-header .round-header-data ::deep svg {
                 align-self: center;
             }
@@ -41,7 +46,7 @@
                     width: 100%;
                     border: none;
                     padding: 0 0.2rem;
-                    background:none;
+                    background: none;
                     color: var(--chd-font-color);
                 }
 

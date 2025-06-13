@@ -11,7 +11,7 @@
     <div class="round-header">
         <div class="round-name">
             <IconButton FAClass="input-text" Style="EIconStyle.Regular" OnClick="this.ChooseRoundTitle" />
-            <input type="text" @bind-value="this._roundName" placeholder="Lauftitel" />
+            <input type="text" @bind-value="this._roundName" placeholder="Form eingeben ..." />
         </div>
         <div class="round-competitors">
             <div class="round-competitor red">@this.fighterDataService.CurrentRed?.DisplayName</div>
