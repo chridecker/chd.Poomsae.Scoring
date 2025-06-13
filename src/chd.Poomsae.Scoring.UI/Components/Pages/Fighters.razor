@@ -1,6 +1,8 @@
 @using chd.Poomsae.Scoring.UI.Components.Pages.Base
+@using chd.Poomsae.Scoring.UI.Components.Shared
 @using chd.Poomsae.Scoring.UI.Components.Shared.Fighters
 @using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Components.General.Search
 @using chd.UI.Base.Contracts.Enum
 @inherits BaseClientComponent
 @page "/fighters"
@@ -13,13 +15,14 @@
 </div>
 
 <FloatingActionNavigation FAIconActive="user-plus" TextActive="@TextConstants.AddFighter" OnClick="this.AddFighter">
+    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
     <FloatingActionButton FAClass="magnifying-glass-plus" Title="@TextConstants.AddDeviceAuto" OnClick="this.Search" />
     @if (this._connectedDevices.Any())
     {
         <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
         <FloatingActionButton FAClass="laptop-slash" Title="@TextConstants.RemoveDevice" OnClick="this.RemoveDevices" />
     }
-    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
+    <FloatingActionButton FAClass="ranking-star" Title="@TextConstants.PrintResult" OnClick="this.ChooseForResult" />
 </FloatingActionNavigation>
 
 
@@ -31,7 +34,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        this._backButton.IconRight="plus";
+        this._backButton.IconRight = "plus";
         this._backButton.RightClick = this.AddFighter;
 
 
@@ -60,6 +63,23 @@
     protected override async Task OnDeviceDisconncted(DeviceDto e)
     {
         await this.InvokeAsync(this.StateHasChanged);
+    }
+
+    private async Task ChooseForResult()
+    {
+        var parameters = new ModalParameters
+            {
+                { nameof(MultiSelectModalComponent<FighterDto>.Items), this.fighterDataService.Fighters},
+                { nameof(MultiSelectModalComponent<FighterDto>.RenderType),typeof(FighterSearchItem) },
+                { nameof(MultiSelectModalComponent<FighterDto>.RenderParameterDict),(FighterDto dto)=> MultiSelectModalComponent<FighterDto>.CreateRenderParameterDict(dto,((x)=> nameof(FighterSearchItem.Fighter),(x)=>x))},
+                { nameof(MultiSelectModalComponent<FighterDto>.ConfirmText), "Übernehmen"},
+            };
+        var modalInstance = this._modalService.Show<MultiSelectModalComponent<FighterDto>>("Teilnehmer Suche", parameters);
+
+        var result = await modalInstance.Result;
+        if (result.Confirmed && result.Data is List<FighterDto> fighterLst)
+        {
+        }
     }
 
     private async Task AddFighter()
