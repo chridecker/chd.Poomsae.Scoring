@@ -40,7 +40,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string AddFighter = "Teilnehmer hinzufügen";
         public const string RemoveFighter = "Teilnehmer löschen";
         public const string EditFighter = "Teilnehmer bearbeiten";
-        public const string PrintResult = "Ergebnisseliste erstellen";
+        public const string PrintResult = "Ergebnisliste erstellen";
 
         public const string SaveRound = "Speichern";
         public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
