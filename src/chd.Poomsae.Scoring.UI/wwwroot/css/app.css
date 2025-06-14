@@ -54,7 +54,6 @@
     --chd-main-color-theme: var(--chd-p-blue) !important;
     --chd-main-color-theme-transparent: var(--chd-p-blue-transparent) !important;
     --chd-main-color-theme-semi-transparent: var(--chd-p-blue-semi-transparent) !important;
-    --chd-ios-blue: rgb(0,122,255);
     /*ios*/
     --chd-ios-navbar-height: calc(var(--chd-ios-navbar-available-height) + var(--chd-ios-navbar-statusheight));
     --chd-ios-navbar-statusheight: 33px;
@@ -118,6 +117,26 @@ body #app #startup-logo {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.chd-app-modal .bm-content .multiselect-search-modal-component {
+}
+
+    .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all {
+        align-items:center;
+    }
+
+        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all button.icon-button {
+            background:none;
+        }
+
+        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all .multiselected-count::after {
+            content: ')'
+        }
+        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all .multiselected-count::before {
+            content: '('
+        }
+        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all .multiselected-count {
+        }
 
 .fab-navigation {
 }

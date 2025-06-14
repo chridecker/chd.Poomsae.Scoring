@@ -31,10 +31,10 @@
     [Inject] IFighterDataService fighterDataService { get; set; }
 
     protected override string _navigationTitle => "Teilnehmer";
+    protected override string _rightButtonIcon => "pllus";
 
     protected override async Task OnInitializedAsync()
     {
-        this._backButton.IconRight = "plus";
         this._backButton.RightClick = this.AddFighter;
 
 

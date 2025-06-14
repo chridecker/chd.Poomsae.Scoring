@@ -28,13 +28,12 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         protected abstract bool _showBackButton { get; }
         protected abstract string _navigationBackTitle { get; }
         protected abstract string _navigationTitle { get; }
+        protected virtual string _rightButtonIcon { get; } = "ellipsis";
 
         protected override async Task OnInitializedAsync()
         {
             await this._backButton.SetBackButton(this._showBackButton);
-            this._backButton.BackTitle = this._navigationBackTitle;
-            this._backButton.Title = this._navigationTitle;
-
+            await this._backButton.SetTitle(this._navigationTitle, this._navigationBackTitle, this._rightButtonIcon);
 
             this._registerLocationChangeHandler = this._navigationManager.RegisterLocationChangingHandler(OnLocationChanging, ChangeLocation);
             await base.OnInitializedAsync();
@@ -50,7 +49,6 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         public virtual void Dispose()
         {
             this._backButton.RightClick = null;
-            this._backButton.IconRight = "ellipsis";
 
             this._cts.Cancel();
 

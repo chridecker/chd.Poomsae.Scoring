@@ -3,13 +3,13 @@
 {
     <div class="global-back-button ios @(this._showBackButton ? "" : " hide ") ">
         <div class="ios-nav-arrow" @onclick="this.HandleBack">
-            <CustomIcon FAClass="chevron-left" Style="EIconStyle.Regular" />@BackTitle
+            <CustomIcon FAClass="chevron-left" Style="EIconStyle.Regular" />@_backTitle
         </div>
-        <div class="ios-nav-title">@Title</div>
+        <div class="ios-nav-title">@_title</div>
         <div class="ios-nav-right" @onclick:stopPropagation>
             @if (this.RightClick is not null)
             {
-                <IconButton FAClass="@this.IconRight" Style="EIconStyle.Regular" OnClick="this.RightClick" />
+                <IconButton FAClass="@this._iconRight" Style="EIconStyle.Regular" OnClick="this.RightClick" />
             }
         </div>
     </div>
@@ -31,10 +31,10 @@ else
     [Inject] INavigationHandler navigationHandler { get; set; }
 
 
-    public string IconRight { get; set; } = "ellipsis";
+    private string _iconRight = "ellipsis";
 
-    public string BackTitle { get; set; }
-    public string Title { get; set; }
+    private string _backTitle;
+    private string _title;
     public Func<Task> RightClick { get; set; }
 
     private bool _showBackButton = true;
@@ -42,6 +42,14 @@ else
     protected override void OnInitialized()
     {
         base.OnInitialized();
+    }
+
+    public async Task SetTitle(string title, string backTitle, string icon = "ellipsis")
+    {
+        this._title = title;
+        this._backTitle = backTitle;
+        this._iconRight = icon;
+        await this.InvokeAsync(this.StateHasChanged);
     }
 
     public async Task SetBackButton(bool value)
