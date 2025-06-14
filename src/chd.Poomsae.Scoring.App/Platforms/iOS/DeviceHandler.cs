@@ -52,7 +52,7 @@ namespace chd.Poomsae.Scoring.App.Platforms.iOS
                         }
                         else
                         {
-                            NewOrientation = UIInterfaceOrientationMask.LandscapeLeft;
+                            NewOrientation = UIInterfaceOrientationMask.Landscape;
                         }
                         scene.Title = "PerformOrientation";
                         scene.RequestGeometryUpdate(

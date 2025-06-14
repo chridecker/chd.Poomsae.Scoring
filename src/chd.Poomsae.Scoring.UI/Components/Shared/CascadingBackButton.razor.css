@@ -9,8 +9,9 @@
     top: 1.2rem;
     align-content: center;
     align-items: center;
-    display: flex;
+    display: grid;
     background: var(--chd-p-blue-transparent);
+    grid-template-columns: repeat(3,1fr);
 }
 
 
@@ -47,6 +48,9 @@
 
         .global-back-button.ios .ios-nav-arrow {
             margin: 0 5px;
+            justify-items: start;
+            font-size: 0.9rem;
+            align-items: center;
         }
 
             .global-back-button.ios .ios-nav-arrow ::deep svg {
@@ -54,10 +58,12 @@
             }
 
         .global-back-button.ios .ios-nav-title {
+            justify-items: center;
         }
 
         .global-back-button.ios .ios-nav-right {
             margin: 0 5px;
+            justify-items: end;
         }
 
             .global-back-button.ios .ios-nav-right ::deep button.btn.icon-button {
@@ -70,6 +76,23 @@
                     fill: var(--chd-ios-blue);
                     height: 17pt;
                 }
+
+
+@media only screen and (orientation: landscape) {
+    .global-back-button.ios {
+    }
+
+        .global-back-button.ios .ios-nav-title {
+        }
+
+        .global-back-button.ios .ios-nav-title {
+            display: none;
+        }
+
+        .global-back-button.ios .ios-nav-right {
+            display: none;
+        }
+}
 
 
 @media only screen and (orientation: portrait) {
