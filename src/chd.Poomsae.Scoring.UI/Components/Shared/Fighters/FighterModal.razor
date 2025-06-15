@@ -16,7 +16,7 @@
             }
         </div>
     }
-    <div class="fighter-section buttons">
+    <div class="fighter-section buttons @(this.IsNew ? "add" : "")">
         @if (this.IsNew)
         {
             <button class="btn btn-secondary" @onclick="this.Cancel">Abbrechen</button>
