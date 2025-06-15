@@ -17,7 +17,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
         Task UpdateFighter(FighterDto fighter);
         Task UpdateRound(RoundDto round);
         Task HandleResult(ScoreDto score, DeviceDto device, FighterDto fighterDto);
-        Task CreateRound(FighterDto fighter);
+        Task CreateRound(string name, FighterDto fighter);
         Task CloseRound(FighterDto fighter);
 
         Task SetBlue(FighterDto fighterDto);

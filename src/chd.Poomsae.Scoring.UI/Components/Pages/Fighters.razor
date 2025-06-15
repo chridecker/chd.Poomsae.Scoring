@@ -31,11 +31,11 @@
     [Inject] IFighterDataService fighterDataService { get; set; }
 
     protected override string _navigationTitle => "Teilnehmer";
-    protected override string _rightButtonIcon => "pllus";
 
     protected override async Task OnInitializedAsync()
     {
         this._backButton.RightClick = this.AddFighter;
+        await this._backButton.SetTitle(this._navigationTitle, this._navigationBackTitle, "plus");
 
 
         await this._deviceHandler.ResetOrientation();
@@ -72,6 +72,10 @@
                 { nameof(MultiSelectModalComponent<FighterDto>.Items), this.fighterDataService.Fighters},
                 { nameof(MultiSelectModalComponent<FighterDto>.RenderType),typeof(FighterSearchItem) },
                 { nameof(MultiSelectModalComponent<FighterDto>.RenderParameterDict),(FighterDto dto)=> MultiSelectModalComponent<FighterDto>.CreateRenderParameterDict(dto,((x)=> nameof(FighterSearchItem.Fighter),(x)=>x))},
+                { nameof(MultiSelectModalComponent<FighterDto>.SelectAllText), "Alles auswählen"},
+                { nameof(MultiSelectModalComponent<FighterDto>.SelectNoneText), "Alles abwählen"},
+                { nameof(MultiSelectModalComponent<FighterDto>.ShowCount), false},
+
                 { nameof(MultiSelectModalComponent<FighterDto>.ConfirmText), "Übernehmen"},
             };
         var modalInstance = this._modalService.Show<MultiSelectModalComponent<FighterDto>>("Teilnehmer Suche", parameters);

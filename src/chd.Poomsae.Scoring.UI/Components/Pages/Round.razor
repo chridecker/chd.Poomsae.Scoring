@@ -112,7 +112,7 @@
     {
         if (this.fighterDataService.CurrentBlue is not null)
         {
-            var round = this.fighterDataService.CreateRound(this.fighterDataService.CurrentBlue);
+            var round = this.fighterDataService.CreateRound(this._roundName, this.fighterDataService.CurrentBlue);
             foreach (var result in this.resultService.Result.Results)
             {
                 if (!this._connectedDevices.TryGetValue(result.Key, out var device) || result.Value.ChongScore is null) { continue; }
@@ -123,7 +123,7 @@
         }
         if (this.fighterDataService.CurrentRed is not null)
         {
-            var round = this.fighterDataService.CreateRound(this.fighterDataService.CurrentRed);
+            var round = this.fighterDataService.CreateRound(this._roundName, this.fighterDataService.CurrentRed);
             foreach (var result in this.resultService.Result.Results)
             {
                 if (!this._connectedDevices.TryGetValue(result.Key, out var device) || result.Value.HongScore is null) { continue; }

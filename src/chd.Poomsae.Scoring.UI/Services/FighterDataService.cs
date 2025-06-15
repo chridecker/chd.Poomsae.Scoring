@@ -53,13 +53,14 @@ namespace chd.Poomsae.Scoring.UI.Services
             await this._scoringContext.SaveChangesAsync();
         }
 
-        public async Task CreateRound(FighterDto fighter)
+        public async Task CreateRound(string name, FighterDto fighter)
         {
             await this.CloseRound(fighter);
             if (!fighter.Rounds.Any(a => !a.Finished.HasValue))
             {
                 await this._scoringContext.Rounds.AddAsync(new RoundDto
                 {
+                    Name = name,
                     Created = DateTime.Now,
                     FighterId = fighter.Id,
                 });

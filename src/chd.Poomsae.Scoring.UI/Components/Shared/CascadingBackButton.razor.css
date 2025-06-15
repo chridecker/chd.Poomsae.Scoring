@@ -9,9 +9,7 @@
     top: 1.2rem;
     align-content: center;
     align-items: center;
-    display: grid;
     background: var(--chd-p-blue-transparent);
-    grid-template-columns: repeat(3,1fr);
 }
 
 
@@ -33,6 +31,8 @@
     }
 
     .global-back-button.ios {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
         top: var(--chd-ios-navbar-statusheight) !important;
         left: 0;
         width: 100%;
@@ -57,10 +57,7 @@
                 fill: var(--chd-ios-blue);
             }
 
-        .global-back-button.ios .ios-nav-title {
-            justify-items: center;
-        }
-
+      
         .global-back-button.ios .ios-nav-right {
             margin: 0 5px;
             justify-items: end;
@@ -80,14 +77,8 @@
 
 @media only screen and (orientation: landscape) {
     .global-back-button.ios {
+        top: calc(var(--chd-ios-navbar-statusheight) / 2) !important;
     }
-
-        .global-back-button.ios .ios-nav-title {
-        }
-
-        .global-back-button.ios .ios-nav-title {
-            display: none;
-        }
 
         .global-back-button.ios .ios-nav-right {
             display: none;
@@ -113,8 +104,6 @@
                     fill: var(--chd-ios-blue);
                 }
 
-            .global-back-button.ios .ios-nav-title {
-            }
 
             .global-back-button.ios .ios-nav-right {
                 right: 0;

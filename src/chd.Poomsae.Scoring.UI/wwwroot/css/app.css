@@ -54,10 +54,6 @@
     --chd-main-color-theme: var(--chd-p-blue) !important;
     --chd-main-color-theme-transparent: var(--chd-p-blue-transparent) !important;
     --chd-main-color-theme-semi-transparent: var(--chd-p-blue-semi-transparent) !important;
-    /*ios*/
-    --chd-ios-navbar-height: calc(var(--chd-ios-navbar-available-height) + var(--chd-ios-navbar-statusheight));
-    --chd-ios-navbar-statusheight: 33px;
-    --chd-ios-navbar-available-height: 44px;
 }
 
 body #app #startup-logo {
@@ -118,25 +114,63 @@ body #app #startup-logo {
         content: "An error has occurred."
     }
 
+
+.chd-app-modal-small {
+}
+
 .chd-app-modal .bm-content .multiselect-search-modal-component {
 }
 
     .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all {
-        align-items:center;
+        align-items: center;
+        justify-content: space-between;
     }
 
         .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all button.icon-button {
-            background:none;
+            padding: 0.2rem 0.4rem;
+            background: var(--chd-bg-lighter);
+            display: flex;
+            justify-content: center;
+            border-radius: 0.7rem;
         }
 
-        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all .multiselected-count::after {
-            content: ')'
-        }
-        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all .multiselected-count::before {
-            content: '('
-        }
-        .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all .multiselected-count {
-        }
+            .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all button.icon-button .button-text {
+                font-size: 0.8rem;
+            }
+
+            .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all button.icon-button svg {
+                display: none;
+            }
+
+
+    .chd-app-modal .bm-content .multiselect-search-modal-component .search-container .search-results-container .search-item .search-item-content.selected {
+        background: var(--chd-bg-lighter);
+        font-weight: unset;
+    }
+
+    .chd-app-modal .bm-content .multiselect-search-modal-component button.btn.btn-secondary {
+        background: var(--chd-bg-lighter);
+    }
+
+.chd-app-modal .bm-content .search-modal-component button.btn.btn-secondary {
+    background: var(--chd-bg-lighter);
+}
+
+.chd-app-modal.ios .bm-content .multiselect-search-modal-component .search-container .search-results-container .search-item svg[fontawesome-icon=circle-check] {
+    fill: var(--chd-ios-blue);
+}
+
+.chd-app-modal.ios .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all button.icon-button .button-text {
+    color: var(--chd-ios-blue);
+}
+
+.chd-app-modal.ios .bm-content .multiselect-search-modal-component button.btn.btn-secondary {
+    color: var(--chd-ios-blue);
+}
+
+.chd-app-modal.ios .bm-content .search-modal-component button.btn.btn-secondary {
+    color: var(--chd-ios-blue);
+}
 
 .fab-navigation {
 }
@@ -148,7 +182,8 @@ body #app #startup-logo {
             border-radius: calc(var(--floating-action-navigation-size) / 3) !important;
         }
 
-@media (max-width: 360px) {
+
+@media only screen (max-width: 360px) {
     * {
         --nav-toggle-height: 1.2rem !important;
         --top-header-padding-tb: 0.2 !important;
@@ -157,6 +192,7 @@ body #app #startup-logo {
         --widget-width: 15rem !important;
         --widget-height: 33rem !important;
     }
+
 
     main {
     }

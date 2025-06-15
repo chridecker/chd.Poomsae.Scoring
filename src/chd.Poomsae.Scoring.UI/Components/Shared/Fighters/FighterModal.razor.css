@@ -13,7 +13,7 @@
 
         .fighter-modal-container .fighter-section .section-title {
             font-size: 0.7rem;
-            line-height:0.7rem;
+            line-height: 0.7rem;
             color: var(--chd-grey);
             grid-column: 2;
             padding: 0 0.4rem;
@@ -52,9 +52,12 @@
                 }
 
         .fighter-modal-container .fighter-section.rounds {
-            display:flex;
-            flex-direction:column;
+            display: flex;
+            flex-direction: column;
         }
+
+
+
 
         .fighter-modal-container .fighter-section.buttons {
             padding: 0 0.8rem;
@@ -66,6 +69,22 @@
             margin-top: auto;
         }
 
+            .fighter-modal-container .fighter-section.buttons.add {
+                display: grid;
+                padding: 0;
+                grid-template-columns: 1fr;
+            }
+
+                .fighter-modal-container .fighter-section.buttons.add ::deep button.btn.btn-secondary {
+                    order: 2;
+                    background: var(--chd-bg-lighter);
+                }
+
+
+                .fighter-modal-container .fighter-section.buttons.add ::deep button.btn-primary.btn-primary {
+                    order: 1;
+                }
+
             .fighter-modal-container .fighter-section.buttons ::deep button.icon-button {
                 background: none;
                 padding: 0.2rem 0.4rem;
@@ -74,3 +93,6 @@
                 .fighter-modal-container .fighter-section.buttons ::deep button.icon-button svg {
                     height: 1.4rem;
                 }
+.ios .fighter-modal-container .fighter-section.buttons.add ::deep button.btn.btn-secondary {
+    color: var(--chd-ios-blue);
+}

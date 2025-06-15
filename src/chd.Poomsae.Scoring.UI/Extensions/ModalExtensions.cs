@@ -40,7 +40,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             {
                 DisableBackgroundCancel = true,
                 HideCloseButton = true,
-                Class = "chd-app-modal-small"
+                Class = "chd-app-modal-small",
             });
             ModalResult res = await modal.Result;
             if (res.Cancelled)
