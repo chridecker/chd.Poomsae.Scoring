@@ -17,7 +17,7 @@
     [Parameter] public EventCallback Reload { get; set; }
     private async Task Delete()
     {
-        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie die Wertung wirklich löschen?", this.deviceHandler.IsiOS);
+        var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveScoreQuestion, this.deviceHandler.IsiOS);
         if (res is EDialogResult.Yes)
         {
             await this.fighterDataService.RemoveScore(this.Score);

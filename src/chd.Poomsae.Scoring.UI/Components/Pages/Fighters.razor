@@ -25,40 +25,23 @@
     [Inject] IFighterDataService fighterDataService { get; set; }
     [Inject] IPrintService printService { get; set; }
 
-    protected override string _navigationTitle => "Teilnehmer";
+    protected override string _navigationTitle => TextConstants.Fighters;
 
     protected override async Task OnInitializedAsync()
     {
         this._backButton.RightClick = this.AddFighter;
         await this._backButton.SetTitle(this._navigationTitle, this._navigationBackTitle, "plus");
 
-
         await this._deviceHandler.ResetOrientation();
 
         await base.OnInitializedAsync();
     }
 
-    protected override Task Clear()
-    {
-        return base.Clear();
-    }
+    protected override Task Clear() => base.Clear();
 
-    protected override async Task OnResultReceived(ScoreReceivedEventArgs e)
-    {
-        await this.InvokeAsync(this.StateHasChanged);
-    }
+    protected override Task OnResultReceived(ScoreReceivedEventArgs e) => this.InvokeAsync(this.StateHasChanged);
 
-    protected override async Task OnDeviceFound(DeviceDto e)
-    {
-        await base.OnDeviceFound(e);
-        await this.Send(e);
-
-    }
-
-    protected override async Task OnDeviceDisconncted(DeviceDto e)
-    {
-        await this.InvokeAsync(this.StateHasChanged);
-    }
+    protected override Task OnDeviceDisconncted(DeviceDto e) => this.InvokeAsync(this.StateHasChanged);
 
     private async Task ChooseForResult()
     {
@@ -67,18 +50,18 @@
                 { nameof(MultiSelectModalComponent<FighterDto>.Items), this.fighterDataService.Fighters},
                 { nameof(MultiSelectModalComponent<FighterDto>.RenderType),typeof(FighterSearchItem) },
                 { nameof(MultiSelectModalComponent<FighterDto>.RenderParameterDict),(FighterDto dto)=> MultiSelectModalComponent<FighterDto>.CreateRenderParameterDict(dto,((x)=> nameof(FighterSearchItem.Fighter),(x)=>x))},
-                { nameof(MultiSelectModalComponent<FighterDto>.SelectAllText), "Alles auswählen"},
-                { nameof(MultiSelectModalComponent<FighterDto>.SelectNoneText), "Alles abwählen"},
+                { nameof(MultiSelectModalComponent<FighterDto>.SelectAllText), TextConstants.ChooseAll},
+                { nameof(MultiSelectModalComponent<FighterDto>.SelectNoneText), TextConstants.ChooseNone},
                 { nameof(MultiSelectModalComponent<FighterDto>.ShowCount), false},
 
-                { nameof(MultiSelectModalComponent<FighterDto>.ConfirmText), "Übernehmen"},
+                { nameof(MultiSelectModalComponent<FighterDto>.ConfirmText), TextConstants.Submit},
             };
-        var modalInstance = this._modalService.Show<MultiSelectModalComponent<FighterDto>>("Teilnehmer Suche", parameters);
+        var modalInstance = this._modalService.Show<MultiSelectModalComponent<FighterDto>>(TextConstants.SearchFighter, parameters);
 
         var result = await modalInstance.Result;
         if (result.Confirmed && result.Data is List<FighterDto> fighterLst)
         {
-            var name = await this._modalService.ShowSmallInputDialog("Ergebnisliste",this._deviceHandler.IsiOS,"Klassenname ... "); // "Jugend LK1  - U18";
+            var name = await this._modalService.ShowSmallInputDialog(TextConstants.ResultList, this._deviceHandler.IsiOS, TextConstants.ClassNamePlaceholder); // "Jugend LK1  - U18";
 
             await this.printService.PrintComponentAsync<ClassPrint>(new Dictionary<string, object?>() { {
                 nameof(ClassPrint.Date), DateTime.Now },
@@ -92,7 +75,7 @@
     private async Task AddFighter()
     {
         var fighter = new FighterDto();
-        var res = await this._modalService.Show<FighterModal>("Teilnehmer", new ModalParameters() {
+        var res = await this._modalService.Show<FighterModal>(TextConstants.Fighters, new ModalParameters() {
         { nameof(FighterModal.Fighter), fighter },
         {nameof(FighterModal.IsNew),true}
     }, new ModalOptions()
@@ -117,16 +100,4 @@
         await this.fighterDataService.SetRed(fighterDto);
         await this.InvokeAsync(this.StateHasChanged);
     }
-
-    private async Task Send(DeviceDto device)
-    {
-        await this.broadcastClient.SendFighter(this.fighterDataService.CurrentBlue, EScoringButtonColor.Blue, device);
-        await this.broadcastClient.SendFighter(this.fighterDataService.CurrentRed, EScoringButtonColor.Red, device);
-    }
-
-    public override void Dispose()
-    {
-        base.Dispose();
-    }
-
 }

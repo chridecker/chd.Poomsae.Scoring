@@ -66,7 +66,7 @@
                 { nameof(SearchModalComponent<string, string>.Items),TextConstants.PoomsaeRuns },
                 { nameof(SearchModalComponent<string, string>.DisableOrder), true },
             };
-        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>("Form Auswahl", parameters);
+        var modalInstance = this.modalService.Show<SearchModalComponent<string, string>>(TextConstants.ChooseForm, parameters);
 
         var result = await modalInstance.Result;
         if (result.Confirmed && result.Data is string runTitle)
@@ -86,7 +86,7 @@
     }
     private async Task DeleteRound()
     {
-        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie den Lauf wirklich löschen?", this.deviceHandler.IsiOS);
+        var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveRunQuestion, this.deviceHandler.IsiOS);
         if (res is EDialogResult.Yes)
         {
             await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<RoundDto>(this.Round, EDataAction.Delete)));

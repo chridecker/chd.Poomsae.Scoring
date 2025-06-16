@@ -32,7 +32,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         protected IModalReference _loadingModal;
 
         protected override bool _showBackButton => true;
-        protected override string _navigationBackTitle => "Home";
+        protected override string _navigationBackTitle => TextConstants.Home;
 
 
         protected override async Task OnInitializedAsync()
@@ -54,7 +54,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task Discover()
         {
-            var result = await this._modalService.Show<DiscoverDevices>("Geräte Suchen", new ModalOptions()
+            var result = await this._modalService.Show<DiscoverDevices>(TextConstants.SearchDevices, new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;
@@ -69,7 +69,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected async Task RemoveDevices()
         {
-            var result = await this._modalService.Show<SelectConnectedDevices>("Geräte Entfernen", new ModalOptions()
+            var result = await this._modalService.Show<SelectConnectedDevices>(TextConstants.RemoveDevices, new ModalOptions()
             {
                 Size = ModalSize.ExtraLarge
             }).Result;

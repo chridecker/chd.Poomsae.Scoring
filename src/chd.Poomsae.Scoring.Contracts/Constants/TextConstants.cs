@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blazorise;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
 
         public const string LeaveSiteQuestion = "Wollen Sie die Seite wirklich verlassen?";
         public const string RemoveFighterQuestion = "Wollen Sie den Teilnehmer wirklich löschen?";
+        public const string RemoveRunQuestion = "Wollen Sie den Lauf wirklich löschen?";
+        public const string RemoveScoreQuestion = "Wollen Sie die Wertung wirklich löschen?";
         public const string EnterNameTitle = "Anzeigenamen ändern";
 
         public const string ScoresSend = "Wertung gesendet!";
@@ -30,6 +33,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string Send = "Senden";
         public const string Restart = "Neustart";
 
+        public const string Home = "Home";
         public const string Single = "Einzel";
         public const string Eliminiation = "Head to Head";
         public const string Results = "Ergebnisse";
@@ -37,10 +41,19 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string Scores = "Wertung";
         public const string License = "Lizenz";
 
+        public const string SearchFighter = "Teilnehmer Suche";
         public const string AddFighter = "Teilnehmer hinzufügen";
         public const string RemoveFighter = "Teilnehmer löschen";
         public const string EditFighter = "Teilnehmer bearbeiten";
         public const string PrintResult = "Ergebnisliste erstellen";
+        
+        public const string Form = "Form";
+        public const string ChooseForm = "Form Auswahl";
+
+        public const string SavedRun = "Runde erfolgreich gespeichert";
+
+        public const string ResultList = "Ergebnisliste";
+        public const string ClassNamePlaceholder = "Klassenname ... ";
 
         public const string SaveRound = "Speichern";
         public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
@@ -50,6 +63,12 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
 
         public const string NoLicense = "Es konnte keine gültige Lizenz ermittelt!";
         public const string NoUser = "Es konnte kein Benutzer ermittelt werden!";
+
+        public const string ChooseAll = "Alles auswählen";
+        public const string ChooseNone = "Alles abwählen";
+
+        public const string Submit = "Übernehmen";
+
 
         private static IEnumerable<string> Taegeuks => Enumerable.Range(1, 8).Select(s => $"Taegeuk {s}");
         private static IEnumerable<string> Dans => ["Koryo", "Keumgang", "Taeback", "Pyongwon", "Shipjin", "Jitae", "Chonkwon", "Hansu", "Ilyo"];

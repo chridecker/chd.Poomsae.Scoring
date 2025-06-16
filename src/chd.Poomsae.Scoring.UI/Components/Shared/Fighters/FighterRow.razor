@@ -22,7 +22,7 @@
             Lastname = this.Fighter.Lastname
         };
 
-        var modal = await this.modalService.Show<FighterModal>("Teilnehmer", new ModalParameters()
+        var modal = await this.modalService.Show<FighterModal>(TextConstants.Fighters, new ModalParameters()
         {
             {nameof(FighterModal.Fighter),fighter},
             {nameof(FighterModal.Rounds),this.Fighter.Rounds},

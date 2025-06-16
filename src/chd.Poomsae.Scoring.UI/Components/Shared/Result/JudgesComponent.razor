@@ -27,7 +27,7 @@
 
     private async Task OnDisconnectDevice(DeviceDto device)
     {
-        var res = await this.modalService.ShowYesNoDialog($"Gerät entfernen?", this.deviceHandler.IsiOS);
+        var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveDevice, this.deviceHandler.IsiOS);
         if (res is EDialogResult.Yes)
         {
             await this.DisconnectDevice?.Invoke(device);
