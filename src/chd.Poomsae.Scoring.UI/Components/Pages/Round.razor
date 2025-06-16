@@ -130,8 +130,8 @@
 
                 await this.fighterDataService.HandleResult(result.Value.HongScore, device, this.fighterDataService.CurrentRed);
             }
-
         }
+        await this._deviceHandler.ShowToast($"Runde erfolgreich gespeichert");
     }
 
     protected override async Task OnDeviceDisconncted(DeviceDto dto)
@@ -149,7 +149,7 @@
         || this.fighterDataService.CurrentBlue is not null
         || this.fighterDataService.CurrentRed is not null)
         {
-            var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+            var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion, this._deviceHandler.IsiOS);
             if (res is not EDialogResult.Yes)
             {
                 return false;

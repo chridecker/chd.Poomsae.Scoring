@@ -36,6 +36,7 @@
     [CascadingParameter] public BlazoredModalInstance ModalInstance { get; set; }
 
     [Inject] IModalHandler modalService { get; set; }
+    [Inject] IDeviceHandler deviceHandler { get; set; }
 
 
     [Parameter] public FighterDto Fighter { get; set; }
@@ -54,7 +55,7 @@
 
     private async Task RemoveFighter()
     {
-        var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveFighterQuestion);
+        var res = await this.modalService.ShowYesNoDialog(TextConstants.RemoveFighterQuestion, this.deviceHandler.IsiOS);
         if (res is chd.UI.Base.Contracts.Enum.EDialogResult.Yes)
         {
             await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Delete)));

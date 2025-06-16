@@ -18,7 +18,7 @@
     }
 
     .global-back-button.hide {
-        display: none;
+        display: none !important;
     }
 
     .global-back-button:has(:hover) {
@@ -65,7 +65,7 @@
         }
 
             .global-back-button.ios .ios-nav-right ::deep button.btn.icon-button {
-                background: var(--chd-bg);
+                background: inherit;
                 border: none;
                 padding: 0.2rem 0.4rem;
             }

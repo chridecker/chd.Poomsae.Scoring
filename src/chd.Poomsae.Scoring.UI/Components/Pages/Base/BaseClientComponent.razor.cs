@@ -156,7 +156,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             if (this._connectedDevices.Any())
             {
-                var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+                var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion, this._deviceHandler.IsiOS);
                 if (res == EDialogResult.No)
                 {
                     return false;

@@ -39,7 +39,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 
         protected override bool _showBackButton => true;
         protected override string _navigationBackTitle => "";
-         protected override string _navigationTitle => "";
+        protected override string _navigationTitle => "";
 
         protected override async Task OnInitializedAsync()
         {
@@ -119,7 +119,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         }
         private async Task ResetResults()
         {
-            var res = await this._modalService.ShowYesNoDialog(TextConstants.ResetScoreQuestion);
+            var res = await this._modalService.ShowYesNoDialog(TextConstants.ResetScoreQuestion, this._deviceHandler.IsiOS);
             if (res is EDialogResult.Yes)
             {
                 this.broadCastService.ResetScore();
@@ -130,7 +130,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         private async Task SendResults()
         {
             this.broadCastService.BroadcastResult(this.runDto);
-            _ = await this._modalService.ShowSmallDialog(TextConstants.ScoresSend, EDialogButtons.OK);
+            await this._deviceHandler.ShowToast(TextConstants.ScoresSend, this._cts.Token);
         }
         private void CalculateAccuracyScore(ScoreDto dto, decimal value)
         {
@@ -153,7 +153,7 @@ namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
         {
             if (this.runDto.State is ERunState.Started)
             {
-                var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion);
+                var res = await this._modalService.ShowYesNoDialog(TextConstants.LeaveSiteQuestion, this._deviceHandler.IsiOS);
                 if (res is not EDialogResult.Yes)
                 {
                     return false;

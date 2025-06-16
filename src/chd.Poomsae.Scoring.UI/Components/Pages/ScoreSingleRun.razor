@@ -60,7 +60,7 @@
 
     private async Task ChangeColor()
     {
-        var res = await this._modalService.ShowYesNoDialog(TextConstants.ChangeColorQuestion);
+        var res = await this._modalService.ShowYesNoDialog(TextConstants.ChangeColorQuestion, this._deviceHandler.IsiOS);
         if (res is not EDialogResult.Yes) { return; }
         this.runDto = this._runService.StartSingleRun(__colorChange());
 

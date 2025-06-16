@@ -50,6 +50,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await this._backButton.SetBackButton(false);
+
         await this._backButton.SetTitle(string.Empty, string.Empty);
 
         this._backButton.RightClick = null;
@@ -60,7 +62,6 @@
         }
 
         await this._deviceHandler.ResetOrientation();
-        await this._backButton.SetBackButton(false);
 
         await base.OnInitializedAsync();
     }

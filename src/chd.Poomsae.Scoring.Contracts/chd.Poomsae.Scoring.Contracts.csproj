@@ -12,7 +12,7 @@
     <None Remove="Settings\**" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25167.128" />
+		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25167.129" />
 	</ItemGroup>
 
 </Project>

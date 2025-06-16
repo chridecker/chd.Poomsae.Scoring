@@ -1,4 +1,5 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
+using CommunityToolkit.Maui.Alerts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,11 @@ namespace chd.Poomsae.Scoring.App.Services
 
         public void CloseApp() => Application.Current.Quit();
 
+
+        public async Task ShowToast(string message, CancellationToken cancellationToken = default)
+        {
+            await Toast.Make(message).Show();
+        }
 
         public abstract Task RequestLandscape();
         public abstract Task ResetOrientation();

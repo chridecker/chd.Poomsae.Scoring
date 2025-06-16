@@ -15,13 +15,6 @@
 </div>
 
 <FloatingActionNavigation FAIconActive="user-plus" TextActive="@TextConstants.AddFighter" OnClick="this.AddFighter">
-    <FloatingActionButton FAClass="magnifying-glass" Title="@TextConstants.SearchDevices" OnClick="this.Discover" />
-    <FloatingActionButton FAClass="magnifying-glass-plus" Title="@TextConstants.AddDeviceAuto" OnClick="this.Search" />
-    @if (this._connectedDevices.Any())
-    {
-        <FloatingActionButton FAClass="eraser" Title="@TextConstants.RemoveDevices" OnClick="this.Clear" />
-        <FloatingActionButton FAClass="laptop-slash" Title="@TextConstants.RemoveDevice" OnClick="this.RemoveDevices" />
-    }
     <FloatingActionButton FAClass="ranking-star" Title="@TextConstants.PrintResult" OnClick="this.ChooseForResult" />
 </FloatingActionNavigation>
 
@@ -34,6 +27,12 @@
 
     protected override async Task OnInitializedAsync()
     {
+        using var mem = new MemoryStream();
+        using var img = File.OpenRead(Path.Combine("wwwroot", "logo.svg"));
+        await img.CopyToAsync(mem);
+        var base64 = Convert.ToBase64String(mem.ToArray());
+
+
         this._backButton.RightClick = this.AddFighter;
         await this._backButton.SetTitle(this._navigationTitle, this._navigationBackTitle, "plus");
 

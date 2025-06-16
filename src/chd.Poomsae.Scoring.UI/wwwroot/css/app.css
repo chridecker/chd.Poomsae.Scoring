@@ -116,15 +116,13 @@ body #app #startup-logo {
     }
 
 
-.chd-app-modal-small {
-}
-
 .chd-app-modal .bm-content .multiselect-search-modal-component {
 }
 
     .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all {
         align-items: center;
         justify-content: space-between;
+        padding: 0 0 0.1rem 0;
     }
 
         .chd-app-modal .bm-content .multiselect-search-modal-component .multiselect-search-checkboxes-all button.icon-button {

@@ -11,12 +11,13 @@
 @code {
     [Inject] IModalHandler modalService { get; set; }
     [Inject] IFighterDataService fighterDataService { get; set; }
+    [Inject] IDeviceHandler deviceHandler { get; set; }
 
     [Parameter] public SavedScoreDto Score { get; set; }
     [Parameter] public EventCallback Reload { get; set; }
     private async Task Delete()
     {
-        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie die Wertung wirklich löschen?");
+        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie die Wertung wirklich löschen?", this.deviceHandler.IsiOS);
         if (res is EDialogResult.Yes)
         {
             await this.fighterDataService.RemoveScore(this.Score);

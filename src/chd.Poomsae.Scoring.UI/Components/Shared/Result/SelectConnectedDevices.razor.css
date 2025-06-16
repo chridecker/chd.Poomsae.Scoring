@@ -22,10 +22,10 @@
         gap: 0.2rem;
     }
 
-        .connected-modal-container .buttons .buttons.btn-secondary {
+        .connected-modal-container .buttons button.btn-secondary {
             background: var(--chd-bg-lighter);
         }
 
-.ios .connected-modal-container .buttons .buttons.btn-secondary {
+.ios .connected-modal-container .buttons button.btn-secondary {
     color: var(--chd-ios-blue);
 }

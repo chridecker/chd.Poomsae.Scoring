@@ -1,26 +1,19 @@
 ﻿.home-container {
     height: 100vh;
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: 1rem;
-    justify-content: space-around;
-    align-items: center;
-    align-content: center;
+    padding: 1rem 0.2rem;
 }
 
     .home-container .home-card {
-        aspect-ratio: 2/1;
-        min-width: 10rem;
-        width: auto;
         border: 1px solid;
         border-radius: 0.5rem;
         padding: 0.5rem;
-        justify-items: center;
-        align-items: center;
-        align-content: center;
+        display:flex;
+        align-items:center;
+        gap: 0.5rem;
         font-size: 1.5rem;
-        text-align: center;
     }
 
         .home-container .home-card:nth-child(odd) {

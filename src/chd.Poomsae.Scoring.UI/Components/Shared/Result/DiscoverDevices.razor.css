@@ -24,10 +24,10 @@
         gap: 0.2rem;
     }
 
-        .discover-modal-container .buttons .buttons.btn-secondary {
+        .discover-modal-container .buttons button.btn-secondary {
             background: var(--chd-bg-lighter);
         }
 
-.ios .discover-modal-container .buttons .buttons.btn-secondary {
+.ios .discover-modal-container .buttons button.btn-secondary {
     color: var(--chd-ios-blue);
 }

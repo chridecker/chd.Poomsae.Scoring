@@ -43,6 +43,7 @@
     [Inject] IPrintService printService { get; set; }
     [Inject] IFighterDataService fighterDataService { get; set; }
     [Inject] IModalHandler modalService { get; set; }
+    [Inject] IDeviceHandler deviceHandler { get; set; }
     [Parameter] public RoundDto Round { get; set; }
 
     private string _roundName;
@@ -85,7 +86,7 @@
     }
     private async Task DeleteRound()
     {
-        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie den Lauf wirklich löschen?");
+        var res = await this.modalService.ShowYesNoDialog($"Wollen Sie den Lauf wirklich löschen?", this.deviceHandler.IsiOS);
         if (res is EDialogResult.Yes)
         {
             await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<RoundDto>(this.Round, EDataAction.Delete)));
