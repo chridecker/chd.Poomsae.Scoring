@@ -45,7 +45,6 @@
         }
 
         .single-run-container .fighter-container .change-button ::deep svg {
-            fill: white;
             height: 1.2rem;
             margin-top: -0.1rem;
         }

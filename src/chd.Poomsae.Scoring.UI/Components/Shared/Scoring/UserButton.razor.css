@@ -10,7 +10,6 @@
 }
 
     .user-button ::deep svg[fontawesome-icon=user-tie] {
-        fill: white;
         height: 1.2rem;
         margin-top: -0.2rem;
     }

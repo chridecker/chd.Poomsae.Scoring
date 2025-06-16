@@ -25,7 +25,9 @@
     {
         if (firstRender)
         {
-            await this._baseUIComponentHandler.SetDarkMode(true);
+            var darkMode = await this._baseUIComponentHandler.GetDarkMode();
+
+            await this._baseUIComponentHandler.SetDarkMode(darkMode);
         }
         await base.OnAfterRenderAsync(firstRender);
     }
