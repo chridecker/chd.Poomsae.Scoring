@@ -44,6 +44,7 @@
         background: none;
         color: var(--chd-ios-blue);
         justify-content: space-between;
+        padding: var(--chd-ios-navbar-padding-th) var(--chd-ios-navbar-padding-lr);
     }
 
         .global-back-button.ios .ios-nav-arrow {
@@ -57,7 +58,7 @@
                 fill: var(--chd-ios-blue);
             }
 
-      
+
         .global-back-button.ios .ios-nav-right {
             margin: 0 5px;
             justify-items: end;
@@ -78,6 +79,7 @@
 @media only screen and (orientation: landscape) {
     .global-back-button.ios {
         top: calc(var(--chd-ios-navbar-statusheight) / 2) !important;
+        padding: 0;
     }
 
         .global-back-button.ios .ios-nav-right {
@@ -93,7 +95,7 @@
     }
 
         .global-back-button.ios {
-            background: var(--chd-bg);
+            background: var(--chd-bg-lighter);
         }
 
             .global-back-button.ios .ios-nav-arrow {

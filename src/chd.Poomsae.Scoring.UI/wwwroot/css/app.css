@@ -54,6 +54,8 @@
     --chd-main-color-theme: var(--chd-p-blue) !important;
     --chd-main-color-theme-transparent: var(--chd-p-blue-transparent) !important;
     --chd-main-color-theme-semi-transparent: var(--chd-p-blue-semi-transparent) !important;
+    --chd-ios-navbar-padding-lr: 0;
+    --chd-ios-navbar-padding-th: 22px;
 }
 
 body #app #startup-logo {
@@ -64,6 +66,7 @@ body #app #startup-logo {
     background: white;
     animation: fadeIn 1.5s ease-out;
 }
+
 
 @keyframes fadeIn {
     0% {
