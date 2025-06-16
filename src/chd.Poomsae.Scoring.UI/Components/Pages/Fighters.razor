@@ -27,12 +27,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        using var mem = new MemoryStream();
-        using var img = File.OpenRead(Path.Combine("wwwroot", "logo.svg"));
-        await img.CopyToAsync(mem);
-        var base64 = Convert.ToBase64String(mem.ToArray());
-
-
         this._backButton.RightClick = this.AddFighter;
         await this._backButton.SetTitle(this._navigationTitle, this._navigationBackTitle, "plus");
 

@@ -1,4 +1,5 @@
 @using System.Text
+@using Microsoft.Extensions.Configuration
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Contracts.Enum
 <html>
@@ -36,9 +37,9 @@
                     justify-self: end;
                 }
 
-                    .round-print-container .round-header .logo .icon-logo {
+                    .round-print-container .round-header .logo img {
                         height: 2cm;
-                        width: 3cm;
+                        margin-right: 0.3cm;
                     }
 
 
@@ -100,7 +101,7 @@
         <div class="round-header">
             <div class="fighter-name">@Round.Fighter.FullName</div>
             <div class="logo">
-                <img src="data:image/svg+xml;base64,@_svgBase64" />
+                <img src="data:image/png;base64,@_svgBase64" />
             </div>
             <div class="round-name">@Round.Name</div>
             <div class="round-date">@Round.Created.ToString("dd.MM.yyyy HH:mm")</div>
@@ -143,14 +144,11 @@
 </html>
 
 @code {
+    [Inject]IConfiguration configuration{ get; set; }
+
     [Parameter] public RoundDto Round { get; set; }
 
-    private string _svgBase64 => Convert.ToBase64String(Encoding.UTF8.GetBytes("<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"auto\"" +
-                    "viewBox=\"0 0 520 500\"> " +
-                    "<path d=\"M -2.567 1.84 C -2.686 2.071 -0.758 3.554 1.732 5.175 C 21.411 18.007 29.484 23.52 42.178 32.877 C 82.148 62.432 118.923 96.248 151.82 133.725 C 180.212 166.012 201.741 195.428 223.007 230.959 C 243.225 264.729 261.251 303.039 274.464 340.33 C 293.092 392.862 304.797 450.072 308.402 506.402 L 308.696 511.266 L 349.225 511.405 C 386.106 511.498 389.794 511.451 390.033 510.756 C 390.43 509.598 384.744 482.962 379.837 462.857 C 345.813 323.051 288.69 209.326 211.01 126.637 C 165.937 78.692 116.169 43.346 61.988 20.786 C 44.008 13.328 25.11 7.491 5.375 3.369 C 1.885 2.627 -1.284 1.886 -1.645 1.701 C -2.046 1.562 -2.447 1.608 -2.567 1.84 Z\" style=\"transform-box: fill-box; transform-origin: 50% 50%;\" transform=\"matrix(0.999954, 0.008332, -0.011126, 0.999954, 0.000003, 0)\" fill=\"#000000\" stroke=\"none\"></path>" +
-                    "<path d=\"M 457.443 71.67 C 446.064 73.662 436.658 79.035 429.186 87.744 C 421.195 97.055 416.457 108.914 415.531 121.839 C 414.76 132.632 416.593 143.055 420.828 152.459 C 434.704 183.033 469.605 191.696 493.358 170.479 C 502.275 162.465 508.456 150.884 510.705 138.052 C 512.204 129.343 512.318 126.888 511.54 121.051 C 510.272 111.972 508.126 104.56 504.942 98.491 C 496.035 81.444 480.132 71.16 463.055 71.392 C 460.53 71.438 458.004 71.531 457.443 71.67 Z\" style=\"transform-box: fill-box; transform-origin: 50% 50%;\" transform=\"matrix(0.999954, 0.008332, -0.011126, 0.999954, -0.000006, 0)\" fill=\"#ff0000\" stroke=\"none\"></path>" +
-                    "<path d=\"M 244.064 84.099 C 231.438 84.701 220.539 86.369 206.518 89.889 C 205.797 90.028 205.197 90.353 205.197 90.492 C 205.198 90.677 208.326 91.186 212.135 91.65 C 268.558 98.228 314.781 113.515 345.832 135.797 C 373.588 155.762 389.812 180.314 394.584 209.684 C 395.482 215.103 395.796 227.287 395.252 233.216 C 393.459 251.746 386.775 269.951 376.194 285.099 C 375.236 286.489 371.761 290.982 368.485 295.059 C 356.86 309.651 351.234 319.055 349.532 326.884 C 347.909 334.203 350.929 338.789 357.826 339.576 C 362.798 340.086 371.771 337.631 377.454 334.156 C 380.135 332.489 388.294 325.494 393.251 320.583 C 398.168 315.673 407.319 305.158 410.833 300.386 C 425.529 280.281 433.329 259.899 434.99 237.246 C 436.766 212.834 428.552 185.827 412.251 162.34 C 408.106 156.411 396.563 143.023 391.258 138.066 C 360.51 109.253 319.728 90.306 277.34 85.211 C 271.766 84.562 255.328 83.543 252.281 83.682 C 251.64 83.728 247.912 83.914 244.064 84.099 Z\" style=\"transform-box: fill-box; transform-origin: 50% 50%;\" transform=\"matrix(0.999954, 0.008332, -0.011126, 0.999954, 0.000002, 0)\" fill=\"#4169e1\" stroke=\"none\"></path>" +
-                    "</svg>"));
+    private string _svgBase64 => configuration.GetSection("Logo:Base64").Value;
 
 
     private decimal _roundTotal => this._roundAccuracy + this._roundPresentation;

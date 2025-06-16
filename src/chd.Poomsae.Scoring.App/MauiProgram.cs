@@ -41,6 +41,7 @@ namespace chd.Poomsae.Scoring.App
 
             builder.Configuration.AddConfiguration(GetLocalSetting());
             builder.Configuration.AddConfiguration(GetAppSettingsConfig());
+            builder.Configuration.AddConfiguration(LoadLogoToBase64());
             builder.Services.Configure<GoogleFirebaseSettings>(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings)));
             builder.Services.Configure<FirebaseAuthServiceSettings>(builder.Configuration.GetSection(nameof(FirebaseAuthServiceSettings)));
 
@@ -106,6 +107,26 @@ namespace chd.Poomsae.Scoring.App
             });
             return builder;
         }
+        private static IConfiguration LoadLogoToBase64()
+        {
+            var fileName = Path.Combine("wwwroot/logo.png");
+            if (!FileSystem.AppPackageFileExistsAsync(fileName).Result)
+            {
+                throw new ApplicationException($"Unable to read file [{fileName}]");
+            }
+            using var mem = new MemoryStream();
+            using var stream = FileSystem.OpenAppPackageFileAsync(fileName).Result;
+            stream.CopyTo(mem);
+            var base64 = Convert.ToBase64String(mem.ToArray());
+
+            var dict = new Dictionary<string, string>();
+            dict.Add($"Logo:Base64", $"{base64}");
+            return new ConfigurationBuilder()
+                    .AddInMemoryCollection(dict)
+                    .Build();
+        }
+
+
         private static IConfiguration GetAppSettingsConfig()
         {
             var fileName = "appsettings.txt";
