@@ -12,6 +12,7 @@
     [Inject] private ISettingManager settingManager { get; set; }
     [Inject] private IBroadCastService broadCastService { get; set; }
     [Inject] private IModalHandler modalService { get; set; }
+    [Inject] private IDeviceHandler deviceHandler { get; set; }
 
     private string _deviceName = string.Empty;
 
@@ -24,9 +25,10 @@
     private async Task ChangeName()
     {
         await this.modalService.Show<DeviceNameModal>(TextConstants.EnterNameTitle, new ModalOptions()
-            {
-                Position = ModalPosition.TopCenter
-            }).Result;
+        {
+            Class = $"chd-app-modal-small {(deviceHandler.IsiOS ? "ios" : "")}",
+            Position = ModalPosition.TopCenter
+        }).Result;
         this._deviceName = await this.settingManager.GetName();
 
         await this.broadCastService.BroadcastNameChange();

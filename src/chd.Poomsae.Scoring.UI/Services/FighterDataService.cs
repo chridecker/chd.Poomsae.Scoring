@@ -29,6 +29,13 @@ namespace chd.Poomsae.Scoring.UI.Services
         {
             this._scoringContext = scoringContext;
             this._broadcastClient = broadcastClient;
+            this._broadcastClient.DeviceFound += this._broadcastClient_DeviceFound;
+        }
+
+        private async void _broadcastClient_DeviceFound(object? sender, DeviceDto e)
+        {
+            await this._broadcastClient.SendFighter(this.CurrentBlue, EScoringButtonColor.Blue, e);
+            await this._broadcastClient.SendFighter(this.CurrentRed, EScoringButtonColor.Red, e);
         }
 
         public async Task AddFighter(FighterDto fighter)
