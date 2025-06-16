@@ -19,6 +19,7 @@ main {
 
 .page.ios {
     --main-article-height: calc(100vh - calc(var(--top-header-height) - 2rem)) !important;
+    font-family: var(--chd-io-font-family);
 }
 
     .page.ios main {

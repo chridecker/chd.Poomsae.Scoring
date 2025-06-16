@@ -73,6 +73,7 @@
                 display: grid;
                 padding: 0;
                 grid-template-columns: 1fr;
+                gap:0.2rem;
             }
 
                 .fighter-modal-container .fighter-section.buttons.add ::deep button.btn.btn-secondary {

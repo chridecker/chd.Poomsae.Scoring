@@ -13,11 +13,21 @@
         border-radius: 0.8rem;
     }
 
-       
+
 
     .discover-modal-container .buttons {
-        display: flex;
-        justify-content: space-between;
         width: 100%;
         margin-top: auto;
+        display: grid;
+        padding: 0;
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
     }
+
+        .discover-modal-container .buttons .buttons.btn-secondary {
+            background: var(--chd-bg-lighter);
+        }
+
+.ios .discover-modal-container .buttons .buttons.btn-secondary {
+    color: var(--chd-ios-blue);
+}
