@@ -1,6 +1,7 @@
 @using chd.Poomsae.Scoring.UI.Components.Pages.Base
 @using chd.Poomsae.Scoring.UI.Components.Shared
 @using chd.Poomsae.Scoring.UI.Components.Shared.Fighters
+@using chd.Poomsae.Scoring.UI.Components.Shared.Prints
 @using chd.Poomsae.Scoring.UI.Extensions
 @using chd.UI.Base.Components.General.Search
 @using chd.UI.Base.Contracts.Enum
@@ -22,6 +23,7 @@
 @code {
 
     [Inject] IFighterDataService fighterDataService { get; set; }
+    [Inject] IPrintService printService { get; set; }
 
     protected override string _navigationTitle => "Teilnehmer";
 
@@ -76,6 +78,14 @@
         var result = await modalInstance.Result;
         if (result.Confirmed && result.Data is List<FighterDto> fighterLst)
         {
+            var name = await this._modalService.ShowSmallInputDialog("Ergebnisliste",this._deviceHandler.IsiOS,"Klassenname ... "); // "Jugend LK1  - U18";
+
+            await this.printService.PrintComponentAsync<ClassPrint>(new Dictionary<string, object?>() { {
+                nameof(ClassPrint.Date), DateTime.Now },
+            { nameof(ClassPrint.ClassTitle),name },
+            { nameof(ClassPrint.Fighters),fighterLst}
+            }, name);
+
         }
     }
 
