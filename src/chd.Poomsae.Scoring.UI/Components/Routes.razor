@@ -19,4 +19,15 @@
 </CascadingToolTip>
 @code {
     [Inject] IDeviceHandler deviceHandler { get; set; }
+    [Inject] IBaseUIComponentHandler _baseUIComponentHandler { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await this._baseUIComponentHandler.SetDarkMode(true);
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
 }
