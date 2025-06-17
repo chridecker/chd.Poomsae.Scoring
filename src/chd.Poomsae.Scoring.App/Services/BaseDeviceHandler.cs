@@ -40,10 +40,8 @@ namespace chd.Poomsae.Scoring.App.Services
         public void CloseApp() => Application.Current.Quit();
 
 
-        public async Task ShowToast(string message, CancellationToken cancellationToken = default)
-        {
-            await Toast.Make(message).Show();
-        }
+        public Task ShowToast(string message, CancellationToken cancellationToken = default) => Toast.Make(message).Show();
+
 
         public abstract Task RequestLandscape();
         public abstract Task ResetOrientation();

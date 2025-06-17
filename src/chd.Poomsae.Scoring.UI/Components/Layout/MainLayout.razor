@@ -8,7 +8,7 @@
 @using chd.UI.Base.Client.Implementations.Services
 @using chd.UI.Base.Contracts.Enum
 @inject IScrollInfoService scrollInfoService
-@inject IModalService modalService
+@inject IModalHandler modalService
 
 
 <div class="page @(this.deviceHandler.IsiOS ? "ios" : "") ">
@@ -46,6 +46,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        this.appInfoService.ExitApplication += this.ExitApplication;
         this._profileService.UserChanged += this.UserChanged;
         _ = await this._profileService.LoginAsync(new(), this._cts.Token);
 
@@ -69,6 +70,16 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
+    private async void ExitApplication(object? sender, bool exit)
+    {
+        if(!exit)
+        {
+            await this.deviceHandler.ShowToast(TextConstants.ExitApplicationQuestion);
+            return;
+        }
+        this.deviceHandler.CloseApp();
+    }
+
     private async void UserChanged(object? sender, UserDto<Guid, int> user)
     {
         if (user is PSUserDto dto)
@@ -89,6 +100,7 @@
     }
     public async ValueTask DisposeAsync()
     {
+        this.appInfoService.ExitApplication -= this.ExitApplication;
         this._profileService.UserChanged -= this.UserChanged;
         await this._profileService.LogoutAsync(this._cts.Token);
         this._cts.Cancel();

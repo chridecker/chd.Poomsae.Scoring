@@ -1,5 +1,6 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
+using chd.Poomsae.Scoring.Contracts.Constants;
 using chd.Poomsae.Scoring.UI.Components.Shared;
 using chd.UI.Base.Client.Implementations.Services;
 using chd.UI.Base.Components.General.Form;
@@ -77,7 +78,8 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             var parameter = new ModalParameters()
             {
                 {nameof(InputDialog.Placeholder),placeHolder},
-                {nameof(InputDialog.ChildContent),childContent }
+                {nameof(InputDialog.ChildContent),childContent },
+                {nameof(InputDialog.ConfirmText),TextConstants.Submit },
             };
             var modal = modalService.Show<InputDialog>(message, parameter, new ModalOptions
             {

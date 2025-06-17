@@ -59,10 +59,11 @@
         var modalInstance = this._modalService.Show<MultiSelectModalComponent<FighterDto>>(TextConstants.SearchFighter, parameters);
 
         var result = await modalInstance.Result;
-        if (result.Confirmed && result.Data is List<FighterDto> fighterLst)
+        if (result.Confirmed && result.Data is List<FighterDto> fighterLst
+            && fighterLst.Any())
         {
             var name = await this._modalService.ShowSmallInputDialog(TextConstants.ResultList, this._deviceHandler.IsiOS, TextConstants.ClassNamePlaceholder); // "Jugend LK1  - U18";
-
+            name = string.IsNullOrWhiteSpace(name) ? TextConstants.ResultList : name;
             await this.printService.PrintComponentAsync<ClassPrint>(new Dictionary<string, object?>() { {
                 nameof(ClassPrint.Date), DateTime.Now },
             { nameof(ClassPrint.ClassTitle),name },

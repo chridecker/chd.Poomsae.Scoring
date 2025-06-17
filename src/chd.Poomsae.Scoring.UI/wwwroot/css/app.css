@@ -4,7 +4,7 @@
     --sidebar-width-small: 3rem !important;
     --top-header-height: 0 !important;
     --main-article-padding-lr: 0 !important;
-    --main-article-height: calc(100% - var(--top-header-height)) !important;
+    --main-article-height: 100% !important;
     --sidebar-toggle-top: calc(var(--top-header-height) + 0.5rem) !important;
     --main-article-available-height: 100% !important;
     --chd-p-blue: rgb(65,105,225);
@@ -54,6 +54,16 @@
     --chd-main-color-theme: var(--chd-p-blue) !important;
     --chd-main-color-theme-transparent: var(--chd-p-blue-transparent) !important;
     --chd-main-color-theme-semi-transparent: var(--chd-p-blue-semi-transparent) !important;
+}
+
+.light-mode * {
+    --chd-p-accuracy: rgb(223,0,26);
+    --chd-p-accuracy-semi-transparent: rgba(223,0,26,0.5);
+    --chd-p-accuracy-transparent: rgba(223,0,26,0.1);
+    --chd-p-presentation: rgb(223,5,0);
+    --chd-p-presentation-transparent: rgba(223,5,0,0.1);
+    --chd-p-presentation-semi-transparent: rgba(223,5,0,0.5);
+    --chd-p-total: rgb(223,197,0);
 }
 
 body #app #startup-logo {
@@ -143,7 +153,7 @@ body #app #startup-logo {
 
 
     .chd-app-modal .bm-content .multiselect-search-modal-component .search-container .search-results-container .search-item .search-item-content.selected {
-        background: var(--chd-bg-lighter);
+        background: var(--chd-sub-color-theme-gradient);
         font-weight: unset;
     }
 
