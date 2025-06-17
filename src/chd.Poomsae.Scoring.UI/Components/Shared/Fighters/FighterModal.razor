@@ -1,3 +1,4 @@
+@using chd.Poomsae.Scoring.UI.Components.Shared.Prints
 @using chd.Poomsae.Scoring.UI.Extensions
 <div class="fighter-modal-container">
     <div class="fighter-section data">
@@ -37,6 +38,8 @@
 
     [Inject] IModalHandler modalService { get; set; }
     [Inject] IDeviceHandler deviceHandler { get; set; }
+    [Inject] IPrintService printService { get; set; }
+    [Inject] IFighterDataService fighterDataService { get; set; }
 
 
     [Parameter] public FighterDto Fighter { get; set; }
@@ -50,7 +53,8 @@
 
     private async Task Print()
     {
-        await this.modalService.ShowDialog("Drucken noch nicht umgesetzt", chd.UI.Base.Contracts.Enum.EDialogButtons.OK);
+        var fighter = await this.fighterDataService.GetFighter(this.Fighter.Id);
+        await this.printService.PrintComponentAsync<FighterPrint>(new Dictionary<string, object?>() { { nameof(FighterPrint.Fighter), fighter } }, this.Fighter.Lastname);
     }
 
     private async Task RemoveFighter()

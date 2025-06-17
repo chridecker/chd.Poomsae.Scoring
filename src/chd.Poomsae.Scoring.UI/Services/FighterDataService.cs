@@ -43,6 +43,10 @@ namespace chd.Poomsae.Scoring.UI.Services
             await this._scoringContext.Fighters.AddAsync(fighter);
             await this._scoringContext.SaveChangesAsync();
         }
+
+        public Task<FighterDto> GetFighter(Guid id) => this._scoringContext.Fighters.LoadFighters().FirstOrDefaultAsync(x => x.Id == id);
+
+
         public Task RemoveFighter(FighterDto fighter) => this.RemoveEntry(fighter);
 
         public Task RemoveRound(RoundDto round) => this.RemoveEntry(round);

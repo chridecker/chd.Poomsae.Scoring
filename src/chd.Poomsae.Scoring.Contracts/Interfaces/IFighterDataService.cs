@@ -10,6 +10,7 @@ namespace chd.Poomsae.Scoring.Contracts.Interfaces
     public interface IFighterDataService
     {
         List<FighterDto> Fighters { get; }
+        Task<FighterDto> GetFighter(Guid id);
         Task AddFighter(FighterDto fighter);
         Task RemoveFighter(FighterDto fighter);
         Task RemoveRound(RoundDto round);

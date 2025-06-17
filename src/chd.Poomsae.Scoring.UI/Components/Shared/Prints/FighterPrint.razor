@@ -1,0 +1,182 @@
+@using System.Text
+@using Microsoft.Extensions.Configuration
+@using chd.Poomsae.Scoring.UI.Extensions
+@using chd.UI.Base.Contracts.Enum
+<html lang="de">
+<head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        * {
+            font-family: Arial;
+            -webkit-print-color-adjust: exact !important; /* Chrome, Safari 6 – 15.3, Edge */
+            print-color-adjust: exact !important; /* Firefox 97+, Safari 15.4+ */
+        }
+
+        .round-print-container {
+            margin: 1cm 0.5cm;
+            display: grid;
+            width: 20cm;
+            gap: 0.5cm;
+        }
+
+            .round-print-container .fighter-name {
+                font-weight: bold;
+                font-size: 20pt;
+            }
+
+            .round-print-container .logo {
+                grid-row: 1/4;
+                grid-column: 2;
+                justify-self: end;
+            }
+
+                .round-print-container .logo img {
+                    height: 2cm;
+                    margin-right: 0.3cm;
+                }
+
+
+            .round-print-container .rounds {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5cm;
+            }
+
+                .round-print-container .rounds .round-header {
+                    display: grid;
+                    grid-template-columns: max-content auto;
+                    align-items: center;
+                    gap: 0.2cm 0.5cm;
+                }
+
+                    .round-print-container .rounds .round-header .round-name {
+                        font-size: 18pt;
+                        font-weight: bold;
+                    }
+
+                    .round-print-container .rounds .round-header .round-date {
+                        font-size: 18pt;
+                    }
+
+                    .round-print-container .rounds .round-header .round-total-result {
+                        margin-top: 0.2cm;
+                        grid-column: 1/3;
+                        display: flex;
+                        justify-content: space-around;
+                        border-bottom: 1px solid;
+                        padding-bottom: 0.2cm;
+                    }
+
+                        .round-print-container .rounds .round-header .round-total-result .round-result {
+                            display: grid;
+                            justify-items: center;
+                            font-size: 18pt;
+                        }
+
+                            .round-print-container .rounds .round-header .round-total-result .round-result .round-result-label {
+                                font-size: 14pt;
+                            }
+
+                            .round-print-container .rounds .round-header .round-total-result .round-result .round-result-value {
+                                font-weight: bold;
+                            }
+
+                .round-print-container .rounds .round-body {
+                    display: grid;
+                    gap: 0.2cm 2cm;
+                }
+
+                    .round-print-container .rounds .round-body .score-row {
+                        display: grid;
+                        grid-template-columns: repeat(5,1fr);
+                        text-align: center;
+                    }
+
+                        .round-print-container .rounds .round-body .score-row.header {
+                            font-size: 12pt;
+                        }
+
+                        .round-print-container .rounds .round-body .score-row .judge-name {
+                            text-align: left;
+                        }
+
+    </style>
+</head>
+<body>
+    <div class="round-print-container">
+        <div class="fighter-name">@this.Fighter.FullName</div>
+        <div class="logo">
+            <img src="data:image/png;base64,@_svgBase64" />
+        </div>
+        <div class="rounds">
+            @foreach (var round in this.Fighter.Rounds)
+            {
+                <div class="round-header">
+                    <div class="round-name">@round.Name</div>
+                    <div class="round-date">@round.Created.ToString("dd.MM.yyyy HH:mm")</div>
+                    <div class="round-total-result">
+                        <div class="round-result total">
+                            <div class="round-result-label">@TextConstants.Total</div>
+                            <div class="round-result-value">@_roundTotal(round).ToDisplayString()</div>
+                        </div>
+                        <div class="round-result accuracy">
+                            <div class="round-result-label">@TextConstants.Accuracy</div>
+                            <div class="round-result-value">@this._roundAccuracy(round).ToDisplayString()</div>
+                        </div>
+                        <div class="round-result presentation">
+                            <div class="round-result-label">@TextConstants.Presentation</div>
+                            <div class="round-result-value">@this._roundAccuracy(round).ToDisplayString()</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="round-body">
+                    <div class="score-row header">
+                        <div class=""></div>
+                        <div class="accuracy">@TextConstants.Accuracy</div>
+                        <div class="presentation">@TextConstants.SpeedAndPower</div>
+                        <div class="presentation">@TextConstants.RhythmAndTempo</div>
+                        <div class="presentation">@TextConstants.ExpressionAndEnergy</div>
+                    </div>
+                    @foreach (var score in round.Scores.OrderBy(o => o.JudgeName))
+                    {
+                        <div class="score-row">
+                            <div class="judge-name">@score.JudgeName</div>
+                            <div class="accuracy">@score.Accuracy</div>
+                            <div class="presentation">@score.SpeedAndPower</div>
+                            <div class="presentation">@score.RhythmAndTempo</div>
+                            <div class="presentation">@score.ExpressionAndEnergy</div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>
+
+@code {
+    [Inject] IConfiguration configuration { get; set; }
+
+    [Parameter] public FighterDto Fighter { get; set; }
+
+    private string _svgBase64 => configuration.GetSection("Logo:Base64").Value;
+
+
+    private decimal _roundTotal(RoundDto round) => this._roundAccuracy(round) + this._roundPresentation(round);
+    private decimal _roundAccuracy(RoundDto round)
+    {
+        if (round.Scores.Count <= 3)
+        {
+            return round.Scores.Select(s => s.Accuracy).Average();
+        }
+        return (round.Scores.Sum(s => s.Accuracy) - round.Scores.Min(m => m.Accuracy) - round.Scores.Max(m => m.Accuracy)) / (round.Scores.Count - 2);
+    }
+    private decimal _roundPresentation(RoundDto round)
+    {
+        if (round.Scores.Count <= 3)
+        {
+            return round.Scores.Select(s => s.Presentation.Value).Average();
+        }
+        return (round.Scores.Sum(s => s.Presentation.Value) - round.Scores.Min(m => m.Presentation.Value) - round.Scores.Max(m => m.Presentation.Value)) / (round.Scores.Count - 2);
+    }
+}
