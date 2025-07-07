@@ -17,20 +17,8 @@
             }
         </div>
     }
-    <div class="fighter-section buttons @(this.IsNew ? "add" : "")">
-        @if (this.IsNew)
-        {
-            <button class="btn btn-secondary" @onclick="this.Cancel">Abbrechen</button>
-            <button class="btn btn-primary" @onclick="async () => await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Add)))">Speichern</button>
-        }
-        else
-        {
-            <IconButton FAClass="floppy-disk" OnClick="this.SaveFighter" />
-            <IconButton FAClass="print" OnClick="this.Print" />
-            <IconButton FAClass="trash" OnClick="this.RemoveFighter" />
-            <IconButton FAClass="arrow-turn-left" OnClick="this.Cancel" />
-        }
-    </div>
+
+    <ModalBottomButtonsComponent IsNew="@IsNew" Cancel="this.Cancel" Save="this.SaveFighter" Print="this.Print" Remove="this.RemoveFighter" CancelText="@TextConstants.Cancel" SaveText="@TextConstants.SaveRound" />
 </div>
 
 @code {
@@ -46,10 +34,8 @@
     [Parameter] public ICollection<RoundDto> Rounds { get; set; } = [];
     [Parameter] public bool IsNew { get; set; }
 
-    private async Task Cancel()
-    {
-        await this.ModalInstance.CancelAsync();
-    }
+    private Task Cancel() => this.ModalInstance.CancelAsync();
+
 
     private async Task Print()
     {
@@ -65,9 +51,6 @@
             await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Delete)));
         }
     }
-    private async Task SaveFighter()
-    {
-        await this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, EDataAction.Update)));
-    }
+    private Task SaveFighter() => this.ModalInstance.CloseAsync(ModalResult.Ok(new ModalResultDto<FighterDto>(this.Fighter, this.IsNew ? EDataAction.Add : EDataAction.Update)));
 
 }

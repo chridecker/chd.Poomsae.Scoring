@@ -29,12 +29,7 @@
             <ScoreRow Reload="async () => await this.InvokeAsync(this.StateHasChanged)" Score="@score" />
         }
     </div>
-    <div class="round-buttons">
-        <IconButton FAClass="floppy-disk" OnClick="this.Save" />
-        <IconButton FAClass="print" OnClick="this.Print" />
-        <IconButton FAClass="trash" OnClick="this.DeleteRound" />
-        <IconButton FAClass="arrow-turn-left" OnClick="this.Cancel" />
-    </div>
+    <ModalBottomButtonsComponent IsNew="false" Cancel="this.Cancel" Print="this.Print" Save="this.Save" Remove="this.DeleteRound" CancelText="@TextConstants.Cancel" SaveText="@TextConstants.SaveRound" />
 </div>
 
 @code {

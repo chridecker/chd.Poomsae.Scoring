@@ -1,0 +1,35 @@
+﻿.bottom-buttons ::deep button.btn:active,
+.bottom-buttons ::deep button.btn:focus,
+.bottom-buttons ::deep button.btn:hover {
+    background: var(--chd-grey-semi-transparent);
+}
+
+.bottom-buttons.add {
+    display: grid;
+    padding: 0;
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+}
+
+    .bottom-buttons.add ::deep button.btn.btn-secondary {
+        order: 2;
+        background: var(--chd-bg-lighter);
+    }
+
+
+    .bottom-buttons.add ::deep button.btn-primary.btn-primary {
+        order: 1;
+    }
+
+.bottom-buttons ::deep button.icon-button {
+    background: none;
+    padding: 0.2rem 0.4rem;
+}
+
+    .bottom-buttons ::deep button.icon-button svg {
+        height: 1.4rem;
+    }
+
+.ios .bottom-buttons.add ::deep button.btn.btn-secondary {
+    color: var(--chd-ios-blue);
+}

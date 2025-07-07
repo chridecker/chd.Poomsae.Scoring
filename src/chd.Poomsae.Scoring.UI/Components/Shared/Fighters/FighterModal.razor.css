@@ -59,41 +59,14 @@
 
 
 
-        .fighter-modal-container .fighter-section.buttons {
-            padding: 0 0.8rem;
-            background: var(--chd-bg);
-            border-radius: 0;
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: auto;
-        }
+    .fighter-modal-container ::deep .bottom-buttons {
+        padding: 0 0.8rem;
+        background: var(--chd-bg);
+        border-radius: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: auto;
+    }
 
-            .fighter-modal-container .fighter-section.buttons.add {
-                display: grid;
-                padding: 0;
-                grid-template-columns: 1fr;
-                gap:0.2rem;
-            }
-
-                .fighter-modal-container .fighter-section.buttons.add ::deep button.btn.btn-secondary {
-                    order: 2;
-                    background: var(--chd-bg-lighter);
-                }
-
-
-                .fighter-modal-container .fighter-section.buttons.add ::deep button.btn-primary.btn-primary {
-                    order: 1;
-                }
-
-            .fighter-modal-container .fighter-section.buttons ::deep button.icon-button {
-                background: none;
-                padding: 0.2rem 0.4rem;
-            }
-
-                .fighter-modal-container .fighter-section.buttons ::deep button.icon-button svg {
-                    height: 1.4rem;
-                }
-.ios .fighter-modal-container .fighter-section.buttons.add ::deep button.btn.btn-secondary {
-    color: var(--chd-ios-blue);
-}
+            

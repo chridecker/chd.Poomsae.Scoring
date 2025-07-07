@@ -90,7 +90,7 @@
         border-radius: 0.8rem;
     }
 
-    .round-container .round-buttons {
+    .round-container ::deep .bottom-buttons {
         padding: 0 0.8rem;
         background: var(--chd-bg);
         border-radius: 0;
@@ -100,11 +100,3 @@
         margin-top: auto;
     }
 
-        .round-container .round-buttons ::deep button.icon-button {
-            background: none;
-            padding: 0.2rem 0.4rem;
-        }
-
-            .round-container .round-buttons ::deep button.icon-button svg {
-                height: 1.4rem;
-            }

@@ -1,0 +1,25 @@
+<div class="bottom-buttons @(this.IsNew ? "add" : "")">
+    @if (this.IsNew)
+    {
+        <button class="btn btn-secondary" @onclick="this.Cancel">@CancelText</button>
+        <button class="btn btn-primary" @onclick="this.Save">@SaveText</button>
+    }
+    else
+    {
+        <IconButton FAClass="floppy-disk" OnClick="this.Save" />
+        <IconButton FAClass="print" OnClick="this.Print" />
+        <IconButton FAClass="trash" OnClick="this.Remove" />
+        <IconButton FAClass="arrow-turn-left" OnClick="this.Cancel" />
+    }
+</div>
+
+@code {
+    [Parameter] public bool IsNew { get; set; }
+    [Parameter] public string CancelText { get; set; } 
+    [Parameter] public Func<Task> Cancel { get; set; }
+   
+    [Parameter] public string SaveText { get; set; }
+    [Parameter] public Func<Task> Save { get; set; }
+    [Parameter] public Func<Task> Print { get; set; }
+    [Parameter] public Func<Task> Remove { get; set; }
+}

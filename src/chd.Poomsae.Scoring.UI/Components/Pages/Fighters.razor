@@ -84,7 +84,8 @@
         Size = ModalSize.ExtraLarge,
     }).Result;
         if (res.Confirmed && res.Data is ModalResultDto<FighterDto> dto
-        && dto.Action is EDataAction.Add)
+        && dto.Action is EDataAction.Add
+        && !(string.IsNullOrWhiteSpace(dto.Data.Firstname) || string.IsNullOrWhiteSpace(dto.Data.Lastname)))
         {
             await this.fighterDataService.AddFighter(dto.Data);
             await this.InvokeAsync(this.StateHasChanged);

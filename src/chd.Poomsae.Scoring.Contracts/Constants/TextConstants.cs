@@ -57,6 +57,7 @@ namespace chd.Poomsae.Scoring.Contracts.Constants
         public const string ClassNamePlaceholder = "Klassenname ... ";
 
         public const string SaveRound = "Speichern";
+        public const string Cancel = "Abbrechen";
         public const string AddDeviceAuto = "Geräte automatisches Hinzufügen";
         public const string SearchDevices = "Erweiterte Gerätesuche";
         public const string RemoveDevices = "Geräte Löschen";
