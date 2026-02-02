@@ -19,14 +19,6 @@ on:
         description: 'Create an IPA Artifact'
         required: true
         default: 'false'
-      package_name:
-        description: 'APP Package Name'
-        required: true
-        default: 'com.companyname.chd.poomsae.scoring.app'
-      platform:
-        description: 'APP Platform'
-        required: true
-        default: 'ios'
 
 jobs:
   build-ios:
@@ -54,7 +46,7 @@ jobs:
         echo "VERSION=${{env.DATEVERSION}}" >> $GITHUB_ENV
 
     - name: Select Xcode version
-      run: sudo xcode-select -s /Applications/Xcode_26.0.app
+      run: sudo xcode-select -s /Applications/Xcode.app
       
   #-------------------------------------------------------
 
@@ -120,24 +112,4 @@ jobs:
       with:
         name: ios-app
         path: ./**/Release/**/publish/*.ipa
-
-    - name: Set up SSH
-      run: |
-         mkdir -p ~/.ssh
-         echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
-         chmod 600 ~/.ssh/id_ed25519
-         ssh-keyscan github.com >> ~/.ssh/known_hosts
-    
-    - name: Update Github Version
-      run: |
-        git clone git@github.com:chridecker/chd.version.git
-        cd chd.version
-        ls
-        mkdir -p ${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}
-        ls
-        echo "{\"Version\": \"${{ env.DATEIOSVERSION }} \"}" > ${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}/Version.json
-        git add ${{ github.event.inputs.package_name }}/${{ github.event.inputs.platform }}/Version.json
-        git config user.name "CHD Build Service"
-        git config user.email "chdscoring@gmail.com"
-        git commit -a -m "Version ${{ env.DATEIOSVERSION }} "
-        git push -f
+  
