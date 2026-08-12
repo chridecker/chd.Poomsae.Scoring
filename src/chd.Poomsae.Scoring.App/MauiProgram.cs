@@ -1,16 +1,11 @@
 ﻿using Blazored.Modal;
 using chd.Poomsae.Scoring.App.Extensions;
-using chd.Poomsae.Scoring.Contracts.Constants;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-using chd.Poomsae.Scoring.App.Settings;
-using System.Reflection;
-using chd.UI.Base.Contracts.Interfaces.Update;
 using SQLitePCL;
 using chd.Poomsae.Scoring.Persistence;
-using Microsoft.EntityFrameworkCore;
+using chd.UI.Base.Contracts.Interfaces.Update;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
@@ -40,8 +35,6 @@ namespace chd.Poomsae.Scoring.App
             builder.Configuration.AddConfiguration(GetLocalSetting());
             builder.Configuration.AddConfiguration(GetAppSettingsConfig());
             builder.Configuration.AddConfiguration(LoadLogoToBase64());
-            builder.Services.Configure<GoogleFirebaseSettings>(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings)));
-            builder.Services.Configure<FirebaseAuthServiceSettings>(builder.Configuration.GetSection(nameof(FirebaseAuthServiceSettings)));
 
             builder.Services.AddMauiBlazorWebView();
             builder.AddServices();
