@@ -4,11 +4,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.Activity;
-using AndroidX.Core.View;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
 using chd.Poomsae.Scoring.Platforms.Android;
 using chd.UI.Base.Contracts.Interfaces.Services;
-using Plugin.Firebase.Auth.Google;
 using System.Text.Json;
 
 namespace chd.Poomsae.Scoring.App
@@ -34,12 +32,6 @@ namespace chd.Poomsae.Scoring.App
             this.Window.ClearFlags(WindowManagerFlags.TranslucentStatus);
             this.Window.AddFlags(WindowManagerFlags.DrawsSystemBarBackgrounds);
             this.Window.SetStatusBarColor(Android.Graphics.Color.Transparent);
-        }
-
-        protected override void OnActivityResult(int requestCode, Result resultCode, Intent? data)
-        {
-            base.OnActivityResult(requestCode, resultCode, data);
-            FirebaseAuthGoogleImplementation.HandleActivityResultAsync(requestCode, resultCode, data);
         }
 
         protected override void OnNewIntent(Intent? intent)

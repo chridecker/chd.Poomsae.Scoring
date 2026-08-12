@@ -22,8 +22,7 @@ namespace chd.Poomsae.Scoring.UI.Extensions
 {
     public static class DIExtensions
     {
-        public static IServiceCollection AddUi<TProfileService, TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient, TPrintService>(this IServiceCollection services, IConfiguration configuration)
-                 where TProfileService : ProfileService<Guid, int>, ILicenseTokenProfileService
+        public static IServiceCollection AddUi<TUpdateService, TDeviceHandler, TSettingManager, TVibrationHelper, TBroadCastService, TBroadcastClient, TPrintService>(this IServiceCollection services, IConfiguration configuration)
                  where TSettingManager : BaseClientSettingManager<Guid, int>, ISettingManager
             where TVibrationHelper : class, IVibrationHelper
             where TBroadCastService : class, IBroadCastService
@@ -33,18 +32,16 @@ namespace chd.Poomsae.Scoring.UI.Extensions
             where TPrintService : class, IPrintService
         {
             services.AddAuthorizationCore();
-            services.AddUtilities<TProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, TUpdateService>(ServiceLifetime.Singleton);
+            services.AddUtilities<PSProfileService, Guid, int, UserIdLogInService, TSettingManager, ISettingManager, UIComponentHandler, IBaseUIComponentHandler, TUpdateService>(ServiceLifetime.Singleton);
             services.AddMauiModalHandler();
             services.AddScoped<INavigationHistoryStateContainer, NavigationHistoryStateContainer>();
             services.AddScoped<INavigationHandler, NavigationHandler>();
 
-            services.Add(new ServiceDescriptor(typeof(ILicenseTokenProfileService), sp => sp.GetRequiredService<TProfileService>(), ServiceLifetime.Singleton));
             services.AddDataAccess(configuration);
 
             services.AddTransient<HtmlRenderer>();
             services.AddSingleton<IPrintService, TPrintService>();
             services.AddSingleton<IDeviceHandler, TDeviceHandler>();
-            services.AddSingleton<ITokenService, TokenService>();
             services.AddSingleton<IAppInfoService, AppInfoService>();
             services.AddSingleton<IResultService, ResultService>();
             services.AddSingleton<IStartRunService, StartRunService>();

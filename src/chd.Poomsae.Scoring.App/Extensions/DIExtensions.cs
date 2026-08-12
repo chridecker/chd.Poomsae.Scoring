@@ -1,12 +1,10 @@
 ﻿#if ANDROID
 using chd.Poomsae.Scoring.App.Platforms.Android;
-using chd.Poomsae.Scoring.App.Platforms.Android.Authentication;
 using chd.Poomsae.Scoring.App.Platforms.Android.BLE;
 #elif IOS
 using chd.Poomsae.Scoring.App.Platforms.iOS;
 using chd.Poomsae.Scoring.App.Platforms.iOS.BLE;
 using chd.Poomsae.Scoring.App.Platforms.iOS.Update;
-using chd.Poomsae.Scoring.App.Platforms.iOS.Authentication;
 #endif
 using chd.Poomsae.Scoring.App.Services;
 using chd.Poomsae.Scoring.Contracts.Interfaces;
@@ -29,10 +27,10 @@ namespace chd.Poomsae.Scoring.App.Extensions
         {
 #if ANDROID
             services.AddAndroidServices();
-            services.AddUi<GoogleSignInManager, MauiUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient, PrintService>(configuration);
+            services.AddUi<MauiUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient, PrintService>(configuration);
 #elif IOS
             services.AddiOS();
-            services.AddUi<AppleSignInManager, InAppUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient,PrintService>(configuration);
+            services.AddUi<InAppUpdateService, DeviceHandler, SettingManager, VibrationHelper, BLEServer, BLEClient,PrintService>(configuration);
 #endif
 
             services.AddSingleton<IDeviceInfo>(_ => DeviceInfo.Current);

@@ -1,15 +1,9 @@
 ﻿using chd.Poomsae.Scoring.Contracts.Interfaces;
-using chd.Poomsae.Scoring.UI.Components.Shared;
 using chd.UI.Base.Client.Implementations.Services;
 using chd.UI.Base.Components.Base;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using chd.UI.Base.Components.General.Nav;
 
 namespace chd.Poomsae.Scoring.UI.Components.Pages.Base
 {

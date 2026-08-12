@@ -14,8 +14,6 @@ using Microsoft.EntityFrameworkCore;
 
 #if ANDROID
 using Maui.Android.InAppUpdates;
-using Plugin.Firebase.Core.Platforms.Android;
-using Plugin.Firebase.Auth.Google;
 #elif IOS
 using UIKit;
 
@@ -93,8 +91,8 @@ namespace chd.Poomsae.Scoring.App
 #if ANDROID
                 events.AddAndroid(android => android.OnCreate((activity, _) =>
                 {
-                    CrossFirebase.Initialize(activity);
-                    FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
+                    //CrossFirebase.Initialize(activity,a=>a.);
+                    //FirebaseAuthGoogleImplementation.Initialize(builder.Configuration.GetSection(nameof(GoogleFirebaseSettings))[nameof(GoogleFirebaseSettings.ClientKey)]);
                 }));
 #elif IOS
                 events.AddiOS(iOS => iOS.FinishedLaunching((_, _) =>

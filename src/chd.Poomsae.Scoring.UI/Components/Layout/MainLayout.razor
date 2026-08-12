@@ -1,11 +1,7 @@
 ﻿@inherits PageComponentBase<Guid,int>
 @implements IAsyncDisposable
-@using Blazored.Modal.Services
 @using Blazored.Toast.Configuration
-@using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Shared
-@using chd.Poomsae.Scoring.UI.Extensions
-@using chd.UI.Base.Client.Implementations.Services
 @using chd.UI.Base.Contracts.Enum
 @inject IScrollInfoService scrollInfoService
 @inject IModalHandler modalService
@@ -47,7 +43,6 @@
     protected override async Task OnInitializedAsync()
     {
         this.appInfoService.ExitApplication += this.ExitApplication;
-        this._profileService.UserChanged += this.UserChanged;
         _ = await this._profileService.LoginAsync(new(), this._cts.Token);
 
 
@@ -80,16 +75,6 @@
         this.deviceHandler.CloseApp();
     }
 
-    private async void UserChanged(object? sender, UserDto<Guid, int> user)
-    {
-        if (user is PSUserDto dto)
-        {
-#if DEBUG
-            await this.deviceHandler.ShowToast($"user:{dto.Email}");
-#endif
-        }
-    }
-
     private async Task OnLabelSwiped(ESwipeDirection e)
     {
         if (e == ESwipeDirection.LeftToRight)
@@ -101,7 +86,6 @@
     public async ValueTask DisposeAsync()
     {
         this.appInfoService.ExitApplication -= this.ExitApplication;
-        this._profileService.UserChanged -= this.UserChanged;
         await this._profileService.LogoutAsync(this._cts.Token);
         this._cts.Cancel();
     }

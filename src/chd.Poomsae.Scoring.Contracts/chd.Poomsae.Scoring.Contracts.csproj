@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
 	  <LangVersion>Latest</LangVersion>
   </PropertyGroup>
@@ -12,7 +12,7 @@
     <None Remove="Settings\**" />
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="chd.UI.Base.Components" Version="1.0.25168.134" />
+		<PackageReference Include="chd.UI.Base.Components" Version="2.0.25327.148" />
 	</ItemGroup>
 
 </Project>

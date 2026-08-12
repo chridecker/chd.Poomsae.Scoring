@@ -12,10 +12,6 @@ namespace chd.Poomsae.Scoring.UI.Services
 {
     public class StartRunService : IStartRunService
     {
-
-        public StartRunService()
-        {
-        }
         public EliminationRunDto StartEliminiationRun()
         {
             var dto = new EliminationRunDto()

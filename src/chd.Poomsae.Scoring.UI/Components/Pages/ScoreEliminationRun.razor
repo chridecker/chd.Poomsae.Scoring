@@ -1,44 +1,28 @@
 @page "/eliminationscore"
 @inherits BaseScoringComponent<EliminationRunDto>
-@using Blazored.Modal.Services
-@using chd.Poomsae.Scoring.Contracts.Constants
-@using chd.Poomsae.Scoring.Contracts.Dtos
-@using chd.Poomsae.Scoring.Contracts.Enums
-@using chd.Poomsae.Scoring.Contracts.Interfaces
 @using chd.Poomsae.Scoring.UI.Components.Pages.Base
-@using chd.Poomsae.Scoring.UI.Components.Shared.Licensing
 @using chd.Poomsae.Scoring.UI.Components.Shared.Scoring
-@using chd.Poomsae.Scoring.UI.Extensions
-@using chd.UI.Base.Contracts.Enum
 
-
-<ChdAuthorizeView TRightId="int" TUserId="Guid" Rights="new int[]{RightConstants.IS_ALLOWED}">
-    <Authorized>
-        @if (runDto is null) { return; }
-        <div class="run-container">
-            <div class="fighter-container">
-                <FighterScore FighterName="@redName" Score="@runDto.HongScore" Color="EScoringButtonColor.Red" />
-                <FighterScore FighterName="@blueName" Score="@runDto.ChongScore" Color="EScoringButtonColor.Blue">
-                    <ButtonContent>
-                        <UserButton />
-                    </ButtonContent>
-                </FighterScore>
-            </div>
-            <div class="scoring-container">
-                <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Red" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
-                <ScoringSummaryComponent State="@this.runDto.State" OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore">
-                    <ButtonContent>
-                        <StateButton State="@runDto.State" HandleState="this.HandleClick" />
-                    </ButtonContent>
-                </ScoringSummaryComponent>
-                <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
-            </div>
-        </div>
-    </Authorized>
-    <NotAuthorized>
-        <NoLicenseComponent />
-    </NotAuthorized>
-</ChdAuthorizeView>
+@if (runDto is null) { return; }
+<div class="run-container">
+    <div class="fighter-container">
+        <FighterScore FighterName="@redName" Score="@runDto.HongScore" Color="EScoringButtonColor.Red" />
+        <FighterScore FighterName="@blueName" Score="@runDto.ChongScore" Color="EScoringButtonColor.Blue">
+            <ButtonContent>
+                <UserButton />
+            </ButtonContent>
+        </FighterScore>
+    </div>
+    <div class="scoring-container">
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Left" Color="EScoringButtonColor.Red" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
+        <ScoringSummaryComponent State="@this.runDto.State" OpenModal="this.OpenPresentationModal" ChongScore="@runDto.ChongScore" HongScore="@runDto.HongScore">
+            <ButtonContent>
+                <StateButton State="@runDto.State" HandleState="this.HandleClick" />
+            </ButtonContent>
+        </ScoringSummaryComponent>
+        <ScoringButtonComponent Direction="EScoringButtonDirection.Right" Color="EScoringButtonColor.Blue" ValueBig="0.1m" ValueSmall="0.3m" OnCalcClick="this.CalcScore" />
+    </div>
+</div>
 
 @code {
 
