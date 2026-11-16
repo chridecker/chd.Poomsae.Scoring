@@ -22,6 +22,8 @@ on:
         type: choice
         options: [completed, draft]
         default: draft
+permissions:
+  contents: write
 
 jobs:
   build:
