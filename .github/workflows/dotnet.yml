@@ -95,4 +95,3 @@ jobs:
         releaseFiles: release/*.aab
         track: ${{ inputs.play_track }}
         status:  ${{ inputs.play_status }} # "completed"   "draft", falls die App in Play noch im Entwurfsstatus ist
-        changesNotSentForReview: true
