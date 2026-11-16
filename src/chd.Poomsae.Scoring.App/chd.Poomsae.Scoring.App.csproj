@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
+		<TargetFrameworks>net11.0-android;net11.0-ios</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>chd.Poomsae.Scoring.App</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -31,14 +31,16 @@
 	<!--<PropertyGroup Condition="'$(Configuration)' == 'Debug' AND '$(TargetFramework)' == 'net9.0-ios'">
 		<RuntimeIdentifiers>iossimulator-arm64</RuntimeIdentifiers>
 	</PropertyGroup>-->
-
-
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0-android'">
-		<PublishAot>False</PublishAot>
-		<RunAOTCompilation>false</RunAOTCompilation>
+	<PropertyGroup>
+		<!--<RuntimeIdentifier>android-arm64</RuntimeIdentifier>-->
+		<UseCoreCLR>true</UseCoreCLR>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0-android'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net11.0-android'">
+		<PublishAot>False</PublishAot>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)'=='net11.0-android'">
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
@@ -55,28 +57,28 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net11.0-ios'">
 		<Entitlements>Platforms/iOS/Entitlements.plist</Entitlements>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-ios'">
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.11" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net11.0-ios'">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="11.0.0" />
 		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0-android'">
-		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.19" />
-		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.6.0.1" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net11.0-android'">
+		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.20" />
+		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="122.0.0" />
 		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.5.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="15.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="10.0.90" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.90" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.90" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />
-		<PackageReference Include="Plugin.BLE" Version="3.2.1" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="17.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="11.0.10" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="11.0.0-preview.5.26304.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="11.0.10" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="11.0.0" />
+		<PackageReference Include="Plugin.BLE" Version="3.3.0-beta.3" />
 
 	</ItemGroup>
 

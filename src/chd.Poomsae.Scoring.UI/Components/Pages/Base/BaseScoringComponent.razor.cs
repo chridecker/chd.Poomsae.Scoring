@@ -15,7 +15,6 @@ using chd.UI.Base.Contracts.Interfaces.Authentication;
 using chd.UI.Base.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using System;
 using System.Collections.Generic;
 using System.Linq;
