@@ -67,8 +67,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net11.0-android'">
-		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.20" />
-		<PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="122.0.0" />
+		<PackageReference Include="Xamarin.Google.Android.Play.App.Update.Ktx" Version="2.1.0.19" />
 		<PackageReference Include="Oscore.Maui.Android.InAppUpdates" Version="1.5.1" />
 	</ItemGroup>
 
