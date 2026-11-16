@@ -93,5 +93,5 @@ jobs:
         serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
         packageName: ${{ env.PACKAGE_NAME }}
         releaseFiles: release/*.aab
-        track: ${{ inputs.play_track }}
+        tracks: ${{ inputs.play_track }}
         status:  ${{ inputs.play_status }} # "completed"   "draft", falls die App in Play noch im Entwurfsstatus ist
