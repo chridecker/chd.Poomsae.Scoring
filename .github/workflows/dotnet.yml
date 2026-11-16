@@ -7,28 +7,33 @@ on:
   workflow_dispatch:
     inputs: 
       build_config:
-        description: 'How to build debug/release'
+        description: 'How to build'
         required: true
+        type: choice
+        options: [Release, Debug]
         default: 'Release'
-      use_aab:
-        description: 'Create an AAB Artifact'
-        required: true
-        default: 'true'
-      use_apk:
-        description: 'Create an APK Artifact'
-        required: true
-        default: 'false'
+      play_track:
+        description: 'Google Play Track'
+        type: choice
+        options: [internal, alpha, beta, production]
+        default: internal
+      play_status:
+        description: 'Google Play Status'
+        type: choice
+        options: [completed, draft]
+        default: draft
 
 jobs:
   build:
     env:
       BUILD_CONFIG: ${{ github.event.inputs.build_config }}
+      PACKAGE_NAME: 'com.companyname.chd.poomsae.scoring.app'
       
     runs-on: windows-latest
 
     strategy:
       matrix:
-        dotnet-version: [ '10.0.x' ]
+        dotnet-version: [ '11.0.x' ]
 
     steps:
     - uses: actions/checkout@v4
@@ -36,7 +41,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.x
+        dotnet-version: 11.0.x
         
     - name: Install Maui
       run: dotnet workload install maui 
@@ -51,18 +56,41 @@ jobs:
         $HOUR=& Get-Date -format HHmm
         $VERSION="$MAJOR.$MINOR.$YEAR.$HOUR"
         echo "DATEVERSION=$VERSION" >> $env:GITHUB_ENV
-        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net10.0-android /p:ApplicationDisplayVersion=$VERSION /p:ApplicationVersion=${{ github.run_number}} /p:AndroidSigningKeyPass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidSigningStorePass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=chdpoomsaescoring.keystore /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidVersionCode=${{github.run_number}} 
+        dotnet publish src/chd.Poomsae.Scoring.App/chd.Poomsae.Scoring.App.csproj --no-restore --configuration ${{ env.BUILD_CONFIG }} --framework net11.0-android /p:ApplicationDisplayVersion=$VERSION /p:ApplicationVersion=${{ github.run_number}} /p:AndroidSigningKeyPass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidSigningStorePass=${{secrets.CHDPOOMSAE_SCORING_KEYPASS}} /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=chdpoomsaescoring.keystore /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidSigningKeyAlias=chdpoomsaescoring /p:AndroidVersionCode=${{github.run_number}} /p:PublishReadyToRun=false 
         
-    - name: Upload APK Build Artifact
-      if: ${{ github.event.inputs.use_apk == 'true' }}
-      uses: actions/upload-artifact@v4.4.2
+    - name: Collect files
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force release | Out-Null
+        $aab = Get-ChildItem -Recurse src -Filter *-Signed.aab | Where-Object { $_.FullName -match 'publish' } | Select-Object -First 1
+        Copy-Item $aab.FullName "release/scoPom${{ env.VERSION }}.aab"
+        $apk = Get-ChildItem -Recurse src -Filter *.apk | Where-Object { $_.FullName -match 'publish' } | Select-Object -First 1
+        Copy-Item $apk.FullName "release/scoPom-${{ env.VERSION }}.apk"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
       with:
-        name: chdPoomsaeScoring
-        path: ./**/bin/Release/**/publish/*.apk
-          
-    - name: Upload AAB Build Artifact
-      if: ${{ github.event.inputs.use_aab == 'true' }}
-      uses: actions/upload-artifact@v4.4.2
+        name: scoPoom-${{ env.VERSION }}
+        path: release/*
+        
+    - name: Create Tag and Release
+      uses: softprops/action-gh-release@v2
       with:
-        name: chdPoomsaeScoringAAB
-        path: ./**/bin/Release/**/publish/*.app-Signed.aab
+        tag_name: v${{ env.VERSION }}
+        target_commitish: ${{ github.sha }}
+        name: chd ScoringPoomsae ${{ env.VERSION }}
+        files: release/*.exe
+        generate_release_notes: true
+        prerelease: ${{ env.BUILD_CONFIG == 'Debug' }}
+        make_latest: ${{ env.BUILD_CONFIG == 'Release' }}
+
+    - name: Upload to Google Play
+      if: ${{ inputs.build_config == 'Release' }}
+      uses: r0adkll/upload-google-play@v1
+      with:
+        serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        packageName: ${{ env.PACKAGE_NAME }}
+        releaseFiles: release/*.aab
+        track: ${{ inputs.play_track }}
+        status:  ${{ inputs.play_status }} # "completed"   "draft", falls die App in Play noch im Entwurfsstatus ist
+        changesNotSentForReview: true
